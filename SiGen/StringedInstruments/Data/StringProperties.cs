@@ -1,13 +1,8 @@
 ﻿using SiGen.Measuring;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SiGen.StringedInstruments.Data
 {
-    [Serializable]
     public class StringProperties
     {
         /// <summary>
@@ -21,7 +16,7 @@ namespace SiGen.StringedInstruments.Data
         /// </summary>
         public Measure StringDiameter { get; set; }
         /// <summary>
-        /// The weight per unit volume of the string's material (core wire for wound strings).
+        /// The weight per unit volume of the string's material (core wire for wound strings) in lbs./ inch.
         /// Used for fret compensation calculations.
         /// </summary>
         public double UnitWeight { get; set; }
