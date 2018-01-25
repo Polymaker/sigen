@@ -63,6 +63,34 @@ namespace SiGen.Measuring
             return (value * from.ConversionFactor) / to.ConversionFactor;
         }
 
+        public static UnitOfMeasure GetUnitByName(string unitName)
+        {
+            switch (unitName.ToLower())
+            {
+                case "mm":
+                case "millimeter":
+                case "millimeters":
+                    return Millimeters;
+                //default:
+                case "cm":
+                case "centimeter":
+                case "centimeters":
+                    return Centimeters;
+                case "\"":
+                case "in":
+                case "inch":
+                case "inches":
+                    return Inches;
+                case "'":
+                case "ft":
+                case "foot":
+                case "feet":
+                case "feets":
+                    return Feets;
+            }
+            return null;
+        }
+
         #region Designer Code
 
         public class UnitOfMeasureConverter : System.ComponentModel.TypeConverter

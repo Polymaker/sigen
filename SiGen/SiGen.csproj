@@ -60,9 +60,19 @@
     <Compile Include="Measuring\PointM.cs" />
     <Compile Include="Measuring\RectangleM.cs" />
     <Compile Include="Measuring\UnitOfMeasure.cs" />
+    <Compile Include="Physics\IntonationMethod.cs" />
+    <Compile Include="Physics\MusicalNote.cs" />
+    <Compile Include="Physics\NoteName.cs" />
+    <Compile Include="Physics\PitchValue.cs" />
+    <Compile Include="Physics\NoteConverter.cs" />
+    <Compile Include="Physics\Temperament.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringedInstruments\Data\StringProperties.cs" />
     <Compile Include="Utilities\NumberHelper.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -85,6 +95,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

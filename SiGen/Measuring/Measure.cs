@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace SiGen.Measuring
 {
     [Serializable]
-    public struct Measure
+    public struct Measure : ISerializable, IXmlSerializable
     {
 
         #region Static Consts
@@ -314,6 +317,52 @@ namespace SiGen.Measuring
                     return string.Format("~{0}{1}", whole, unit.Symbol);
             }
             return string.Format("{0:0.##}{1}", this[unit], unit.Symbol);
+        }
+
+        #endregion
+
+        #region Serialization
+
+        private Measure(SerializationInfo info, StreamingContext context)
+        {
+            _Unit = UnitOfMeasure.GetUnitByName(info.GetString("Unit"));
+            normalizedValue = info.GetDouble("Value") * _Unit.ConversionFactor;
+        }
+
+        [SecurityPermissionAttribute(SecurityAction.Demand, SerializationFormatter = true)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Unit", Unit.Name);
+            info.AddValue("Value", Value);
+        }
+
+        public System.Xml.Schema.XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            reader.MoveToContent();
+            var value = double.Parse(reader.GetAttribute("Value"));
+            _Unit = UnitOfMeasure.GetUnitByName(reader.GetAttribute("Unit"));
+            if (_Unit == null)
+                normalizedValue = value;
+            else
+                normalizedValue = _Unit.ConversionFactor * value;
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            if (writer.WriteState == WriteState.Element)
+            {
+                writer.WriteStartAttribute("Value");
+                writer.WriteValue(Value);
+                writer.WriteEndAttribute();
+                writer.WriteStartAttribute("Unit");
+                writer.WriteValue(Unit.Name);
+                writer.WriteEndAttribute();
+            }
         }
 
         #endregion
