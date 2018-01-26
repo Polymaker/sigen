@@ -32,6 +32,7 @@ namespace SiGen.StringedInstruments.Data
         public string Material { get; set; }
         /// <summary>
         /// Gets the area of the string (core wire for wound strings).
+        /// Used for fret compensation calculations.
         /// </summary>
         public Measure CoreWireArea
         {
