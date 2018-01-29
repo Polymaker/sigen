@@ -193,6 +193,12 @@ namespace SiGen.Measuring
             return new Measure(m1.Value * value, m1.Unit);
         }
 
+        public static PointM operator *(Maths.Vector value, Measure m)
+        {
+            m.EnsureIsNotNaN();
+            return new PointM(m * value.X, m * value.Y);
+        }
+
         public static Measure operator /(Measure m1, double value)
         {
             m1.EnsureIsNotNaN();
@@ -285,7 +291,7 @@ namespace SiGen.Measuring
                 if (remain >= sixtyfourth)
                 {
                     int sixtyFourCount = 0;
-                    while (remain >= 0.015625d)
+                    while (remain >= 0.015625d || Math.Abs(remain - 0.015625d) < 0.000001)
                     {
                         sixtyFourCount++;
                         remain -= 0.015625d;
@@ -364,6 +370,15 @@ namespace SiGen.Measuring
                 writer.WriteEndAttribute();
             }
         }
+
+        public System.Xml.Linq.XAttribute SerializeAsAttribute(string name)
+        {
+            if(IsEmpty)
+                return new System.Xml.Linq.XAttribute(name, "N/A");
+            return new System.Xml.Linq.XAttribute(name, string.Format("{0}{1}", Value, Unit != null ? Unit.Symbol : string.Empty));
+        }
+
+
 
         #endregion
     }

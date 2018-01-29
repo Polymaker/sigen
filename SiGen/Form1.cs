@@ -1,5 +1,6 @@
 ﻿using SiGen.Measuring;
 using SiGen.StringedInstruments.Data;
+using SiGen.StringedInstruments.Layout;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,7 +24,13 @@ namespace SiGen
 
         private void button1_Click(object sender, EventArgs e)
         {
+            var test = new SILayout();
+            test.NumberOfStrings = 6;
             
+            (test.CurrentScaleLength as ScaleLengthManager.SingleScale).Length = Measure.Inches(25.5);
+            test.StringSpacing.SetSpacing(0, Measure.Mm(7), true);
+            test.StringSpacing.SetSpacing(0, Measure.Mm(10), false);
+            LayoutBuilder.BuildLayout(test);
         }
     }
 }

@@ -76,7 +76,15 @@ namespace SiGen.Measuring
         {
             this.x = new Measure(x, unit);
             this.y = new Measure(y, unit);
+        }
 
+        #endregion
+
+        #region Static Ctors
+
+        public static PointM FromVector(Vector vec, UnitOfMeasure unit)
+        {
+            return new PointM(Measure.FromNormalizedValue(vec.X, unit), Measure.FromNormalizedValue(vec.Y, unit));
         }
 
         #endregion
