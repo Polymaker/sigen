@@ -11,8 +11,11 @@ namespace SiGen.StringedInstruments.Layout
 {
     public class LayoutBuilder
     {
+
         public static void BuildLayout(SILayout layout)
         {
+            layout.VisualElements.Clear();
+
             Measure nutCenter = Measure.Zero;
             Measure bridgeCenter = Measure.Zero;
             Measure[] nutStringPos = layout.StringSpacing.GetStringPositions(true, out nutCenter);
@@ -20,19 +23,25 @@ namespace SiGen.StringedInstruments.Layout
 
             //***** STRINGS *****//
             var stringLines = new List<StringLine>();
+
             for (int i = 0; i < layout.NumberOfStrings; i++)
                 stringLines.Add(ConstructString(layout.Strings[i], nutStringPos[i], bridgeStringPos[i]));
 
-            var maxPerpHeight = Measure.FromNormalizedValue(stringLines.Max(l => l.Bounds.Height.NormalizedValue), UnitOfMeasure.Mm);
+            Measure maxPerpHeight = Measure.Zero;
+            if (layout.NumberOfStrings > 1)
+                maxPerpHeight = Measure.FromNormalizedValue(stringLines.Max(l => l.Bounds.Height.NormalizedValue), UnitOfMeasure.Mm);
 
             foreach (var stringLine in stringLines)
                 AdjustString(maxPerpHeight, stringLine);
 
-            //***** Fretboard Edges *****//
+            layout.VisualElements.AddRange(stringLines);
 
+            
+
+            //***** Fretboard Edges *****//
+            
 
             //***** Frets *****//
-
 
         }
 
@@ -43,7 +52,7 @@ namespace SiGen.StringedInstruments.Layout
             var opp = Measure.Abs(nutPos - bridgePos);
             Measure adj = str.ScaleLength;
 
-            if (str.LengthCalculationMethod == ScaleLengthMethod.AlongString)
+            if (str.LengthCalculationMethod == LengthFunction.AlongString && opp > Measure.Zero)
             {
                 var theta = Math.Asin(opp.NormalizedValue / str.ScaleLength.NormalizedValue);
                 adj = Math.Cos(theta) * str.ScaleLength;
@@ -57,10 +66,10 @@ namespace SiGen.StringedInstruments.Layout
 
         private static void SetStringRealLength(SIString stringInfo, StringLine stringLine)
         {
-            if (stringInfo.PlaceFretsRelativeToString)
+            if (stringInfo.Layout.CompensateFretPositions || stringInfo.LengthCalculationMethod == LengthFunction.AlongString)
                 stringInfo.FinalLength = stringLine.Length;
             else
-                stringInfo.FinalLength = Measure.Abs(stringLine.P2.Y - stringLine.P1.Y);
+                stringInfo.FinalLength = stringLine.Bounds.Height;
         }
 
         private static void AdjustString(Measure maxPerpHeight , StringLine stringLine)
@@ -87,10 +96,20 @@ namespace SiGen.StringedInstruments.Layout
         }
 
         #endregion
-
+        /// <summary>
+        /// Returns the fret position as the distance from the bridge.
+        /// </summary>
+        /// <param name="fret"></param>
+        /// <returns></returns>
         public static double GetEqualTemperedFretPosition(int fret)
         {
             return 1d / Math.Pow(2, fret / 12d);
         }
+
+        #region Update Scheduler
+
+
+
+        #endregion
     }
 }

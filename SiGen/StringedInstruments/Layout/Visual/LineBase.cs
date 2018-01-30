@@ -59,7 +59,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
             }
         }
 
-        public RectangleM Bounds
+        public override RectangleM Bounds
         {
             get
             {

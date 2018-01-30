@@ -34,7 +34,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(122, 74);
+            this.button1.Location = new System.Drawing.Point(12, 12);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -45,9 +45,12 @@
             // layoutViewer1
             // 
             this.layoutViewer1.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.layoutViewer1.Location = new System.Drawing.Point(12, 116);
+            this.layoutViewer1.CurrentLayout = null;
+            this.layoutViewer1.DisplayConfig.FretWidth = new SiGen.Measuring.Measure(2.5D, SiGen.Measuring.UnitOfMeasure.Millimeters);
+            this.layoutViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layoutViewer1.Location = new System.Drawing.Point(0, 0);
             this.layoutViewer1.Name = "layoutViewer1";
-            this.layoutViewer1.Size = new System.Drawing.Size(260, 133);
+            this.layoutViewer1.Size = new System.Drawing.Size(284, 261);
             this.layoutViewer1.TabIndex = 1;
             this.layoutViewer1.Text = "layoutViewer1";
             // 
@@ -56,8 +59,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
-            this.Controls.Add(this.layoutViewer1);
             this.Controls.Add(this.button1);
+            this.Controls.Add(this.layoutViewer1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);

@@ -4,21 +4,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SiGen.StringedInstruments.Layout
 {
     public abstract class ScaleLengthManager : LayoutComponent
     {
+        protected LengthFunction _LengthCalculationMethod;
+        public LengthFunction LengthCalculationMethod
+        {
+            get { return _LengthCalculationMethod; }
+            set
+            {
+                if (value != _LengthCalculationMethod)
+                {
+                    _LengthCalculationMethod = value;
+                    Layout.NotifyLayoutChanged(this, "LengthCalculationMethod");
+                }
+            }
+        }
+
+        public abstract ScaleLengthType Type { get; }
         public ScaleLengthManager(SILayout layout) : base(layout)
         {
-
+            _LengthCalculationMethod = LengthFunction.AlongString;
         }
         public abstract void SetLength(int index, Measure value);
         public abstract Measure GetLength(int index);
 
+        public virtual XElement Serialize(string elemName)
+        {
+            return new XElement(elemName, new XAttribute("Type", Type), new XAttribute("LengthFunction", LengthCalculationMethod));
+        }
+
+        internal virtual void Deserialize(XElement elem)
+        {
+            LengthCalculationMethod = (LengthFunction)Enum.Parse(typeof(LengthFunction), elem.Attribute("LengthFunction").Value);
+        }
+
         public class SingleScale : ScaleLengthManager
         {
             private Measure _Length;
+            
             public Measure Length
             {
                 get { return _Length; }
@@ -32,9 +59,14 @@ namespace SiGen.StringedInstruments.Layout
                 }
             }
 
+            public override ScaleLengthType Type
+            {
+                get { return ScaleLengthType.Single; }
+            }
+
             public SingleScale(SILayout layout) : base(layout)
             {
-
+                _LengthCalculationMethod = LengthFunction.AlongFingerboard;
             }
 
             public override Measure GetLength(int index)
@@ -47,6 +79,18 @@ namespace SiGen.StringedInstruments.Layout
                 Length = value;
             }
 
+            public override XElement Serialize(string elemName)
+            {
+                var elem = base.Serialize(elemName);
+                elem.Add(Length.SerializeAsAttribute("Value"));
+                return elem;
+            }
+
+            internal override void Deserialize(XElement elem)
+            {
+                base.Deserialize(elem);
+                Length = Measure.Parse(elem.Attribute("Value").Value);
+            }
         }
 
         public class MultiScale : ScaleLengthManager
@@ -80,6 +124,11 @@ namespace SiGen.StringedInstruments.Layout
                 }
             }
 
+            public override ScaleLengthType Type
+            {
+                get { return ScaleLengthType.Multiple; }
+            }
+
             public MultiScale(SILayout layout) : base(layout)
             {
 
@@ -101,7 +150,21 @@ namespace SiGen.StringedInstruments.Layout
                     Treble = value;
                 else if (index == Layout.NumberOfStrings - 1)
                     Bass = value;
+            }
 
+            public override XElement Serialize(string elemName)
+            {
+                var elem = base.Serialize(elemName);
+                elem.Add(Treble.SerializeAsAttribute("Treble"));
+                elem.Add(Bass.SerializeAsAttribute("Bass"));
+                return elem;
+            }
+
+            internal override void Deserialize(XElement elem)
+            {
+                base.Deserialize(elem);
+                Treble = Measure.Parse(elem.Attribute("Treble").Value);
+                Bass = Measure.Parse(elem.Attribute("Bass").Value);
             }
         }
 
@@ -111,12 +174,17 @@ namespace SiGen.StringedInstruments.Layout
 
             public Measure[] Lengths { get { return _Lengths; } }
 
-            public Individual(SILayout layout) : base(layout)
+            public override ScaleLengthType Type
             {
-                layout.NumberOfStringsChanged += Layout_NumberOfStringsChanged;
+                get { return ScaleLengthType.Individual; }
             }
 
-            private void Layout_NumberOfStringsChanged(object sender, EventArgs e)
+            public Individual(SILayout layout) : base(layout)
+            {
+
+            }
+
+            protected override void OnStringConfigurationChanged()
             {
                 if (_Lengths != null && _Lengths.Length > 0)
                 {
@@ -145,6 +213,5 @@ namespace SiGen.StringedInstruments.Layout
                 Layout.NotifyLayoutChanged(this, "ScaleLength");
             }
         }
-    }
-    
+    } 
 }

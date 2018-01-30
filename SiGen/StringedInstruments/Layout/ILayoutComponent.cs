@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SiGen.StringedInstruments.Layout
 {
-    public enum StringSpacingMode
+    public interface ILayoutComponent
     {
-        Simple,
-        Manual
+        SILayout Layout { get; }
+        void OnStringConfigurationChanged();
     }
 }

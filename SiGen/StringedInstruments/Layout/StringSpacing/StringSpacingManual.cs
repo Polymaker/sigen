@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SiGen.StringedInstruments.Layout
 {
-    public class StringsSpacingManual : StringsSpacingBase
+    public class StringSpacingManual : StringSpacingManager
     {
         private Measure[] _NutSpacing;
         private Measure[] _BridgeSpacing;
@@ -15,14 +15,14 @@ namespace SiGen.StringedInstruments.Layout
         public Measure[] NutSpacing { get { return _NutSpacing; } }
         public Measure[] BridgeSpacing { get { return _BridgeSpacing; } }
 
-        public StringsSpacingManual(SILayout layout) : base(layout)
+        public StringSpacingManual(SILayout layout) : base(layout)
         {
 
         }
 
-        protected override void OnNumberOfStringsChanged()
+        protected override void OnStringConfigurationChanged()
         {
-            if(_NutSpacing != null && _NutSpacing.Length > 0)
+            if (_NutSpacing != null && _NutSpacing.Length > 0)
             {
                 var oldNut = _NutSpacing;
                 var oldBridge = _BridgeSpacing;
@@ -30,7 +30,7 @@ namespace SiGen.StringedInstruments.Layout
                 _BridgeSpacing = new Measure[Layout.NumberOfStrings - 1];
                 for (int i = 0; i < Layout.NumberOfStrings - 1; i++)
                 {
-                    if(i< oldNut.Length)
+                    if (i < oldNut.Length)
                     {
                         _NutSpacing[i] = oldNut[i];
                         _BridgeSpacing[i] = oldBridge[i];

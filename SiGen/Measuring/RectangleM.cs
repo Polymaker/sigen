@@ -6,6 +6,12 @@
     /// <remarks>The rectangle is specified in 2D space (Y+ up)</remarks>
     public struct RectangleM
     {
+        #region Static Const
+
+        public static RectangleM Empty = new RectangleM(Measure.Empty, Measure.Empty, Measure.Empty, Measure.Empty);
+
+        #endregion
+
         #region Fields
 
         private Measure x;
@@ -74,6 +80,11 @@
         public Measure Right { get { return X + Width; } }
         public Measure Bottom { get { return Top - Height; } }
 
+        public bool IsEmpty
+        {
+            get { return X.IsEmpty; }
+        }
+
         #endregion
 
         #region Ctors
@@ -108,6 +119,9 @@
 
         public static bool operator ==(RectangleM left, RectangleM right)
         {
+            if (left.IsEmpty || right.IsEmpty)
+                return left.IsEmpty == right.IsEmpty;
+
             return left.X == right.X && left.Y == right.Y && left.Width == right.Width && left.Height == right.Height;
         }
 

@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 
-namespace SiGen
+namespace System.Collections.Generic
 {
     public static class CollectionHelper
     {
@@ -46,6 +46,26 @@ namespace SiGen
                         propertyInfo.SetValue(obj, values[ctr++], null);
                     else if (fieldInfo != null)
                         fieldInfo.SetValue(obj, values[ctr++]);
+                }
+            }
+        }
+
+        public static void SetAll<T, V>(this IEnumerable<T> list, Expression<Func<T, V>> assign, V valueToSet)
+        {
+            if (assign.Body.NodeType == ExpressionType.MemberAccess)
+            {
+                var bodyExp = (MemberExpression)assign.Body;
+
+                var memberInfo = bodyExp.Member;
+                var propertyInfo = memberInfo as PropertyInfo;
+                var fieldInfo = memberInfo as FieldInfo;
+
+                foreach (T obj in list)
+                {
+                    if (propertyInfo != null)
+                        propertyInfo.SetValue(obj, valueToSet, null);
+                    else if (fieldInfo != null)
+                        fieldInfo.SetValue(obj, valueToSet);
                 }
             }
         }

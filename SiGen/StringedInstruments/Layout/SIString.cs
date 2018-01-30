@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace SiGen.StringedInstruments.Layout
 {
@@ -19,28 +20,19 @@ namespace SiGen.StringedInstruments.Layout
         private int _StartingFret;
         private StringTuning _Tuning;
         private StringProperties _PhysicalProperties;
-        private Measure _ScaleLength;
         private Measure _ActionAtTwelfthFret;
-        private ScaleLengthMethod _LengthCalculationMethod;
         private double _RelativeScaleLengthOffset;
 
         #endregion
 
         #region Properties
 
+        [XmlAttribute("Index")]
         public int Index { get { return _Index; } }
 
         public Measure ScaleLength
         {
             get { return Layout.CurrentScaleLength.GetLength(Index)/*_ScaleLength*/; }
-            //set
-            //{
-            //    if(value != _ScaleLength)
-            //    {
-            //        _ScaleLength = value;
-            //        Layout.NotifyLayoutChanged(this, "ScaleLength");
-            //    }
-            //}
         }
 
         public Measure FinalLength { get; set; }
@@ -48,6 +40,7 @@ namespace SiGen.StringedInstruments.Layout
         /// <summary>
         /// Gets or sets the number of fret. This value d
         /// </summary>
+        [XmlAttribute("NumberOfFrets")]
         public int NumberOfFrets
         {
             get { return _NumberOfFrets; }
@@ -67,6 +60,7 @@ namespace SiGen.StringedInstruments.Layout
         /// A positive value places the starting fret (or nut) further down the fingerboard (eg: a banjo's first string starts at the fifth fret).
         /// A negative value places the starting fret (or nut) behind the nut (a.k.a. negative fret).
         /// </summary>
+        [XmlAttribute("StartingFret")]
         public int StartingFret
         {
             get { return _StartingFret; }
@@ -98,6 +92,7 @@ namespace SiGen.StringedInstruments.Layout
         /// Gets or sets the relative offset of this string for a mutli scale length layout.
         /// This value affects the placement of this string relative to the longest scale length.</para>
         /// </summary>
+        [XmlAttribute("MultiScaleRatio")]
         public double RelativeScaleLengthOffset
         {
             get { return _RelativeScaleLengthOffset; }
@@ -111,27 +106,33 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
-        public ScaleLengthMethod LengthCalculationMethod
+        public LengthFunction LengthCalculationMethod
         {
-            get { return _LengthCalculationMethod; }
+            get { return Layout.CurrentScaleLength.LengthCalculationMethod; }
             set
             {
-                if (value != _LengthCalculationMethod)
-                {
-                    _LengthCalculationMethod = value;
-                    Layout.NotifyLayoutChanged(this, "LengthCalculationMethod");
-                }
+                Layout.CurrentScaleLength.LengthCalculationMethod = value;
             }
+            //get { return _LengthCalculationMethod; }
+            //set
+            //{
+            //    if (value != _LengthCalculationMethod)
+            //    {
+            //        _LengthCalculationMethod = value;
+            //        Layout.NotifyLayoutChanged(this, "LengthCalculationMethod");
+            //    }
+            //}
         }
 
         public bool PlaceFretsRelativeToString
         {
             get
             {
-                return /*Layout.CompensateFretPositions || */LengthCalculationMethod == ScaleLengthMethod.AlongString;
+                return /*Layout.CompensateFretPositions || */LengthCalculationMethod == LengthFunction.AlongString;
             }
         }
 
+        [XmlElement("Properties")]
         public StringProperties PhysicalProperties
         {
             get { return _PhysicalProperties; }
@@ -144,8 +145,25 @@ namespace SiGen.StringedInstruments.Layout
                     //EnsureCanStillCalculateCompentation();
                 }
             }
-        } 
+        }
 
+        public Measure Gauge
+        {
+            get
+            {
+                if (PhysicalProperties != null)
+                    return PhysicalProperties.StringDiameter;
+                return Measure.Empty;
+            }
+            set
+            {
+                if (PhysicalProperties == null)
+                    PhysicalProperties = new StringProperties();
+                PhysicalProperties.StringDiameter = value;
+            }
+        }
+
+        [XmlElement("Tuning")]
         public StringTuning Tuning
         {
             get { return _Tuning; }
@@ -160,11 +178,12 @@ namespace SiGen.StringedInstruments.Layout
                 }
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the string action at the twelfth fret, measured above the fret.
         /// Used only for fret compensation calculation.
         /// </summary>
+        [XmlAttribute("ActionAtTwelfthFret")]
         public Measure ActionAtTwelfthFret
         {
             get { return _ActionAtTwelfthFret; }
@@ -176,6 +195,14 @@ namespace SiGen.StringedInstruments.Layout
                     //EnsureCanStillCalculateCompentation();
                 }
             }
+        }
+
+        public bool CanCalculateCompensation
+        {
+            get { return Tuning != null && 
+                    PhysicalProperties != null && 
+                    PhysicalProperties.CanCalculateCompensation && 
+                    ActionAtTwelfthFret != Measure.Zero; }
         }
 
         public SIString Previous
@@ -194,22 +221,37 @@ namespace SiGen.StringedInstruments.Layout
         {
             _Index = stringIndex;
             _ActionAtTwelfthFret = Measure.Empty;
+            _RelativeScaleLengthOffset = 0.5;
         }
 
         #region XML serialization
 
-        internal XElement Serialize()
+        internal XElement Serialize(bool includeScale = false)
         {
             var elem = new XElement("String", 
                 new XAttribute("Index", Index),
                 new XAttribute("StartingFret", StartingFret),
                 new XAttribute("NumberOfFrets", NumberOfFrets),
-                new XAttribute("LengthMethod", LengthCalculationMethod),
-                ScaleLength.SerializeAsAttribute("ScaleLength"),
+                new XAttribute("MultiScaleRatio", RelativeScaleLengthOffset),
+                //new XAttribute("LengthMethod", LengthCalculationMethod),
+                //ScaleLength.SerializeAsAttribute("ScaleLength"),
                 ActionAtTwelfthFret.SerializeAsAttribute("ActionAtTwelfthFret"));
-
+            if (includeScale)
+                elem.Add(ScaleLength.SerializeAsAttribute("ScaleLength"));
+            if (Tuning != null)
+                elem.Add(new XElement("Tuning"));
+            if (PhysicalProperties != null)
+                elem.Add(new XElement("Properties"));
             return elem;
-        } 
+        }
+
+        internal void Deserialize(XElement elem)
+        {
+            _StartingFret = elem.GetIntAttribute("StartingFret");
+            _NumberOfFrets = elem.GetIntAttribute("NumberOfFrets");
+            _RelativeScaleLengthOffset = double.Parse(elem.Attribute("MultiScaleRatio").Value);
+            _ActionAtTwelfthFret = Measure.Parse(elem.Attribute("ActionAtTwelfthFret").Value);
+        }
 
         #endregion
     }

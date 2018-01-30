@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SiGen.StringedInstruments.Layout
 {
-    public class StringsSpacingSimple : StringsSpacingBase
+    public class StringSpacingSimple : StringSpacingManager
     {
         private Measure _StringSpacingAtNut;
         private Measure _StringSpacingAtBridge;
@@ -62,7 +63,7 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
-        public StringsSpacingSimple(SILayout layout) : base(layout)
+        public StringSpacingSimple(SILayout layout) : base(layout)
         {
 
         }
@@ -78,6 +79,14 @@ namespace SiGen.StringedInstruments.Layout
                 _StringSpacingAtNut = value;
             else
                 _StringSpacingAtBridge = value;
+        }
+
+        public override XElement Serialize(string elemName)
+        {
+            var elem = base.Serialize(elemName);
+            elem.Add(StringSpacingAtNut.SerializeAsAttribute("StringSpacingAtNut"));
+            elem.Add(StringSpacingAtBridge.SerializeAsAttribute("StringSpacingAtBridge"));
+            return elem;
         }
     }
 }

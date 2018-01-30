@@ -1,4 +1,7 @@
 ﻿using SiGen.Maths;
+using SiGen.Measuring;
+using SiGen.StringedInstruments.Layout;
+using SiGen.StringedInstruments.Layout.Visual;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,8 +17,30 @@ namespace SiGen.UI
     public partial class LayoutViewer : Control
     {
         private double _Zoom;
+        private LayoutViewerDisplayConfig _DisplayConfig;
+        private bool manualZoom;
         private Vector cameraPosition;
         private Vector dragStart;
+        private SILayout _CurrentLayout;
+
+        public SILayout CurrentLayout
+        {
+            get { return _CurrentLayout; }
+            set
+            {
+                if(value != _CurrentLayout)
+                {
+                    _CurrentLayout = value;
+                    ResetCamera();
+                }
+            }
+        }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content), TypeConverter(typeof(ExpandableObjectConverter))]
+        public LayoutViewerDisplayConfig DisplayConfig
+        {
+            get { return _DisplayConfig; }
+        }
 
         public LayoutViewer()
         {
@@ -24,6 +49,14 @@ namespace SiGen.UI
             _Zoom = 1d;
             dragStart = Vector.Empty;
             cameraPosition = Vector.Zero;
+            _DisplayConfig = new LayoutViewerDisplayConfig();
+            _DisplayConfig.PropertyChanged += DisplayConfigChanged;
+        }
+
+        private void DisplayConfigChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (IsHandleCreated)
+                Invalidate();
         }
 
         #region Drawing
@@ -39,9 +72,24 @@ namespace SiGen.UI
             pe.Graphics.ScaleTransform((float)_Zoom, (float)_Zoom);
             pe.Graphics.TranslateTransform((float)cameraPosition.X * -1, (float)cameraPosition.Y);
 
-            pe.Graphics.DrawRectangle(Pens.Black, -10, -10, 20, 20);
-            pe.Graphics.DrawRectangle(Pens.Black, -20, -20, 40, 40);
-            DrawLine(pe.Graphics, new Vector(-10, -10), new Vector(10, 10), Color.Red);
+            //pe.Graphics.DrawRectangle(Pens.Black, -10, -10, 20, 20);
+            //pe.Graphics.DrawRectangle(Pens.Black, -20, -20, 40, 40);
+            //DrawLine(pe.Graphics, new Vector(-10, -10), new Vector(10, 10), Color.Red);
+
+            if(CurrentLayout != null)
+            {
+                foreach(var vElem in CurrentLayout.VisualElements.OfType<LineBase>())
+                {
+                    DrawLine(pe.Graphics, PointToVector(vElem.P1), PointToVector(vElem.P2),  Color.Black);
+                }
+            }
+        }
+
+        private Vector PointToVector(PointM pos)
+        {
+            if (DisplayConfig.FretboardOrientation == Orientation.Horizontal)
+                return new Vector(pos.Y.NormalizedValue, pos.X.NormalizedValue * -1);
+            return new Vector(pos.X.NormalizedValue, pos.Y.NormalizedValue);
         }
 
         private void DrawLine(Graphics g, Vector p1, Vector p2, Color color)
@@ -50,15 +98,51 @@ namespace SiGen.UI
                 g.DrawLine(pen, (float)p1.X, (float)p1.Y * -1, (float)p2.X, (float)p2.Y * -1);
         }
 
+        private void DrawLine(Graphics g, Vector p1, Vector p2, Color color, Measure size)
+        {
+            using (var pen = new Pen(color, (float)size.NormalizedValue))
+                g.DrawLine(pen, (float)p1.X, (float)p1.Y * -1, (float)p2.X, (float)p2.Y * -1);
+        }
+
         #endregion
-
-
 
         public void ResetCamera()
         {
-            _Zoom = 1d;
             cameraPosition = Vector.Zero;
-            Invalidate();
+            ZoomToFit();
+            if (IsHandleCreated)
+                Invalidate();
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            if (!manualZoom)
+            {
+                ZoomToFit();
+            } 
+        }
+
+        private void ZoomToFit()
+        {
+            _Zoom = 1d;
+
+            if (CurrentLayout != null)
+            {
+                var layoutBounds = CurrentLayout.GetBounds();
+                if (!layoutBounds.IsEmpty)
+                {
+                    if (DisplayConfig.FretboardOrientation == Orientation.Horizontal)
+                    {
+                        _Zoom = (Width - 6f) / (float)layoutBounds.Height.NormalizedValue;
+                    }
+                    else
+                    {
+                        _Zoom = (Height - 6f) / (float)layoutBounds.Height.NormalizedValue;
+                    }
+                }
+            }
+            manualZoom = false;
         }
 
         #region Mouse Handling
@@ -92,6 +176,7 @@ namespace SiGen.UI
                 var diffVec = curPos - dragStart;
                 if (diffVec.Length > 1)
                 {
+                    manualZoom = true;
                     diffVec *= -1;
                     cameraPosition += diffVec / _Zoom;
                     dragStart = curPos;
@@ -113,7 +198,7 @@ namespace SiGen.UI
             {
                 var oldZoom = _Zoom;
                 var mousePos = e.Location;
-
+                manualZoom = true;
                 if (e.Delta > 0)
                     _Zoom *= 1.1;
                 else

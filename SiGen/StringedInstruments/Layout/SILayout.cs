@@ -1,8 +1,10 @@
 ﻿using SiGen.Measuring;
 using SiGen.Physics;
 using SiGen.StringedInstruments.Layout.Visual;
+using SiGen.Utilities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,21 +12,24 @@ using System.Xml.Linq;
 
 namespace SiGen.StringedInstruments.Layout
 {
-    public class SILayout
+    public class SILayout// : XSerializable
     {
         #region Fields
 
+        internal List<LayoutComponent> _Component;
         private Temperament _FretsTemperament;
         private bool _LeftHanded;
         private int _NumberOfStrings;
         private SIString[] _Strings;
         private bool _CompensateFretPositions;
-        private IStringsSpacing _StringSpacing;
-        private ScaleLengthMode _ScaleLengthMode;
+        private StringSpacingManager _StringSpacing;
+        private ScaleLengthType _ScaleLengthMode;
+        private FingerboardMargin _Margins;
         private ScaleLengthManager.SingleScale _SingleScaleMgr;
         private ScaleLengthManager.MultiScale _MultiScaleMgr;
         private ScaleLengthManager.Individual _ManualScaleMgr;
         private List<VisualElement> _VisualElements;
+        private bool isLayoutDirty;
 
         #endregion
 
@@ -38,13 +43,16 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
+        /// <summary>
+        /// Strings are ordered from Treble to Bass!!!
+        /// </summary>
         public SIString[] Strings { get { return _Strings; } }
 
         public string LayoutName { get; set; }
 
         #region Scale length management
 
-        public ScaleLengthMode ScaleLengthMode
+        public ScaleLengthType ScaleLengthMode
         {
             get { return _ScaleLengthMode; }
             set
@@ -64,17 +72,34 @@ namespace SiGen.StringedInstruments.Layout
                 switch (ScaleLengthMode)
                 {
                     default:
-                    case ScaleLengthMode.Single:
+                    case ScaleLengthType.Single:
                         return _SingleScaleMgr;
-                    case ScaleLengthMode.Multiple:
-                        return _ManualScaleMgr;
-                    case ScaleLengthMode.Individual:
+                    case ScaleLengthType.Multiple:
+                        return _MultiScaleMgr;
+                    case ScaleLengthType.Individual:
                         return _ManualScaleMgr;
                 }
             }
         }
 
+        public ScaleLengthManager.SingleScale SingleScaleConfig
+        {
+            get { return _SingleScaleMgr; }
+        }
+
+        public ScaleLengthManager.MultiScale MultiScaleConfig
+        {
+            get { return _MultiScaleMgr; }
+        }
+
+        public ScaleLengthManager.Individual ManualScaleConfig
+        {
+            get { return _ManualScaleMgr; }
+        }
+
         #endregion
+
+        public FingerboardMargin Margins { get { return _Margins; } }
 
         public Temperament FretsTemperament
         {
@@ -90,7 +115,7 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
-        public IStringsSpacing StringSpacing
+        public StringSpacingManager StringSpacing
         {
             get { return _StringSpacing; }
             set
@@ -99,6 +124,21 @@ namespace SiGen.StringedInstruments.Layout
                 {
                     _StringSpacing = value;
                     NotifyLayoutChanged(this, "StringSpacing");
+                }
+            }
+        }
+
+        public bool CompensateFretPositions
+        {
+            get { return _CompensateFretPositions; }
+            set
+            {
+                if(value != _CompensateFretPositions)
+                {
+                    if (value && !Strings.All(s => s.CanCalculateCompensation))
+                        return;
+                    _CompensateFretPositions = value;
+                    NotifyLayoutChanged(this, "CompensateFretPositions");
                 }
             }
         }
@@ -120,18 +160,22 @@ namespace SiGen.StringedInstruments.Layout
 
         #region Events
 
-        public event EventHandler NumberOfStringsChanged;
+        //public event EventHandler NumberOfStringsChanged;
+        public event EventHandler LayoutChanged;
 
         #endregion
 
         public SILayout()
         {
-            _StringSpacing = new StringsSpacingSimple(this);
+            _Component = new List<LayoutComponent>();
+            _Margins = new FingerboardMargin(this);
+            _StringSpacing = new StringSpacingSimple(this);
             _SingleScaleMgr = new ScaleLengthManager.SingleScale(this);
             _MultiScaleMgr = new ScaleLengthManager.MultiScale(this);
             _ManualScaleMgr = new ScaleLengthManager.Individual(this);
             _VisualElements = new List<VisualElement>();
-            _ScaleLengthMode = ScaleLengthMode.Single;
+            _ScaleLengthMode = ScaleLengthType.Single;
+            LayoutName = string.Empty;
         }
 
         private void InitializeStrings(int oldValue, int newValue)
@@ -146,13 +190,15 @@ namespace SiGen.StringedInstruments.Layout
                 else
                     _Strings[i] = new SIString(this, i);
             }
-            if (NumberOfStringsChanged != null)
-                NumberOfStringsChanged(this, EventArgs.Empty);
+            foreach (var comp in _Component)
+                (comp as ILayoutComponent).OnStringConfigurationChanged();
+            //if (NumberOfStringsChanged != null)
+            //    NumberOfStringsChanged(this, EventArgs.Empty);
         }
 
         internal void NotifyLayoutChanged(object sender, string propname)
         {
-
+            isLayoutDirty = true;
         }
 
         public bool VerifyFretboardHasStraightFrets()
@@ -175,52 +221,126 @@ namespace SiGen.StringedInstruments.Layout
             return true;
         }
 
-        #region XML serialization
-
-        public static SILayout Load(string path)
+        public RectangleM GetBounds()
         {
-            return null;
+            if (VisualElements.Count == 0)
+                return RectangleM.Empty;
+
+            Measure minX = Measure.Zero;
+            Measure maxX = Measure.Zero;
+            Measure minY = Measure.Zero;
+            Measure maxY = Measure.Zero;
+
+            foreach(var elem in VisualElements)
+            {
+                if (elem.Bounds.Left < minX)
+                    minX = elem.Bounds.Left;
+                if (elem.Bounds.Bottom < minY)
+                    minY = elem.Bounds.Bottom;
+                if (elem.Bounds.Right > maxX)
+                    maxX = elem.Bounds.Right;
+                if (elem.Bounds.Top > maxY)
+                    maxY = elem.Bounds.Top;
+            }
+
+            return RectangleM.FromLTRB(minX, maxY, maxX, minY);
         }
+
+        #region XML serialization
 
         public void Save(string path)
         {
-            var configElem = new XElement("Config");
-            var stringsElem = new XElement("Strings");
-            var spacingElem = new XElement("Spacings");
+            using (var fs = File.Open(path, FileMode.Create))
+                Save(fs);
+        }
+        
+        public void Save(Stream stream)
+        {
+            var root = new XElement("Layout");
 
-            var rootElem = new XElement("SILayout", new XAttribute("Name", LayoutName), 
-                configElem, stringsElem, spacingElem);
+            //*** BASIC PARAMETERS ***
+            if (!string.IsNullOrEmpty(LayoutName))
+                root.Add(new XAttribute("Name", LayoutName));
 
-            configElem.Add(new XElement("Temperament", new XAttribute("Value", FretsTemperament)));
-            configElem.Add(new XElement("LeftHanded", new XAttribute("Value", LeftHanded)));
+            root.Add(SerializeProperty("Temperament", FretsTemperament));
+            root.Add(SerializeProperty("LeftHanded", LeftHanded));
+            root.Add(SerializeProperty("FretCompensation", CompensateFretPositions));
+            root.Add(CurrentScaleLength.Serialize("ScaleLength"));
+            root.Add(Utilities.SerializationHelper.GenericSerialize(Margins, "FingerboardMargins"));
 
-            foreach (var str in Strings)
-                stringsElem.Add(str.Serialize());
-
-            for(int i = 0; i < NumberOfStrings - 1; i++)
+            var stringsElem = new XElement("Strings", new XAttribute("Count", NumberOfStrings));
+            for (int i = 0; i < NumberOfStrings; i++)
             {
-                spacingElem.Add(new XElement("Spacing", 
-                    new XAttribute("Index", i), 
-                    _StringSpacing.GetSpacing(i, true).SerializeAsAttribute("Nut"),
-                    _StringSpacing.GetSpacing(i, false).SerializeAsAttribute("Bridge")
-                    ));
+                stringsElem.Add(Utilities.SerializationHelper.GenericSerialize(Strings[i], "String"));
+                //stringsElem.Add(Strings[i].Serialize(ScaleLengthMode == ScaleLengthType.Individual));
+            }
+            root.Add(stringsElem);
+            if(NumberOfStrings > 1)
+                root.Add(StringSpacing.Serialize("StringSpacings"));
+
+            var doc = new XDocument(root);
+            doc.Save(stream);
+        }
+        
+        public static SILayout Load(string path)
+        {
+            using (var fs = File.Open(path, FileMode.Open))
+                return Load(fs);
+        }
+
+        public static SILayout Load(Stream stream)
+        {
+            var doc = XDocument.Load(stream);
+            var root = doc.Root;
+
+            var layout = new SILayout();
+            layout.NumberOfStrings = root.Element("Strings").GetIntAttribute("Count");
+            layout.ScaleLengthMode = DeserializeProperty<ScaleLengthType>(root.Element("ScaleLength").Attribute("Type"));
+            layout.CurrentScaleLength.Deserialize(root.Element("ScaleLength"));
+            SerializationHelper.GenericDeserialize(layout.Margins, root.Element("FingerboardMargins"));
+
+            if (root.ContainsElement("Temperament"))
+                layout.FretsTemperament = DeserializeProperty<Temperament>(root.Element("Temperament"));
+
+            if (root.ContainsElement("LeftHanded"))
+                layout.LeftHanded = DeserializeProperty<bool>(root.Element("LeftHanded"));
+
+            for(int i = 0;i < layout.NumberOfStrings; i++)
+            {
+                var stringElem = root.Element("Strings").Elements("String").First(s => s.Attribute("Index").Value == i.ToString());
+                SerializationHelper.GenericDeserialize(layout.Strings[i], stringElem);
+                //layout.Strings[i].Deserialize(stringElem);
             }
 
-            var doc = new XDocument(rootElem);
+            //if (root.ContainsElement("FretCompensation"))
+            //    layout.LeftHanded = DeserializeProperty<bool>(root.Element("FretCompensation"));
+            return null;
+        }
 
-            doc.Save(path);
+        private static XElement SerializeProperty(string name, object value)
+        {
+            return new XElement(name, new XAttribute("Value", value));
+        }
+
+        private static T DeserializeProperty<T>(XElement elem)
+        {
+            return DeserializeProperty<T>(elem.Attribute("Value"));
+        }
+
+        private static T DeserializeProperty<T>(XAttribute attr)
+        {
+            var strValue = attr.Value;
+            if (typeof(T) == typeof(string))
+                return (T)(object)strValue;
+            if (typeof(T) == typeof(bool))
+                return (T)(object)bool.Parse(strValue);
+            if (typeof(T).IsEnum)
+                return (T)Enum.Parse(typeof(T), strValue);
+
+            return default(T);
         }
 
         #endregion
 
-        #region Enums
-
-        //public enum StringConfigChangeType
-        //{
-        //    Layout,
-        //    Display
-        //}
-
-        #endregion
     }
 }

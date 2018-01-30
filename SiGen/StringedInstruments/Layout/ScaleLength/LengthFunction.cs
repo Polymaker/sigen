@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SiGen.StringedInstruments.Layout
 {
-    public enum ScaleLengthMethod
+    public enum LengthFunction
     {
         /// <summary>
         /// The scale length is applied/calculated with the string's real length. 

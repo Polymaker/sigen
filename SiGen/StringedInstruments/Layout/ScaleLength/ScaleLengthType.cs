@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SiGen.StringedInstruments.Layout
 {
-    public enum ScaleLengthMode
+    public enum ScaleLengthType
     {
         Single,
         Multiple,

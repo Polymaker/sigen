@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SiGen.Measuring;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,6 @@ namespace SiGen.StringedInstruments.Layout.Visual
         {
             get { return _ElementType; }
         }
+        public abstract RectangleM Bounds { get; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
@@ -10,7 +11,7 @@ using System.Xml.Serialization;
 
 namespace SiGen.Measuring
 {
-    [Serializable]
+    [Serializable, TypeConverter(typeof(Utilities.MeasureConverter))]
     public struct Measure : ISerializable, IXmlSerializable
     {
 
@@ -253,6 +254,26 @@ namespace SiGen.Measuring
             return value1 > value2 ? value1 : value2;
         }
 
+        public static double SmartConvert(double value, double conv, bool mult)
+        {
+            double res1 = mult ? value * conv : value / conv;
+            double res2 = (double)(mult ? (decimal)value * (decimal)conv : (decimal)value / (decimal)conv);
+            var res1Str = res1.ToString();
+            var res2Str = res2.ToString();
+            if (res1Str.Contains("."))
+                res1Str = res1Str.Substring(res1Str.IndexOf(".") + 1);
+            else
+                res1Str = string.Empty;
+            if (res2Str.Contains("."))
+                res2Str = res2Str.Substring(res2Str.IndexOf(".") + 1);
+            else
+                res2Str = string.Empty;
+            if (res1Str.Length < res2Str.Length)
+                return res1;
+            else
+                return res2;
+        }
+
         #endregion
 
         private void EnsureIsNotNaN()
@@ -275,6 +296,9 @@ namespace SiGen.Measuring
 
         public string ToString(UnitOfMeasure unit, bool forceDecimal = false)
         {
+            if (IsEmpty)
+                return "N/A";
+
             if (unit == null)
                 return Value.ToString();
 
@@ -375,10 +399,27 @@ namespace SiGen.Measuring
         {
             if(IsEmpty)
                 return new System.Xml.Linq.XAttribute(name, "N/A");
-            return new System.Xml.Linq.XAttribute(name, string.Format("{0}{1}", Value, Unit != null ? Unit.Symbol : string.Empty));
+            return new System.Xml.Linq.XAttribute(name, string.Format("{0}{1}", Value, Unit != null ? Unit.Abreviation : string.Empty));
         }
 
+        public static Measure Parse(string value)
+        {
+            return (Measure)TypeDescriptor.GetConverter(typeof(Measure)).ConvertFrom(value);
+        }
 
+        public static bool TryParse(string value, out Measure measure)
+        {
+            measure = Measure.Empty;
+            try
+            {
+                measure = Parse(value);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
 
         #endregion
     }
