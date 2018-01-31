@@ -66,6 +66,7 @@ namespace SiGen.UI
             base.OnPaint(pe);
             pe.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
             var zoomf = (float)_Zoom;
             var center = new PointF(Width / 2f, Height / 2f);
             pe.Graphics.TranslateTransform(center.X, center.Y);
@@ -88,21 +89,42 @@ namespace SiGen.UI
 
         private void DrawVisualElement(Graphics g, VisualElement elem)
         {
+            if (elem is StringLine)
+                DrawString(g, (StringLine)elem);
+
             switch (elem.ElementType)
             {
                 case VisualElementType.FingerboardEdge:
                     var edgeLine = (LayoutLine)elem;
                     DrawLine(g, PointToVector(edgeLine.P1), PointToVector(edgeLine.P2), Color.Blue);
                     break;
-                case VisualElementType.String:
-                    var stringLine = (StringLine)elem;
-                    DrawLine(g, PointToVector(stringLine.P1), PointToVector(stringLine.P2), Color.Black);
-                    break;
+                //case VisualElementType.String:
+                //    var stringLine = (StringLine)elem;
+                //    DrawLine(g, PointToVector(stringLine.P1), PointToVector(stringLine.P2), Color.Black);
+                //    break;
                 case VisualElementType.StringCenter:
                 case VisualElementType.GuideLine:
                     var guideLine = (LayoutLine)elem;
-                    DrawLine(g, PointToVector(guideLine.P1), PointToVector(guideLine.P2), Color.Gray);
+                    DrawLine(g, PointToVector(guideLine.P1), PointToVector(guideLine.P2), Color.Silver);
                     break;
+            }
+        }
+
+        private void DrawString(Graphics g, StringLine stringLine)
+        {
+            if (DisplayConfig.RenderRealStrings)
+            {
+                if(stringLine.String.Gauge != Measure.Empty && stringLine.String.Gauge > Measure.Zero)
+                {
+                    var stringColor = Color.Black;// stringLine.String.Gauge[UnitOfMeasure.In] >= 0.02 ? Color.LightGray : Color.DimGray;
+                    //if(stringLine.String.Gauge[UnitOfMeasure.In] >= 0.02)
+                    //    DrawLine(g, PointToVector(stringLine.P1), PointToVector(stringLine.P2), Color.DimGray, stringLine.String.Gauge + Measure.FromNormalizedValue(1.5 / _Zoom,null));
+                    DrawLine(g, PointToVector(stringLine.P1), PointToVector(stringLine.P2), stringColor, stringLine.String.Gauge);
+                }
+            }
+            else
+            {
+                DrawLine(g, PointToVector(stringLine.P1), PointToVector(stringLine.P2), Color.Black);
             }
         }
 

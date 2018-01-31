@@ -58,6 +58,7 @@ namespace SiGen
             
             test.StringSpacing.SetSpacing(0, Measure.Mm(7), true);
             test.StringSpacing.SetSpacing(0, Measure.Mm(10), false);
+
             test.RebuildLayout();
             layoutViewer1.CurrentLayout = test;
             

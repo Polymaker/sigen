@@ -189,8 +189,8 @@ namespace SiGen.StringedInstruments.Layout
                 if (_Lengths != null && _Lengths.Length > 0)
                 {
                     var oldLengths = _Lengths;
-                    _Lengths = new Measure[Layout.NumberOfStrings - 1];
-                    for (int i = 0; i < Layout.NumberOfStrings - 1; i++)
+                    _Lengths = new Measure[Layout.NumberOfStrings];
+                    for (int i = 0; i < Layout.NumberOfStrings; i++)
                     {
                         if (i < oldLengths.Length)
                             _Lengths[i] = oldLengths[i];
@@ -199,7 +199,7 @@ namespace SiGen.StringedInstruments.Layout
                     }
                 }
                 else
-                    _Lengths = new Measure[Layout.NumberOfStrings - 1];
+                    _Lengths = new Measure[Layout.NumberOfStrings];
             }
 
             public override Measure GetLength(int index)
@@ -211,6 +211,13 @@ namespace SiGen.StringedInstruments.Layout
             {
                 _Lengths[index] = value;
                 Layout.NotifyLayoutChanged(this, "ScaleLength");
+            }
+
+            public void SetLengths(params Measure[] lengths)
+            {
+                if (lengths.Length != NumberOfStrings)
+                    throw new InvalidOperationException();
+                _Lengths = lengths;
             }
         }
     } 

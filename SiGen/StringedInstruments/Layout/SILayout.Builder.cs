@@ -24,6 +24,7 @@ namespace SiGen.StringedInstruments.Layout
 
             LayoutStrings(nutStringPos, bridgeStringPos);
             CreateFingerboardEdges();
+            PlaceFrets();
 
             isLayoutDirty = false;
         }
@@ -80,6 +81,7 @@ namespace SiGen.StringedInstruments.Layout
                     AddVisualElement(new StringLine(Strings[i],
                         PointM.FromVector(nutPos, nutStringPos[i].Unit),
                         PointM.FromVector(bridgePos, bridgeStringPos[i].Unit)));
+                    Strings[i].UpdateFinalLength();
                 }
             }
             else
@@ -110,12 +112,7 @@ namespace SiGen.StringedInstruments.Layout
             }
 
             for(int i = 0; i < NumberOfStrings - 1; i++)
-            {
                 AddVisualElement(new StringCenter(Strings[i + 1].LayoutLine, Strings[i].LayoutLine));
-                //var str1 = Strings[i].LayoutLine;
-                //var str2 = Strings[i + 1].LayoutLine;
-                //AddVisualElement(new LayoutLine(PointM.Average(str1.P1, str2.P1), PointM.Average(str1.P2, str2.P2), VisualElementType.StringCenter));
-            }
         }
 
         /// <summary>
@@ -248,6 +245,14 @@ namespace SiGen.StringedInstruments.Layout
             return new FretPosition() { FretIndex = fret, Position = fretPos, StringIndex = str.Index, PositionRatio = fretPosRatio };
         }
 
+        private void PlaceFrets()
+        {
+            var stringFrets = new Dictionary<int, List<FretPosition>>();
+            foreach (var str in Strings)
+                stringFrets.Add(str.Index, CalculateFretsForString(str));
+
+        }
+
         /// <summary>
         /// Returns the fret position as the distance from the bridge.
         /// </summary>
@@ -258,7 +263,7 @@ namespace SiGen.StringedInstruments.Layout
             return 1d / Math.Pow(2, fret / 12d);
         }
 
-        public static double GetRelativeFretPosition(StringTuning openString, int fret, Temperament temperament/*, int startingFret = 0*/)
+        public static double GetRelativeFretPosition(StringTuning openString, int fret, Temperament temperament)
         {
             var openCents = openString.FinalPitch.Cents;
             var fretNote = openString.Note.AddSteps(fret);
