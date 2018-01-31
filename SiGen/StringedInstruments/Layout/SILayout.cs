@@ -12,7 +12,7 @@ using System.Xml.Linq;
 
 namespace SiGen.StringedInstruments.Layout
 {
-    public class SILayout// : XSerializable
+    public partial class SILayout// : XSerializable
     {
         #region Fields
 
@@ -30,6 +30,7 @@ namespace SiGen.StringedInstruments.Layout
         private ScaleLengthManager.Individual _ManualScaleMgr;
         private List<VisualElement> _VisualElements;
         private bool isLayoutDirty;
+        private bool isLoading;
 
         #endregion
 
@@ -59,6 +60,8 @@ namespace SiGen.StringedInstruments.Layout
             {
                 if (value != _ScaleLengthMode)
                 {
+                    if (NumberOfStrings == 1)
+                        return;
                     _ScaleLengthMode = value;
                     NotifyLayoutChanged(this, "ScaleLengthMode");
                 }
@@ -180,6 +183,10 @@ namespace SiGen.StringedInstruments.Layout
 
         private void InitializeStrings(int oldValue, int newValue)
         {
+            if (newValue < 0)
+                return;
+            if (newValue == 1)
+                _ScaleLengthMode = ScaleLengthType.Single;
             _NumberOfStrings = newValue;
             var oldStrings = _Strings;
             _Strings = new SIString[NumberOfStrings];
@@ -198,7 +205,8 @@ namespace SiGen.StringedInstruments.Layout
 
         internal void NotifyLayoutChanged(object sender, string propname)
         {
-            isLayoutDirty = true;
+            if(!isLoading)
+                isLayoutDirty = true;
         }
 
         public bool VerifyFretboardHasStraightFrets()
@@ -293,7 +301,7 @@ namespace SiGen.StringedInstruments.Layout
             var doc = XDocument.Load(stream);
             var root = doc.Root;
 
-            var layout = new SILayout();
+            var layout = new SILayout() { isLoading = true };
             layout.NumberOfStrings = root.Element("Strings").GetIntAttribute("Count");
             layout.ScaleLengthMode = DeserializeProperty<ScaleLengthType>(root.Element("ScaleLength").Attribute("Type"));
             layout.CurrentScaleLength.Deserialize(root.Element("ScaleLength"));
@@ -312,9 +320,13 @@ namespace SiGen.StringedInstruments.Layout
                 //layout.Strings[i].Deserialize(stringElem);
             }
 
-            //if (root.ContainsElement("FretCompensation"))
-            //    layout.LeftHanded = DeserializeProperty<bool>(root.Element("FretCompensation"));
-            return null;
+            if (root.ContainsElement("FretCompensation"))
+                layout.CompensateFretPositions = DeserializeProperty<bool>(root.Element("FretCompensation"));
+
+            layout.isLoading = false;
+            layout.isLayoutDirty = true;
+
+            return layout;
         }
 
         private static XElement SerializeProperty(string name, object value)

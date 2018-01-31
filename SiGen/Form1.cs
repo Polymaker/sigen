@@ -33,7 +33,7 @@ namespace SiGen
             test.SingleScaleConfig.Length = Measure.Inches(25.5);
             test.MultiScaleConfig.Treble = Measure.Inches(25.5);
             test.MultiScaleConfig.Bass = Measure.Inches(27);
-
+            //test.Strings[6].StartingFret = -2;
             test.Strings.MassAssign(s => s.PhysicalProperties,
                 new StringProperties(Measure.Inches(0.009), Measure.Inches(0.009), 0.00001794, 29442660.75919),
                 new StringProperties(Measure.Inches(0.011), Measure.Inches(0.011), 0.00002680, 29442660.75919),
@@ -58,7 +58,7 @@ namespace SiGen
             
             test.StringSpacing.SetSpacing(0, Measure.Mm(7), true);
             test.StringSpacing.SetSpacing(0, Measure.Mm(10), false);
-            LayoutBuilder.BuildLayout(test);
+            test.RebuildLayout();
             layoutViewer1.CurrentLayout = test;
             
             //test.Save("template 7-strings multi-scale guitar.xml");

@@ -152,7 +152,12 @@ namespace SiGen.Measuring
         /// <param name="point"></param>
         public static explicit operator Vector(PointM point)
         {
-            return new Vector(point.X.NormalizedValue, point.Y.NormalizedValue);
+            return point.ToVector();
+        }
+
+        public Vector ToVector()
+        {
+            return new Vector(X.NormalizedValue, Y.NormalizedValue);
         }
 
         #endregion

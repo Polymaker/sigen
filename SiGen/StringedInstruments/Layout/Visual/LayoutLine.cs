@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SiGen.StringedInstruments.Layout.Visual
 {
-    public class LineBase : VisualElement
+    public class LayoutLine : VisualElement
     {
         private bool isDirty;
         private Vector _Direction;
@@ -18,7 +18,6 @@ namespace SiGen.StringedInstruments.Layout.Visual
         private PointM _P2;
         private Measure _Length;
         
-
         public PointM P1
         {
             get { return _P1; }
@@ -79,12 +78,20 @@ namespace SiGen.StringedInstruments.Layout.Visual
             }
         }
 
-        public LineBase() { }
+        public LayoutLine() { }
 
-        public LineBase(PointM p1, PointM p2)
+        public LayoutLine(PointM p1, PointM p2)
         {
             P1 = p1;
             P2 = p2;
+            _ElementType = VisualElementType.GuideLine;
+        }
+
+        public LayoutLine(PointM p1, PointM p2, VisualElementType type)
+        {
+            P1 = p1;
+            P2 = p2;
+            _ElementType = type;
         }
 
         private void UpdateInfos()
@@ -106,6 +113,19 @@ namespace SiGen.StringedInstruments.Layout.Visual
             if (Equation.Intersect(perp, out inter))
                 return new PointM(inter.X, inter.Y, P1.Unit ?? P2.Unit);
             return PointM.Empty;
+        }
+
+        public PointM GetPerpendicularPoint(PointM pos, Measure dist)
+        {
+            //var virtualLine = Line.FromPoints((Vector)P1, (Vector)P2);
+            var perp = Maths.Line.GetPerpendicular(Equation, (Vector)pos);
+            return pos + perp.Vector * dist;
+        }
+
+        public PointM GetIntersection(LayoutLine line)
+        {
+            var inter = Equation.GetIntersection(line.Equation);
+            return PointM.FromVector(inter, P1.Unit);
         }
     }
 }

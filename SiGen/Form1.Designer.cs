@@ -44,7 +44,7 @@
             // 
             // layoutViewer1
             // 
-            this.layoutViewer1.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.layoutViewer1.BackColor = System.Drawing.SystemColors.Window;
             this.layoutViewer1.CurrentLayout = null;
             this.layoutViewer1.DisplayConfig.FretWidth = new SiGen.Measuring.Measure(2.5D, SiGen.Measuring.UnitOfMeasure.Millimeters);
             this.layoutViewer1.Dock = System.Windows.Forms.DockStyle.Fill;

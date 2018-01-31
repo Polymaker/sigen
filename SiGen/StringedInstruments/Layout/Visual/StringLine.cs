@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SiGen.StringedInstruments.Layout.Visual
 {
-    public class StringLine : LineBase
+    public class StringLine : LayoutLine
     {
         private readonly SIString _String;
 
@@ -16,24 +16,11 @@ namespace SiGen.StringedInstruments.Layout.Visual
             get { return _String; }
         }
 
-        public override VisualElementType ElementType
-        {
-            get
-            {
-                return VisualElementType.String;
-            }
-        }
-
         public int Index { get { return _String.Index; } }
 
         public PointM FretZero { get; set; }
 
-        public StringLine(SIString str)
-        {
-            _String = str;
-        }
-
-        public StringLine(SIString str, PointM p1, PointM p2) : base(p1, p2)
+        public StringLine(SIString str, PointM p1, PointM p2) : base(p1, p2, VisualElementType.String)
         {
             _String = str;
         }

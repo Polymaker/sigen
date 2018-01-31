@@ -8,12 +8,17 @@ using System.Threading.Tasks;
 
 namespace SiGen.StringedInstruments.Layout.Visual
 {
-    public class StringCenter : LineBase
+    public class StringCenter : LayoutLine
     {
         private StringLine _Left;
         private StringLine _Right;
-
+        /// <summary>
+        /// Towwards Bass
+        /// </summary>
         public StringLine Left { get { return _Left; } }
+        /// <summary>
+        /// Towards Treble
+        /// </summary>
         public StringLine Right { get { return _Right; } }
 
         public override VisualElementType ElementType

@@ -35,6 +35,9 @@ namespace SiGen.StringedInstruments.Layout
             get { return Layout.CurrentScaleLength.GetLength(Index)/*_ScaleLength*/; }
         }
 
+        /// <summary>
+        /// Length used for fret positions
+        /// </summary>
         public Measure FinalLength { get; set; }
 
         /// <summary>
@@ -128,7 +131,7 @@ namespace SiGen.StringedInstruments.Layout
         {
             get
             {
-                return /*Layout.CompensateFretPositions || */LengthCalculationMethod == LengthFunction.AlongString;
+                return Layout.CompensateFretPositions || LengthCalculationMethod == LengthFunction.AlongString;
             }
         }
 
@@ -215,6 +218,11 @@ namespace SiGen.StringedInstruments.Layout
             get { return Index < Layout.NumberOfStrings - 1 ? Layout.Strings[Index + 1] : null; }
         }
 
+        public Visual.StringLine LayoutLine
+        {
+            get { return Layout.VisualElements.OfType<Visual.StringLine>().FirstOrDefault(l => l.String == this); }
+        }
+
         #endregion
 
         public SIString(SILayout layout, int stringIndex) : base(layout)
@@ -222,6 +230,19 @@ namespace SiGen.StringedInstruments.Layout
             _Index = stringIndex;
             _ActionAtTwelfthFret = Measure.Empty;
             _RelativeScaleLengthOffset = 0.5;
+        }
+
+        public bool HasFret(int fretNo)
+        {
+            return fretNo >= StartingFret && fretNo <= NumberOfFrets;
+        }
+
+        internal void UpdateFinalLength()
+        {
+            if (PlaceFretsRelativeToString)
+                FinalLength = LayoutLine.Length;
+            else
+                FinalLength = LayoutLine.Bounds.Height;
         }
 
         #region XML serialization

@@ -15,13 +15,23 @@
 
         public double A { get { return _A; } }
 
-        public double B { get { return _A; } }
+        public double B { get { return _B; } }
 
         public double X { get { return _X; } }
 
         public bool IsVertical { get { return _IsVertical; } }
 
         public bool IsHorizontal { get { return !IsVertical && A.EqualOrClose(0); } }
+
+        public Vector Vector
+        {
+            get
+            {
+                if (IsVertical)
+                    return new Vector(0, 1);
+                return new Vector(1, A).Normalized;
+            }
+        }
 
         #endregion
 

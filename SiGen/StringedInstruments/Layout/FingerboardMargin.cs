@@ -12,7 +12,13 @@ namespace SiGen.StringedInstruments.Layout
     {
         private Measure _Treble;
         private Measure _Bass;
+        //private Measure _TrebleAtNut;
+        //private Measure _BassAtNut;
+        //private Measure _TrebleAtBridge;
+        //private Measure _BassAtBridge;
         private Measure _LastFret;
+        
+
 
         [XmlAttribute("Treble")]
         public Measure Treble
@@ -68,6 +74,9 @@ namespace SiGen.StringedInstruments.Layout
         public FingerboardMargin(SILayout layout) : base(layout)
         {
             _LastFret = Measure.Empty;
+
         }
+
+        //public class 
     }
 }

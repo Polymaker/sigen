@@ -78,10 +78,31 @@ namespace SiGen.UI
 
             if(CurrentLayout != null)
             {
-                foreach(var vElem in CurrentLayout.VisualElements.OfType<LineBase>())
+                foreach(var vElem in CurrentLayout.VisualElements/*.OfType<LayoutLine>()*/)
                 {
-                    DrawLine(pe.Graphics, PointToVector(vElem.P1), PointToVector(vElem.P2),  Color.Black);
+                    DrawVisualElement(pe.Graphics, vElem);
+                    //DrawLine(pe.Graphics, PointToVector(vElem.P1), PointToVector(vElem.P2), vElem.ElementType == VisualElementType.FingerboardEdge ? Color.Blue : Color.Black);
                 }
+            }
+        }
+
+        private void DrawVisualElement(Graphics g, VisualElement elem)
+        {
+            switch (elem.ElementType)
+            {
+                case VisualElementType.FingerboardEdge:
+                    var edgeLine = (LayoutLine)elem;
+                    DrawLine(g, PointToVector(edgeLine.P1), PointToVector(edgeLine.P2), Color.Blue);
+                    break;
+                case VisualElementType.String:
+                    var stringLine = (StringLine)elem;
+                    DrawLine(g, PointToVector(stringLine.P1), PointToVector(stringLine.P2), Color.Black);
+                    break;
+                case VisualElementType.StringCenter:
+                case VisualElementType.GuideLine:
+                    var guideLine = (LayoutLine)elem;
+                    DrawLine(g, PointToVector(guideLine.P1), PointToVector(guideLine.P2), Color.Gray);
+                    break;
             }
         }
 

@@ -9,7 +9,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
 {
     public abstract class VisualElement
     {
-        private VisualElementType _ElementType;
+        protected VisualElementType _ElementType;
         public virtual VisualElementType ElementType
         {
             get { return _ElementType; }
