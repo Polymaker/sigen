@@ -83,6 +83,7 @@
     <Compile Include="StringedInstruments\Layout\SILayout.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FingerboardEdge.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FretLine.cs" />
+    <Compile Include="StringedInstruments\Layout\Visual\FretSegment.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\StringCenter.cs" />
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingAlignment.cs" />
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingManager.cs" />

@@ -67,6 +67,7 @@ namespace SiGen.StringedInstruments.Layout
             public SingleScale(SILayout layout) : base(layout)
             {
                 _LengthCalculationMethod = LengthFunction.AlongFingerboard;
+                _Length = Measure.Inches(25.5);
             }
 
             public override Measure GetLength(int index)
@@ -131,7 +132,8 @@ namespace SiGen.StringedInstruments.Layout
 
             public MultiScale(SILayout layout) : base(layout)
             {
-
+                _Treble = Measure.Inches(25.5);
+                _Bass = Measure.Inches(27);
             }
 
             public override Measure GetLength(int index)
@@ -199,7 +201,11 @@ namespace SiGen.StringedInstruments.Layout
                     }
                 }
                 else
+                {
                     _Lengths = new Measure[Layout.NumberOfStrings];
+                    for (int i = 0; i < Layout.NumberOfStrings; i++)
+                        _Lengths[i] = Measure.Inches(25.5);
+                }
             }
 
             public override Measure GetLength(int index)

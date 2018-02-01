@@ -58,7 +58,8 @@ namespace SiGen
             
             test.StringSpacing.SetSpacing(0, Measure.Mm(7), true);
             test.StringSpacing.SetSpacing(0, Measure.Mm(10), false);
-
+            test.Strings[6].StartingFret = -2;
+            test.Strings[0].NumberOfFrets = 22;
             test.RebuildLayout();
             layoutViewer1.CurrentLayout = test;
             

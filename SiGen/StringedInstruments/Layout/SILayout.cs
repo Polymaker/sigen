@@ -241,6 +241,8 @@ namespace SiGen.StringedInstruments.Layout
 
             foreach(var elem in VisualElements)
             {
+                if (elem.Bounds.IsEmpty)
+                    continue;
                 if (elem.Bounds.Left < minX)
                     minX = elem.Bounds.Left;
                 if (elem.Bounds.Bottom < minY)

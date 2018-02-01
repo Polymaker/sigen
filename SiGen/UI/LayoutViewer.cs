@@ -79,11 +79,14 @@ namespace SiGen.UI
 
             if(CurrentLayout != null)
             {
-                foreach(var vElem in CurrentLayout.VisualElements/*.OfType<LayoutLine>()*/)
-                {
-                    DrawVisualElement(pe.Graphics, vElem);
-                    //DrawLine(pe.Graphics, PointToVector(vElem.P1), PointToVector(vElem.P2), vElem.ElementType == VisualElementType.FingerboardEdge ? Color.Blue : Color.Black);
-                }
+                //foreach(var vElem in CurrentLayout.VisualElements/*.OfType<LayoutLine>()*/)
+                //{
+                //    DrawVisualElement(pe.Graphics, vElem);
+                //    //DrawLine(pe.Graphics, PointToVector(vElem.P1), PointToVector(vElem.P2), vElem.ElementType == VisualElementType.FingerboardEdge ? Color.Blue : Color.Black);
+                //}
+                DrawFingerboard(pe.Graphics);
+                DrawFrets(pe.Graphics);
+                DrawStrings(pe.Graphics);
             }
         }
 
@@ -128,6 +131,50 @@ namespace SiGen.UI
             }
         }
 
+        private void DrawFingerboard(Graphics g)
+        {
+            foreach(var edge in CurrentLayout.VisualElements.OfType<FingerboardEdge>())
+            {
+                DrawLine(g, edge.P1, edge.P2, Color.Blue);
+            }
+        }
+
+        private void DrawFrets(Graphics g)
+        {
+            //foreach(var fretSeg in CurrentLayout.VisualElements.OfType<FretSegment>())
+            //{
+            //    DrawLine(g, fretSeg.P1, fretSeg.PointOnString, Color.Red);
+            //    DrawLine(g, fretSeg.PointOnString, fretSeg.P2, Color.Red);
+            //}
+
+            foreach (var fretLine in CurrentLayout.VisualElements.OfType<FretLine>())
+            {
+                if(fretLine.Points.Count == 2)
+                    DrawLine(g, fretLine.Points[0], fretLine.Points[1], Color.Red);
+                else
+                {
+                    for(int i = 0; i < fretLine.Points.Count - 1;i++)
+                        DrawLine(g, fretLine.Points[i], fretLine.Points[i + 1], Color.Red);
+                }
+            }
+        }
+
+        private void DrawStrings(Graphics g)
+        {
+            foreach (var stringLine in CurrentLayout.VisualElements.OfType<StringLine>())
+            {
+                if (DisplayConfig.RenderRealStrings)
+                {
+                    if (stringLine.String.Gauge != Measure.Empty && stringLine.String.Gauge > Measure.Zero)
+                    {
+                        DrawLine(g, stringLine.P1, stringLine.P2, Color.Black, stringLine.String.Gauge);
+                    }
+                }
+                else
+                    DrawLine(g, stringLine.P1, stringLine.P2, Color.Black);
+            }
+        }
+
         private Vector PointToVector(PointM pos)
         {
             if (DisplayConfig.FretboardOrientation == Orientation.Horizontal)
@@ -135,10 +182,20 @@ namespace SiGen.UI
             return new Vector(pos.X.NormalizedValue, pos.Y.NormalizedValue);
         }
 
+        private void DrawLine(Graphics g, PointM p1, PointM p2, Color color)
+        {
+            DrawLine(g, PointToVector(p1), PointToVector(p2), color);
+        }
+
         private void DrawLine(Graphics g, Vector p1, Vector p2, Color color)
         {
             using (var pen = new Pen(color, 1f / (float)_Zoom))
                 g.DrawLine(pen, (float)p1.X, (float)p1.Y * -1, (float)p2.X, (float)p2.Y * -1);
+        }
+
+        private void DrawLine(Graphics g, PointM p1, PointM p2, Color color, Measure size)
+        {
+            DrawLine(g, PointToVector(p1), PointToVector(p2), color, size);
         }
 
         private void DrawLine(Graphics g, Vector p1, Vector p2, Color color, Measure size)

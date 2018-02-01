@@ -129,7 +129,7 @@ namespace SiGen.StringedInstruments.Layout
             stringLine.String.UpdateFinalLength();
         }
         
-        private LayoutLine GetStringBoundaryLine(SIString str, FingerboardSide dir)
+        internal LayoutLine GetStringBoundaryLine(SIString str, FingerboardSide dir)
         {
             LayoutLine boundary = null;
             if (dir == FingerboardSide.Bass)
@@ -251,6 +251,54 @@ namespace SiGen.StringedInstruments.Layout
             foreach (var str in Strings)
                 stringFrets.Add(str.Index, CalculateFretsForString(str));
 
+            foreach (var str in Strings)
+            {
+                for (int i = Strings.Min(s => s.StartingFret); i <= Strings.Max(s => s.NumberOfFrets); i++)
+                {
+                    if (str.HasFret(i) || stringFrets[str.Index].Any(f=>f.FretIndex == i))
+                    {
+                        var fretPos = stringFrets[str.Index].First(f => f.FretIndex == i);
+                        var perpLine = str.LayoutLine.Equation.GetPerpendicular(fretPos.Position.ToVector());
+                        var leftLine = GetStringBoundaryLine(str, FingerboardSide.Bass);
+                        var rightLine = GetStringBoundaryLine(str, FingerboardSide.Treble);
+                        var p1 = PointM.FromVector(perpLine.GetIntersection(leftLine.Equation), fretPos.Position.Unit);
+                        var p2 = PointM.FromVector(perpLine.GetIntersection(rightLine.Equation), fretPos.Position.Unit);
+                        var seg = AddVisualElement(new FretSegment(i, str, fretPos.Position, p1, p2));
+                        if (!str.HasFret(i))
+                            seg.IsVirtual = true;
+                    }
+                }
+            }
+            var fretSegments = VisualElements.OfType<FretSegment>();
+            for (int f = Strings.Min(s => s.StartingFret); f <= Strings.Max(s => s.NumberOfFrets); f++)
+            {
+                for(int s = 0; s < NumberOfStrings; s++)
+                {
+                    if (!Strings[s].HasFret(f))
+                        continue;
+                    var followingStrings = Strings.Skip(s).TakeWhile(x => x.Next == null || x.Next.HasFret(f));
+                    var followingFrets = fretSegments.Where(fs => fs.FretIndex == f && followingStrings.Contains(fs.String)).ToList();
+
+                    followingFrets.AddRange(fretSegments.Where(fs => fs.IsVirtual && fs.FretIndex == f 
+                    && (fs.String == followingFrets.Last().String.Next || 
+                    fs.String == followingFrets.First().String.Previous)));
+
+                    var line = AddVisualElement(new FretLine(followingFrets));
+                    line.BuildLayout();
+                    s += followingStrings.Count() - 1;
+                }
+                //foreach (var str in Strings)
+                //{
+                //    if(str.HasFret(f) && str.Next != null && str.Next.HasFret(f))
+                //    {
+                //        var fret1 = VisualElements.OfType<FretSegment>().First(x => x.FretIndex == f && x.String == str);
+                //        var fret2 = VisualElements.OfType<FretSegment>().First(x => x.FretIndex == f && x.String == str.Next);
+                //        var avg1 = PointM.Average(fret1.P1, fret2.P2);
+                //        fret1.P1 = avg1;
+                //        fret2.P2 = avg1;
+                //    }
+                //}
+            }
         }
 
         /// <summary>

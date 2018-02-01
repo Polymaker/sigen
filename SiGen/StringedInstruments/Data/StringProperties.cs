@@ -67,6 +67,7 @@ namespace SiGen.StringedInstruments.Data
             UnitWeight = uw;
             ModulusOfElasticity = moe;
         }
+
         public StringProperties(Measure coreDiam, Measure gauge, double uw, double moe)
         {
             Material = string.Empty;

@@ -158,6 +158,11 @@
             return new Line(newSlope, b);
         }
 
+        public Line GetPerpendicular(Vector pt)
+        {
+            return GetPerpendicular(this, pt);
+        }
+
         public static bool LinesIntersect(Line l1, Line l2, out Vector intersection)
         {
             intersection = Vector.Empty;
