@@ -22,7 +22,7 @@ namespace SiGen.UI
         private Vector cameraPosition;
         private Vector dragStart;
         private SILayout _CurrentLayout;
-
+        private const int PADDING_BORDER = 6;
         public SILayout CurrentLayout
         {
             get { return _CurrentLayout; }
@@ -73,17 +73,8 @@ namespace SiGen.UI
             pe.Graphics.ScaleTransform((float)_Zoom, (float)_Zoom);
             pe.Graphics.TranslateTransform((float)cameraPosition.X * -1, (float)cameraPosition.Y);
 
-            //pe.Graphics.DrawRectangle(Pens.Black, -10, -10, 20, 20);
-            //pe.Graphics.DrawRectangle(Pens.Black, -20, -20, 40, 40);
-            //DrawLine(pe.Graphics, new Vector(-10, -10), new Vector(10, 10), Color.Red);
-
             if(CurrentLayout != null)
             {
-                //foreach(var vElem in CurrentLayout.VisualElements/*.OfType<LayoutLine>()*/)
-                //{
-                //    DrawVisualElement(pe.Graphics, vElem);
-                //    //DrawLine(pe.Graphics, PointToVector(vElem.P1), PointToVector(vElem.P2), vElem.ElementType == VisualElementType.FingerboardEdge ? Color.Blue : Color.Black);
-                //}
                 DrawFingerboard(pe.Graphics);
                 DrawFrets(pe.Graphics);
                 DrawStrings(pe.Graphics);
@@ -94,23 +85,6 @@ namespace SiGen.UI
         {
             if (elem is StringLine)
                 DrawString(g, (StringLine)elem);
-
-            switch (elem.ElementType)
-            {
-                case VisualElementType.FingerboardEdge:
-                    var edgeLine = (LayoutLine)elem;
-                    DrawLine(g, PointToVector(edgeLine.P1), PointToVector(edgeLine.P2), Color.Blue);
-                    break;
-                //case VisualElementType.String:
-                //    var stringLine = (StringLine)elem;
-                //    DrawLine(g, PointToVector(stringLine.P1), PointToVector(stringLine.P2), Color.Black);
-                //    break;
-                case VisualElementType.StringCenter:
-                case VisualElementType.GuideLine:
-                    var guideLine = (LayoutLine)elem;
-                    DrawLine(g, PointToVector(guideLine.P1), PointToVector(guideLine.P2), Color.Silver);
-                    break;
-            }
         }
 
         private void DrawString(Graphics g, StringLine stringLine)
@@ -141,22 +115,33 @@ namespace SiGen.UI
 
         private void DrawFrets(Graphics g)
         {
-            //foreach(var fretSeg in CurrentLayout.VisualElements.OfType<FretSegment>())
-            //{
-            //    DrawLine(g, fretSeg.P1, fretSeg.PointOnString, Color.Red);
-            //    DrawLine(g, fretSeg.PointOnString, fretSeg.P2, Color.Red);
-            //}
+            Pen fretPen = null;
+            if (!DisplayConfig.RenderRealFrets)
+                fretPen = new Pen(Color.Red, 1f / (float)_Zoom);
+            else
+                fretPen = new Pen(Color.DarkGray, (float)DisplayConfig.FretWidth.NormalizedValue);
 
             foreach (var fretLine in CurrentLayout.VisualElements.OfType<FretLine>())
             {
-                if(fretLine.Points.Count == 2)
-                    DrawLine(g, fretLine.Points[0], fretLine.Points[1], Color.Red);
+                
+                if (fretLine.IsStraight)
+                    g.DrawLines(fretPen, fretLine.Points.Select(p => PointToUI(p)).ToArray());
                 else
-                {
-                    for(int i = 0; i < fretLine.Points.Count - 1;i++)
-                        DrawLine(g, fretLine.Points[i], fretLine.Points[i + 1], Color.Red);
-                }
+                    g.DrawCurve(fretPen, fretLine.Points.Select(p => PointToUI(p)).ToArray());
+
+                //g.DrawLine(new Pen(Color.Blue, 1f / (float)_Zoom), PointToUI(fretLine.Segments.First().PointOnString), PointToUI(fretLine.Segments.Last().PointOnString));
+                //g.DrawLines(new Pen(Color.Red, 1f / (float)_Zoom), fretLine.Points.Select(p => PointToUI(p)).ToArray());
+
+
+                //if (fretLine.Points.Count == 2)
+                //    DrawLine(g, fretLine.Points[0], fretLine.Points[1], Color.Red);
+                //else
+                //{
+                //    for(int i = 0; i < fretLine.Points.Count - 1;i++)
+                //        DrawLine(g, fretLine.Points[i], fretLine.Points[i + 1], Color.Red);
+                //}
             }
+            fretPen.Dispose();
         }
 
         private void DrawStrings(Graphics g)
@@ -182,6 +167,12 @@ namespace SiGen.UI
             return new Vector(pos.X.NormalizedValue, pos.Y.NormalizedValue);
         }
 
+        private PointF PointToUI(PointM point)
+        {
+            var vec = PointToVector(point);
+            return new PointF((float)vec.X, (float)vec.Y * -1);
+        }
+
         private void DrawLine(Graphics g, PointM p1, PointM p2, Color color)
         {
             DrawLine(g, PointToVector(p1), PointToVector(p2), color);
@@ -202,6 +193,20 @@ namespace SiGen.UI
         {
             using (var pen = new Pen(color, (float)size.NormalizedValue))
                 g.DrawLine(pen, (float)p1.X, (float)p1.Y * -1, (float)p2.X, (float)p2.Y * -1);
+        }
+
+        private void DrawLine(Graphics g, PointM[] points, Color color, Measure size)
+        {
+            DrawLine(g, points.Select(p => PointToVector(p)).ToArray(), color, size);
+        }
+
+        private void DrawLine(Graphics g, Vector[] points, Color color, Measure size)
+        {
+            using (var pen = new Pen(color, (float)size.NormalizedValue))
+            {
+                var gdiPoints = points.Select(p => new PointF((float)p.X, (float)p.Y * -1)).ToArray();
+                g.DrawLines(pen, gdiPoints);
+            }
         }
 
         #endregion
@@ -234,12 +239,18 @@ namespace SiGen.UI
                 {
                     if (DisplayConfig.FretboardOrientation == Orientation.Horizontal)
                     {
-                        _Zoom = (Width - 6f) / (float)layoutBounds.Height.NormalizedValue;
+                        _Zoom = (Width - (PADDING_BORDER * 2f)) / (float)layoutBounds.Height.NormalizedValue;
                     }
                     else
                     {
-                        _Zoom = (Height - 6f) / (float)layoutBounds.Height.NormalizedValue;
+                        _Zoom = (Height - (PADDING_BORDER * 2f)) / (float)layoutBounds.Height.NormalizedValue;
                     }
+                    var centerY = layoutBounds.Center.Y.NormalizedValue;
+                    cameraPosition = Vector.Zero;
+                    if (DisplayConfig.FretboardOrientation == Orientation.Vertical)
+                        cameraPosition.Y += centerY;
+                    else
+                        cameraPosition.X += centerY;
                 }
             }
             manualZoom = false;

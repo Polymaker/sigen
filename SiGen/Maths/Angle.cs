@@ -174,7 +174,50 @@ namespace SiGen.Maths
 
         #region Functions
 
+        /// <summary>
+        /// Clamps the angle between 0-360
+        /// </summary>
+        public void Normalize()
+        {
+            _Degrees = NormalizeDegrees(_Degrees);
+        }
 
+        public Angle Normalized()
+        {
+            return FromDegrees(NormalizeDegrees(_Degrees));
+        }
+
+        public static double NormalizeDegrees(double degrees)
+        {
+            degrees = degrees % 360d;
+            if (degrees < 0d)
+                degrees += 360d;
+            return degrees;
+        }
+
+        public static double NormalizeRadians(double radians)
+        {
+            radians = radians % (Math.PI * 2d);
+            if (radians < 0d)
+                radians += Math.PI * 2d;
+            return radians;
+        }
+
+        public Angle Diff(Angle other)//clockwise
+        {
+            var angle1 = NormalizeDegrees(Degrees);
+            var angle2 = NormalizeDegrees(other.Degrees);
+            if (angle2 > angle1)
+            {
+                return FromDegrees(angle2 - angle1);
+            }
+            return FromDegrees((360f - angle1) + angle2);
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}°", Degrees);
+        }
         #endregion
     }
 }

@@ -16,6 +16,8 @@ namespace SiGen.StringedInstruments.Layout
         public void RebuildLayout()
         {
             VisualElements.Clear();
+            if (StringSpacing is StringSpacingSimple)
+                (StringSpacing as StringSpacingSimple).CalculateNutSlotPositions();
 
             Measure nutCenter = Measure.Zero;
             Measure bridgeCenter = Measure.Zero;
@@ -146,11 +148,11 @@ namespace SiGen.StringedInstruments.Layout
         /// <summary>
         /// Treble side string
         /// </summary>
-        private SIString FirstString { get { return Strings[0]; } }
+        public SIString FirstString { get { return Strings[0]; } }
         /// <summary>
         /// Bass side string
         /// </summary>
-        private SIString LastString { get { return Strings[NumberOfStrings - 1]; } }
+        public SIString LastString { get { return Strings[NumberOfStrings - 1]; } }
 
         #endregion
 
@@ -221,7 +223,7 @@ namespace SiGen.StringedInstruments.Layout
                 var positions = FretCompensationCalculator.CalculateFretsCompensatedPositions(
                     str.PhysicalProperties, str.FinalLength,
                     str.Tuning.FinalPitch, FretsTemperament,
-                    Measure.Inches(0.030), str.ActionAtTwelfthFret, Measure.Mm(1.2), str.TotalNumberOfFrets);
+                    Measure.Inches(0.020), str.ActionAtTwelfthFret, Measure.Mm(1.2), str.TotalNumberOfFrets);
                 for (int i = 0; i < positions.Length; i++)
                 {
                     double fretPosRatio = (str.FinalLength - positions[i]).NormalizedValue / str.FinalLength.NormalizedValue;
@@ -250,7 +252,7 @@ namespace SiGen.StringedInstruments.Layout
             var stringFrets = new Dictionary<int, List<FretPosition>>();
             foreach (var str in Strings)
                 stringFrets.Add(str.Index, CalculateFretsForString(str));
-
+            var fretSegments = new List<FretSegment>();
             foreach (var str in Strings)
             {
                 for (int i = Strings.Min(s => s.StartingFret); i <= Strings.Max(s => s.NumberOfFrets); i++)
@@ -263,13 +265,15 @@ namespace SiGen.StringedInstruments.Layout
                         var rightLine = GetStringBoundaryLine(str, FingerboardSide.Treble);
                         var p1 = PointM.FromVector(perpLine.GetIntersection(leftLine.Equation), fretPos.Position.Unit);
                         var p2 = PointM.FromVector(perpLine.GetIntersection(rightLine.Equation), fretPos.Position.Unit);
-                        var seg = AddVisualElement(new FretSegment(i, str, fretPos.Position, p1, p2));
+                        //var seg = AddVisualElement(new FretSegment(i, str, fretPos.Position, p1, p2));
+                        var seg = new FretSegment(i, str, fretPos.Position, p1, p2);
+                        fretSegments.Add(seg);
                         if (!str.HasFret(i))
                             seg.IsVirtual = true;
                     }
                 }
             }
-            var fretSegments = VisualElements.OfType<FretSegment>();
+            //var fretSegments = VisualElements.OfType<FretSegment>();
             for (int f = Strings.Min(s => s.StartingFret); f <= Strings.Max(s => s.NumberOfFrets); f++)
             {
                 for(int s = 0; s < NumberOfStrings; s++)

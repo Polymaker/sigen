@@ -81,6 +81,7 @@
     <Compile Include="StringedInstruments\Layout\SIString.cs" />
     <Compile Include="StringedInstruments\Layout\ScaleLength\LengthFunction.cs" />
     <Compile Include="StringedInstruments\Layout\SILayout.cs" />
+    <Compile Include="StringedInstruments\Layout\StringSpacing\NutSpacingMode.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FingerboardEdge.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FretLine.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FretSegment.cs" />

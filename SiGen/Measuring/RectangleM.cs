@@ -1,4 +1,6 @@
-﻿namespace SiGen.Measuring
+﻿using System.Collections.Generic;
+
+namespace SiGen.Measuring
 {
     /// <summary>
     /// 
@@ -104,6 +106,30 @@
         public static RectangleM FromLTRB(Measure left, Measure top, Measure right, Measure bottom)
         {
             return new RectangleM(left, top, right - left, top - bottom);
+        }
+
+        public static RectangleM BoundingRectangle(IEnumerable<PointM> points)
+        {
+            Measure minX = Measure.Zero;
+            Measure maxX = Measure.Zero;
+            Measure minY = Measure.Zero;
+            Measure maxY = Measure.Zero;
+
+            foreach (var pt in points)
+            {
+                if (pt.IsEmpty)
+                    continue;
+                if (pt.X < minX)
+                    minX = pt.X;
+                if (pt.Y < minY)
+                    minY = pt.Y;
+                if (pt.X > maxX)
+                    maxX = pt.X;
+                if (pt.Y > maxY)
+                    maxY = pt.Y;
+            }
+
+            return RectangleM.FromLTRB(minX, maxY, maxX, minY);
         }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿using SiGen.Measuring;
 using SiGen.Physics;
+using SiGen.StringedInstruments.Data;
 using SiGen.StringedInstruments.Layout.Visual;
 using SiGen.Utilities;
 using System;
@@ -112,6 +113,7 @@ namespace SiGen.StringedInstruments.Layout
                 if (value != _FretsTemperament)
                 {
                     _FretsTemperament = value;
+                    AdjustStringsTuning();
                     //AdjustStringsTuning();
                     NotifyLayoutChanged(this, "FretsTemperament");
                 }
@@ -178,6 +180,7 @@ namespace SiGen.StringedInstruments.Layout
             _ManualScaleMgr = new ScaleLengthManager.Individual(this);
             _VisualElements = new List<VisualElement>();
             _ScaleLengthMode = ScaleLengthType.Single;
+            _FretsTemperament = Temperament.Equal;
             LayoutName = string.Empty;
         }
 
@@ -201,6 +204,61 @@ namespace SiGen.StringedInstruments.Layout
                 (comp as ILayoutComponent).OnStringConfigurationChanged();
             //if (NumberOfStringsChanged != null)
             //    NumberOfStringsChanged(this, EventArgs.Empty);
+        }
+
+        public void SetStringsTuning(params MusicalNote[] tunings)
+        {
+            if (tunings.Length != NumberOfStrings)
+                throw new InvalidOperationException("Number of string mistmatch.");
+            for (int i = 0; i < NumberOfStrings; i++)
+                Strings[i].Tuning = new StringTuning(tunings[i]);
+        }
+
+        private void AdjustStringsTuning()
+        {
+            foreach (var str in Strings)
+            {
+                if (str.Tuning != null)
+                {
+                    MusicalNote newNote;
+                    switch (FretsTemperament)
+                    {
+                        default:
+                        case Temperament.Equal:
+                            newNote = MusicalNote.EqualNote(str.Tuning.Note.NoteName, str.Tuning.Note.Octave);
+                            break;
+                        case Temperament.Just:
+                            newNote = MusicalNote.JustNote(str.Tuning.Note.NoteName, str.Tuning.Note.Octave);
+                            break;
+                    }
+                    var offset = new PitchValue();
+                    if (FretsTemperament == Temperament.ThidellFormula)
+                    {
+                        if (newNote.NoteName == NoteName.E && newNote.Octave == 2)
+                            offset = PitchValue.FromCents(-2);
+                        else if (newNote.NoteName == NoteName.D && newNote.Octave == 3)
+                            offset = PitchValue.FromCents(2);
+                        else if (newNote.NoteName == NoteName.G && newNote.Octave == 3)
+                            offset = PitchValue.FromCents(4);
+                        else if (newNote.NoteName == NoteName.B && newNote.Octave == 3)
+                            offset = PitchValue.FromCents(-1);
+                        else if (newNote.NoteName == NoteName.E && newNote.Octave == 4)
+                            offset = PitchValue.FromCents(-1);
+                    }
+                    else if (FretsTemperament == Temperament.DieWohltemperirte)
+                    {
+                        if (newNote.NoteName == NoteName.E && newNote.Octave == 2)
+                            offset = PitchValue.FromCents(-2);
+                        else if (newNote.NoteName == NoteName.D && newNote.Octave == 3)
+                            offset = PitchValue.FromCents(2);
+                        else if (newNote.NoteName == NoteName.G && newNote.Octave == 3)
+                            offset = PitchValue.FromCents(3.9);
+                        else if (newNote.NoteName == NoteName.E && newNote.Octave == 4)
+                            offset = PitchValue.FromCents(-2);
+                    }
+                    str.Tuning = new StringTuning(newNote, offset);
+                }
+            }
         }
 
         internal void NotifyLayoutChanged(object sender, string propname)

@@ -40,19 +40,19 @@ namespace SiGen.StringedInstruments.Data
         /// Gets the area of the string (core wire for wound strings).
         /// Used for fret compensation calculations.
         /// </summary>
-        public Measure CoreWireArea
+        public double CoreWireArea
         {
             get
             {
                 if (CoreWireDiameter.IsEmpty)
-                    return Measure.Empty;
-                return Measure.FromNormalizedValue(Math.Pow(CoreWireDiameter.NormalizedValue / 2d, 2) * Math.PI, CoreWireDiameter.Unit);
+                    return 0;// Measure.Empty;
+                return Math.Pow(CoreWireDiameter[UnitOfMeasure.In] / 2d, 2) * Math.PI;// Measure.FromNormalizedValue(Math.Pow(CoreWireDiameter.NormalizedValue / 2d, 2) * Math.PI, CoreWireDiameter.Unit);
             }
         }
 
         public bool CanCalculateCompensation
         {
-            get { return CoreWireArea != Measure.Empty && ModulusOfElasticity > 0 && UnitWeight > 0; }
+            get { return CoreWireArea != 0 && ModulusOfElasticity > 0 && UnitWeight > 0; }
         }
 
         public StringProperties()
@@ -71,6 +71,7 @@ namespace SiGen.StringedInstruments.Data
         public StringProperties(Measure coreDiam, Measure gauge, double uw, double moe)
         {
             Material = string.Empty;
+            
             CoreWireDiameter = coreDiam;
             StringDiameter = gauge;
             UnitWeight = uw;
