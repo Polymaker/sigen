@@ -127,5 +127,11 @@ namespace SiGen.StringedInstruments.Layout.Visual
             var inter = Equation.GetIntersection(line.Equation);
             return PointM.FromVector(inter, P1.Unit);
         }
+
+        public PointM GetIntersection(Line line)
+        {
+            var inter = Equation.GetIntersection(line);
+            return PointM.FromVector(inter, P1.Unit);
+        }
     }
 }

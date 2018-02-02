@@ -27,6 +27,7 @@ namespace SiGen.StringedInstruments.Layout
             LayoutStrings(nutStringPos, bridgeStringPos);
             CreateFingerboardEdges();
             PlaceFrets();
+            FinishFingerboardShape();
 
             isLayoutDirty = false;
         }
@@ -34,6 +35,7 @@ namespace SiGen.StringedInstruments.Layout
         private T AddVisualElement<T>(T elem) where T : VisualElement
         {
             VisualElements.Add(elem);
+            elem.Layout = this;
             return elem;
         }
 
@@ -140,7 +142,7 @@ namespace SiGen.StringedInstruments.Layout
                 boundary = VisualElements.OfType<StringCenter>().FirstOrDefault(c => c.Left.Index == str.Index);
 
             if (boundary == null)
-                return VisualElements.OfType<FingerboardEdge>().First(e => e.Side == dir);
+                return VisualElements.OfType<FingerboardSideEdge>().First(e => e.IsAtSideOf(dir, null));
 
             return boundary;
         }
@@ -161,12 +163,12 @@ namespace SiGen.StringedInstruments.Layout
         private void CreateFingerboardEdges()
         {
             var trebleLine = FirstString.LayoutLine;
-            var trebleFretboardEdge = AddVisualElement(new FingerboardEdge(
+            var trebleFretboardEdge = AddVisualElement(new FingerboardSideEdge(
                trebleLine.GetPerpendicularPoint(trebleLine.P1, Margins.Treble),
                trebleLine.GetPerpendicularPoint(trebleLine.P2, Margins.Treble),
                FingerboardSide.Treble));
             var bassLine = LastString.LayoutLine;
-            var bassFretboardEdge = AddVisualElement(new FingerboardEdge(
+            var bassFretboardEdge = AddVisualElement(new FingerboardSideEdge(
                bassLine.GetPerpendicularPoint(bassLine.P1, Margins.Bass * -1), //*-1 to offset towards left
                bassLine.GetPerpendicularPoint(bassLine.P2, Margins.Bass * -1),
                FingerboardSide.Bass));
@@ -198,6 +200,39 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
+        private void FinishFingerboardShape()
+        {
+            var trebleSideEdge = VisualElements.OfType<FingerboardSideEdge>().First(e => e.Side == FingerboardSide.Treble);
+            var bassSideEdge = VisualElements.OfType<FingerboardSideEdge>().First(e => e.Side == FingerboardSide.Bass);
+            var trebleNutFret = VisualElements.OfType<FretLine>().First(f => f.FretIndex == FirstString.StartingFret && f.Segments.Any(s => s.String == FirstString));
+            var bassNutFret = VisualElements.OfType<FretLine>().First(f => f.FretIndex == LastString.StartingFret && f.Segments.Any(s => s.String == LastString));
+
+            if (!Strings.AllEqual(s => s.StartingFret) || !Strings.AllEqual(s => s.NumberOfFrets))
+            {
+                foreach (var str in Strings)
+                {
+                    if (str.Next != null && str.StartingFret != str.Next.StartingFret)
+                    {
+                        var center = GetStringBoundaryLine(str, FingerboardSide.Bass);
+                        AddVisualElement(new FingerboardEdge(center.SnapToLine(str.LayoutLine.P1, true), center.SnapToLine(str.Next.LayoutLine.P1, true)));
+                    }
+                }
+            }
+
+            if (trebleNutFret.IsStraight)
+            {
+                var tmpLine = new LayoutLine(trebleNutFret.Points[0], trebleNutFret.Points[1]);
+                trebleSideEdge.P1 = trebleSideEdge.GetIntersection(tmpLine);
+            }
+
+            if (bassNutFret.IsStraight)
+            {
+                var tmpLine = new LayoutLine(bassNutFret.Points[0], bassNutFret.Points[1]);
+                bassSideEdge.P1 = bassSideEdge.GetIntersection(tmpLine);
+            }
+
+        }
+
         #endregion
 
         #region Frets
@@ -223,7 +258,7 @@ namespace SiGen.StringedInstruments.Layout
                 var positions = FretCompensationCalculator.CalculateFretsCompensatedPositions(
                     str.PhysicalProperties, str.FinalLength,
                     str.Tuning.FinalPitch, FretsTemperament,
-                    Measure.Inches(0.020), str.ActionAtTwelfthFret, Measure.Mm(1.2), str.TotalNumberOfFrets);
+                    Measure.Mm(0.5), str.ActionAtTwelfthFret, Measure.Mm(1.2), str.TotalNumberOfFrets);
                 for (int i = 0; i < positions.Length; i++)
                 {
                     double fretPosRatio = (str.FinalLength - positions[i]).NormalizedValue / str.FinalLength.NormalizedValue;
@@ -280,7 +315,7 @@ namespace SiGen.StringedInstruments.Layout
                 {
                     if (!Strings[s].HasFret(f))
                         continue;
-                    var followingStrings = Strings.Skip(s).TakeWhile(x => x.Next == null || x.Next.HasFret(f));
+                    var followingStrings = Strings.Skip(s).TakeWhile(x => x.HasFret(f));
                     var followingFrets = fretSegments.Where(fs => fs.FretIndex == f && followingStrings.Contains(fs.String)).ToList();
 
                     followingFrets.AddRange(fretSegments.Where(fs => fs.IsVirtual && fs.FretIndex == f 
@@ -291,17 +326,6 @@ namespace SiGen.StringedInstruments.Layout
                     line.BuildLayout();
                     s += followingStrings.Count() - 1;
                 }
-                //foreach (var str in Strings)
-                //{
-                //    if(str.HasFret(f) && str.Next != null && str.Next.HasFret(f))
-                //    {
-                //        var fret1 = VisualElements.OfType<FretSegment>().First(x => x.FretIndex == f && x.String == str);
-                //        var fret2 = VisualElements.OfType<FretSegment>().First(x => x.FretIndex == f && x.String == str.Next);
-                //        var avg1 = PointM.Average(fret1.P1, fret2.P2);
-                //        fret1.P1 = avg1;
-                //        fret2.P2 = avg1;
-                //    }
-                //}
             }
         }
 
@@ -337,6 +361,14 @@ namespace SiGen.StringedInstruments.Layout
         {
             var note = FretsTemperament == Temperament.Just ? MusicalNote.JustNote(NoteName.E, 2) : MusicalNote.EqualNote(NoteName.E, 2);
             return new StringTuning(note);
+        }
+
+        private FretSegment GetFretForString(SIString str, int fret)
+        {
+            var fretLine = VisualElements.OfType<FretLine>().FirstOrDefault(fl => fl.FretIndex == 0 && fl.Segments.Any(s => s.String == str));
+            if(fretLine != null)
+                return fretLine.Segments.First(s => s.String == str);
+            return null;
         }
 
         #endregion

@@ -26,7 +26,29 @@ namespace SiGen.Physics
         public static Measure[] CalculateFretsCompensatedPositions(StringProperties properties, Measure stringLength, PitchValue openTuning, Temperament temperament,
             Measure actionAtFirstFret, Measure actionAtTwelfthFret, Measure fretHeight, int numberOfFrets)
         {
-            double L = stringLength[UnitOfMeasure.Inches];
+            var fretPositions = new double[numberOfFrets + 1];//+1 to include nut and improve readability (e.g. fretPositions[1] = fret #1 instead of fretPositions[0])
+            var frettedLengths = new double[numberOfFrets + 1];//+1 to include nut and improve readability (e.g. frettedLengths[1] = fret #1 instead of frettedLengths[0])
+            var frettedTensions = new double[numberOfFrets + 1];//+1 to include nut and improve readability (e.g. frettedTensions[1] = fret #1 instead of frettedTensions[0])
+            var finalFretPositions = new Measure[numberOfFrets + 1];
+
+            //Calculate the fret positions
+            double flatLength = stringLength[UnitOfMeasure.Inches];
+            for (int i = 1; i <= numberOfFrets; i++)//i=1 to skip the nut
+            {
+                var fretRatio = Math.Pow(2, i / 12d);
+                fretPositions[i] = flatLength - (flatLength / fretRatio);
+            }
+
+            var fret1Action = new Vector(fretPositions[1], actionAtFirstFret[UnitOfMeasure.Inches] + fretHeight[UnitOfMeasure.Inches]);
+            var fret12Action = new Vector(fretPositions[12], actionAtTwelfthFret[UnitOfMeasure.Inches] + fretHeight[UnitOfMeasure.Inches]);
+            var actionLineEq = Line.FromPoints(fret1Action, fret12Action);
+            var nutPos = actionLineEq.GetPointForX(0);
+            var saddlePos = actionLineEq.GetPointForX(flatLength);
+            var saddleToNutDir = (nutPos - saddlePos).Normalized;
+            frettedLengths[0] = (nutPos - saddlePos).Length;//actual string length
+            finalFretPositions[0] = Measure.Zero;
+
+            double L = frettedLengths[0];// stringLength[UnitOfMeasure.Inches];
             double f = openTuning.Frequency;//Frequency, Hz.
             double E = properties.ModulusOfElasticity;//Modulus of Elasticity, core wire, psi
             double A = properties.CoreWireArea;//Area, core wire, in²
@@ -39,41 +61,21 @@ namespace SiGen.Physics
             //Calculate "unstressed" string length: Lor = L / ((T / (E * A)) + 1)
             double Lor = L / ((T / (E * A)) + 1);
 
-            var fretPositions = new double[numberOfFrets + 1];//+1 to include nut and improve readability (e.g. fretPositions[1] = fret #1 instead of fretPositions[0])
-            var frettedLengths = new double[numberOfFrets + 1];//+1 to include nut and improve readability (e.g. frettedLengths[1] = fret #1 instead of frettedLengths[0])
-            var frettedTensions = new double[numberOfFrets + 1];//+1 to include nut and improve readability (e.g. frettedTensions[1] = fret #1 instead of frettedTensions[0])
-            var finalFretPositions = new Measure[numberOfFrets + 1];
-            //Calculate the fret positions
-            for (int i = 1; i <= numberOfFrets; i++)//i=1 to skip the nut
-            {
-                var fretRatio = Math.Pow(2, i / 12d);
-                fretPositions[i] = L - (L / fretRatio);
-            }
-
-            var fret1Action = new Vector(fretPositions[1], actionAtFirstFret[UnitOfMeasure.Inches] + fretHeight[UnitOfMeasure.Inches]);
-            var fret12Action = new Vector(fretPositions[12], actionAtTwelfthFret[UnitOfMeasure.Inches] + fretHeight[UnitOfMeasure.Inches]);
-            var actionLineEq = Line.FromPoints(fret1Action, fret12Action);
-            var nutPos = actionLineEq.GetPointForX(0);
-            var saddlePos = actionLineEq.GetPointForX(L);
-            frettedLengths[0] = (nutPos - saddlePos).Length;//actual string length
-            finalFretPositions[0] = Measure.Zero;
-
             for (int i = 1; i <= numberOfFrets; i++)//i=1 to skip the nut
             {
                 var fretTopPos = new Vector(fretPositions[i], fretHeight[UnitOfMeasure.Inches]);
-                //var fretboardPos = new Vector((finalFretPositions[i - 1][UnitOfMeasure.Inches] + fretPositions[i]) /2, fretHeight[UnitOfMeasure.Inches]);
+                var fretCenterPos = new Vector(fretPositions[i - 1], i == 1 ? nutPos.Y : fretHeight[UnitOfMeasure.Inches]);
 
                 //Calculate the fretted string length : Ls(n) = The sum of the distances between the top of the fret from the nut and saddle
-                var Lsn = frettedLengths[i] = (nutPos - fretTopPos).Length + (saddlePos - fretTopPos).Length;
-
-                //this one add the distance from the fretboard to the top of the fret:
-                //var Lsn = frettedLengths[i] = (nutPos - fretboardPos).Length + (fretboardPos - fretTopPos).Length + (fretTopPos - saddlePos).Length;
+                //var Lsn = frettedLengths[i] = (nutPos - fretTopPos).Length + (saddlePos - fretTopPos).Length;
+                var Lsn = frettedLengths[i] = (nutPos - fretCenterPos).Length + (fretCenterPos - fretTopPos).Length + (fretTopPos - saddlePos).Length;
 
                 //Calculate the fretted string tension : Ts(n) = ((Lsn - Lor) / Lor) * E * A
                 var Tsn = frettedTensions[i] = ((Lsn - Lor) / Lor) * E * A;
                 //Calculate fret compensated position: Lfret(n) = SQRT((g * Tsn )/ mul ) / (2 * fn )
                 var Lfretn = Math.Sqrt((g * Tsn) / mul) / (2 * GetPitchAtFret(openTuning, i, temperament).Frequency);
-                finalFretPositions[i] = Measure.Inches(L - Lfretn);
+                var pos2D = saddlePos + (saddleToNutDir * Lfretn);
+                finalFretPositions[i] = Measure.Inches(pos2D.X);
             }
 
             return finalFretPositions;

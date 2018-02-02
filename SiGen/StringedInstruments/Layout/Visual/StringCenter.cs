@@ -36,6 +36,8 @@ namespace SiGen.StringedInstruments.Layout.Visual
             P1 = PointM.Average(left.P1, right.P1);
             P2 = PointM.Average(left.P2, right.P2);
 
+            //P1 = PointM.FromVector(Equation.GetPointForY(Math.Min(left.P1.Y.NormalizedValue, right.P1.Y.NormalizedValue)), P1.Unit);
+
             //P1 = PointM.Average(left.FretZero, right.FretZero);
             //P2 = PointM.Average(left.P2, right.P2);
             //var nutLine = Line.FromPoints((Vector)left.P1, (Vector)right.P1);

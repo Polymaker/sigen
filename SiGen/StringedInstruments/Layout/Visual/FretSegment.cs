@@ -20,6 +20,8 @@ namespace SiGen.StringedInstruments.Layout.Visual
         /// We still create the segment to help define the fret shape of neighbouring strings that has the fret
         /// </summary>
         public bool IsVirtual { get; set; }
+        public bool IsNut { get { return String.StartingFret == FretIndex; } }
+
         public FretSegment(int index, SIString str, PointM p1, PointM p2) : base(p1, p2, VisualElementType.Fret)
         {
             _FretIndex = index;
@@ -31,6 +33,15 @@ namespace SiGen.StringedInstruments.Layout.Visual
             _FretIndex = index;
             _String = str;
             _PointOnString = center;
+        }
+
+        public FretSegment Clone()
+        {
+            return new FretSegment(FretIndex, String, P1, P2)
+            {
+                _PointOnString = PointOnString,
+                IsVirtual = true
+            };
         }
     }
 }

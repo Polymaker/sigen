@@ -107,7 +107,12 @@ namespace SiGen.UI
 
         private void DrawFingerboard(Graphics g)
         {
-            foreach(var edge in CurrentLayout.VisualElements.OfType<FingerboardEdge>())
+            foreach (var edge in CurrentLayout.VisualElements.OfType<StringCenter>())
+            {
+                DrawLine(g, edge.P1, edge.P2, Color.Gainsboro);
+            }
+
+            foreach (var edge in CurrentLayout.VisualElements.OfType<FingerboardEdge>())
             {
                 DrawLine(g, edge.P1, edge.P2, Color.Blue);
             }
@@ -116,6 +121,7 @@ namespace SiGen.UI
         private void DrawFrets(Graphics g)
         {
             Pen fretPen = null;
+            Pen nutPen = new Pen(Color.Red, 1f / (float)_Zoom);
             if (!DisplayConfig.RenderRealFrets)
                 fretPen = new Pen(Color.Red, 1f / (float)_Zoom);
             else
@@ -123,24 +129,16 @@ namespace SiGen.UI
 
             foreach (var fretLine in CurrentLayout.VisualElements.OfType<FretLine>())
             {
-                
+                var penToUse = fretLine.IsNut ? nutPen : fretPen;
                 if (fretLine.IsStraight)
-                    g.DrawLines(fretPen, fretLine.Points.Select(p => PointToUI(p)).ToArray());
+                    g.DrawLines(penToUse, fretLine.Points.Select(p => PointToUI(p)).ToArray());
                 else
-                    g.DrawCurve(fretPen, fretLine.Points.Select(p => PointToUI(p)).ToArray());
+                    g.DrawCurve(penToUse, fretLine.Points.Select(p => PointToUI(p)).ToArray(), 0.3f);
 
                 //g.DrawLine(new Pen(Color.Blue, 1f / (float)_Zoom), PointToUI(fretLine.Segments.First().PointOnString), PointToUI(fretLine.Segments.Last().PointOnString));
                 //g.DrawLines(new Pen(Color.Red, 1f / (float)_Zoom), fretLine.Points.Select(p => PointToUI(p)).ToArray());
-
-
-                //if (fretLine.Points.Count == 2)
-                //    DrawLine(g, fretLine.Points[0], fretLine.Points[1], Color.Red);
-                //else
-                //{
-                //    for(int i = 0; i < fretLine.Points.Count - 1;i++)
-                //        DrawLine(g, fretLine.Points[i], fretLine.Points[i + 1], Color.Red);
-                //}
             }
+            nutPen.Dispose();
             fretPen.Dispose();
         }
 
