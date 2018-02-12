@@ -13,6 +13,8 @@ namespace SiGen.StringedInstruments.Layout
 {
     public partial class SILayout
     {
+        public bool IsLayoutDirty { get { return isLayoutDirty; } }
+
         public void RebuildLayout()
         {
             VisualElements.Clear();
@@ -30,6 +32,12 @@ namespace SiGen.StringedInstruments.Layout
             FinishFingerboardShape();
 
             isLayoutDirty = false;
+            OnLayoutUpdated();
+        }
+
+        protected void OnLayoutUpdated()
+        {
+            LayoutUpdated?.Invoke(this, EventArgs.Empty);
         }
 
         private T AddVisualElement<T>(T elem) where T : VisualElement

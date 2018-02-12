@@ -23,16 +23,14 @@ namespace SiGen.UI
         private Vector dragStart;
         private SILayout _CurrentLayout;
         private const int PADDING_BORDER = 6;
+
         public SILayout CurrentLayout
         {
             get { return _CurrentLayout; }
             set
             {
-                if(value != _CurrentLayout)
-                {
-                    _CurrentLayout = value;
-                    ResetCamera();
-                }
+                if (value != _CurrentLayout)
+                    SetLayout(value);
             }
         }
 
@@ -59,6 +57,27 @@ namespace SiGen.UI
                 Invalidate();
         }
 
+        private void SetLayout(SILayout layout)
+        {
+            if(_CurrentLayout != null)
+                _CurrentLayout.LayoutUpdated -= CurrentLayoutUpdated;
+            _CurrentLayout = layout;
+            if (_CurrentLayout != null)
+                _CurrentLayout.LayoutUpdated += CurrentLayoutUpdated;
+            ResetCamera();
+        }
+
+        private void CurrentLayoutUpdated(object sender, EventArgs e)
+        {
+            if (IsHandleCreated)
+            {
+                if (!manualZoom)
+                    ResetCamera();
+                else
+                    Invalidate();
+            }
+        }
+
         #region Drawing
 
         protected override void OnPaint(PaintEventArgs pe)
@@ -79,6 +98,9 @@ namespace SiGen.UI
                 DrawFrets(pe.Graphics);
                 DrawStrings(pe.Graphics);
             }
+
+            pe.Graphics.ResetTransform();
+
         }
 
         private void DrawVisualElement(Graphics g, VisualElement elem)

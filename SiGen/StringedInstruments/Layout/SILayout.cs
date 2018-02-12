@@ -165,8 +165,7 @@ namespace SiGen.StringedInstruments.Layout
 
         #region Events
 
-        //public event EventHandler NumberOfStringsChanged;
-        public event EventHandler LayoutChanged;
+        public event EventHandler LayoutUpdated;
 
         #endregion
 
@@ -200,10 +199,12 @@ namespace SiGen.StringedInstruments.Layout
                 else
                     _Strings[i] = new SIString(this, i);
             }
+
             foreach (var comp in _Component)
                 (comp as ILayoutComponent).OnStringConfigurationChanged();
-            //if (NumberOfStringsChanged != null)
-            //    NumberOfStringsChanged(this, EventArgs.Empty);
+
+            NotifyLayoutChanged(this, "Strings");
+
         }
 
         public void SetStringsTuning(params MusicalNote[] tunings)

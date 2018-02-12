@@ -230,6 +230,7 @@ namespace SiGen.StringedInstruments.Layout
             _Index = stringIndex;
             _ActionAtTwelfthFret = Measure.Empty;
             _RelativeScaleLengthOffset = 0.5;
+            _NumberOfFrets = 24;
         }
 
         public bool HasFret(int fretNo)

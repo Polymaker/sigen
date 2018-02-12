@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -94,6 +95,7 @@
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingManual.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElement.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElementType.cs" />
+    <Compile Include="UI\Designers\MeasureEditor.cs" />
     <Compile Include="UI\FrmLayoutBuilder.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,10 +109,23 @@
       <DependentUpon>LayoutViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\LayoutViewerDisplayConfig.cs" />
+    <Compile Include="UI\MeasureEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\MeasureEdit.Designer.cs">
+      <DependentUpon>MeasureEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MeasureTextbox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\MeasureTextbox.Designer.cs">
+      <DependentUpon>MeasureTextbox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\ExtensionMethods\CollectionHelper.cs" />
     <Compile Include="Utilities\MeasureConverter.cs" />
     <Compile Include="Utilities\ExtensionMethods\NumberHelper.cs" />
     <Compile Include="Utilities\ExtensionMethods\XmlLinqExtensions.cs" />
+    <Compile Include="Utilities\MeasureParser.cs" />
     <Compile Include="Utilities\SerializationHelper.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -128,6 +143,12 @@
     <EmbeddedResource Include="UI\FrmLayoutBuilder.resx">
       <DependentUpon>FrmLayoutBuilder.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\MeasureEdit.resx">
+      <DependentUpon>MeasureEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MeasureTextbox.resx">
+      <DependentUpon>MeasureTextbox.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -143,7 +164,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="UI\Designers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

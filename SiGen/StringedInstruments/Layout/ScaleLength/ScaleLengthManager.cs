@@ -54,7 +54,8 @@ namespace SiGen.StringedInstruments.Layout
                     if (value != _Length)
                     {
                         _Length = value;
-                        Layout.NotifyLayoutChanged(this, "ScaleLength");
+                        if (Layout.CurrentScaleLength == this)
+                            Layout.NotifyLayoutChanged(this, "ScaleLength");
                     }
                 }
             }
@@ -98,6 +99,7 @@ namespace SiGen.StringedInstruments.Layout
         {
             private Measure _Treble;
             private Measure _Bass;
+            private double _PerpendicularFretRatio;
 
             public Measure Treble
             {
@@ -107,7 +109,8 @@ namespace SiGen.StringedInstruments.Layout
                     if (value != _Treble)
                     {
                         _Treble = value;
-                        Layout.NotifyLayoutChanged(this, "ScaleLength");
+                        if (Layout.CurrentScaleLength == this)
+                            Layout.NotifyLayoutChanged(this, "ScaleLength");
                     }
                 }
             }
@@ -120,8 +123,19 @@ namespace SiGen.StringedInstruments.Layout
                     if (value != _Bass)
                     {
                         _Bass = value;
-                        Layout.NotifyLayoutChanged(this, "ScaleLength");
+                        if(Layout.CurrentScaleLength == this)
+                            Layout.NotifyLayoutChanged(this, "ScaleLength");
                     }
+                }
+            }
+
+            public double PerpendicularFretRatio
+            {
+                get { return _PerpendicularFretRatio; }
+                set
+                {
+                    _PerpendicularFretRatio = value;
+                    Layout.Strings.SetAll(s => s.RelativeScaleLengthOffset, value);
                 }
             }
 
@@ -134,6 +148,7 @@ namespace SiGen.StringedInstruments.Layout
             {
                 _Treble = Measure.Inches(25.5);
                 _Bass = Measure.Inches(27);
+                _PerpendicularFretRatio = 0.5;
             }
 
             public override Measure GetLength(int index)
@@ -216,7 +231,8 @@ namespace SiGen.StringedInstruments.Layout
             public override void SetLength(int index, Measure value)
             {
                 _Lengths[index] = value;
-                Layout.NotifyLayoutChanged(this, "ScaleLength");
+                if (Layout.CurrentScaleLength == this)
+                    Layout.NotifyLayoutChanged(this, "ScaleLength");
             }
 
             public void SetLengths(params Measure[] lengths)
@@ -224,6 +240,8 @@ namespace SiGen.StringedInstruments.Layout
                 if (lengths.Length != NumberOfStrings)
                     throw new InvalidOperationException();
                 _Lengths = lengths;
+                if (Layout.CurrentScaleLength == this)
+                    Layout.NotifyLayoutChanged(this, "ScaleLength");
             }
         }
     } 
