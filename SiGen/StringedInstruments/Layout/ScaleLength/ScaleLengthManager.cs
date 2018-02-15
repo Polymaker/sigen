@@ -11,6 +11,10 @@ namespace SiGen.StringedInstruments.Layout
     public abstract class ScaleLengthManager : LayoutComponent
     {
         protected LengthFunction _LengthCalculationMethod;
+        /// <summary>
+        /// Determine if the scale length is applied along each strings (taking into account the neck taper) or straight along the fingerboard.
+        /// </summary>
+        /// <remarks>Originally this value was assignable by string, but that complicated considerably the layout calculation and it is not really usefull anyway.</remarks>
         public LengthFunction LengthCalculationMethod
         {
             get { return _LengthCalculationMethod; }

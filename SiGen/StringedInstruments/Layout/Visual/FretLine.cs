@@ -64,7 +64,6 @@ namespace SiGen.StringedInstruments.Layout.Visual
             {
                 //unused at the moment, was coded in case I needed to create fret lines directly from points
                 _IsStraight = CheckPointsAreStraight(Points);
-                
             }
         }
 

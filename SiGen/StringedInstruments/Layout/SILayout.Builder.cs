@@ -93,7 +93,7 @@ namespace SiGen.StringedInstruments.Layout
                     AddVisualElement(new StringLine(Strings[i],
                         PointM.FromVector(nutPos, nutStringPos[i].Unit),
                         PointM.FromVector(bridgePos, bridgeStringPos[i].Unit)));
-                    Strings[i].UpdateFinalLength();
+                    Strings[i].RecalculateLengths();
                 }
             }
             else
@@ -113,13 +113,13 @@ namespace SiGen.StringedInstruments.Layout
                 {
                     var startingFretPosRatio = GetEqualTemperedFretPosition(str.StartingFret);
                     var stringVector = str.PlaceFretsRelativeToString ? str.LayoutLine.Direction * -1 : new Vector(0, 1);
-                    var startingFretPos = str.LayoutLine.P2 + (stringVector * str.FinalLength * startingFretPosRatio);
+                    var startingFretPos = str.LayoutLine.P2 + (stringVector * str.CalculatedLength * startingFretPosRatio);
 
                     if (!str.PlaceFretsRelativeToString)
                         startingFretPos = str.LayoutLine.SnapToLine(startingFretPos, true);
 
                     str.LayoutLine.P1 = startingFretPos;
-                    str.UpdateFinalLength();
+                    str.RecalculateLengths();
                 }
             }
 
@@ -138,7 +138,7 @@ namespace SiGen.StringedInstruments.Layout
             stringLine.P1 += new PointM(Measure.Zero, offsetY);
             stringLine.P2 += new PointM(Measure.Zero, offsetY);
             stringLine.FretZero = stringLine.P1;//keep pos of fret 0 usefull because starting fret can be negative
-            stringLine.String.UpdateFinalLength();
+            stringLine.String.RecalculateLengths();
         }
         
         internal LayoutLine GetStringBoundaryLine(SIString str, FingerboardSide dir)
@@ -172,13 +172,13 @@ namespace SiGen.StringedInstruments.Layout
         {
             var trebleLine = FirstString.LayoutLine;
             var trebleFretboardEdge = AddVisualElement(new FingerboardSideEdge(
-               trebleLine.GetPerpendicularPoint(trebleLine.P1, Margins.Treble),
-               trebleLine.GetPerpendicularPoint(trebleLine.P2, Margins.Treble),
+               trebleLine.GetPerpendicularPoint(trebleLine.P1, Margins.TrebleMargins[FingerboardEnd.Nut]),
+               trebleLine.GetPerpendicularPoint(trebleLine.P2, Margins.TrebleMargins[FingerboardEnd.Bridge]),
                FingerboardSide.Treble));
             var bassLine = LastString.LayoutLine;
             var bassFretboardEdge = AddVisualElement(new FingerboardSideEdge(
-               bassLine.GetPerpendicularPoint(bassLine.P1, Margins.Bass * -1), //*-1 to offset towards left
-               bassLine.GetPerpendicularPoint(bassLine.P2, Margins.Bass * -1),
+               bassLine.GetPerpendicularPoint(bassLine.P1, Margins.BassMargins[FingerboardEnd.Nut] * -1), //*-1 to offset towards left
+               bassLine.GetPerpendicularPoint(bassLine.P2, Margins.BassMargins[FingerboardEnd.Bridge] * -1),
                FingerboardSide.Bass));
 
             if(ScaleLengthMode != ScaleLengthType.Individual && NumberOfStrings > 1)
@@ -264,13 +264,13 @@ namespace SiGen.StringedInstruments.Layout
             else
             {
                 var positions = FretCompensationCalculator.CalculateFretsCompensatedPositions(
-                    str.PhysicalProperties, str.FinalLength,
+                    str.PhysicalProperties, str.StringLength,
                     str.Tuning.FinalPitch, FretsTemperament,
                     Measure.Mm(0.5), str.ActionAtTwelfthFret, Measure.Mm(1.2), str.TotalNumberOfFrets);
                 for (int i = 0; i < positions.Length; i++)
                 {
-                    double fretPosRatio = (str.FinalLength - positions[i]).NormalizedValue / str.FinalLength.NormalizedValue;
-                    var fretPos = str.LayoutLine.P2 + (str.LayoutLine.Direction * -1) * (str.FinalLength * fretPosRatio);
+                    double fretPosRatio = (str.StringLength - positions[i]).NormalizedValue / str.StringLength.NormalizedValue;
+                    var fretPos = str.LayoutLine.P2 + (str.LayoutLine.Direction * -1) * (str.StringLength * fretPosRatio);
                     frets.Add(new FretPosition() { FretIndex = i - str.StartingFret, Position = fretPos, StringIndex = str.Index, PositionRatio = fretPosRatio });
                 }
             }
@@ -283,7 +283,7 @@ namespace SiGen.StringedInstruments.Layout
             double fretPosRatio = GetRelativeFretPosition(stringTuning, fret - str.StartingFret, FretsTemperament);
             var dir = str.PlaceFretsRelativeToString ? str.LayoutLine.Direction * -1 : new Vector(0, 1);
 
-            var fretPos = str.LayoutLine.P2 + (dir * str.FinalLength * fretPosRatio);
+            var fretPos = str.LayoutLine.P2 + (dir * str.CalculatedLength * fretPosRatio);
             if (!str.PlaceFretsRelativeToString)
                 fretPos = str.LayoutLine.SnapToLine(fretPos, true);
 

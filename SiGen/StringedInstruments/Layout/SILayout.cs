@@ -335,12 +335,12 @@ namespace SiGen.StringedInstruments.Layout
             root.Add(SerializeProperty("LeftHanded", LeftHanded));
             root.Add(SerializeProperty("FretCompensation", CompensateFretPositions));
             root.Add(CurrentScaleLength.Serialize("ScaleLength"));
-            root.Add(Utilities.SerializationHelper.GenericSerialize(Margins, "FingerboardMargins"));
+            root.Add(Margins.Serialize("FingerboardMargins"));
 
             var stringsElem = new XElement("Strings", new XAttribute("Count", NumberOfStrings));
             for (int i = 0; i < NumberOfStrings; i++)
             {
-                stringsElem.Add(Utilities.SerializationHelper.GenericSerialize(Strings[i], "String"));
+                stringsElem.Add(SerializationHelper.GenericSerialize(Strings[i], "String"));
                 //stringsElem.Add(Strings[i].Serialize(ScaleLengthMode == ScaleLengthType.Individual));
             }
             root.Add(stringsElem);
@@ -366,7 +366,7 @@ namespace SiGen.StringedInstruments.Layout
             layout.NumberOfStrings = root.Element("Strings").GetIntAttribute("Count");
             layout.ScaleLengthMode = DeserializeProperty<ScaleLengthType>(root.Element("ScaleLength").Attribute("Type"));
             layout.CurrentScaleLength.Deserialize(root.Element("ScaleLength"));
-            SerializationHelper.GenericDeserialize(layout.Margins, root.Element("FingerboardMargins"));
+            layout.Margins.Deserialize(root.Element("FingerboardMargins"));
 
             if (root.ContainsElement("Temperament"))
                 layout.FretsTemperament = DeserializeProperty<Temperament>(root.Element("Temperament"));

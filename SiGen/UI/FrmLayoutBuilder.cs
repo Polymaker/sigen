@@ -228,5 +228,6 @@ namespace SiGen.UI
                 RebuildLayoutIfNeeded();
             }
         }
+
     }
 }

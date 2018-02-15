@@ -23,6 +23,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
         public StringLine(SIString str, PointM p1, PointM p2) : base(p1, p2, VisualElementType.String)
         {
             _String = str;
+            FretZero = PointM.Empty;
         }
     }
 }

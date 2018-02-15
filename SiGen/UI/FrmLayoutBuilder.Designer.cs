@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.gbxStringSpacing = new System.Windows.Forms.GroupBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -36,24 +37,23 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.nudNumberOfStrings = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
             this.gbxScaleLength = new System.Windows.Forms.GroupBox();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.tlpScaleLenghts = new System.Windows.Forms.TableLayoutPanel();
+            this.lblMultiScaleRatio = new System.Windows.Forms.Label();
             this.lblBassLength = new System.Windows.Forms.Label();
             this.lblTrebleLength = new System.Windows.Forms.Label();
             this.lblScaleLength = new System.Windows.Forms.Label();
             this.nudMultiScaleOffset = new System.Windows.Forms.NumericUpDown();
             this.rbMultiScale = new System.Windows.Forms.RadioButton();
             this.rbSingleScale = new System.Windows.Forms.RadioButton();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.nudNumberOfFrets = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.nudNumberOfStrings = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.nudNumberOfFrets = new System.Windows.Forms.NumericUpDown();
-            this.lblMultiScaleRatio = new System.Windows.Forms.Label();
             this.meSpacingBridge2 = new SiGen.UI.MeasureEdit();
             this.meSpacingBridge1 = new SiGen.UI.MeasureEdit();
             this.meSpacingNut2 = new SiGen.UI.MeasureEdit();
@@ -66,14 +66,14 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.gbxStringSpacing.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudNumberOfStrings)).BeginInit();
             this.gbxScaleLength.SuspendLayout();
             this.tlpScaleLenghts.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMultiScaleOffset)).BeginInit();
-            this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudNumberOfFrets)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudNumberOfStrings)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -93,6 +93,19 @@
             this.splitContainer1.Size = new System.Drawing.Size(820, 446);
             this.splitContainer1.SplitterDistance = 331;
             this.splitContainer1.TabIndex = 1;
+            // 
+            // panel1
+            // 
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.gbxStringSpacing);
+            this.panel1.Controls.Add(this.gbxScaleLength);
+            this.panel1.Controls.Add(this.groupBox2);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Padding = new System.Windows.Forms.Padding(3);
+            this.panel1.Size = new System.Drawing.Size(329, 444);
+            this.panel1.TabIndex = 6;
             // 
             // gbxStringSpacing
             // 
@@ -170,38 +183,6 @@
             this.label4.TabIndex = 6;
             this.label4.Text = "Spacing at nut:";
             // 
-            // nudNumberOfStrings
-            // 
-            this.nudNumberOfStrings.Location = new System.Drawing.Point(113, 23);
-            this.nudNumberOfStrings.Maximum = new decimal(new int[] {
-            30,
-            0,
-            0,
-            0});
-            this.nudNumberOfStrings.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudNumberOfStrings.Name = "nudNumberOfStrings";
-            this.nudNumberOfStrings.Size = new System.Drawing.Size(57, 20);
-            this.nudNumberOfStrings.TabIndex = 1;
-            this.nudNumberOfStrings.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudNumberOfStrings.ValueChanged += new System.EventHandler(this.nudNumberOfStrings_ValueChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(18, 25);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Number of strings";
-            // 
             // gbxScaleLength
             // 
             this.gbxScaleLength.Controls.Add(this.radioButton1);
@@ -250,6 +231,16 @@
             this.tlpScaleLenghts.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpScaleLenghts.Size = new System.Drawing.Size(205, 99);
             this.tlpScaleLenghts.TabIndex = 5;
+            // 
+            // lblMultiScaleRatio
+            // 
+            this.lblMultiScaleRatio.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.lblMultiScaleRatio.AutoSize = true;
+            this.lblMultiScaleRatio.Location = new System.Drawing.Point(3, 80);
+            this.lblMultiScaleRatio.Name = "lblMultiScaleRatio";
+            this.lblMultiScaleRatio.Size = new System.Drawing.Size(81, 13);
+            this.lblMultiScaleRatio.TabIndex = 9;
+            this.lblMultiScaleRatio.Text = "Alignment Ratio";
             // 
             // lblBassLength
             // 
@@ -328,37 +319,6 @@
             this.rbSingleScale.UseVisualStyleBackColor = true;
             this.rbSingleScale.CheckedChanged += new System.EventHandler(this.ScaleLengthMode_CheckedChanged);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(100, 22);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(85, 50);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 7;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // panel1
-            // 
-            this.panel1.AutoScroll = true;
-            this.panel1.Controls.Add(this.gbxStringSpacing);
-            this.panel1.Controls.Add(this.gbxScaleLength);
-            this.panel1.Controls.Add(this.groupBox2);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Padding = new System.Windows.Forms.Padding(3);
-            this.panel1.Size = new System.Drawing.Size(329, 444);
-            this.panel1.TabIndex = 6;
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.nudNumberOfFrets);
@@ -372,15 +332,6 @@
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Strings Configuration";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(24, 49);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(79, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Number of frets";
             // 
             // nudNumberOfFrets
             // 
@@ -405,15 +356,64 @@
             0});
             this.nudNumberOfFrets.ValueChanged += new System.EventHandler(this.nudNumberOfFrets_ValueChanged);
             // 
-            // lblMultiScaleRatio
+            // label2
             // 
-            this.lblMultiScaleRatio.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.lblMultiScaleRatio.AutoSize = true;
-            this.lblMultiScaleRatio.Location = new System.Drawing.Point(3, 80);
-            this.lblMultiScaleRatio.Name = "lblMultiScaleRatio";
-            this.lblMultiScaleRatio.Size = new System.Drawing.Size(81, 13);
-            this.lblMultiScaleRatio.TabIndex = 9;
-            this.lblMultiScaleRatio.Text = "Alignment Ratio";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(24, 49);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(79, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Number of frets";
+            // 
+            // nudNumberOfStrings
+            // 
+            this.nudNumberOfStrings.Location = new System.Drawing.Point(113, 23);
+            this.nudNumberOfStrings.Maximum = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            this.nudNumberOfStrings.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudNumberOfStrings.Name = "nudNumberOfStrings";
+            this.nudNumberOfStrings.Size = new System.Drawing.Size(57, 20);
+            this.nudNumberOfStrings.TabIndex = 1;
+            this.nudNumberOfStrings.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudNumberOfStrings.ValueChanged += new System.EventHandler(this.nudNumberOfStrings_ValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(18, 25);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(89, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Number of strings";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(100, 22);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(85, 50);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 7;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
             // 
             // meSpacingBridge2
             // 
@@ -497,18 +497,18 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.gbxStringSpacing.ResumeLayout(false);
             this.gbxStringSpacing.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudNumberOfStrings)).EndInit();
             this.gbxScaleLength.ResumeLayout(false);
             this.gbxScaleLength.PerformLayout();
             this.tlpScaleLenghts.ResumeLayout(false);
             this.tlpScaleLenghts.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMultiScaleOffset)).EndInit();
-            this.panel1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudNumberOfFrets)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudNumberOfStrings)).EndInit();
             this.ResumeLayout(false);
 
         }

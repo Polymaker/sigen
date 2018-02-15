@@ -17,5 +17,6 @@ namespace SiGen.StringedInstruments.Layout
         /// Useful for having a trully straight middle string when the nut slots are adjusted relative to the strings gauges.
         /// </summary>
         StringCenter
+            //,Symmetrical
     }
 }

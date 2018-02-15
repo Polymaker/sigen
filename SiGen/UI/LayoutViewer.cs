@@ -23,6 +23,9 @@ namespace SiGen.UI
         private Vector dragStart;
         private SILayout _CurrentLayout;
         private const int PADDING_BORDER = 6;
+        private List<Vector> intersections;
+        private Vector measure1;
+        private Vector measure2;
 
         public SILayout CurrentLayout
         {
@@ -47,6 +50,9 @@ namespace SiGen.UI
             _Zoom = 1d;
             dragStart = Vector.Empty;
             cameraPosition = Vector.Zero;
+            measure1 = Vector.Empty;
+            measure2 = Vector.Empty;
+            intersections = new List<Vector>();
             _DisplayConfig = new LayoutViewerDisplayConfig();
             _DisplayConfig.PropertyChanged += DisplayConfigChanged;
         }
@@ -64,7 +70,9 @@ namespace SiGen.UI
             _CurrentLayout = layout;
             if (_CurrentLayout != null)
                 _CurrentLayout.LayoutUpdated += CurrentLayoutUpdated;
+
             ResetCamera();
+            CalculateIntersections();
         }
 
         private void CurrentLayoutUpdated(object sender, EventArgs e)
@@ -75,6 +83,7 @@ namespace SiGen.UI
                     ResetCamera();
                 else
                     Invalidate();
+                CalculateIntersections();
             }
         }
 
@@ -97,6 +106,11 @@ namespace SiGen.UI
                 DrawFingerboard(pe.Graphics);
                 DrawFrets(pe.Graphics);
                 DrawStrings(pe.Graphics);
+            }
+
+            if (!measure1.IsEmpty)
+            {
+                DrawLine(pe.Graphics, measure1, measure2, Color.Black);
             }
 
             pe.Graphics.ResetTransform();
@@ -248,6 +262,17 @@ namespace SiGen.UI
             } 
         }
 
+        private void CalculateIntersections()
+        {
+            intersections.Clear();
+            if(CurrentLayout != null && CurrentLayout.VisualElements.Count > 0)
+            {
+                var fretPos = CurrentLayout.VisualElements.OfType<FretLine>().SelectMany(fl => fl.Segments.Where(s => !s.IsVirtual)).Select(s=>s.PointOnString).Distinct();
+                intersections.AddRange(fretPos.Select(p => PointToVector(p)));
+
+            }
+        }
+
         private void ZoomToFit()
         {
             _Zoom = 1d;
@@ -296,6 +321,27 @@ namespace SiGen.UI
             base.OnMouseUp(e);
             if (e.Button == MouseButtons.Middle)
                 dragStart = Vector.Empty;
+
+            if (e.Button == MouseButtons.Left)
+            {
+                if (measure1.IsEmpty)
+                {
+                    var curPos = DisplayToWorld(e.Location);
+                    var closeInters = intersections.Where(i => (i - curPos).Length <= 0.1);
+                    if (closeInters.Any())
+                    {
+                        measure1 = closeInters.First();
+                    }
+                }
+                else
+                {
+                    var measuredLength = Measure.FromNormalizedValue((measure2 - measure1).Length, UnitOfMeasure.Mm);
+                    Console.WriteLine(string.Format("Measured length: {0}", measuredLength));
+                    measure1 = Vector.Empty;
+                    Invalidate();
+                }
+                
+            }
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -311,6 +357,14 @@ namespace SiGen.UI
                     diffVec *= -1;
                     cameraPosition += diffVec / _Zoom;
                     dragStart = curPos;
+                    Invalidate();
+                }
+            }
+            else
+            {
+                if (!measure1.IsEmpty)
+                {
+                    measure2 = DisplayToWorld(e.Location);
                     Invalidate();
                 }
             }

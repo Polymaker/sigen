@@ -36,9 +36,28 @@ namespace SiGen.StringedInstruments.Layout
         }
 
         /// <summary>
-        /// Length used for fret positions
+        /// The string's real length, taking into accounts the neck taper and measured at the starting fret (nut)
         /// </summary>
-        public Measure FinalLength { get; set; }
+        public Measure StringLength { get; private set; }
+
+        /// <summary>
+        /// The string's real length, taking into accounts the neck taper and measured at the fret 0 (virtual nut)
+        /// </summary>
+        public Measure RealScaleLength { get; private set; }
+
+        /// <summary>
+        /// The length used to calculate fret positions.
+        /// Depending on the value of <see cref="PlaceFretsRelativeToString"/>, it will either return the string's real length or vertical length.
+        /// </summary>
+        public Measure CalculatedLength
+        {
+            get
+            {
+                if (LayoutLine == null)
+                    return Measure.Empty;
+                return PlaceFretsRelativeToString ? LayoutLine.Length : LayoutLine.Bounds.Height;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the number of fret. This value d
@@ -109,6 +128,10 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
+        /// <summary>
+        /// Determine if the scale length is applied along the string (taking into account the neck taper) or straight along the fingerboard.
+        /// </summary>
+        /// <remarks>Originally this value was assignable by string, but that complicated considerably the layout calculation and it is not really usefull anyway.</remarks>
         public LengthFunction LengthCalculationMethod
         {
             get { return Layout.CurrentScaleLength.LengthCalculationMethod; }
@@ -116,15 +139,6 @@ namespace SiGen.StringedInstruments.Layout
             {
                 Layout.CurrentScaleLength.LengthCalculationMethod = value;
             }
-            //get { return _LengthCalculationMethod; }
-            //set
-            //{
-            //    if (value != _LengthCalculationMethod)
-            //    {
-            //        _LengthCalculationMethod = value;
-            //        Layout.NotifyLayoutChanged(this, "LengthCalculationMethod");
-            //    }
-            //}
         }
 
         public bool PlaceFretsRelativeToString
@@ -238,12 +252,13 @@ namespace SiGen.StringedInstruments.Layout
             return fretNo >= StartingFret && fretNo <= NumberOfFrets;
         }
 
-        internal void UpdateFinalLength()
+        internal void RecalculateLengths()
         {
-            if (PlaceFretsRelativeToString)
-                FinalLength = LayoutLine.Length;
+            StringLength = LayoutLine.Length;
+            if (LayoutLine.FretZero != PointM.Empty)
+                RealScaleLength = PointM.Distance(LayoutLine.FretZero, LayoutLine.P2);
             else
-                FinalLength = LayoutLine.Bounds.Height;
+                RealScaleLength = StringLength;
         }
 
         #region XML serialization

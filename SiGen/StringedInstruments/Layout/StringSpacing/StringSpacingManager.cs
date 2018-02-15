@@ -91,7 +91,7 @@ namespace SiGen.StringedInstruments.Layout
             for (int i = 0; i < NumberOfStrings; i++)
             {
                 //offset each strings position so they are centered relative to the layout
-                //multiply by -1 to match string order (trbele->bass = right->left)
+                //multiply by -1 to match string order (treble->bass = right->left)
                 stringPos[i] = (stringPos[i] - center) * -1;
             }
             return stringPos;
