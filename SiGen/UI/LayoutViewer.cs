@@ -19,7 +19,7 @@ namespace SiGen.UI
         private double _Zoom;
         private LayoutViewerDisplayConfig _DisplayConfig;
         private bool manualZoom;
-        private Vector cameraPosition;
+        private Vector cameraPosition;//independant of orientation
         private Vector dragStart;
         private SILayout _CurrentLayout;
         private const int PADDING_BORDER = 6;
@@ -49,18 +49,13 @@ namespace SiGen.UI
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.UserPaint | ControlStyles.Selectable, true);
             _Zoom = 1d;
             dragStart = Vector.Empty;
+            _CachedCenter = Vector.Empty;
             cameraPosition = Vector.Zero;
             measure1 = Vector.Empty;
             measure2 = Vector.Empty;
             intersections = new List<Vector>();
             _DisplayConfig = new LayoutViewerDisplayConfig();
             _DisplayConfig.PropertyChanged += DisplayConfigChanged;
-        }
-
-        private void DisplayConfigChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (IsHandleCreated)
-                Invalidate();
         }
 
         private void SetLayout(SILayout layout)
@@ -73,18 +68,6 @@ namespace SiGen.UI
 
             ResetCamera();
             CalculateIntersections();
-        }
-
-        private void CurrentLayoutUpdated(object sender, EventArgs e)
-        {
-            if (IsHandleCreated)
-            {
-                if (!manualZoom)
-                    ResetCamera();
-                else
-                    Invalidate();
-                CalculateIntersections();
-            }
         }
 
         #region Drawing
@@ -103,164 +86,62 @@ namespace SiGen.UI
 
             if(CurrentLayout != null)
             {
-                DrawFingerboard(pe.Graphics);
-                DrawFrets(pe.Graphics);
-                DrawStrings(pe.Graphics);
+                RenderFingerboard(pe.Graphics);
+                RenderFrets(pe.Graphics);
+                RenderStrings(pe.Graphics);
             }
 
             if (!measure1.IsEmpty)
             {
-                DrawLine(pe.Graphics, measure1, measure2, Color.Black);
+                using (var measurePen = GetPen(Color.Black, 2))
+                    pe.Graphics.DrawLine(measurePen, VectorToDisplay(measure1), VectorToDisplay(measure2));
             }
 
             pe.Graphics.ResetTransform();
 
-        }
-
-        private void DrawVisualElement(Graphics g, VisualElement elem)
-        {
-            if (elem is StringLine)
-                DrawString(g, (StringLine)elem);
-        }
-
-        private void DrawString(Graphics g, StringLine stringLine)
-        {
-            if (DisplayConfig.RenderRealStrings)
+            if (!measure1.IsEmpty)
             {
-                if(stringLine.String.Gauge != Measure.Empty && stringLine.String.Gauge > Measure.Zero)
-                {
-                    var stringColor = Color.Black;// stringLine.String.Gauge[UnitOfMeasure.In] >= 0.02 ? Color.LightGray : Color.DimGray;
-                    //if(stringLine.String.Gauge[UnitOfMeasure.In] >= 0.02)
-                    //    DrawLine(g, PointToVector(stringLine.P1), PointToVector(stringLine.P2), Color.DimGray, stringLine.String.Gauge + Measure.FromNormalizedValue(1.5 / _Zoom,null));
-                    DrawLine(g, PointToVector(stringLine.P1), PointToVector(stringLine.P2), stringColor, stringLine.String.Gauge);
-                }
-            }
-            else
-            {
-                DrawLine(g, PointToVector(stringLine.P1), PointToVector(stringLine.P2), Color.Black);
-            }
-        }
-
-        private void DrawFingerboard(Graphics g)
-        {
-            foreach (var edge in CurrentLayout.VisualElements.OfType<StringCenter>())
-            {
-                DrawLine(g, edge.P1, edge.P2, Color.Gainsboro);
-            }
-
-            foreach (var edge in CurrentLayout.VisualElements.OfType<FingerboardEdge>())
-            {
-                DrawLine(g, edge.P1, edge.P2, Color.Blue);
-            }
-        }
-
-        private void DrawFrets(Graphics g)
-        {
-            Pen fretPen = null;
-            Pen nutPen = new Pen(Color.Red, 1f / (float)_Zoom);
-            if (!DisplayConfig.RenderRealFrets)
-                fretPen = new Pen(Color.Red, 1f / (float)_Zoom);
-            else
-                fretPen = new Pen(Color.DarkGray, (float)DisplayConfig.FretWidth.NormalizedValue);
-
-            foreach (var fretLine in CurrentLayout.VisualElements.OfType<FretLine>())
-            {
-                var penToUse = fretLine.IsNut ? nutPen : fretPen;
-                if (fretLine.IsStraight)
-                    g.DrawLines(penToUse, fretLine.Points.Select(p => PointToUI(p)).ToArray());
-                else
-                    g.DrawCurve(penToUse, fretLine.Points.Select(p => PointToUI(p)).ToArray(), 0.3f);
-
-                //g.DrawLine(new Pen(Color.Blue, 1f / (float)_Zoom), PointToUI(fretLine.Segments.First().PointOnString), PointToUI(fretLine.Segments.Last().PointOnString));
-                //g.DrawLines(new Pen(Color.Red, 1f / (float)_Zoom), fretLine.Points.Select(p => PointToUI(p)).ToArray());
-            }
-            nutPen.Dispose();
-            fretPen.Dispose();
-        }
-
-        private void DrawStrings(Graphics g)
-        {
-            foreach (var stringLine in CurrentLayout.VisualElements.OfType<StringLine>())
-            {
-                if (DisplayConfig.RenderRealStrings)
-                {
-                    if (stringLine.String.Gauge != Measure.Empty && stringLine.String.Gauge > Measure.Zero)
-                    {
-                        DrawLine(g, stringLine.P1, stringLine.P2, Color.Black, stringLine.String.Gauge);
-                    }
-                }
-                else
-                    DrawLine(g, stringLine.P1, stringLine.P2, Color.Black);
-            }
-        }
-
-        private Vector PointToVector(PointM pos)
-        {
-            if (DisplayConfig.FretboardOrientation == Orientation.Horizontal)
-                return new Vector(pos.Y.NormalizedValue, pos.X.NormalizedValue * -1);
-            return new Vector(pos.X.NormalizedValue, pos.Y.NormalizedValue);
-        }
-
-        private PointF PointToUI(PointM point)
-        {
-            var vec = PointToVector(point);
-            return new PointF((float)vec.X, (float)vec.Y * -1);
-        }
-
-        private void DrawLine(Graphics g, PointM p1, PointM p2, Color color)
-        {
-            DrawLine(g, PointToVector(p1), PointToVector(p2), color);
-        }
-
-        private void DrawLine(Graphics g, Vector p1, Vector p2, Color color)
-        {
-            using (var pen = new Pen(color, 1f / (float)_Zoom))
-                g.DrawLine(pen, (float)p1.X, (float)p1.Y * -1, (float)p2.X, (float)p2.Y * -1);
-        }
-
-        private void DrawLine(Graphics g, PointM p1, PointM p2, Color color, Measure size)
-        {
-            DrawLine(g, PointToVector(p1), PointToVector(p2), color, size);
-        }
-
-        private void DrawLine(Graphics g, Vector p1, Vector p2, Color color, Measure size)
-        {
-            using (var pen = new Pen(color, (float)size.NormalizedValue))
-                g.DrawLine(pen, (float)p1.X, (float)p1.Y * -1, (float)p2.X, (float)p2.Y * -1);
-        }
-
-        private void DrawLine(Graphics g, PointM[] points, Color color, Measure size)
-        {
-            DrawLine(g, points.Select(p => PointToVector(p)).ToArray(), color, size);
-        }
-
-        private void DrawLine(Graphics g, Vector[] points, Color color, Measure size)
-        {
-            using (var pen = new Pen(color, (float)size.NormalizedValue))
-            {
-                var gdiPoints = points.Select(p => new PointF((float)p.X, (float)p.Y * -1)).ToArray();
-                g.DrawLines(pen, gdiPoints);
+                var measureLen = Measure.Cm((measure2 - measure1).Length);
+                var measureCenter = WorldToDisplay((measure1 + measure2) / 2, _Zoom, true);
+                pe.Graphics.DrawString(measureLen.ToString(), Font, Brushes.Black, measureCenter);
             }
         }
 
         #endregion
 
-        public void ResetCamera()
+        #region Change events
+
+        private void DisplayConfigChanged(object sender, PropertyChangedEventArgs e)
         {
-            cameraPosition = Vector.Zero;
-            ZoomToFit();
             if (IsHandleCreated)
                 Invalidate();
         }
 
+        private void CurrentLayoutUpdated(object sender, EventArgs e)
+        {
+            if (IsHandleCreated)
+            {
+                if (!manualZoom)
+                    ResetCamera();
+                else
+                    Invalidate();
+                CalculateIntersections();
+            }
+        }
+
         protected override void OnSizeChanged(EventArgs e)
         {
+            _CachedCenter = new Vector((Width - 1) / 2d, (Height - 1) / 2d);
+
             base.OnSizeChanged(e);
+
             if (!manualZoom)
             {
                 ZoomToFit();
-            } 
+            }
         }
+
+        #endregion
 
         private void CalculateIntersections()
         {
@@ -268,9 +149,22 @@ namespace SiGen.UI
             if(CurrentLayout != null && CurrentLayout.VisualElements.Count > 0)
             {
                 var fretPos = CurrentLayout.VisualElements.OfType<FretLine>().SelectMany(fl => fl.Segments.Where(s => !s.IsVirtual)).Select(s=>s.PointOnString).Distinct();
-                intersections.AddRange(fretPos.Select(p => PointToVector(p)));
 
+                intersections.AddRange(fretPos.Select(p => p.ToVector()));
+                intersections.AddRange(CurrentLayout.VisualElements.OfType<FretLine>().Select(fl=>fl.Points.First().ToVector()));
+                intersections.AddRange(CurrentLayout.VisualElements.OfType<FretLine>().Select(fl => fl.Points.Last().ToVector()));
+                intersections = intersections.Distinct().ToList();
             }
+        }
+
+        #region Camera
+
+        public void ResetCamera()
+        {
+            cameraPosition = Vector.Zero;
+            ZoomToFit();
+            if (IsHandleCreated)
+                Invalidate();
         }
 
         private void ZoomToFit()
@@ -301,6 +195,8 @@ namespace SiGen.UI
             manualZoom = false;
         }
 
+        #endregion
+
         #region Mouse Handling
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -309,11 +205,17 @@ namespace SiGen.UI
             Select();
             if (e.Button == MouseButtons.Middle)
                 dragStart = DisplayToLocal(e.Location);
-            else if (e.Button == MouseButtons.Left)
-            {
-                var worldPos = DisplayToWorld(e.Location);
-                Console.WriteLine(worldPos);
-            }
+            //else if (e.Button == MouseButtons.Left)
+            //{
+            //    var localPos = DisplayToLocal(e.Location);
+            //    var worldPos = LocalToWorld(localPos, _Zoom, true);
+
+            //    Console.WriteLine(string.Format("Display pos: {0}", e.Location));
+            //    Console.WriteLine(string.Format("Local pos: {0}", localPos));
+            //    Console.WriteLine(string.Format("Display calc pos: {0}", LocalToDisplay(localPos)));
+            //    Console.WriteLine(string.Format("World calc pos: {0}", worldPos));
+            //    Console.WriteLine(string.Format("Local calc pos: {0}", WorldToLocal(worldPos, _Zoom, true)));
+            //}
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
@@ -321,27 +223,6 @@ namespace SiGen.UI
             base.OnMouseUp(e);
             if (e.Button == MouseButtons.Middle)
                 dragStart = Vector.Empty;
-
-            if (e.Button == MouseButtons.Left)
-            {
-                if (measure1.IsEmpty)
-                {
-                    var curPos = DisplayToWorld(e.Location);
-                    var closeInters = intersections.Where(i => (i - curPos).Length <= 0.1);
-                    if (closeInters.Any())
-                    {
-                        measure1 = closeInters.First();
-                    }
-                }
-                else
-                {
-                    var measuredLength = Measure.FromNormalizedValue((measure2 - measure1).Length, UnitOfMeasure.Mm);
-                    Console.WriteLine(string.Format("Measured length: {0}", measuredLength));
-                    measure1 = Vector.Empty;
-                    Invalidate();
-                }
-                
-            }
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -364,8 +245,15 @@ namespace SiGen.UI
             {
                 if (!measure1.IsEmpty)
                 {
-                    measure2 = DisplayToWorld(e.Location);
-                    Invalidate();
+                    var pt1 = WorldToDisplay(measure1, _Zoom, true);
+                    var minX = (int)Math.Min(pt1.X, e.X);
+                    var maxX = (int)Math.Max(pt1.X, e.X);
+                    var minY = (int)Math.Min(pt1.Y, e.Y);
+                    var maxY = (int)Math.Max(pt1.Y, e.Y);
+                    measure2 = DisplayToWorld(e.Location, _Zoom, true);
+                    var updateBounds = Rectangle.FromLTRB(minX, minY, maxX, maxY);
+                    updateBounds.Inflate(50, 50);
+                    Invalidate(updateBounds);
                 }
             }
         }
@@ -396,25 +284,117 @@ namespace SiGen.UI
             }
         }
 
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            base.OnMouseClick(e);
+            if(e.Button == MouseButtons.Left)
+            {
+                if (measure1.IsEmpty)
+                {
+                    if (intersections.Count > 0)
+                    {
+                        var clickedPos = DisplayToWorld(e.Location, _Zoom, true);
+                        var pointsNear = intersections.Where(i => (i - clickedPos).Length <= 2);
+                        if (pointsNear.Any())
+                        {
+                            var nearest = pointsNear.OrderBy(p => (p - clickedPos).Length).First();
+                            measure1 = nearest;
+                        }
+                    }
+                }
+                else
+                {
+                    measure1 = Vector.Empty;
+                    Invalidate();
+                }
+            }
+        }
         #endregion
 
         #region UI <-> 2D coordinates
 
+        private bool IsHorizontal { get { return DisplayConfig.FretboardOrientation == Orientation.Horizontal; } }
+
+        private Vector _CachedCenter;
+        private Vector ControlCenter
+        {
+            get
+            {
+                return _CachedCenter;
+            }
+        }
+
+        #region Local <-> Display (UI)
+
         private Vector DisplayToLocal(Point pt)
         {
-            var center = new Vector(Width / 2d, Height / 2d);
             var pos = new Vector(pt.X, (Height - 1) - pt.Y);
-            return pos - center;
+            return pos - ControlCenter;
         }
+
+        private Vector DisplayToLocal(PointF pt)
+        {
+            var pos = new Vector(pt.X, (Height - 1) - pt.Y);
+            return pos - ControlCenter;
+        }
+
+        private PointF LocalToDisplay(Vector vec)
+        {
+            var final = ControlCenter + vec;
+            return new PointF((float)final.X, (Height - 1) -(float)final.Y);
+        }
+
+        #endregion
+
+        #region World <-> Local
+
+        private Vector LocalToWorld(Vector vec, double zoom, bool fixOrientation)
+        {
+            var worldPos = (vec / zoom) + cameraPosition;
+            if (fixOrientation && IsHorizontal)
+                worldPos = new Vector(worldPos.Y * -1, worldPos.X);
+            return worldPos;
+        }
+
+        private Vector WorldToLocal(Vector vec, double zoom, bool fixOrientation)
+        {
+            if (fixOrientation && IsHorizontal)
+                vec = new Vector(vec.Y, vec.X * -1d);
+            vec -= cameraPosition;
+            return vec * zoom;
+        }
+
+        #endregion
+
+        #region World <-> Display
+
+        private Vector DisplayToWorld(Point pt, double zoom, bool fixOrientation)
+        {
+            return LocalToWorld(DisplayToLocal(pt), zoom, fixOrientation);
+        }
+
+        private Vector DisplayToWorld(PointF pt, double zoom, bool fixOrientation)
+        {
+            return LocalToWorld(DisplayToLocal(pt), zoom, fixOrientation);
+        }
+
+        private PointF WorldToDisplay(Vector vec, double zoom, bool fixOrientation)
+        {
+            return LocalToDisplay(WorldToLocal(vec, zoom, fixOrientation));
+        }
+
+        #endregion
 
         private Vector DisplayToWorld(Point pt)
         {
-            return DisplayToWorld(pt, _Zoom);
+            return DisplayToWorld(pt, _Zoom, false);
+            //return DisplayToWorld(pt, _Zoom);
         }
 
         private Vector DisplayToWorld(Point pt, double zoom)
         {
-            return (DisplayToLocal(pt) / zoom) + cameraPosition;
+            return DisplayToWorld(pt, zoom, false);
+            //return (DisplayToLocal(pt) / zoom) + cameraPosition;
         }
 
         #endregion

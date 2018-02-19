@@ -155,6 +155,11 @@ namespace SiGen.Maths
             return new Vector(pt.X / value, pt.Y / value);
         }
 
+        public static Vector operator /(Vector pt1, Vector pt2)
+        {
+            return new Vector(pt1.X / pt2.X, pt1.Y / pt2.Y);
+        }
+
         public static Vector operator *(Vector pt, double value)
         {
             return new Vector(pt.X * value, pt.Y * value);
@@ -163,6 +168,16 @@ namespace SiGen.Maths
         public static Vector operator *(double value, Vector pt)
         {
             return new Vector(pt.X * value, pt.Y * value);
+        }
+
+        public static Vector operator *(Vector pt1, Vector pt2)
+        {
+            return new Vector(pt1.X * pt2.X, pt1.Y * pt2.Y);
+        }
+
+        public static explicit operator System.Drawing.PointF(Vector vec)
+        {
+            return new System.Drawing.PointF((float)vec.x, (float)vec.y);
         }
 
         #endregion

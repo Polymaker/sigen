@@ -32,11 +32,15 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.gbxStringSpacing = new System.Windows.Forms.GroupBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.meSpacingBridge2 = new SiGen.UI.MeasureEdit();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.meSpacingBridge1 = new SiGen.UI.MeasureEdit();
             this.label6 = new System.Windows.Forms.Label();
+            this.meSpacingNut2 = new SiGen.UI.MeasureEdit();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.meSpacingNut1 = new SiGen.UI.MeasureEdit();
             this.gbxScaleLength = new System.Windows.Forms.GroupBox();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.tlpScaleLenghts = new System.Windows.Forms.TableLayoutPanel();
@@ -45,6 +49,9 @@
             this.lblTrebleLength = new System.Windows.Forms.Label();
             this.lblScaleLength = new System.Windows.Forms.Label();
             this.nudMultiScaleOffset = new System.Windows.Forms.NumericUpDown();
+            this.meSingleScale = new SiGen.UI.MeasureEdit();
+            this.meBassScale = new SiGen.UI.MeasureEdit();
+            this.meTrebleScale = new SiGen.UI.MeasureEdit();
             this.rbMultiScale = new System.Windows.Forms.RadioButton();
             this.rbSingleScale = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -52,16 +59,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.nudNumberOfStrings = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
+            this.layoutViewer1 = new SiGen.UI.LayoutViewer();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.meSpacingBridge2 = new SiGen.UI.MeasureEdit();
-            this.meSpacingBridge1 = new SiGen.UI.MeasureEdit();
-            this.meSpacingNut2 = new SiGen.UI.MeasureEdit();
-            this.meSpacingNut1 = new SiGen.UI.MeasureEdit();
-            this.meSingleScale = new SiGen.UI.MeasureEdit();
-            this.meBassScale = new SiGen.UI.MeasureEdit();
-            this.meTrebleScale = new SiGen.UI.MeasureEdit();
-            this.layoutViewer1 = new SiGen.UI.LayoutViewer();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -80,6 +80,7 @@
             // 
             this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
             // 
@@ -136,6 +137,14 @@
             this.label7.TabIndex = 14;
             this.label7.Text = "String spread:";
             // 
+            // meSpacingBridge2
+            // 
+            this.meSpacingBridge2.Location = new System.Drawing.Point(106, 126);
+            this.meSpacingBridge2.Name = "meSpacingBridge2";
+            this.meSpacingBridge2.Size = new System.Drawing.Size(94, 21);
+            this.meSpacingBridge2.TabIndex = 13;
+            this.meSpacingBridge2.ValueChanged += new System.EventHandler(this.StringSpacingChanged);
+            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -155,6 +164,14 @@
             this.label9.TabIndex = 10;
             this.label9.Text = "Spacing at bridge:";
             // 
+            // meSpacingBridge1
+            // 
+            this.meSpacingBridge1.Location = new System.Drawing.Point(106, 102);
+            this.meSpacingBridge1.Name = "meSpacingBridge1";
+            this.meSpacingBridge1.Size = new System.Drawing.Size(94, 21);
+            this.meSpacingBridge1.TabIndex = 11;
+            this.meSpacingBridge1.ValueChanged += new System.EventHandler(this.StringSpacingChanged);
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -163,6 +180,14 @@
             this.label6.Size = new System.Drawing.Size(72, 13);
             this.label6.TabIndex = 9;
             this.label6.Text = "String spread:";
+            // 
+            // meSpacingNut2
+            // 
+            this.meSpacingNut2.Location = new System.Drawing.Point(106, 59);
+            this.meSpacingNut2.Name = "meSpacingNut2";
+            this.meSpacingNut2.Size = new System.Drawing.Size(94, 21);
+            this.meSpacingNut2.TabIndex = 8;
+            this.meSpacingNut2.ValueChanged += new System.EventHandler(this.StringSpacingChanged);
             // 
             // label5
             // 
@@ -182,6 +207,14 @@
             this.label4.Size = new System.Drawing.Size(94, 13);
             this.label4.TabIndex = 6;
             this.label4.Text = "Spacing at nut:";
+            // 
+            // meSpacingNut1
+            // 
+            this.meSpacingNut1.Location = new System.Drawing.Point(106, 35);
+            this.meSpacingNut1.Name = "meSpacingNut1";
+            this.meSpacingNut1.Size = new System.Drawing.Size(94, 21);
+            this.meSpacingNut1.TabIndex = 6;
+            this.meSpacingNut1.ValueChanged += new System.EventHandler(this.StringSpacingChanged);
             // 
             // gbxScaleLength
             // 
@@ -297,6 +330,33 @@
             65536});
             this.nudMultiScaleOffset.ValueChanged += new System.EventHandler(this.nudMultiScaleOffset_ValueChanged);
             // 
+            // meSingleScale
+            // 
+            this.meSingleScale.Location = new System.Drawing.Point(89, 2);
+            this.meSingleScale.Margin = new System.Windows.Forms.Padding(2);
+            this.meSingleScale.Name = "meSingleScale";
+            this.meSingleScale.Size = new System.Drawing.Size(114, 21);
+            this.meSingleScale.TabIndex = 2;
+            this.meSingleScale.ValueChanged += new System.EventHandler(this.meSingleScale_ValueChanged);
+            // 
+            // meBassScale
+            // 
+            this.meBassScale.Location = new System.Drawing.Point(89, 52);
+            this.meBassScale.Margin = new System.Windows.Forms.Padding(2);
+            this.meBassScale.Name = "meBassScale";
+            this.meBassScale.Size = new System.Drawing.Size(114, 21);
+            this.meBassScale.TabIndex = 6;
+            this.meBassScale.ValueChanged += new System.EventHandler(this.meBassScale_ValueChanged);
+            // 
+            // meTrebleScale
+            // 
+            this.meTrebleScale.Location = new System.Drawing.Point(89, 27);
+            this.meTrebleScale.Margin = new System.Windows.Forms.Padding(2);
+            this.meTrebleScale.Name = "meTrebleScale";
+            this.meTrebleScale.Size = new System.Drawing.Size(114, 21);
+            this.meTrebleScale.TabIndex = 5;
+            this.meTrebleScale.ValueChanged += new System.EventHandler(this.meTrebleScale_ValueChanged);
+            // 
             // rbMultiScale
             // 
             this.rbMultiScale.AutoSize = true;
@@ -397,6 +457,17 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Number of strings";
             // 
+            // layoutViewer1
+            // 
+            this.layoutViewer1.CurrentLayout = null;
+            this.layoutViewer1.DisplayConfig.FretWidth = new SiGen.Measuring.Measure(2.5D, SiGen.Measuring.UnitOfMeasure.Millimeters);
+            this.layoutViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layoutViewer1.Location = new System.Drawing.Point(0, 0);
+            this.layoutViewer1.Name = "layoutViewer1";
+            this.layoutViewer1.Size = new System.Drawing.Size(483, 444);
+            this.layoutViewer1.TabIndex = 0;
+            this.layoutViewer1.Text = "layoutViewer1";
+            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(100, 22);
@@ -414,76 +485,6 @@
             this.button2.TabIndex = 7;
             this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
-            // 
-            // meSpacingBridge2
-            // 
-            this.meSpacingBridge2.Location = new System.Drawing.Point(106, 126);
-            this.meSpacingBridge2.Name = "meSpacingBridge2";
-            this.meSpacingBridge2.Size = new System.Drawing.Size(94, 21);
-            this.meSpacingBridge2.TabIndex = 13;
-            this.meSpacingBridge2.ValueChanged += new System.EventHandler(this.StringSpacingChanged);
-            // 
-            // meSpacingBridge1
-            // 
-            this.meSpacingBridge1.Location = new System.Drawing.Point(106, 102);
-            this.meSpacingBridge1.Name = "meSpacingBridge1";
-            this.meSpacingBridge1.Size = new System.Drawing.Size(94, 21);
-            this.meSpacingBridge1.TabIndex = 11;
-            this.meSpacingBridge1.ValueChanged += new System.EventHandler(this.StringSpacingChanged);
-            // 
-            // meSpacingNut2
-            // 
-            this.meSpacingNut2.Location = new System.Drawing.Point(106, 59);
-            this.meSpacingNut2.Name = "meSpacingNut2";
-            this.meSpacingNut2.Size = new System.Drawing.Size(94, 21);
-            this.meSpacingNut2.TabIndex = 8;
-            this.meSpacingNut2.ValueChanged += new System.EventHandler(this.StringSpacingChanged);
-            // 
-            // meSpacingNut1
-            // 
-            this.meSpacingNut1.Location = new System.Drawing.Point(106, 35);
-            this.meSpacingNut1.Name = "meSpacingNut1";
-            this.meSpacingNut1.Size = new System.Drawing.Size(94, 21);
-            this.meSpacingNut1.TabIndex = 6;
-            this.meSpacingNut1.ValueChanged += new System.EventHandler(this.StringSpacingChanged);
-            // 
-            // meSingleScale
-            // 
-            this.meSingleScale.Location = new System.Drawing.Point(89, 2);
-            this.meSingleScale.Margin = new System.Windows.Forms.Padding(2);
-            this.meSingleScale.Name = "meSingleScale";
-            this.meSingleScale.Size = new System.Drawing.Size(114, 21);
-            this.meSingleScale.TabIndex = 2;
-            this.meSingleScale.ValueChanged += new System.EventHandler(this.meSingleScale_ValueChanged);
-            // 
-            // meBassScale
-            // 
-            this.meBassScale.Location = new System.Drawing.Point(89, 52);
-            this.meBassScale.Margin = new System.Windows.Forms.Padding(2);
-            this.meBassScale.Name = "meBassScale";
-            this.meBassScale.Size = new System.Drawing.Size(114, 21);
-            this.meBassScale.TabIndex = 6;
-            this.meBassScale.ValueChanged += new System.EventHandler(this.meBassScale_ValueChanged);
-            // 
-            // meTrebleScale
-            // 
-            this.meTrebleScale.Location = new System.Drawing.Point(89, 27);
-            this.meTrebleScale.Margin = new System.Windows.Forms.Padding(2);
-            this.meTrebleScale.Name = "meTrebleScale";
-            this.meTrebleScale.Size = new System.Drawing.Size(114, 21);
-            this.meTrebleScale.TabIndex = 5;
-            this.meTrebleScale.ValueChanged += new System.EventHandler(this.meTrebleScale_ValueChanged);
-            // 
-            // layoutViewer1
-            // 
-            this.layoutViewer1.CurrentLayout = null;
-            this.layoutViewer1.DisplayConfig.FretWidth = new SiGen.Measuring.Measure(2.5D, SiGen.Measuring.UnitOfMeasure.Millimeters);
-            this.layoutViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layoutViewer1.Location = new System.Drawing.Point(0, 0);
-            this.layoutViewer1.Name = "layoutViewer1";
-            this.layoutViewer1.Size = new System.Drawing.Size(483, 444);
-            this.layoutViewer1.TabIndex = 0;
-            this.layoutViewer1.Text = "layoutViewer1";
             // 
             // FrmLayoutBuilder
             // 
