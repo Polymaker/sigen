@@ -1,4 +1,6 @@
-﻿using SiGen.Measuring;
+﻿using SiGen.Export;
+using SiGen.Measuring;
+using SiGen.Physics;
 using SiGen.StringedInstruments.Layout;
 using System;
 using System.Collections.Generic;
@@ -28,7 +30,7 @@ namespace SiGen.UI
             base.OnLoad(e);
 
             layoutViewer1.CurrentLayout = CreateDefaultLayout();
-            
+            layoutViewer1.Select();
             UpdateParameters();
         }
 
@@ -39,6 +41,15 @@ namespace SiGen.UI
             layout.SingleScaleConfig.Length = Measure.Inches(25.5);
             layout.MultiScaleConfig.Treble = Measure.Inches(25.5);
             layout.MultiScaleConfig.Bass = Measure.Inches(27);
+            
+            layout.SetStringsTuning(
+                MusicalNote.EqualNote(NoteName.E, 4),
+                MusicalNote.EqualNote(NoteName.B, 3),
+                MusicalNote.EqualNote(NoteName.G, 3),
+                MusicalNote.EqualNote(NoteName.D, 3),
+                MusicalNote.EqualNote(NoteName.A, 2),
+                MusicalNote.EqualNote(NoteName.E, 2)
+                );
 
             var spacing = (StringSpacingSimple)layout.StringSpacing;
             spacing.StringSpacingAtNut = Measure.Mm(7.3);
@@ -229,5 +240,9 @@ namespace SiGen.UI
             }
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            SvgLayoutExporter.ExportLayout("test.svg", layoutViewer1.CurrentLayout, new LayoutExportOptions() { ExportStrings = true, ExportStringCenters = true });
+        }
     }
 }

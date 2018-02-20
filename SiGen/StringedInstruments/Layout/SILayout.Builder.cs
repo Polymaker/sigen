@@ -212,8 +212,8 @@ namespace SiGen.StringedInstruments.Layout
         {
             var trebleSideEdge = VisualElements.OfType<FingerboardSideEdge>().First(e => e.Side == FingerboardSide.Treble);
             var bassSideEdge = VisualElements.OfType<FingerboardSideEdge>().First(e => e.Side == FingerboardSide.Bass);
-            var trebleNutFret = VisualElements.OfType<FretLine>().First(f => f.FretIndex == FirstString.StartingFret && f.Segments.Any(s => s.String == FirstString));
-            var bassNutFret = VisualElements.OfType<FretLine>().First(f => f.FretIndex == LastString.StartingFret && f.Segments.Any(s => s.String == LastString));
+            var trebleNutFret = VisualElements.OfType<FretLine>().First(f => f.IsNut && f.Strings.Contains(FirstString));
+            var bassNutFret = VisualElements.OfType<FretLine>().First(f => f.IsNut && f.Strings.Contains(LastString));
 
             if (!Strings.AllEqual(s => s.StartingFret) || !Strings.AllEqual(s => s.NumberOfFrets))
             {
@@ -239,6 +239,10 @@ namespace SiGen.StringedInstruments.Layout
                 bassSideEdge.P1 = bassSideEdge.GetIntersection(tmpLine);
             }
 
+            if (!Margins.LastFret.IsEmpty)
+            {
+
+            }
         }
 
         #endregion

@@ -23,9 +23,7 @@ namespace SiGen.UI
         private Vector dragStart;
         private SILayout _CurrentLayout;
         private const int PADDING_BORDER = 6;
-        private List<Vector> intersections;
-        private Vector measure1;
-        private Vector measure2;
+        private List<Vector> LayoutIntersections;
 
         public SILayout CurrentLayout
         {
@@ -47,13 +45,12 @@ namespace SiGen.UI
         {
             InitializeComponent();
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.UserPaint | ControlStyles.Selectable, true);
-            _Zoom = 1d;
-            dragStart = Vector.Empty;
+
+            InitCamera();
+            InitMeasureTool();
             _CachedCenter = Vector.Empty;
-            cameraPosition = Vector.Zero;
-            measure1 = Vector.Empty;
-            measure2 = Vector.Empty;
-            intersections = new List<Vector>();
+
+            LayoutIntersections = new List<Vector>();
             _DisplayConfig = new LayoutViewerDisplayConfig();
             _DisplayConfig.PropertyChanged += DisplayConfigChanged;
         }
@@ -91,20 +88,26 @@ namespace SiGen.UI
                 RenderStrings(pe.Graphics);
             }
 
-            if (!measure1.IsEmpty)
-            {
-                using (var measurePen = GetPen(Color.Black, 2))
-                    pe.Graphics.DrawLine(measurePen, VectorToDisplay(measure1), VectorToDisplay(measure2));
-            }
+            //if (!measure1.IsEmpty)
+            //{
+            //    using (var measurePen = GetPen(Color.Black, 2))
+            //        pe.Graphics.DrawLine(measurePen, VectorToDisplay(measure1), VectorToDisplay(measure2));
+            //}
 
             pe.Graphics.ResetTransform();
 
-            if (!measure1.IsEmpty)
+            if (!measurePos1.IsEmpty)
             {
-                var measureLen = Measure.Cm((measure2 - measure1).Length);
-                var measureCenter = WorldToDisplay((measure1 + measure2) / 2, _Zoom, true);
-                pe.Graphics.DrawString(measureLen.ToString(), Font, Brushes.Black, measureCenter);
+                RenderMeasureTool(pe.Graphics);
+                
             }
+
+            //if (!measure1.IsEmpty)
+            //{
+            //    var measureLen = Measure.Cm((measure2 - measure1).Length);
+            //    var measureCenter = WorldToDisplay((measure1 + measure2) / 2, _Zoom, true);
+            //    pe.Graphics.DrawString(measureLen.ToString(), Font, Brushes.Black, measureCenter);
+            //}
         }
 
         #endregion
@@ -125,6 +128,7 @@ namespace SiGen.UI
                     ResetCamera();
                 else
                     Invalidate();
+                ClearMeasuring();
                 CalculateIntersections();
             }
         }
@@ -143,21 +147,14 @@ namespace SiGen.UI
 
         #endregion
 
-        private void CalculateIntersections()
-        {
-            intersections.Clear();
-            if(CurrentLayout != null && CurrentLayout.VisualElements.Count > 0)
-            {
-                var fretPos = CurrentLayout.VisualElements.OfType<FretLine>().SelectMany(fl => fl.Segments.Where(s => !s.IsVirtual)).Select(s=>s.PointOnString).Distinct();
-
-                intersections.AddRange(fretPos.Select(p => p.ToVector()));
-                intersections.AddRange(CurrentLayout.VisualElements.OfType<FretLine>().Select(fl=>fl.Points.First().ToVector()));
-                intersections.AddRange(CurrentLayout.VisualElements.OfType<FretLine>().Select(fl => fl.Points.Last().ToVector()));
-                intersections = intersections.Distinct().ToList();
-            }
-        }
-
         #region Camera
+
+        private void InitCamera()
+        {
+            _Zoom = 1d;
+            dragStart = Vector.Empty;
+            cameraPosition = Vector.Zero;
+        }
 
         public void ResetCamera()
         {
@@ -243,16 +240,16 @@ namespace SiGen.UI
             }
             else
             {
-                if (!measure1.IsEmpty)
+                if (!measurePos1.IsEmpty)
                 {
-                    var pt1 = WorldToDisplay(measure1, _Zoom, true);
+                    var pt1 = WorldToDisplay(measurePos1, _Zoom, true);
                     var minX = (int)Math.Min(pt1.X, e.X);
                     var maxX = (int)Math.Max(pt1.X, e.X);
                     var minY = (int)Math.Min(pt1.Y, e.Y);
                     var maxY = (int)Math.Max(pt1.Y, e.Y);
-                    measure2 = DisplayToWorld(e.Location, _Zoom, true);
+                    //measure2 = DisplayToWorld(e.Location, _Zoom, true);
                     var updateBounds = Rectangle.FromLTRB(minX, minY, maxX, maxY);
-                    updateBounds.Inflate(50, 50);
+                    updateBounds.Inflate(10, 10);
                     Invalidate(updateBounds);
                 }
             }
@@ -289,26 +286,89 @@ namespace SiGen.UI
             base.OnMouseClick(e);
             if(e.Button == MouseButtons.Left)
             {
-                if (measure1.IsEmpty)
+                if(LayoutIntersections.Count > 0)
                 {
-                    if (intersections.Count > 0)
+                    if (measurePos1.IsEmpty || !measurePos2.IsEmpty)
                     {
-                        var clickedPos = DisplayToWorld(e.Location, _Zoom, true);
-                        var pointsNear = intersections.Where(i => (i - clickedPos).Length <= 2);
-                        if (pointsNear.Any())
+                        Vector pointsNear = Vector.Empty;
+                        if (GetLayoutPointNear(e.Location, 2, out pointsNear))
                         {
-                            var nearest = pointsNear.OrderBy(p => (p - clickedPos).Length).First();
-                            measure1 = nearest;
+                            measurePos1 = pointsNear;
+                            measurePos2 = Vector.Empty;
+                            Invalidate();
+                        }
+                    }
+                    else if (measurePos2.IsEmpty)
+                    {
+                        Vector pointsNear = Vector.Empty;
+                        if (GetLayoutPointNear(e.Location, 2, out pointsNear))
+                        {
+                            measurePos2 = pointsNear;
+                            Invalidate();
                         }
                     }
                 }
-                else
-                {
-                    measure1 = Vector.Empty;
-                    Invalidate();
-                }
+
+            }
+            else if(e.Button == MouseButtons.Right && !measurePos1.IsEmpty)
+            {
+                ClearMeasuring();
             }
         }
+
+        #endregion
+
+        #region Measuring tool
+
+        private Vector measurePos1;
+        private Vector measurePos2;
+        private UnitOfMeasure DisplayUnit;
+
+        private void InitMeasureTool()
+        {
+            measurePos1 = Vector.Empty;
+            measurePos2 = Vector.Empty;
+            DisplayUnit = UnitOfMeasure.Mm;
+        }
+
+        private void ClearMeasuring()
+        {
+            if (!measurePos1.IsEmpty)
+            {
+                measurePos1 = Vector.Empty;
+                measurePos2 = Vector.Empty;
+                if(IsHandleCreated)
+                    Invalidate();
+            }
+        }
+
+        private bool GetLayoutPointNear(Point pt, double range, out Vector vec)
+        {
+            vec = Vector.Empty;
+            var worldPos = DisplayToWorld(pt, _Zoom, true);
+            var pointsNear = LayoutIntersections.Where(i => (i - worldPos).Length <= range);
+            if (pointsNear.Any())
+                vec = pointsNear.OrderBy(p => (p - worldPos).Length).First();
+
+            return !vec.IsEmpty;
+        }
+
+        private void CalculateIntersections()
+        {
+            LayoutIntersections.Clear();
+            if (CurrentLayout != null && CurrentLayout.VisualElements.Count > 0)
+            {
+                var fretPos = CurrentLayout.VisualElements.OfType<FretLine>().SelectMany(fl => fl.Segments.Where(s => !s.IsVirtual)).Select(s => s.PointOnString).Distinct();
+
+                LayoutIntersections.AddRange(fretPos.Select(p => p.ToVector()));
+                LayoutIntersections.AddRange(CurrentLayout.VisualElements.OfType<FretLine>().Select(fl => fl.Points.First().ToVector()));
+                LayoutIntersections.AddRange(CurrentLayout.VisualElements.OfType<FretLine>().Select(fl => fl.Points.Last().ToVector()));
+                LayoutIntersections.AddRange(CurrentLayout.VisualElements.OfType<LayoutLine>().Select(fl => fl.P1.ToVector()));
+                LayoutIntersections.AddRange(CurrentLayout.VisualElements.OfType<LayoutLine>().Select(fl => fl.P2.ToVector()));
+                LayoutIntersections = LayoutIntersections.Distinct().ToList();
+            }
+        }
+
         #endregion
 
         #region UI <-> 2D coordinates

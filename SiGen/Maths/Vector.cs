@@ -180,6 +180,11 @@ namespace SiGen.Maths
             return new System.Drawing.PointF((float)vec.x, (float)vec.y);
         }
 
+        public static explicit operator Vector(System.Drawing.PointF pt)
+        {
+            return new Vector(pt.X, pt.Y);
+        }
+
         #endregion
 
         public override string ToString()

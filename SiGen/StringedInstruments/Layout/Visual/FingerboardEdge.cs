@@ -19,8 +19,9 @@ namespace SiGen.StringedInstruments.Layout.Visual
     {
         private FingerboardSide _Side;
         private SIString _BesideString;
-
+        //private PointM _
         public FingerboardSide Side { get { return _Side; } }
+
         public SIString BesideString
         {
             get
@@ -46,5 +47,6 @@ namespace SiGen.StringedInstruments.Layout.Visual
         {
             return Side == side && ((str == null && _BesideString == null) || BesideString == str);
         }
+
     }
 }
