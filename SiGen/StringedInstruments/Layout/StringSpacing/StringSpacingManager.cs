@@ -78,7 +78,7 @@ namespace SiGen.StringedInstruments.Layout
                 else
                     stringPos[i] = stringPos[i - 1] + GetSpacingBetweenStrings(i - 1, i, atNut);
             }
-            if ((atNut ? NutAlignment : BridgeAlignment) == StringSpacingAlignment.StringCenter)
+            if ((atNut ? NutAlignment : BridgeAlignment) == StringSpacingAlignment.SpacingMiddle)
                 center = (atNut ? StringSpreadAtNut : StringSpreadAtBridge) / 2d;
             else if (NumberOfStrings % 2 == 1)//odd number of strings
                 center = stringPos[(NumberOfStrings - 1) / 2];

@@ -256,5 +256,59 @@ namespace SiGen.StringedInstruments.Layout.Visual
             left.BuildLayout();
             right.BuildLayout();
         }
+
+        internal PointM GetPointForX(Measure x)
+        {
+            for(int i = 0; i < Points.Count - 1; i++)
+            {
+                if(x>= Points[i].X && x <= Points[i + 1].X)
+                {
+                    var pt = Line.FromPoints(Points[i].ToVector(), Points[i + 1].ToVector()).GetPointForX(x.NormalizedValue);
+                    return PointM.FromVector(pt, UnitOfMeasure.Centimeters);
+                }
+            }
+            return PointM.Empty;
+        }
+
+        internal PointM GetIntersection(LayoutLine other)
+        {
+            var intersection = PointM.Empty;
+            if(Points.Count == 2)
+            {
+                IntersectSegmentWithLine(other.Equation, 0, 1, out intersection);
+            }
+            else
+            {
+                for (int i = 0; i < Points.Count - 1; i++)
+                {
+                    if (IntersectSegmentWithLine(other.Equation, i, i + 1, out intersection))
+                        return intersection;
+                }
+            }
+            return intersection;
+        }
+
+        private bool IntersectSegmentWithLine(Line line, int idx1, int idx2, out PointM inter)
+        {
+            var segLine = Line.FromPoints(Points[idx1].ToVector(), Points[idx2].ToVector());
+            Vector virtualInter;
+            inter = PointM.Empty;
+            if (segLine.Intersect(line, out virtualInter))
+            {
+                if(virtualInter.X >= Points[idx1].X.NormalizedValue && virtualInter.X <= Points[idx2].X.NormalizedValue)
+                {
+                    inter = PointM.FromVector(virtualInter, UnitOfMeasure.Centimeters);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        internal override void FlipHandedness()
+        {
+            base.FlipHandedness();
+            _Points = _Points.Select(p => new PointM(p.X * -1, p.Y)).ToList();
+            _Segments.ForEach(s => s.FlipHandedness());
+        }
     }
 }

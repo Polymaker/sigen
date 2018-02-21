@@ -43,5 +43,11 @@ namespace SiGen.StringedInstruments.Layout.Visual
                 IsVirtual = true
             };
         }
+
+        internal override void FlipHandedness()
+        {
+            base.FlipHandedness();
+            _PointOnString = new PointM(_PointOnString.X * -1, _PointOnString.Y);
+        }
     }
 }

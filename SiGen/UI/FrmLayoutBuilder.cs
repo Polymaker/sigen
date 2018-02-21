@@ -59,10 +59,21 @@ namespace SiGen.UI
                 new StringProperties(Measure.Inches(0.015), Measure.Inches(0.032), 0.00019347, 29442660.75919),
                 new StringProperties(Measure.Inches(0.018), Measure.Inches(0.042), 0.00032279, 29442660.75919)
                 );
+
             var spacing = (StringSpacingSimple)layout.StringSpacing;
-            
             spacing.StringSpacingAtNut = Measure.Mm(7.3);
             spacing.StringSpacingAtBridge = Measure.Mm(10.5);
+            //spacing.NutSpacingMode = NutSpacingMode.BetweenStrings;
+            spacing.NutAlignment = StringSpacingAlignment.SpacingMiddle;
+
+            //layout.Strings[0].NumberOfFrets = 23;
+            //layout.Strings[1].NumberOfFrets = 23;
+            //layout.Strings[2].NumberOfFrets = 23;
+
+            //layout.Strings[0].StartingFret = -1;
+            //layout.Strings[1].StartingFret = -1;
+            //layout.Strings[2].StartingFret = -1;
+
             layout.Margins.Edges = Measure.Mm(3.25);
             layout.Margins.LastFret = Measure.Mm(10);
             layout.RebuildLayout();
@@ -252,7 +263,15 @@ namespace SiGen.UI
 
         private void button3_Click(object sender, EventArgs e)
         {
-            SvgLayoutExporter.ExportLayout("test.svg", layoutViewer1.CurrentLayout, new LayoutExportOptions() { ExportStrings = true, ExportStringCenters = true });
+            SvgLayoutExporter.ExportLayout("test.svg", layoutViewer1.CurrentLayout,
+                new LayoutExportOptions()
+                {
+                    ExportStrings = false,
+                    ExportStringCenters = false,
+                    ExportCenterLine = true
+                });
+            //layoutViewer1.CurrentLayout.LeftHanded = !layoutViewer1.CurrentLayout.LeftHanded;
+            //RebuildLayoutIfNeeded();
         }
     }
 }

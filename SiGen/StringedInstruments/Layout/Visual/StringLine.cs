@@ -25,5 +25,12 @@ namespace SiGen.StringedInstruments.Layout.Visual
             _String = str;
             FretZero = PointM.Empty;
         }
+
+        internal override void FlipHandedness()
+        {
+            base.FlipHandedness();
+            if (!FretZero.IsEmpty)
+                FretZero = new PointM(FretZero.X * -1, FretZero.Y);
+        }
     }
 }

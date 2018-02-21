@@ -16,5 +16,10 @@ namespace SiGen.StringedInstruments.Layout.Visual
             get { return _ElementType; }
         }
         public abstract RectangleM Bounds { get; }
+
+        internal virtual void FlipHandedness()
+        {
+
+        }
     }
 }

@@ -117,7 +117,6 @@ namespace SiGen.StringedInstruments.Layout.Visual
 
         public PointM GetPerpendicularPoint(PointM pos, Measure dist)
         {
-            //var virtualLine = Line.FromPoints((Vector)P1, (Vector)P2);
             var perp = Maths.Line.GetPerpendicular(Equation, (Vector)pos);
             return pos + perp.Vector * dist;
         }
@@ -132,6 +131,13 @@ namespace SiGen.StringedInstruments.Layout.Visual
         {
             var inter = Equation.GetIntersection(line);
             return PointM.FromVector(inter, P1.Unit);
+        }
+
+        internal override void FlipHandedness()
+        {
+            base.FlipHandedness();
+            P1 = new PointM(P1.X * -1, P1.Y);
+            P2 = new PointM(P2.X * -1, P2.Y);
         }
     }
 }

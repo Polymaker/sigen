@@ -30,6 +30,7 @@ namespace SiGen.StringedInstruments.Layout
         private ScaleLengthManager.MultiScale _MultiScaleMgr;
         private ScaleLengthManager.Individual _ManualScaleMgr;
         private List<VisualElement> _VisualElements;
+        private RectangleM _CachedBounds;
         private bool isLayoutDirty;
         private bool isLoading;
 
@@ -180,6 +181,7 @@ namespace SiGen.StringedInstruments.Layout
             _VisualElements = new List<VisualElement>();
             _ScaleLengthMode = ScaleLengthType.Single;
             _FretsTemperament = Temperament.Equal;
+            _CachedBounds = RectangleM.Empty;
             LayoutName = string.Empty;
         }
 
@@ -268,30 +270,33 @@ namespace SiGen.StringedInstruments.Layout
                 isLayoutDirty = true;
         }
 
-        public bool VerifyFretboardHasStraightFrets()
-        {
-            if (FretsTemperament != Temperament.Equal || _CompensateFretPositions)
-                return false;
+        //public bool VerifyFretboardHasStraightFrets()
+        //{
+        //    if (FretsTemperament != Temperament.Equal || _CompensateFretPositions)
+        //        return false;
 
-            if (!Strings.AllEqual(s => s.RelativeScaleLengthOffset))
-                return false;
-            if (Strings.Length > 2 && !Strings.AllEqual(s => s.ScaleLength))
-            {
-                var diff = Measure.Abs(Strings[0].ScaleLength - Strings[1].ScaleLength);
-                for (int i = 1; i < NumberOfStrings - 1; i++)
-                {
-                    var scaleDiff = Measure.Abs(Strings[i].ScaleLength - Strings[i + 1].ScaleLength);
-                    if (!Measure.EqualOrClose(diff, scaleDiff, Measure.Mm(0.0001)))
-                        return false;
-                }
-            }
-            return true;
-        }
+        //    if (!Strings.AllEqual(s => s.RelativeScaleLengthOffset))
+        //        return false;
+        //    if (Strings.Length > 2 && !Strings.AllEqual(s => s.ScaleLength))
+        //    {
+        //        var diff = Measure.Abs(Strings[0].ScaleLength - Strings[1].ScaleLength);
+        //        for (int i = 1; i < NumberOfStrings - 1; i++)
+        //        {
+        //            var scaleDiff = Measure.Abs(Strings[i].ScaleLength - Strings[i + 1].ScaleLength);
+        //            if (!Measure.EqualOrClose(diff, scaleDiff, Measure.Mm(0.0001)))
+        //                return false;
+        //        }
+        //    }
+        //    return true;
+        //}
 
         public RectangleM GetBounds()
         {
             if (VisualElements.Count == 0)
                 return RectangleM.Empty;
+
+            if (!_CachedBounds.IsEmpty)
+                return _CachedBounds;
 
             Measure minX = Measure.Zero;
             Measure maxX = Measure.Zero;
@@ -311,8 +316,8 @@ namespace SiGen.StringedInstruments.Layout
                 if (elem.Bounds.Top > maxY)
                     maxY = elem.Bounds.Top;
             }
-
-            return RectangleM.FromLTRB(minX, maxY, maxX, minY);
+            _CachedBounds = RectangleM.FromLTRB(minX, maxY, maxX, minY);
+            return _CachedBounds;
         }
 
         #region XML serialization
