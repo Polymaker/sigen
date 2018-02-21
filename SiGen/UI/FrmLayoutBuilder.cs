@@ -1,6 +1,7 @@
 ﻿using SiGen.Export;
 using SiGen.Measuring;
 using SiGen.Physics;
+using SiGen.StringedInstruments.Data;
 using SiGen.StringedInstruments.Layout;
 using System;
 using System.Collections.Generic;
@@ -50,11 +51,20 @@ namespace SiGen.UI
                 MusicalNote.EqualNote(NoteName.A, 2),
                 MusicalNote.EqualNote(NoteName.E, 2)
                 );
-
+            layout.Strings.MassAssign(s => s.PhysicalProperties,
+                new StringProperties(Measure.Inches(0.009), Measure.Inches(0.009), 0.00001794, 29442660.75919),
+                new StringProperties(Measure.Inches(0.011), Measure.Inches(0.011), 0.00002680, 29442660.75919),
+                new StringProperties(Measure.Inches(0.016), Measure.Inches(0.016), 0.00005671, 29442660.75919),
+                new StringProperties(Measure.Inches(0.014), Measure.Inches(0.024), 0.00010857, 29442660.75919),
+                new StringProperties(Measure.Inches(0.015), Measure.Inches(0.032), 0.00019347, 29442660.75919),
+                new StringProperties(Measure.Inches(0.018), Measure.Inches(0.042), 0.00032279, 29442660.75919)
+                );
             var spacing = (StringSpacingSimple)layout.StringSpacing;
+            
             spacing.StringSpacingAtNut = Measure.Mm(7.3);
             spacing.StringSpacingAtBridge = Measure.Mm(10.5);
             layout.Margins.Edges = Measure.Mm(3.25);
+            layout.Margins.LastFret = Measure.Mm(10);
             layout.RebuildLayout();
             return layout;
         }

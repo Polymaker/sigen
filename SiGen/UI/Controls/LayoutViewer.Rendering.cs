@@ -78,6 +78,16 @@ namespace SiGen.UI
             }
         }
 
+        private void RenderGuideLines(Graphics g)
+        {
+            using (var guidePen = GetPen(Color.Gainsboro, 1))
+            {
+                guidePen.DashPattern = new float[] { 6, 4, 2, 4 };
+                foreach (var line in CurrentLayout.VisualElements.OfType<LayoutLine>().Where(l => l.ElementType == VisualElementType.GuideLine))
+                    DrawLine(g, guidePen, line.P1, line.P2);
+            }
+        }
+
         private void RenderFrets(Graphics g)
         {
             Pen fretPen = null;

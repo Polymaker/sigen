@@ -194,7 +194,7 @@ namespace SiGen.StringedInstruments.Layout
             _Strings = new SIString[NumberOfStrings];
             for(int i = 0; i < _NumberOfStrings; i++)
             {
-                if (oldStrings != null && i < oldStrings.Length - 1)
+                if (oldStrings != null && i < oldStrings.Length)
                     _Strings[i] = oldStrings[i];
                 else
                     _Strings[i] = new SIString(this, i);

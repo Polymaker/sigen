@@ -84,30 +84,15 @@ namespace SiGen.UI
             if(CurrentLayout != null)
             {
                 RenderFingerboard(pe.Graphics);
+                RenderGuideLines(pe.Graphics);
                 RenderFrets(pe.Graphics);
                 RenderStrings(pe.Graphics);
             }
 
-            //if (!measure1.IsEmpty)
-            //{
-            //    using (var measurePen = GetPen(Color.Black, 2))
-            //        pe.Graphics.DrawLine(measurePen, VectorToDisplay(measure1), VectorToDisplay(measure2));
-            //}
-
             pe.Graphics.ResetTransform();
 
             if (!measurePos1.IsEmpty)
-            {
                 RenderMeasureTool(pe.Graphics);
-                
-            }
-
-            //if (!measure1.IsEmpty)
-            //{
-            //    var measureLen = Measure.Cm((measure2 - measure1).Length);
-            //    var measureCenter = WorldToDisplay((measure1 + measure2) / 2, _Zoom, true);
-            //    pe.Graphics.DrawString(measureLen.ToString(), Font, Brushes.Black, measureCenter);
-            //}
         }
 
         #endregion

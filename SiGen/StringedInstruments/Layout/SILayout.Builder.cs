@@ -239,10 +239,23 @@ namespace SiGen.StringedInstruments.Layout
                 bassSideEdge.P1 = bassSideEdge.GetIntersection(tmpLine);
             }
 
+            var trebleLastFret = VisualElements.OfType<FretLine>().First(f => f.FretIndex == FirstString.NumberOfFrets && f.Strings.Contains(FirstString));
+            var bassLastFret = VisualElements.OfType<FretLine>().First(f => f.FretIndex == LastString.NumberOfFrets && f.Strings.Contains(LastString));
+
+            PointM trebleEndPoint = trebleLastFret.Points.Last();
+            PointM bassEndPoint = bassLastFret.Points.First();
+
             if (!Margins.LastFret.IsEmpty)
             {
+                trebleEndPoint += trebleSideEdge.Direction * Margins.LastFret;
+                bassEndPoint += bassSideEdge.Direction * Margins.LastFret;
 
             }
+
+            var virtualTrebleEdge = AddVisualElement(new LayoutLine(trebleEndPoint, trebleSideEdge.P2, VisualElementType.GuideLine));
+            var virtualBassEdge = AddVisualElement(new LayoutLine(bassEndPoint, bassSideEdge.P2, VisualElementType.GuideLine));
+            trebleSideEdge.P2 = virtualTrebleEdge.P1;
+            bassSideEdge.P2 = virtualBassEdge.P1;
         }
 
         #endregion

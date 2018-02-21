@@ -126,6 +126,8 @@ namespace SiGen.StringedInstruments.Layout
                     AdjustedNutSlots[i] = (Layout.Strings[i].Gauge / 2) + spacing + (Layout.Strings[i + 1].Gauge / 2);
                 }
             }
+            else
+                AdjustedNutSlots = new Measure[0];
         }
     }
 }
