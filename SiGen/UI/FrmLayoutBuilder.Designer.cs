@@ -462,7 +462,6 @@
             // 
             this.layoutViewer1.BackColor = System.Drawing.Color.White;
             this.layoutViewer1.CurrentLayout = null;
-            this.layoutViewer1.DisplayConfig.FretWidth = new SiGen.Measuring.Measure(2.5D, SiGen.Measuring.UnitOfMeasure.Millimeters);
             this.layoutViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layoutViewer1.Location = new System.Drawing.Point(0, 0);
             this.layoutViewer1.Name = "layoutViewer1";
