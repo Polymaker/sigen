@@ -50,10 +50,6 @@ namespace SiGen.UI
                         CancelEdit();
                     _Value = value;
                     SynchronizeValueToTextbox();
-                    
-                    if (IsHandleCreated)
-                        Invalidate();
-
                     OnValueChanged(EventArgs.Empty);
                 }
             }
@@ -70,6 +66,12 @@ namespace SiGen.UI
                     _AllowEmptyValue = value;
                 }
             }
+        }
+
+        [Browsable(false)]
+        public bool IsEditing
+        {
+            get { return _IsEditing; }
         }
 
         #region Events
@@ -104,22 +106,19 @@ namespace SiGen.UI
                 innerTextbox.Text = string.Empty;
             else
             {
-                var valueStr = _Value.ToString();
-                if (valueStr.Contains("~"))
-                    valueStr = _Value.ToString(_Value.Unit, true);
+                var valueStr = _Value.ToString(Measure.MeasureFormatFlag.DisableApproximation);
+                //if (valueStr.Contains("~"))
+                //    valueStr = _Value.ToString(_Value.Unit, true);
                 innerTextbox.Text = valueStr;
             }
             internalChange = false;
+
+            if (IsHandleCreated)
+                Invalidate();
+            UpdateMeasureBounds();
         }
 
         #region Drawing
-
-        const int EBS_NORMAL = 1;
-        const int EBS_HOT = 2;
-        const int EBS_DISABLED = 3;
-        const int EBS_FOCUSED = 4;
-        const int EBS_READONLY = 5;
-        const int EBS_ASSIST = 6;
 
         const int EPSN_NORMAL = 1;
         const int EPSN_HOT = 2;
@@ -208,6 +207,7 @@ namespace SiGen.UI
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
+            Height = FontHeight + (SystemInformation.BorderSize.Height * 4) + 3;
             UpdateMeasureBounds();
         }
 
@@ -223,18 +223,27 @@ namespace SiGen.UI
             UpdateMeasureBounds();
         }
 
+        private bool preventFocus;
+
         protected override void OnGotFocus(EventArgs e)
         {
-            base.OnGotFocus(e);
-            if((MouseButtons & MouseButtons.Right) != MouseButtons.Right/* || !measureBounds.Contains(Cursor.Position)*/)
+            if(!preventFocus)
                 ShowTextBox();
-            Invalidate();
+            preventFocus = false;
+
+            Invalidate();//repaint border
+
+            base.OnGotFocus(e);
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Left && measureBounds.Contains(e.Location))
+            if (!ContainsFocus && e.Button == MouseButtons.Right)
+                preventFocus = true;
+
+            if (e.Button == MouseButtons.Left && measureBounds.Contains(e.Location))
                 ShowTextBox();
+
             base.OnMouseDown(e);
         }
 
@@ -251,8 +260,9 @@ namespace SiGen.UI
         protected override void OnLostFocus(EventArgs e)
         {
             base.OnLostFocus(e);
-            Invalidate();
+            Invalidate();//repaint border
         }
+
         protected override void OnEnabledChanged(EventArgs e)
         {
             base.OnEnabledChanged(e);
@@ -261,7 +271,7 @@ namespace SiGen.UI
 
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            height = FontHeight + 6;
+            height = FontHeight + (SystemInformation.BorderSize.Height * 4) + 3;
             base.SetBoundsCore(x, y, width, height, specified);
             RepositionTextbox();
         }
@@ -272,6 +282,7 @@ namespace SiGen.UI
             {
                 using (var g = CreateGraphics())
                 {
+                    
                     var textSize = g.MeasureString(_Value.ToString(), Font);
                     measureBounds = new Rectangle((int)((Width - textSize.Width) / 2), (int)((Height - textSize.Height) / 2), (int)textSize.Width, (int)textSize.Height);
                 }
@@ -322,7 +333,6 @@ namespace SiGen.UI
             PerformEndEdit(true);
             _Value.Unit = UnitOfMeasure.Mm;
             SynchronizeValueToTextbox();
-            Invalidate();
         }
 
         private void tsmiConvertToCM_Click(object sender, EventArgs e)
@@ -330,7 +340,6 @@ namespace SiGen.UI
             PerformEndEdit(true);
             _Value.Unit = UnitOfMeasure.Cm;
             SynchronizeValueToTextbox();
-            Invalidate();
         }
 
         private void tsmiConvertToIN_Click(object sender, EventArgs e)
@@ -338,7 +347,6 @@ namespace SiGen.UI
             PerformEndEdit(true);
             _Value.Unit = UnitOfMeasure.In;
             SynchronizeValueToTextbox();
-            Invalidate();
         }
 
         private void tsmiConvertToFT_Click(object sender, EventArgs e)
@@ -346,7 +354,6 @@ namespace SiGen.UI
             PerformEndEdit(true);
             _Value.Unit = UnitOfMeasure.Ft;
             SynchronizeValueToTextbox();
-            Invalidate();
         }
 
         private void tsmiClearValue_Click(object sender, EventArgs e)
@@ -448,12 +455,6 @@ namespace SiGen.UI
                 {
                     System.Media.SystemSounds.Exclamation.Play();
                     e.Cancel = true;
-                    //double noUnitValue = 0;
-                    //if (!double.TryParse(innerTextbox.Text, out noUnitValue))
-                    //{
-                    //    System.Media.SystemSounds.Exclamation.Play();
-                    //    e.Cancel = true;
-                    //}
                 }
             }
         }
@@ -466,16 +467,22 @@ namespace SiGen.UI
 
         private void innerTextbox_CommandKeyPressed(object sender, KeyEventArgs e)
         {
-            if (e.KeyData == Keys.Escape && _IsEditing)
+            if (e.KeyData == Keys.Escape)
             {
-                CancelEdit();
-                e.Handled = true;
+                if (IsEditing)
+                {
+                    CancelEdit();
+                    e.Handled = true;
+                }
+                else if (innerTextbox.Visible)
+                {
+                    innerTextbox.Visible = false;
+                    e.Handled = true;
+                }      
             }
         }
 
-
         #endregion
-
     }
 
     internal class MeasureTextboxDesigner : ControlDesigner

@@ -36,7 +36,8 @@ namespace SiGen.UI.Designers
                     var previousValue = (Measure)value;
                     editControl.Value = previousValue;
                     windowsFormsEditorService.DropDownControl(editControl);
-
+                    if (editControl.IsEditing)
+                        editControl.PerformEndEdit();
                     if (previousValue == editControl.Value && previousValue.Unit != editControl.Value.Unit)//the measure is equal but in another display unit
                         context.PropertyDescriptor.SetValue(context.Instance, editControl.Value);//force a ValueChange to keep the new display unit
                     value = editControl.Value;
