@@ -30,19 +30,14 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmLayoutBuilder));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.gbxStringSpacing = new System.Windows.Forms.GroupBox();
             this.button3 = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
-            this.meSpacingBridge2 = new SiGen.UI.MeasureEdit();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.meSpacingBridge1 = new SiGen.UI.MeasureEdit();
             this.label6 = new System.Windows.Forms.Label();
-            this.meSpacingNut2 = new SiGen.UI.MeasureEdit();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.meSpacingNut1 = new SiGen.UI.MeasureEdit();
             this.gbxScaleLength = new System.Windows.Forms.GroupBox();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.tlpScaleLenghts = new System.Windows.Forms.TableLayoutPanel();
@@ -51,9 +46,6 @@
             this.lblTrebleLength = new System.Windows.Forms.Label();
             this.lblScaleLength = new System.Windows.Forms.Label();
             this.nudMultiScaleOffset = new System.Windows.Forms.NumericUpDown();
-            this.meSingleScale = new SiGen.UI.MeasureEdit();
-            this.meBassScale = new SiGen.UI.MeasureEdit();
-            this.meTrebleScale = new SiGen.UI.MeasureEdit();
             this.rbMultiScale = new System.Windows.Forms.RadioButton();
             this.rbSingleScale = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -61,24 +53,34 @@
             this.label2 = new System.Windows.Forms.Label();
             this.nudNumberOfStrings = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
-            this.layoutViewer1 = new SiGen.UI.LayoutViewer();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbNew = new System.Windows.Forms.ToolStripButton();
-            this.tsbOpen = new System.Windows.Forms.ToolStripButton();
+            this.tssbOpen = new System.Windows.Forms.ToolStripSplitButton();
+            this.tsmiOpenFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiOpenTemplate = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsSeparatorOpen = new System.Windows.Forms.ToolStripSeparator();
             this.tssbSave = new System.Windows.Forms.ToolStripSplitButton();
             this.tsmiSave = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveAs = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSplitButton2 = new System.Windows.Forms.ToolStripSplitButton();
+            this.tsmiSaveTemplate = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssbExport = new System.Windows.Forms.ToolStripSplitButton();
             this.exportAsSVGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportAsDXFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
+            this.layoutViewer1 = new SiGen.UI.LayoutViewer();
+            this.meSpacingBridge2 = new SiGen.UI.MeasureEdit();
+            this.meSpacingBridge1 = new SiGen.UI.MeasureEdit();
+            this.meSpacingNut2 = new SiGen.UI.MeasureEdit();
+            this.meSpacingNut1 = new SiGen.UI.MeasureEdit();
+            this.meSingleScale = new SiGen.UI.MeasureEdit();
+            this.meBassScale = new SiGen.UI.MeasureEdit();
+            this.meTrebleScale = new SiGen.UI.MeasureEdit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.gbxStringSpacing.SuspendLayout();
             this.gbxScaleLength.SuspendLayout();
             this.tlpScaleLenghts.SuspendLayout();
@@ -96,33 +98,23 @@
             // 
             this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.panel1);
+            this.splitContainer1.Panel1.Controls.Add(this.layoutViewer1);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.layoutViewer1);
-            this.splitContainer1.Size = new System.Drawing.Size(820, 428);
-            this.splitContainer1.SplitterDistance = 331;
+            this.splitContainer1.Panel2.Controls.Add(this.gbxStringSpacing);
+            this.splitContainer1.Panel2.Controls.Add(this.gbxScaleLength);
+            this.splitContainer1.Panel2.Controls.Add(this.groupBox2);
+            this.splitContainer1.Size = new System.Drawing.Size(820, 440);
+            this.splitContainer1.SplitterDistance = 246;
             this.splitContainer1.TabIndex = 1;
-            // 
-            // panel1
-            // 
-            this.panel1.AutoScroll = true;
-            this.panel1.Controls.Add(this.gbxStringSpacing);
-            this.panel1.Controls.Add(this.gbxScaleLength);
-            this.panel1.Controls.Add(this.groupBox2);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Padding = new System.Windows.Forms.Padding(3);
-            this.panel1.Size = new System.Drawing.Size(329, 426);
-            this.panel1.TabIndex = 6;
             // 
             // gbxStringSpacing
             // 
@@ -137,8 +129,7 @@
             this.gbxStringSpacing.Controls.Add(this.label5);
             this.gbxStringSpacing.Controls.Add(this.label4);
             this.gbxStringSpacing.Controls.Add(this.meSpacingNut1);
-            this.gbxStringSpacing.Dock = System.Windows.Forms.DockStyle.Top;
-            this.gbxStringSpacing.Location = new System.Drawing.Point(3, 243);
+            this.gbxStringSpacing.Location = new System.Drawing.Point(332, 3);
             this.gbxStringSpacing.Name = "gbxStringSpacing";
             this.gbxStringSpacing.Size = new System.Drawing.Size(323, 157);
             this.gbxStringSpacing.TabIndex = 5;
@@ -164,14 +155,6 @@
             this.label7.TabIndex = 14;
             this.label7.Text = "String spread:";
             // 
-            // meSpacingBridge2
-            // 
-            this.meSpacingBridge2.Location = new System.Drawing.Point(106, 126);
-            this.meSpacingBridge2.Name = "meSpacingBridge2";
-            this.meSpacingBridge2.Size = new System.Drawing.Size(94, 21);
-            this.meSpacingBridge2.TabIndex = 13;
-            this.meSpacingBridge2.ValueChanged += new System.EventHandler(this.StringSpacingChanged);
-            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -191,14 +174,6 @@
             this.label9.TabIndex = 10;
             this.label9.Text = "Spacing at bridge:";
             // 
-            // meSpacingBridge1
-            // 
-            this.meSpacingBridge1.Location = new System.Drawing.Point(106, 102);
-            this.meSpacingBridge1.Name = "meSpacingBridge1";
-            this.meSpacingBridge1.Size = new System.Drawing.Size(94, 21);
-            this.meSpacingBridge1.TabIndex = 11;
-            this.meSpacingBridge1.ValueChanged += new System.EventHandler(this.StringSpacingChanged);
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -207,14 +182,6 @@
             this.label6.Size = new System.Drawing.Size(72, 13);
             this.label6.TabIndex = 9;
             this.label6.Text = "String spread:";
-            // 
-            // meSpacingNut2
-            // 
-            this.meSpacingNut2.Location = new System.Drawing.Point(106, 59);
-            this.meSpacingNut2.Name = "meSpacingNut2";
-            this.meSpacingNut2.Size = new System.Drawing.Size(94, 21);
-            this.meSpacingNut2.TabIndex = 8;
-            this.meSpacingNut2.ValueChanged += new System.EventHandler(this.StringSpacingChanged);
             // 
             // label5
             // 
@@ -235,22 +202,13 @@
             this.label4.TabIndex = 6;
             this.label4.Text = "Spacing at nut:";
             // 
-            // meSpacingNut1
-            // 
-            this.meSpacingNut1.Location = new System.Drawing.Point(106, 35);
-            this.meSpacingNut1.Name = "meSpacingNut1";
-            this.meSpacingNut1.Size = new System.Drawing.Size(94, 21);
-            this.meSpacingNut1.TabIndex = 6;
-            this.meSpacingNut1.ValueChanged += new System.EventHandler(this.StringSpacingChanged);
-            // 
             // gbxScaleLength
             // 
             this.gbxScaleLength.Controls.Add(this.radioButton1);
             this.gbxScaleLength.Controls.Add(this.tlpScaleLenghts);
             this.gbxScaleLength.Controls.Add(this.rbMultiScale);
             this.gbxScaleLength.Controls.Add(this.rbSingleScale);
-            this.gbxScaleLength.Dock = System.Windows.Forms.DockStyle.Top;
-            this.gbxScaleLength.Location = new System.Drawing.Point(3, 81);
+            this.gbxScaleLength.Location = new System.Drawing.Point(3, 51);
             this.gbxScaleLength.Name = "gbxScaleLength";
             this.gbxScaleLength.Size = new System.Drawing.Size(323, 162);
             this.gbxScaleLength.TabIndex = 4;
@@ -282,7 +240,7 @@
             this.tlpScaleLenghts.Controls.Add(this.meSingleScale, 1, 0);
             this.tlpScaleLenghts.Controls.Add(this.meBassScale, 1, 2);
             this.tlpScaleLenghts.Controls.Add(this.meTrebleScale, 1, 1);
-            this.tlpScaleLenghts.Location = new System.Drawing.Point(6, 43);
+            this.tlpScaleLenghts.Location = new System.Drawing.Point(6, 39);
             this.tlpScaleLenghts.Name = "tlpScaleLenghts";
             this.tlpScaleLenghts.RowCount = 4;
             this.tlpScaleLenghts.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -357,33 +315,6 @@
             65536});
             this.nudMultiScaleOffset.ValueChanged += new System.EventHandler(this.nudMultiScaleOffset_ValueChanged);
             // 
-            // meSingleScale
-            // 
-            this.meSingleScale.Location = new System.Drawing.Point(89, 2);
-            this.meSingleScale.Margin = new System.Windows.Forms.Padding(2);
-            this.meSingleScale.Name = "meSingleScale";
-            this.meSingleScale.Size = new System.Drawing.Size(114, 21);
-            this.meSingleScale.TabIndex = 2;
-            this.meSingleScale.ValueChanged += new System.EventHandler(this.meSingleScale_ValueChanged);
-            // 
-            // meBassScale
-            // 
-            this.meBassScale.Location = new System.Drawing.Point(89, 52);
-            this.meBassScale.Margin = new System.Windows.Forms.Padding(2);
-            this.meBassScale.Name = "meBassScale";
-            this.meBassScale.Size = new System.Drawing.Size(114, 21);
-            this.meBassScale.TabIndex = 6;
-            this.meBassScale.ValueChanged += new System.EventHandler(this.meBassScale_ValueChanged);
-            // 
-            // meTrebleScale
-            // 
-            this.meTrebleScale.Location = new System.Drawing.Point(89, 27);
-            this.meTrebleScale.Margin = new System.Windows.Forms.Padding(2);
-            this.meTrebleScale.Name = "meTrebleScale";
-            this.meTrebleScale.Size = new System.Drawing.Size(114, 21);
-            this.meTrebleScale.TabIndex = 5;
-            this.meTrebleScale.ValueChanged += new System.EventHandler(this.meTrebleScale_ValueChanged);
-            // 
             // rbMultiScale
             // 
             this.rbMultiScale.AutoSize = true;
@@ -412,17 +343,16 @@
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.nudNumberOfStrings);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Location = new System.Drawing.Point(3, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(323, 78);
+            this.groupBox2.Size = new System.Drawing.Size(323, 42);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Strings Configuration";
             // 
             // nudNumberOfFrets
             // 
-            this.nudNumberOfFrets.Location = new System.Drawing.Point(113, 47);
+            this.nudNumberOfFrets.Location = new System.Drawing.Point(253, 17);
             this.nudNumberOfFrets.Maximum = new decimal(new int[] {
             50,
             0,
@@ -446,7 +376,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(24, 49);
+            this.label2.Location = new System.Drawing.Point(164, 19);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(79, 13);
             this.label2.TabIndex = 2;
@@ -454,7 +384,7 @@
             // 
             // nudNumberOfStrings
             // 
-            this.nudNumberOfStrings.Location = new System.Drawing.Point(113, 23);
+            this.nudNumberOfStrings.Location = new System.Drawing.Point(103, 17);
             this.nudNumberOfStrings.Maximum = new decimal(new int[] {
             30,
             0,
@@ -478,23 +408,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(18, 25);
+            this.label1.Location = new System.Drawing.Point(8, 19);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(89, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Number of strings";
-            // 
-            // layoutViewer1
-            // 
-            this.layoutViewer1.BackColor = System.Drawing.Color.White;
-            this.layoutViewer1.CurrentLayout = null;
-            this.layoutViewer1.DisplayConfig.RenderRealStrings = true;
-            this.layoutViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layoutViewer1.Location = new System.Drawing.Point(0, 0);
-            this.layoutViewer1.Name = "layoutViewer1";
-            this.layoutViewer1.Size = new System.Drawing.Size(483, 426);
-            this.layoutViewer1.TabIndex = 0;
-            this.layoutViewer1.Text = "layoutViewer1";
             // 
             // button1
             // 
@@ -520,9 +438,9 @@
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbNew,
-            this.tsbOpen,
+            this.tssbOpen,
             this.tssbSave,
-            this.toolStripSplitButton2});
+            this.tssbExport});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(820, 25);
@@ -538,19 +456,41 @@
             this.tsbNew.Size = new System.Drawing.Size(90, 22);
             this.tsbNew.Text = "New Layout";
             // 
-            // tsbOpen
+            // tssbOpen
             // 
-            this.tsbOpen.Image = ((System.Drawing.Image)(resources.GetObject("tsbOpen.Image")));
-            this.tsbOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbOpen.Name = "tsbOpen";
-            this.tsbOpen.Size = new System.Drawing.Size(56, 22);
-            this.tsbOpen.Text = "Open";
+            this.tssbOpen.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiOpenFile,
+            this.tsmiOpenTemplate,
+            this.tsSeparatorOpen});
+            this.tssbOpen.Image = ((System.Drawing.Image)(resources.GetObject("tssbOpen.Image")));
+            this.tssbOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tssbOpen.Name = "tssbOpen";
+            this.tssbOpen.Size = new System.Drawing.Size(68, 22);
+            this.tssbOpen.Text = "Open";
+            // 
+            // tsmiOpenFile
+            // 
+            this.tsmiOpenFile.Name = "tsmiOpenFile";
+            this.tsmiOpenFile.Size = new System.Drawing.Size(165, 22);
+            this.tsmiOpenFile.Text = "Open File...";
+            // 
+            // tsmiOpenTemplate
+            // 
+            this.tsmiOpenTemplate.Name = "tsmiOpenTemplate";
+            this.tsmiOpenTemplate.Size = new System.Drawing.Size(165, 22);
+            this.tsmiOpenTemplate.Text = "Open Template...";
+            // 
+            // tsSeparatorOpen
+            // 
+            this.tsSeparatorOpen.Name = "tsSeparatorOpen";
+            this.tsSeparatorOpen.Size = new System.Drawing.Size(162, 6);
             // 
             // tssbSave
             // 
             this.tssbSave.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiSave,
-            this.tsmiSaveAs});
+            this.tsmiSaveAs,
+            this.tsmiSaveTemplate});
             this.tssbSave.Image = ((System.Drawing.Image)(resources.GetObject("tssbSave.Image")));
             this.tssbSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tssbSave.Name = "tssbSave";
@@ -575,16 +515,22 @@
             this.tsmiSaveAs.Text = "Save As...";
             this.tsmiSaveAs.Click += new System.EventHandler(this.tsmiSaveAs_Click);
             // 
-            // toolStripSplitButton2
+            // tsmiSaveTemplate
             // 
-            this.toolStripSplitButton2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiSaveTemplate.Name = "tsmiSaveTemplate";
+            this.tsmiSaveTemplate.Size = new System.Drawing.Size(186, 22);
+            this.tsmiSaveTemplate.Text = "Save As Template";
+            // 
+            // tssbExport
+            // 
+            this.tssbExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exportAsSVGToolStripMenuItem,
             this.exportAsDXFToolStripMenuItem});
-            this.toolStripSplitButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton2.Image")));
-            this.toolStripSplitButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSplitButton2.Name = "toolStripSplitButton2";
-            this.toolStripSplitButton2.Size = new System.Drawing.Size(72, 22);
-            this.toolStripSplitButton2.Text = "Export";
+            this.tssbExport.Image = ((System.Drawing.Image)(resources.GetObject("tssbExport.Image")));
+            this.tssbExport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tssbExport.Name = "tssbExport";
+            this.tssbExport.Size = new System.Drawing.Size(72, 22);
+            this.tssbExport.Text = "Export";
             // 
             // exportAsSVGToolStripMenuItem
             // 
@@ -605,11 +551,11 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainer1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(820, 428);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(820, 440);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(820, 453);
+            this.toolStripContainer1.Size = new System.Drawing.Size(820, 465);
             this.toolStripContainer1.TabIndex = 3;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -617,11 +563,82 @@
             // 
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
             // 
+            // layoutViewer1
+            // 
+            this.layoutViewer1.BackColor = System.Drawing.Color.White;
+            this.layoutViewer1.CurrentLayout = null;
+            this.layoutViewer1.DisplayConfig.RenderRealStrings = true;
+            this.layoutViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layoutViewer1.Location = new System.Drawing.Point(0, 0);
+            this.layoutViewer1.Name = "layoutViewer1";
+            this.layoutViewer1.Size = new System.Drawing.Size(818, 244);
+            this.layoutViewer1.TabIndex = 0;
+            this.layoutViewer1.Text = "layoutViewer1";
+            // 
+            // meSpacingBridge2
+            // 
+            this.meSpacingBridge2.Location = new System.Drawing.Point(106, 126);
+            this.meSpacingBridge2.Name = "meSpacingBridge2";
+            this.meSpacingBridge2.Size = new System.Drawing.Size(94, 21);
+            this.meSpacingBridge2.TabIndex = 13;
+            this.meSpacingBridge2.ValueChanged += new System.EventHandler(this.StringSpacingChanged);
+            // 
+            // meSpacingBridge1
+            // 
+            this.meSpacingBridge1.Location = new System.Drawing.Point(106, 102);
+            this.meSpacingBridge1.Name = "meSpacingBridge1";
+            this.meSpacingBridge1.Size = new System.Drawing.Size(94, 21);
+            this.meSpacingBridge1.TabIndex = 11;
+            this.meSpacingBridge1.ValueChanged += new System.EventHandler(this.StringSpacingChanged);
+            // 
+            // meSpacingNut2
+            // 
+            this.meSpacingNut2.Location = new System.Drawing.Point(106, 59);
+            this.meSpacingNut2.Name = "meSpacingNut2";
+            this.meSpacingNut2.Size = new System.Drawing.Size(94, 21);
+            this.meSpacingNut2.TabIndex = 8;
+            this.meSpacingNut2.ValueChanged += new System.EventHandler(this.StringSpacingChanged);
+            // 
+            // meSpacingNut1
+            // 
+            this.meSpacingNut1.Location = new System.Drawing.Point(106, 35);
+            this.meSpacingNut1.Name = "meSpacingNut1";
+            this.meSpacingNut1.Size = new System.Drawing.Size(94, 21);
+            this.meSpacingNut1.TabIndex = 6;
+            this.meSpacingNut1.ValueChanged += new System.EventHandler(this.StringSpacingChanged);
+            // 
+            // meSingleScale
+            // 
+            this.meSingleScale.Location = new System.Drawing.Point(89, 2);
+            this.meSingleScale.Margin = new System.Windows.Forms.Padding(2);
+            this.meSingleScale.Name = "meSingleScale";
+            this.meSingleScale.Size = new System.Drawing.Size(114, 21);
+            this.meSingleScale.TabIndex = 2;
+            this.meSingleScale.ValueChanged += new System.EventHandler(this.meSingleScale_ValueChanged);
+            // 
+            // meBassScale
+            // 
+            this.meBassScale.Location = new System.Drawing.Point(89, 52);
+            this.meBassScale.Margin = new System.Windows.Forms.Padding(2);
+            this.meBassScale.Name = "meBassScale";
+            this.meBassScale.Size = new System.Drawing.Size(114, 21);
+            this.meBassScale.TabIndex = 6;
+            this.meBassScale.ValueChanged += new System.EventHandler(this.meBassScale_ValueChanged);
+            // 
+            // meTrebleScale
+            // 
+            this.meTrebleScale.Location = new System.Drawing.Point(89, 27);
+            this.meTrebleScale.Margin = new System.Windows.Forms.Padding(2);
+            this.meTrebleScale.Name = "meTrebleScale";
+            this.meTrebleScale.Size = new System.Drawing.Size(114, 21);
+            this.meTrebleScale.TabIndex = 5;
+            this.meTrebleScale.ValueChanged += new System.EventHandler(this.meTrebleScale_ValueChanged);
+            // 
             // FrmLayoutBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(820, 453);
+            this.ClientSize = new System.Drawing.Size(820, 465);
             this.Controls.Add(this.toolStripContainer1);
             this.Name = "FrmLayoutBuilder";
             this.Text = "Stringed Instrument Layout Generator";
@@ -629,7 +646,6 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
             this.gbxStringSpacing.ResumeLayout(false);
             this.gbxStringSpacing.PerformLayout();
             this.gbxScaleLength.ResumeLayout(false);
@@ -683,21 +699,24 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private MeasureEdit meSpacingNut1;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.NumericUpDown nudNumberOfFrets;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblMultiScaleRatio;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton tsbNew;
         private System.Windows.Forms.ToolStripSplitButton tssbSave;
         private System.Windows.Forms.ToolStripMenuItem tsmiSave;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveAs;
-        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton2;
+        private System.Windows.Forms.ToolStripSplitButton tssbExport;
         private System.Windows.Forms.ToolStripMenuItem exportAsSVGToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportAsDXFToolStripMenuItem;
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
-        private System.Windows.Forms.ToolStripButton tsbOpen;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveTemplate;
+        private System.Windows.Forms.ToolStripButton tsbNew;
+        private System.Windows.Forms.ToolStripSplitButton tssbOpen;
+        private System.Windows.Forms.ToolStripMenuItem tsmiOpenFile;
+        private System.Windows.Forms.ToolStripMenuItem tsmiOpenTemplate;
+        private System.Windows.Forms.ToolStripSeparator tsSeparatorOpen;
     }
 }
