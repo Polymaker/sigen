@@ -103,18 +103,29 @@ namespace SiGen.UI
             }
         }
 
-        //[EditorAttribute(typeof(MeasureEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [EditorAttribute(typeof(Designers.MeasureEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Measure FretWidth
         {
             get { return _FretWidth; }
             set
             {
-                if (value != _FretWidth || (_FretWidth.Unit != value.Unit))
+                if (!value.IsEmpty && (value != _FretWidth || _FretWidth.Unit != value.Unit))
                 {
                     _FretWidth = value;
                     OnPropertyChanged("FretWidth");
                 }
             }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public void ResetFretWidth()
+        {
+            FretWidth = Measure.Mm(2.5);
+        }
+
+        public bool ShouldSerializeFretWidth()
+        {
+            return FretWidth.NormalizedValue != 0.25;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

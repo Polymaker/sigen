@@ -86,6 +86,11 @@ namespace SiGen.Physics
             return (int)note2 - (int)note1 + (octave2 - octave1) * 12;
         }
 
+        public static int GetHalfStepsDifference(MusicalNote n1, MusicalNote n2)
+        {
+            return (int)n2.NoteName - (int)n1.NoteName + (n2.Octave - n1.Octave) * 12;
+        }
+
         public MusicalNote AddSteps(int steps)
         {
             var baseSteps = (Octave * 12 + (int)NoteName) + steps;

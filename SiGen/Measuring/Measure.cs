@@ -289,12 +289,31 @@ namespace SiGen.Measuring
 
         #region ToString
 
+        [Flags]
+        public enum MeasureFormatFlag
+        {
+            Default,
+            HideUnit = 1 ,
+            ForceDecimal = 2,
+            DisableApproximation = 4
+        }
+
         public override string ToString()
         {
-            return ToString(Unit);
+            return ToString(MeasureFormatFlag.Default);
         }
 
         public string ToString(UnitOfMeasure unit, bool forceDecimal = false)
+        {
+            return ToString(unit, forceDecimal ? MeasureFormatFlag.ForceDecimal : MeasureFormatFlag.Default);
+        }
+
+        public string ToString(MeasureFormatFlag flags)
+        {
+            return ToString(Unit, flags);
+        }
+
+        public string ToString(UnitOfMeasure unit, MeasureFormatFlag flags)
         {
             if (IsEmpty)
                 return "N/A";
@@ -302,8 +321,10 @@ namespace SiGen.Measuring
             if (unit == null)
                 return Value.ToString();
 
-            if (forceDecimal)
-                return string.Format("{0:0.###}{1}", this[unit], unit.Symbol);
+            var displayedUnit = flags.HasFlag(MeasureFormatFlag.HideUnit) ? string.Empty : unit.Symbol;
+
+            if (flags.HasFlag(MeasureFormatFlag.ForceDecimal))
+                return string.Format("{0:0.###}{1}", this[unit], displayedUnit);
 
             const double sixtyfourth = 0.015625d;
 
@@ -312,6 +333,7 @@ namespace SiGen.Measuring
                 double value = this[unit];
                 int whole = (int)Math.Floor(value);
                 double remain = value - whole;
+
                 if (remain >= sixtyfourth)
                 {
                     int sixtyFourCount = 0;
@@ -327,26 +349,29 @@ namespace SiGen.Measuring
                         sixtyFourCount /= 2;
                     }
 
-                    if (whole == 0)
-                        return string.Format("{3}{0}/{1}{2}", sixtyFourCount, baseFrac, unit.Symbol, remain > 0.002 ? "~" : string.Empty);
-                    return string.Format("{0} {4}{1}/{2}{3}", whole, sixtyFourCount, baseFrac, unit.Symbol, remain > 0.002 ? "~" : string.Empty);
+                    if (remain < 0.002 || !flags.HasFlag(MeasureFormatFlag.DisableApproximation))
+                    {
+                        if (whole == 0)
+                            return string.Format("{3}{0}/{1}{2}", sixtyFourCount, baseFrac, displayedUnit, remain > 0.002 ? "~" : string.Empty);
+                        else
+                            return string.Format("{0} {4}{1}/{2}{3}", whole, sixtyFourCount, baseFrac, displayedUnit, remain > 0.002 ? "~" : string.Empty);
+                    }
                 }
-                else if (remain > 0 && whole > 0)
-                    return string.Format("~{0}{1}", whole, unit.Symbol);
+                else if (remain > 0.002 && whole > 0 && !flags.HasFlag(MeasureFormatFlag.DisableApproximation))
+                    return string.Format("~{0}{1}", whole, displayedUnit);
             }
             else if (unit == UnitOfMeasure.Feets)
             {
                 double value = this[unit];
                 int whole = (int)Math.Floor(value);
                 double remain = value - whole;
-                if (remain > sixtyfourth / 12d)
-                {
-                    return string.Format("{0}{1} {2}", whole, unit.Symbol, Inches(remain * 12d));
-                }
-                else if (remain > 0 && whole > 0)
-                    return string.Format("~{0}{1}", whole, unit.Symbol);
+                if (remain >= sixtyfourth / 12d && !flags.HasFlag(MeasureFormatFlag.HideUnit))
+                    return string.Format("{0}{1} {2}", whole, unit.Symbol, Inches(remain * 12d).ToString(flags));
+                else if (whole > 0 && remain > 0 && remain < sixtyfourth / 12d && !flags.HasFlag(MeasureFormatFlag.DisableApproximation))
+                    return string.Format("~{0}{1}", whole, displayedUnit);
             }
-            return string.Format("{0:0.##}{1}", this[unit], unit.Symbol);
+
+            return string.Format("{0:0.###}{1}", this[unit], displayedUnit);
         }
 
         #endregion
@@ -404,21 +429,20 @@ namespace SiGen.Measuring
 
         public static Measure Parse(string value)
         {
-            return (Measure)TypeDescriptor.GetConverter(typeof(Measure)).ConvertFrom(value);
+            return Utilities.MeasureParser.Parse(value);
         }
 
         public static bool TryParse(string value, out Measure measure)
         {
-            measure = Measure.Empty;
-            try
-            {
-                measure = Parse(value);
-            }
-            catch
-            {
-                return false;
-            }
-            return true;
+            return Utilities.MeasureParser.TryParse(value, out measure);
+        }
+
+        public static Measure TryParse(string value, Measure fallback)
+        {
+            Measure result;
+            if (Utilities.MeasureParser.TryParse(value, out result))
+                return result;
+            return fallback;
         }
 
         #endregion

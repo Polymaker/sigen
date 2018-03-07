@@ -12,10 +12,10 @@ namespace SiGen.Utilities
     public static class MeasureParser
     {
         private static Regex SimpleMeasurePattern = new Regex("^\\s*(-?[\\d .,]+)\\s*([a-zA-Z\"']+\\D*)?$", RegexOptions.Compiled);
-        private static Regex InchFractionPattern = new Regex("^\\s*(\\d+\\s+)?(\\d{1,2})\\s*\\/\\s*(\\d{1,2})\\s*([a-zA-Z\"']+)?$", RegexOptions.Compiled);
+        private static Regex InchFractionPattern = new Regex("^\\s*(-?[\\d ]+\\s+)?(\\d{1,2})\\s*\\/\\s*(\\d{1,2})\\s*([a-zA-Z\"']+\\D*)?$", RegexOptions.Compiled);
         private static Regex FeetFractionPattern = new Regex("^\\s*(\\d+\\s*)('|ft|feet|foot)?\\s+(\\d+\\s+)?(\\d{1,2})\\s*\\/\\s*(\\d{1,2})", RegexOptions.Compiled);
-        private static string NumberPattern;
-        private static string UnitPattern;
+        //private static string NumberPattern;
+        //private static string UnitPattern;
 
         static MeasureParser()
         {
@@ -93,15 +93,49 @@ namespace SiGen.Utilities
         public static bool TryParse(string s, out Measure value, UnitOfMeasure defaultUnit = null)
         {
             value = Measure.Empty;
-            try
+            double decimalValue = 0;
+
+            if(double.TryParse(s, out decimalValue))
             {
-                value = Parse(s, defaultUnit);
+                value = new Measure(decimalValue, null);
             }
-            catch
+            else if (SimpleMeasurePattern.IsMatch(s))
             {
-                return false;
+                var matchResult = SimpleMeasurePattern.Match(s);
+                var numberStr = matchResult.Groups[1].Value;
+                var unit = defaultUnit;
+
+                if (matchResult.Groups[2].Success)
+                {
+                    unit = UnitOfMeasure.GetUnitByName(matchResult.Groups[2].Value.Trim());
+                    if (unit == null)
+                        return false;
+                }
+
+                double measureValue = 0;
+                if (TryParseNumber(numberStr, out measureValue))
+                    value = new Measure(measureValue, unit);
             }
-            return true;
+            else if (InchFractionPattern.IsMatch(s))
+            {
+                var matchResult = InchFractionPattern.Match(s);
+                var whole = matchResult.Groups[1].Success ? int.Parse(matchResult.Groups[1].Value) : 0;
+                var n1 = double.Parse(matchResult.Groups[2].Value);
+                var n2 = double.Parse(matchResult.Groups[3].Value);
+                UnitOfMeasure unit = defaultUnit ?? UnitOfMeasure.In;
+                if (matchResult.Groups[4].Success)
+                {
+                    unit = UnitOfMeasure.GetUnitByName(matchResult.Groups[4].Value.Trim());
+                    if (unit == null)
+                        return false;
+                }
+                value = new Measure(whole + (n1 / n2), unit);
+            }
+
+            if (!value.IsEmpty && value.Unit == null && defaultUnit != null)
+                value = new Measure(value.Value, defaultUnit);
+
+            return !value.IsEmpty;
         }
 
         private static bool TryParseNumber(string s, out double result)

@@ -102,6 +102,18 @@
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingManual.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElement.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElementType.cs" />
+    <Compile Include="UI\Controls\NumericBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\NumericBox.Designer.cs">
+      <DependentUpon>NumericBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\TextBoxEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\TextBoxEx.Designer.cs">
+      <DependentUpon>TextBoxEx.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Designers\MeasureEditor.cs" />
     <Compile Include="UI\Windows\FrmLayoutBuilder.cs">
       <SubType>Form</SubType>

@@ -12,7 +12,7 @@ namespace SiGen.UI.Designers
 {
     public class MeasureEditor : UITypeEditor
     {
-        private MeasureEdit editControl;
+        private MeasureTextbox editControl;
 
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -24,22 +24,25 @@ namespace SiGen.UI.Designers
             if (provider != null)
             {
                 var windowsFormsEditorService = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+                
                 if (windowsFormsEditorService != null)
                 {
                     if (editControl == null)
                     {
-                        editControl = new MeasureEdit();
+                        editControl = new MeasureTextbox();
+                        editControl.AllowEmptyValue = true;
                     }
-                    var currentValue = (Measure)value;
-                    editControl.Value = currentValue;
+
+                    var previousValue = (Measure)value;
+                    editControl.Value = previousValue;
                     windowsFormsEditorService.DropDownControl(editControl);
-                    if (editControl.Value != Measure.Empty/* && editControl.Value != currentValue*/)
-                    {
-                        value = editControl.Value;
-                    }
+                    if (editControl.IsEditing)
+                        editControl.PerformEndEdit();
+                    if (previousValue == editControl.Value && previousValue.Unit != editControl.Value.Unit)//the measure is equal but in another display unit
+                        context.PropertyDescriptor.SetValue(context.Instance, editControl.Value);//force a ValueChange to keep the new display unit
+                    value = editControl.Value;
                 }
             }
-
             return value;
         }
     }
