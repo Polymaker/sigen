@@ -20,6 +20,7 @@ namespace SiGen.UI
 
         private bool isLoading;
         private bool internalChange;
+        private LayoutFile _CurrentFile;
 
         public FrmLayoutBuilder()
         {
@@ -29,8 +30,8 @@ namespace SiGen.UI
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
-            layoutViewer1.CurrentLayout = CreateDefaultLayout();
+            _CurrentFile = new LayoutFile() { Layout = CreateDefaultLayout() };
+            layoutViewer1.CurrentLayout = _CurrentFile.Layout;
             layoutViewer1.Select();
             UpdateParameters();
         }
@@ -59,20 +60,19 @@ namespace SiGen.UI
                 new StringProperties(Measure.Inches(0.015), Measure.Inches(0.032), 0.00019347, 29442660.75919),
                 new StringProperties(Measure.Inches(0.018), Measure.Inches(0.042), 0.00032279, 29442660.75919)
                 );
-
+            layout.Strings.MassAssign(s => s.ActionAtTwelfthFret,
+                Measure.Inches(0.063),
+                Measure.Inches(0.069),
+                Measure.Inches(0.075),
+                Measure.Inches(0.082),
+                Measure.Inches(0.088),
+                Measure.Inches(0.094)
+                );
             var spacing = (StringSpacingSimple)layout.StringSpacing;
             spacing.StringSpacingAtNut = Measure.Mm(7.3);
             spacing.StringSpacingAtBridge = Measure.Mm(10.5);
             //spacing.NutSpacingMode = NutSpacingMode.BetweenStrings;
             spacing.NutAlignment = StringSpacingAlignment.SpacingMiddle;
-
-            //layout.Strings[0].NumberOfFrets = 23;
-            //layout.Strings[1].NumberOfFrets = 23;
-            //layout.Strings[2].NumberOfFrets = 23;
-
-            //layout.Strings[0].StartingFret = -1;
-            //layout.Strings[1].StartingFret = -1;
-            //layout.Strings[2].StartingFret = -1;
 
             layout.Margins.Edges = Measure.Mm(3.25);
             layout.Margins.LastFret = Measure.Mm(10);
@@ -268,10 +268,64 @@ namespace SiGen.UI
                 {
                     ExportStrings = false,
                     ExportStringCenters = false,
-                    ExportCenterLine = true
+                    ExtendFretSlots = Measure.Mm(1.5)
                 });
             //layoutViewer1.CurrentLayout.LeftHanded = !layoutViewer1.CurrentLayout.LeftHanded;
             //RebuildLayoutIfNeeded();
+        }
+
+        #region Save
+
+        private void SaveLayout(bool selectPath)
+        {
+            if (selectPath)
+            {
+                using (var sfd = new SaveFileDialog())
+                {
+                    sfd.FileName = "test.sil";
+                    sfd.Filter = "SI Layout file (*.sil)|*.sil";
+                    sfd.DefaultExt = ".sil";
+
+                    if (sfd.ShowDialog() == DialogResult.OK)
+                    {
+                        _CurrentFile.FileName = sfd.FileName;
+                    }
+                    else
+                        return;
+                }
+            }
+
+            _CurrentFile.Layout.Save(_CurrentFile.FileName);
+        }
+
+        private void tssbSave_ButtonClick(object sender, EventArgs e)
+        {
+            if (_CurrentFile != null)
+                SaveLayout(string.IsNullOrEmpty(_CurrentFile.FileName));
+        }
+        private void tsmiSave_Click(object sender, EventArgs e)
+        {
+            if (_CurrentFile != null)
+                SaveLayout(string.IsNullOrEmpty(_CurrentFile.FileName));
+        }
+
+        private void tsmiSaveAs_Click(object sender, EventArgs e)
+        {
+            if (_CurrentFile != null)
+                SaveLayout(true);
+        }
+
+        #endregion
+
+        private class LayoutFile
+        {
+            public SILayout Layout { get; set; }
+            public string FileName { get; set; }
+        }
+
+        private void exportAsSVGToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -205,6 +205,9 @@ namespace SiGen.StringedInstruments.Layout
             foreach (var comp in _Component)
                 (comp as ILayoutComponent).OnStringConfigurationChanged();
 
+            if (CompensateFretPositions && !Strings.All(s => s.CanCalculateCompensation))
+                CompensateFretPositions = false;
+
             NotifyLayoutChanged(this, "Strings");
 
         }

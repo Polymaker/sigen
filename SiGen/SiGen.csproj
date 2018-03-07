@@ -103,10 +103,10 @@
     <Compile Include="StringedInstruments\Layout\Visual\VisualElement.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElementType.cs" />
     <Compile Include="UI\Designers\MeasureEditor.cs" />
-    <Compile Include="UI\FrmLayoutBuilder.cs">
+    <Compile Include="UI\Windows\FrmLayoutBuilder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\FrmLayoutBuilder.Designer.cs">
+    <Compile Include="UI\Windows\FrmLayoutBuilder.Designer.cs">
       <DependentUpon>FrmLayoutBuilder.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\LayoutViewer.cs">
@@ -128,6 +128,12 @@
     <Compile Include="UI\Controls\MeasureTextbox.Designer.cs">
       <DependentUpon>MeasureTextbox.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Windows\LayoutExportDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Windows\LayoutExportDialog.Designer.cs">
+      <DependentUpon>LayoutExportDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\ArrayProperty.cs" />
     <Compile Include="Utilities\ExtensionMethods\CollectionHelper.cs" />
     <Compile Include="Utilities\MeasureConverter.cs" />
@@ -148,7 +154,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UI\FrmLayoutBuilder.resx">
+    <EmbeddedResource Include="UI\Windows\FrmLayoutBuilder.resx">
       <DependentUpon>FrmLayoutBuilder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\MeasureEdit.resx">
@@ -156,6 +162,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\MeasureTextbox.resx">
       <DependentUpon>MeasureTextbox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Windows\LayoutExportDialog.resx">
+      <DependentUpon>LayoutExportDialog.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

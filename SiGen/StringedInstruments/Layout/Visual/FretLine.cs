@@ -158,6 +158,8 @@ namespace SiGen.StringedInstruments.Layout.Visual
                 }
 
                 _Points.Add(Segments.Last(fs => !fs.IsVirtual).P1);//last segment is toward bass side so edge is at left (P1)
+
+                _Points.Reverse();
             }
 
             _Bounds = RectangleM.BoundingRectangle(Points);

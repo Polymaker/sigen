@@ -269,23 +269,26 @@ namespace SiGen.StringedInstruments.Layout
             trebleSideEdge.P2 = virtualTrebleEdge.P1;
             bassSideEdge.P2 = virtualBassEdge.P1;
 
-            if(trebleLastFret.Strings.Count() == NumberOfStrings && trebleLastFret.IsStraight && trebleLastFret.FretIndex == MaximumFret)
+            if (trebleLastFret.Strings.Count() == NumberOfStrings && trebleLastFret.IsStraight && trebleLastFret.FretIndex == MaximumFret)
             {
                 AddVisualElement(new FingerboardEdge(bassSideEdge.P2, trebleSideEdge.P2));
             }
-            else if(!Margins.LastFret.IsEmpty)
+            else if (!Margins.LastFret.IsEmpty)
             {
                 var fretLines = VisualElements.OfType<FretLine>();
                 var edgePoints = new List<PointM>();
 
-                for(int i = NumberOfStrings - 1; i >= 0; i--)
+                for (int i = NumberOfStrings - 1; i >= 0; i--)
                 {
                     var strLastFret = fretLines.First(fl => fl.FretIndex == Strings[i].NumberOfFrets && fl.Strings.Contains(Strings[i]));
                     var trebleSide = GetStringBoundaryLine(Strings[i], FingerboardSide.Treble);
                     var bassSide = GetStringBoundaryLine(Strings[i], FingerboardSide.Bass);
                     var pt1 = strLastFret.GetIntersection(bassSide);
                     var pt2 = strLastFret.GetIntersection(trebleSide);
-                    
+                    if (pt1.IsEmpty)
+                        pt1 = strLastFret.Points.First();
+                    if (pt2.IsEmpty)
+                        pt2 = strLastFret.Points.Last();
                     //if (!Margins.LastFret.IsEmpty)
                     //{
                     pt1 += bassSide.Direction * Margins.LastFret;
@@ -297,7 +300,7 @@ namespace SiGen.StringedInstruments.Layout
 
                 edgePoints.RemoveAll(p => p.IsEmpty);
                 edgePoints = edgePoints.Distinct().ToList();
-                for(int i = 0; i < edgePoints.Count - 1; i++)
+                for (int i = 0; i < edgePoints.Count - 1; i++)
                     AddVisualElement(new FingerboardEdge(edgePoints[i], edgePoints[i + 1]));
             }
         }
