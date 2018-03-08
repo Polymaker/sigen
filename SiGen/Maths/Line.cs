@@ -200,6 +200,15 @@
             return intersection;
         }
 
+        public Vector GetClosestPointOnLine(Vector point)
+        {
+            var perp = GetPerpendicular(this, point);
+            Vector inter;
+            if (Intersect(perp, out inter))
+                return inter;
+            return Vector.Empty;
+        }
+
         #endregion
     }
 }

@@ -138,56 +138,111 @@ namespace SiGen.UI
             }
             else
             {
-                var pt1 = WorldToDisplay(measurePos1, _Zoom, true);
-                var pt2 = WorldToDisplay(measurePos2, _Zoom, true);
-                var pt3 = new PointF(Math.Min(pt1.X, pt2.X), Math.Max(pt1.Y, pt2.Y));
-                var pt4 = new PointF(Math.Max(pt1.X, pt2.X), Math.Max(pt1.Y, pt2.Y));
-                PointF pt5, pt6;
-
-                if (pt3 == pt1 || pt3 == pt2)
-                    pt5 = pt4;
-                else
-                    pt5 = pt3;
-
-                if (pt3 == pt1 || pt4 == pt1)
-                    pt6 = pt2;
-                else
-                    pt6 = pt1;
-
-                bool lineLeft = (pt5.X == pt3.X);
-
-                var measureLen = Measure.Cm((measurePos1 - measurePos2).Length);
-                var measureWidth = Measure.Cm(IsHorizontal ? Math.Abs(measurePos2.Y - measurePos1.Y) : Math.Abs(measurePos2.X - measurePos1.X));
-                var measureHeight = Measure.Cm(IsHorizontal ? Math.Abs(measurePos2.X - measurePos1.X) : Math.Abs(measurePos2.Y - measurePos1.Y));
-
-                using (var pen = new Pen(Color.Black, 2))
-                    g.DrawLine(pen, pt1, pt2);
-                var lineCenter = new PointF((pt1.X + pt2.X) / 2f, (pt1.Y + pt2.Y) / 2f);
-
-                if (Math.Abs(pt1.X - pt2.X) > 1 && Math.Abs(pt1.Y - pt2.Y) > 1)
+                if(CurrentMeasure != null)
                 {
-                    using (var pen = new Pen(Color.Blue, 2))
-                        g.DrawLine(pen, pt3, pt4);
+                    bool lenghtOnly = false;
+                    for (int i = 0; i < 3; i++)
+                    {
+                        var box = MeasureBoxes[i];
+                        if (box.Value.NormalizedValue * _Zoom < 2 || box.Suppressed || (lenghtOnly && box.Type != LengthType.Length))
+                        {
+                            lenghtOnly = true;
+                            continue;
+                        }
+                        var p1UI = WorldToDisplay(box.P1, _Zoom, true);
+                        var p2UI = WorldToDisplay(box.P2, _Zoom, true);
+                        using (var pen = new Pen(GetMeasureTypeColor(box.Type), 2))
+                            g.DrawLine(pen, p1UI, p2UI);
+                    }
 
-                    using (var pen = new Pen(Color.Red, 2))
-                        g.DrawLine(pen, pt5, pt6);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        var box = MeasureBoxes[i];
+                        if (box.Value.NormalizedValue * _Zoom < 2 || box.Suppressed || (lenghtOnly && box.Type != LengthType.Length))
+                            continue;
 
-                    var horizontalCenter = new PointF((pt3.X + pt4.X) / 2f, pt3.Y);
-                    var verticalCenter = new PointF(pt5.X, (pt5.Y + pt6.Y) / 2f);
+                        var targetUI = WorldToDisplay(box.TargetPos, _Zoom, true);
+                        var centerUI = new PointF(targetUI.X + (float)box.PixelOffset.X, targetUI.Y + (float)box.PixelOffset.Y);
+                        g.DrawLine(Pens.Black, targetUI, centerUI);
+                    }
 
-                    DrawMeasureBox(g, measureWidth, Color.Blue, horizontalCenter, StringAlignment.Center, Orientation.Horizontal);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        var box = MeasureBoxes[i];
+                        if (box.Value.NormalizedValue * _Zoom < 2 || box.Suppressed || (lenghtOnly && box.Type != LengthType.Length))
+                            continue;
 
-                    DrawMeasureBox(g, measureHeight, Color.Red, verticalCenter, lineLeft ? StringAlignment.Far : StringAlignment.Near, Orientation.Vertical);
-                    lineCenter.Y -= Font.Height;
-                    DrawMeasureBox(g, measureLen, Color.Black, lineCenter, lineLeft ? StringAlignment.Near : StringAlignment.Far, Orientation.Vertical);
+                        g.FillRectangle(Brushes.White, box.DisplayBounds);
+                        using (var pen = new Pen(GetMeasureTypeColor(box.Type), 1.5f))
+                            g.DrawRectangle(pen, box.DisplayBounds.X, box.DisplayBounds.Y, box.DisplayBounds.Width, box.DisplayBounds.Height);
+                        using (var sf = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Far })
+                            g.DrawString(box.Value.ToString(DisplayUnit), Font, Brushes.Black, box.DisplayBounds, sf);
+                    }
                 }
-                else
-                {
-                    if (Math.Abs(pt1.X - pt2.X) <= 1)
-                        DrawMeasureBox(g, measureLen, Color.Black, lineCenter, StringAlignment.Near, Orientation.Vertical);
-                    else
-                        DrawMeasureBox(g, measureLen, Color.Black, lineCenter, StringAlignment.Center, Orientation.Horizontal);
-                }
+                //var pt1 = WorldToDisplay(measurePos1, _Zoom, true);
+                //var pt2 = WorldToDisplay(measurePos2, _Zoom, true);
+                //var pt3 = new PointF(Math.Min(pt1.X, pt2.X), Math.Max(pt1.Y, pt2.Y));
+                //var pt4 = new PointF(Math.Max(pt1.X, pt2.X), Math.Max(pt1.Y, pt2.Y));
+                //PointF pt5, pt6;
+
+                //if (pt3 == pt1 || pt3 == pt2)
+                //    pt5 = pt4;
+                //else
+                //    pt5 = pt3;
+
+                //if (pt3 == pt1 || pt4 == pt1)
+                //    pt6 = pt2;
+                //else
+                //    pt6 = pt1;
+
+                //bool lineLeft = (pt5.X == pt3.X);
+
+                //var measureLen = Measure.Cm((measurePos1 - measurePos2).Length);
+                //var measureWidth = Measure.Cm(IsHorizontal ? Math.Abs(measurePos2.Y - measurePos1.Y) : Math.Abs(measurePos2.X - measurePos1.X));
+                //var measureHeight = Measure.Cm(IsHorizontal ? Math.Abs(measurePos2.X - measurePos1.X) : Math.Abs(measurePos2.Y - measurePos1.Y));
+
+                //using (var pen = new Pen(Color.Black, 2))
+                //    g.DrawLine(pen, pt1, pt2);
+                //var lineCenter = new PointF((pt1.X + pt2.X) / 2f, (pt1.Y + pt2.Y) / 2f);
+
+                //if (Math.Abs(pt1.X - pt2.X) > 1 && Math.Abs(pt1.Y - pt2.Y) > 1)
+                //{
+                //    using (var pen = new Pen(Color.Blue, 2))
+                //        g.DrawLine(pen, pt3, pt4);
+
+                //    using (var pen = new Pen(Color.Red, 2))
+                //        g.DrawLine(pen, pt5, pt6);
+
+                //    var horizontalCenter = new PointF((pt3.X + pt4.X) / 2f, pt3.Y);
+                //    var verticalCenter = new PointF(pt5.X, (pt5.Y + pt6.Y) / 2f);
+
+                //    DrawMeasureBox(g, measureWidth, Color.Blue, horizontalCenter, StringAlignment.Center, Orientation.Horizontal);
+
+                //    DrawMeasureBox(g, measureHeight, Color.Red, verticalCenter, lineLeft ? StringAlignment.Far : StringAlignment.Near, Orientation.Vertical);
+                //    lineCenter.Y -= Font.Height;
+                //    DrawMeasureBox(g, measureLen, Color.Black, lineCenter, lineLeft ? StringAlignment.Near : StringAlignment.Far, Orientation.Vertical);
+                //}
+                //else
+                //{
+                //    if (Math.Abs(pt1.X - pt2.X) <= 1)
+                //        DrawMeasureBox(g, measureLen, Color.Black, lineCenter, StringAlignment.Near, Orientation.Vertical);
+                //    else
+                //        DrawMeasureBox(g, measureLen, Color.Black, lineCenter, StringAlignment.Center, Orientation.Horizontal);
+                //}
+            }
+        }
+
+        private static Color GetMeasureTypeColor(LengthType type)
+        {
+            switch (type)
+            {
+                default:
+                case LengthType.Length:
+                    return Color.Black;
+                case LengthType.Width:
+                    return Color.Blue;
+                case LengthType.Height:
+                    return Color.Red;
             }
         }
 

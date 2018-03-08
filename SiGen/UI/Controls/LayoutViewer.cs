@@ -175,6 +175,14 @@ namespace SiGen.UI
                 }
             }
             manualZoom = false;
+            OnCameraChanged(false);
+        }
+
+        private void OnCameraChanged(bool invalidate)
+        {
+            UpdateMeasureBoxBounds();
+            if (invalidate && IsHandleCreated)
+                Invalidate();
         }
 
         #endregion
@@ -220,7 +228,7 @@ namespace SiGen.UI
                     diffVec *= -1;
                     cameraPosition += diffVec / _Zoom;
                     dragStart = curPos;
-                    Invalidate();
+                    OnCameraChanged(true);
                 }
             }
             else
@@ -262,7 +270,7 @@ namespace SiGen.UI
                 var curWorldPos = DisplayToWorld(mousePos, oldZoom);
                 var finalWorldPos = DisplayToWorld(mousePos);
                 cameraPosition -= (finalWorldPos - curWorldPos);
-                Invalidate();
+                OnCameraChanged(true);
             }
         }
 
@@ -289,7 +297,8 @@ namespace SiGen.UI
                         if (GetLayoutPointNear(e.Location, 2, out pointsNear))
                         {
                             measurePos2 = pointsNear;
-                            Invalidate();
+                            CompleteMeasure();
+                            //Invalidate();
                         }
                     }
                 }
@@ -305,25 +314,232 @@ namespace SiGen.UI
 
         #region Measuring tool
 
+        public enum MeasureType
+        {
+            Length,
+            Angle
+        }
+
+        public enum LengthType
+        {
+            Length,
+            Width,
+            Height
+        }
+
+        public class LayoutMeasure
+        {
+            private PointM _First;
+            private PointM _Last;
+            private Measure _Length;
+            private Measure _Width;
+            private Measure _Height;
+
+            public Measure this[LengthType type]
+            {
+                get
+                {
+                    switch (type)
+                    {
+                        default:
+                        case LengthType.Length:
+                            return _Length;
+                        case LengthType.Height:
+                            return _Height;
+                        case LengthType.Width:
+                            return _Width;
+                    }
+                }
+            }
+
+            public PointM FirstPoint { get { return _First; } }
+            public PointM LastPoint { get { return _Last; } }
+            public Measure Length { get { return _Length; } }
+            public Measure Width { get { return _Width; } }
+            public Measure Height { get { return _Height; } }
+
+            public LayoutMeasure(PointM p1, PointM p2)
+            {
+                _First = p1;
+                _Last = p2;
+                _Length = PointM.Distance(p1, p2);
+                _Width = Measure.Abs(p2.X - p1.X);
+                _Height = Measure.Abs(p2.Y - p1.Y);
+            }
+        }
+
+        private class MeasureValueBox
+        {
+            public SizeF BoxSize { get; set; }
+            public Vector TargetPos { get; set; }
+            public Vector PixelOffset { get; set; }
+            public RectangleF DisplayBounds { get; set; }
+        }
+
+        private class LengthValueBox : MeasureValueBox
+        {
+            public LengthType Type { get; set; }
+            public Measure Value { get; set; }
+            public Vector P1 { get; set; }
+            public Vector P2 { get; set; }
+            public bool Suppressed { get; set; }
+        }
+
+        private class AngleValueBox : MeasureValueBox
+        {
+            public Angle Value { get; set; }
+        }
+
         private Vector measurePos1;
         private Vector measurePos2;
+        private LengthValueBox[] MeasureBoxes;
         private UnitOfMeasure DisplayUnit;
+        private LayoutMeasure _CurrentMeasure;
+        public LayoutMeasure CurrentMeasure { get { return _CurrentMeasure; } }
 
         private void InitMeasureTool()
         {
+            MeasureBoxes = new LengthValueBox[3];
             measurePos1 = Vector.Empty;
             measurePos2 = Vector.Empty;
             DisplayUnit = UnitOfMeasure.Mm;
+            _CurrentMeasure = null;
         }
 
         private void ClearMeasuring()
         {
+            if (_CurrentMeasure != null)
+            {
+                _CurrentMeasure = null;
+                if (IsHandleCreated)
+                    Invalidate();
+            }
+
             if (!measurePos1.IsEmpty)
             {
                 measurePos1 = Vector.Empty;
                 measurePos2 = Vector.Empty;
                 if(IsHandleCreated)
                     Invalidate();
+            }
+        }
+
+        private void CompleteMeasure()
+        {
+            _CurrentMeasure = new LayoutMeasure(PointM.FromVector(measurePos1, DisplayUnit), PointM.FromVector(measurePos2, DisplayUnit));
+            MeasureBoxes[0] = ConstructMeasureBox(_CurrentMeasure, LengthType.Length);
+            MeasureBoxes[1] = ConstructMeasureBox(_CurrentMeasure, LengthType.Width);
+            MeasureBoxes[2] = ConstructMeasureBox(_CurrentMeasure, LengthType.Height);
+            UpdateMeasureBoxBounds();
+            Invalidate();
+        }
+
+        private LengthValueBox ConstructMeasureBox(LayoutMeasure selection, LengthType type)
+        {
+            var box = new LengthValueBox() { Value = selection[type], Type = type };
+            var minY = Measure.Min(selection.FirstPoint.Y, selection.LastPoint.Y);
+            var corner1 = new PointM(selection.FirstPoint.X, selection.LastPoint.Y);
+            var center = PointM.Average(selection.FirstPoint, selection.LastPoint, corner1);
+            var centerV = center.ToVector();
+            var p1v = selection.FirstPoint.ToVector();
+            var p2v = selection.LastPoint.ToVector();
+            switch (type)
+            {
+                case LengthType.Length:
+                    {
+                        box.TargetPos = PointM.Average(selection.FirstPoint, selection.LastPoint).ToVector();
+                        box.P1 = p1v;
+                        box.P2 = p2v;
+                    }
+                    break;
+                case LengthType.Height:
+                    {
+                        box.TargetPos = PointM.Average(selection.FirstPoint, corner1).ToVector();
+                        box.P1 = p1v;
+                        box.P2 = corner1.ToVector();
+                    }
+                    break;
+                case LengthType.Width:
+                    {
+                        box.TargetPos = PointM.Average(corner1, selection.LastPoint).ToVector();
+                        box.P1 = corner1.ToVector();
+                        box.P2 = p2v;
+                    }
+                    break;
+            }
+            if(type != LengthType.Length && Vector.EqualOrClose(centerV, box.TargetPos, 0.01))
+                box.Suppressed = true;
+
+            if(!box.Suppressed)
+            {
+                SizeF textSize = SizeF.Empty;
+                using (var g = CreateGraphics())
+                    textSize = g.MeasureString(box.Value.ToString(DisplayUnit), Font);
+                box.BoxSize = new SizeF(textSize.Width + 2, textSize.Height + 3);
+
+                var measureLine = Line.FromPoints(box.P1, box.P2);
+                var perp = measureLine.GetPerpendicular(box.TargetPos);
+                Vector perpCenter = perp.GetClosestPointOnLine(centerV);
+                if ((box.TargetPos - perpCenter).Length < 0.01)
+                    perpCenter = box.TargetPos + perp.Vector * 2;
+
+                var centerUI = WorldToLocal(perpCenter, _Zoom, true);
+                var targetUI = WorldToLocal(box.TargetPos, _Zoom, true);
+
+                var pointOnRec = GetRectIntersect((targetUI - centerUI), box.BoxSize);
+                if (!pointOnRec.IsEmpty)
+                {
+                    box.PixelOffset = ((targetUI - centerUI).Normalized * (pointOnRec.Length + 5)) * FlipY;
+                }
+                else
+                    box.PixelOffset = ((targetUI - centerUI).Normalized * 30) * FlipY;
+            }
+            
+            return box;
+        }
+
+        private Vector GetRectIntersect(Vector dir, SizeF boxSize)
+        {
+            var inters = new List<Vector>();
+            var line = Line.FromPoints(Vector.Zero, dir);
+            Vector inter = Vector.Empty;
+            var tl = new Vector(boxSize.Width * -.5, boxSize.Height * -.5);
+            var tr = new Vector(boxSize.Width * .5, boxSize.Height * -.5);
+            var bl = new Vector(boxSize.Width * -.5, boxSize.Height * .5);
+            var br = new Vector(boxSize.Width * .5, boxSize.Height * .5);
+            if (line.Intersect(Line.FromPoints(tl, tr), out inter))
+                inters.Add(inter);
+            if (line.Intersect(Line.FromPoints(tl, bl), out inter))
+                inters.Add(inter);
+            if (line.Intersect(Line.FromPoints(bl, br), out inter))
+                inters.Add(inter);
+            if (line.Intersect(Line.FromPoints(tr, br), out inter))
+                inters.Add(inter);
+
+            inters = inters.Where(x => Vector.EqualOrClose((Vector.Zero - x).Normalized, dir.Normalized)).ToList();
+
+            foreach (var inter2 in inters)
+            {
+                if (Vector.EqualOrClose((Vector.Zero - inter2).Normalized, dir.Normalized))
+                    return inter2;
+            }
+            return Vector.Empty;
+        }
+
+        private void UpdateMeasureBoxBounds()
+        {
+            if(CurrentMeasure != null && MeasureBoxes[0] != null)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    var box = MeasureBoxes[i];
+                    if (!box.Suppressed)
+                    {
+                        var targetUI = WorldToDisplay(box.TargetPos, _Zoom, true);
+                        var centerUI = new PointF(targetUI.X + (float)box.PixelOffset.X, targetUI.Y + (float)box.PixelOffset.Y);
+                        box.DisplayBounds = new RectangleF(centerUI.X - box.BoxSize.Width / 2, centerUI.Y - box.BoxSize.Height / 2, box.BoxSize.Width, box.BoxSize.Height);
+                    }
+                }
             }
         }
 
