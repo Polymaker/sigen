@@ -22,11 +22,6 @@ namespace SiGen.Utilities
             ParseFractionReg = new Regex("^\\s*(\\d+\\s+)?(\\d{1,2})\\s*\\/\\s*(\\d{1,2})\\s*([a-zA-Z\"']+)", RegexOptions.Compiled);
         }
 
-        public MeasureConverter()
-        {
-            
-        }
-
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
             return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
@@ -125,6 +120,5 @@ namespace SiGen.Utilities
 
             return base.ConvertTo(context, culture, value, destinationType);
         }
-
     }
 }

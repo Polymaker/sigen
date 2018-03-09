@@ -16,6 +16,7 @@ namespace SiGen.UI
         private bool _ShowMidlines;
         private bool _RenderRealStrings;
         private bool _RenderRealFrets;
+        private UnitOfMeasure _DefaultDisplayUnit;
         private Measure _FretWidth;
         private Orientation _FretboardOrientation;
 
@@ -117,15 +118,18 @@ namespace SiGen.UI
             }
         }
 
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public void ResetFretWidth()
+        [EditorAttribute(typeof(Designers.UnitOfMeasureEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public UnitOfMeasure DefaultDisplayUnit
         {
-            FretWidth = Measure.Mm(2.5);
-        }
-
-        public bool ShouldSerializeFretWidth()
-        {
-            return FretWidth.NormalizedValue != 0.25;
+            get { return _DefaultDisplayUnit; }
+            set
+            {
+                if (value != _DefaultDisplayUnit)
+                {
+                    _DefaultDisplayUnit = value;
+                    OnPropertyChanged("DefaultDisplayUnit");
+                }
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -137,12 +141,35 @@ namespace SiGen.UI
             _ShowMidlines = true;
             _RenderRealFrets = true;
             _FretboardOrientation = Orientation.Horizontal;
+            _DefaultDisplayUnit = UnitOfMeasure.Mm;
             _FretWidth = Measure.Mm(2.5);
         }
 
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public void ResetFretWidth()
+        {
+            FretWidth = Measure.Mm(2.5);
+        }
+
+        public bool ShouldSerializeFretWidth()
+        {
+            return FretWidth.NormalizedValue != 0.25;
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public void ResetDefaultDisplayUnit()
+        {
+            DefaultDisplayUnit = UnitOfMeasure.Mm;
+        }
+
+        public bool ShouldSerializeDefaultDisplayUnit()
+        {
+            return DefaultDisplayUnit != UnitOfMeasure.Mm;
         }
     }
 }

@@ -94,7 +94,7 @@ namespace SiGen.Measuring
         {
             public override bool CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, Type destinationType)
             {
-                return destinationType == typeof(System.ComponentModel.Design.Serialization.InstanceDescriptor) || base.CanConvertTo(context, destinationType);
+                return destinationType == typeof(System.ComponentModel.Design.Serialization.InstanceDescriptor) || destinationType == typeof(string) || base.CanConvertTo(context, destinationType) ;
             }
 
             public override object ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
@@ -102,11 +102,13 @@ namespace SiGen.Measuring
                 if (value is UnitOfMeasure && destinationType == typeof(System.ComponentModel.Design.Serialization.InstanceDescriptor))
                 {
                     var unit = value as UnitOfMeasure;
-                    if (unit != null)
-                    {
-                        var member = typeof(UnitOfMeasure).GetField(unit.Name, System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
-                        return new System.ComponentModel.Design.Serialization.InstanceDescriptor(member, new object[0]);
-                    }
+                    var member = typeof(UnitOfMeasure).GetField(unit.Name, System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
+                    return new System.ComponentModel.Design.Serialization.InstanceDescriptor(member, new object[0]);
+                }
+                else if (value is UnitOfMeasure && destinationType == typeof(string))
+                {
+                    var unit = value as UnitOfMeasure;
+                    return unit.Name;
                 }
                 return base.ConvertTo(context, culture, value, destinationType);
             }

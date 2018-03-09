@@ -20,7 +20,7 @@ namespace SiGen.UI
         private LayoutViewerDisplayConfig _DisplayConfig;
         private bool manualZoom;
         private Vector cameraPosition;//independant of orientation
-        private Vector dragStart;
+        
         private SILayout _CurrentLayout;
         private const int PADDING_BORDER = 6;
         private List<Vector> LayoutIntersections;
@@ -49,6 +49,10 @@ namespace SiGen.UI
             InitCamera();
             InitMeasureTool();
             _CachedCenter = Vector.Empty;
+            MouseDownPos = new Dictionary<MouseButtons, Vector>();
+            MouseDownPos[MouseButtons.Left] = Vector.Empty;
+            MouseDownPos[MouseButtons.Right] = Vector.Empty;
+            MouseDownPos[MouseButtons.Middle] = Vector.Empty;
 
             LayoutIntersections = new List<Vector>();
             _DisplayConfig = new LayoutViewerDisplayConfig();
@@ -137,7 +141,7 @@ namespace SiGen.UI
         private void InitCamera()
         {
             _Zoom = 1d;
-            dragStart = Vector.Empty;
+            lastMousePos = Vector.Empty;
             cameraPosition = Vector.Zero;
         }
 
@@ -180,7 +184,6 @@ namespace SiGen.UI
 
         private void OnCameraChanged(bool invalidate)
         {
-            UpdateMeasureBoxBounds();
             if (invalidate && IsHandleCreated)
                 Invalidate();
         }
@@ -189,46 +192,82 @@ namespace SiGen.UI
 
         #region Mouse Handling
 
+        private enum DragEntity
+        {
+            None,
+            Camera,
+            Measure1,
+            Measure2,
+            Measure3
+        }
+
+        private DragEntity DragTarget;
+        private Dictionary<MouseButtons, Vector> MouseDownPos;
+        private bool CanDrag { get { return DragTarget != DragEntity.None; } }
+        private bool IsDragging;
+
+        private Vector lastMousePos;
+        private Vector dragStart;
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            base.OnMouseDown(e);
             Select();
-            if (e.Button == MouseButtons.Middle)
-                dragStart = DisplayToLocal(e.Location);
-            //else if (e.Button == MouseButtons.Left)
-            //{
-            //    var localPos = DisplayToLocal(e.Location);
-            //    var worldPos = LocalToWorld(localPos, _Zoom, true);
 
-            //    Console.WriteLine(string.Format("Display pos: {0}", e.Location));
-            //    Console.WriteLine(string.Format("Local pos: {0}", localPos));
-            //    Console.WriteLine(string.Format("Display calc pos: {0}", LocalToDisplay(localPos)));
-            //    Console.WriteLine(string.Format("World calc pos: {0}", worldPos));
-            //    Console.WriteLine(string.Format("Local calc pos: {0}", WorldToLocal(worldPos, _Zoom, true)));
-            //}
+            MouseDownPos[e.Button] = DisplayToLocal(e.Location);
+            if (!IsDragging)
+            {
+                if (e.Button == MouseButtons.Middle)
+                {
+                    DragTarget = DragEntity.Camera;
+                    lastMousePos = DisplayToLocal(e.Location);
+                }
+                else if (e.Button == MouseButtons.Left)
+                {
+                    var hitInfo = HitTest(e.Location);
+                    if (hitInfo.Type == LayoutViewerHitTestType.MeasureBox)
+                    {
+                        DragTarget = (DragEntity)(DragEntity.Measure1 + hitInfo.MeasureBoxIndex);
+                        lastMousePos = DisplayToLocal(e.Location);
+                    }
+                }
+            }
+            
+            base.OnMouseDown(e);
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
+            
+            if (CanDrag || IsDragging)
+            {
+                lastMousePos = Vector.Empty;
+                DragTarget = DragEntity.None;
+                IsDragging = false;
+            }
+
+            MouseDownPos[e.Button] = Vector.Empty;
             base.OnMouseUp(e);
-            if (e.Button == MouseButtons.Middle)
-                dragStart = Vector.Empty;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            if (!dragStart.IsEmpty)
+
+            if (CanDrag || IsDragging)
             {
                 var curPos = DisplayToLocal(e.Location);
-                var diffVec = curPos - dragStart;
-                if (diffVec.Length > 1)
+                var moveVector = curPos - lastMousePos;
+                if (moveVector.Length > 1)//1 in local unit = 1 pixel
                 {
-                    manualZoom = true;
-                    diffVec *= -1;
-                    cameraPosition += diffVec / _Zoom;
-                    dragStart = curPos;
-                    OnCameraChanged(true);
+                    if (!IsDragging)
+                    {
+                        dragStart = lastMousePos;
+                        IsDragging = true;
+                    }
+
+                    PerformDragMove(moveVector);
+
+                    lastMousePos = curPos;
                 }
             }
             else
@@ -248,11 +287,21 @@ namespace SiGen.UI
             }
         }
 
-        protected override void OnMouseDoubleClick(MouseEventArgs e)
+        private void PerformDragMove(Vector dragVector)
         {
-            base.OnMouseDoubleClick(e);
-            if (e.Button == MouseButtons.Middle)
-                ResetCamera();
+            if (DragTarget == DragEntity.Camera)
+            {
+                manualZoom = true;
+                dragVector *= -1;
+                cameraPosition += dragVector / _Zoom;
+                OnCameraChanged(true);
+            }
+            else if (DragTarget == DragEntity.Measure1 || DragTarget == DragEntity.Measure2 || DragTarget == DragEntity.Measure3)
+            {
+                var boxIndex = (int)DragTarget - (int)DragEntity.Measure1;
+                MeasureBoxes[boxIndex].LocalOffset += dragVector;
+                Invalidate();
+            }
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
@@ -276,38 +325,136 @@ namespace SiGen.UI
 
         protected override void OnMouseClick(MouseEventArgs e)
         {
+            var mouseUpPos = DisplayToLocal(e.Location);
+
+            var cancelClick = !MouseDownPos[e.Button].IsEmpty && (mouseUpPos - MouseDownPos[e.Button]).Length > 8;
+
+            if (!cancelClick)
+                HandleMouseClick(e);
+
             base.OnMouseClick(e);
-            if(e.Button == MouseButtons.Left)
+        }
+
+        private void HandleMouseClick(MouseEventArgs e)
+        {
+            var hitInfo = HitTest(e.Location);
+
+            if (hitInfo.Type == LayoutViewerHitTestType.MeasureBox)
             {
-                if(LayoutIntersections.Count > 0)
+                var clickedBox = MeasureBoxes[hitInfo.MeasureBoxIndex];
+
+                if (e.Button == MouseButtons.Left)
                 {
-                    if (measurePos1.IsEmpty || !measurePos2.IsEmpty)
+
+                }
+                else if (e.Button == MouseButtons.Right)
+                {
+                    menuMeasureBox.Tag = clickedBox;
+                    menuMeasureBox.Show(PointToScreen(e.Location));
+                }
+            }
+            else if (hitInfo.Type == LayoutViewerHitTestType.None)
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    if (LayoutIntersections.Count > 0)
                     {
-                        Vector pointsNear = Vector.Empty;
-                        if (GetLayoutPointNear(e.Location, 2, out pointsNear))
+                        if (measurePos1.IsEmpty || !measurePos2.IsEmpty)
                         {
-                            measurePos1 = pointsNear;
-                            measurePos2 = Vector.Empty;
-                            Invalidate();
+                            Vector pointsNear = Vector.Empty;
+                            if (GetLayoutPointNear(e.Location, 2, out pointsNear))
+                            {
+                                measurePos1 = pointsNear;
+                                measurePos2 = Vector.Empty;
+                                Invalidate();
+                            }
                         }
-                    }
-                    else if (measurePos2.IsEmpty)
-                    {
-                        Vector pointsNear = Vector.Empty;
-                        if (GetLayoutPointNear(e.Location, 2, out pointsNear))
+                        else if (measurePos2.IsEmpty)
                         {
-                            measurePos2 = pointsNear;
-                            CompleteMeasure();
-                            //Invalidate();
+                            Vector pointsNear = Vector.Empty;
+                            if (GetLayoutPointNear(e.Location, 2, out pointsNear))
+                            {
+                                measurePos2 = pointsNear;
+                                if (Vector.EqualOrClose(measurePos1, measurePos2))
+                                    ClearMeasuring();
+                                else
+                                    CompleteMeasure();
+                                //Invalidate();
+                            }
                         }
                     }
                 }
+                else if (e.Button == MouseButtons.Right && !measurePos1.IsEmpty)
+                {
+                    ClearMeasuring();
+                }
+            }
+        }
 
-            }
-            else if(e.Button == MouseButtons.Right && !measurePos1.IsEmpty)
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
+        {
+            base.OnMouseDoubleClick(e);
+
+            if (e.Button == MouseButtons.Middle)
+                ResetCamera();
+            else
             {
-                ClearMeasuring();
+                var hitInfo = HitTest(e.Location);
+                if (hitInfo.Type == LayoutViewerHitTestType.MeasureBox)
+                {
+                    var clickedBox = MeasureBoxes[hitInfo.MeasureBoxIndex];
+                    clickedBox.LocalOffset = clickedBox.OriginalOffset;
+                    Invalidate();
+                }
             }
+        }
+
+        public enum LayoutViewerHitTestType
+        {
+            None,
+            MeasureBox,
+            Button
+        }
+
+        public class HitTestInfo
+        {
+            internal LayoutViewerHitTestType _Type;
+            internal int _MeasureBoxIndex;
+            internal int _ButtonID;
+            public LayoutViewerHitTestType Type { get { return _Type; } }
+            public int MeasureBoxIndex { get { return _MeasureBoxIndex; } }
+            public int ButtonID { get { return _ButtonID; } }
+
+            internal HitTestInfo()
+            {
+                _Type = LayoutViewerHitTestType.None;
+                _MeasureBoxIndex = -1;
+                _ButtonID = -1;
+            }
+        }
+
+        public HitTestInfo HitTest(Point pt)
+        {
+            var hitInfo = new HitTestInfo();
+
+            if (CurrentMeasure != null)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    if (MeasureBoxes[i] != null && MeasureBoxes[i].Visible)
+                    {
+                        var bounds = GetMeasureBoxBounds(MeasureBoxes[i]);
+                        if (bounds.Contains(pt))
+                        {
+                            hitInfo._Type = LayoutViewerHitTestType.MeasureBox;
+                            hitInfo._MeasureBoxIndex = i;
+                            return hitInfo;
+                        }
+                    }
+                }
+            }
+
+            return hitInfo;
         }
 
         #endregion
@@ -370,10 +517,19 @@ namespace SiGen.UI
 
         private class MeasureValueBox
         {
-            public SizeF BoxSize { get; set; }
+            public SizeF Size { get; set; }
             public Vector TargetPos { get; set; }
-            public Vector PixelOffset { get; set; }
-            public RectangleF DisplayBounds { get; set; }
+            public Vector OriginalOffset { get; set; }
+            public Vector LocalOffset { get; set; }
+            public UnitOfMeasure DisplayUnit { get; set; }
+            public bool Suppressed { get; set; }
+            public bool Visible { get; set; }
+            public bool ShowExactValue { get; set; }
+
+            public MeasureValueBox()
+            {
+                Visible = true;
+            }
         }
 
         private class LengthValueBox : MeasureValueBox
@@ -382,7 +538,6 @@ namespace SiGen.UI
             public Measure Value { get; set; }
             public Vector P1 { get; set; }
             public Vector P2 { get; set; }
-            public bool Suppressed { get; set; }
         }
 
         private class AngleValueBox : MeasureValueBox
@@ -404,6 +559,51 @@ namespace SiGen.UI
             measurePos2 = Vector.Empty;
             DisplayUnit = UnitOfMeasure.Mm;
             _CurrentMeasure = null;
+            menuMeasureBox.Opening += MenuMeasureBox_Opening;
+            menuItemDisplayMeasureMM.Tag = UnitOfMeasure.Mm;
+            menuItemDisplayMeasureMM.Click += MenuItemDisplayMeasure_Click;
+
+            menuItemDisplayMeasureCM.Tag = UnitOfMeasure.Cm;
+            menuItemDisplayMeasureCM.Click += MenuItemDisplayMeasure_Click;
+
+            menuItemDisplayMeasureIN.Tag = UnitOfMeasure.In;
+            menuItemDisplayMeasureIN.Click += MenuItemDisplayMeasure_Click;
+
+            menuItemDisplayMeasureFT.Tag = UnitOfMeasure.Ft;
+            menuItemDisplayMeasureFT.Click += MenuItemDisplayMeasure_Click;
+
+            menuItemDisplayMeasureShowDecimals.Click += MenuItemDisplayMeasureShowDecimals_Click;
+        }
+
+        private void MenuMeasureBox_Opening(object sender, CancelEventArgs e)
+        {
+            var targetBox = (LengthValueBox)menuMeasureBox.Tag;
+            menuItemDisplayMeasureMM.Checked = targetBox.DisplayUnit == UnitOfMeasure.Mm;
+            menuItemDisplayMeasureCM.Checked = targetBox.DisplayUnit == UnitOfMeasure.Cm;
+            menuItemDisplayMeasureIN.Checked = targetBox.DisplayUnit == UnitOfMeasure.In;
+            menuItemDisplayMeasureFT.Checked = targetBox.DisplayUnit == UnitOfMeasure.Ft;
+            menuItemDisplayMeasureShowDecimals.Checked = targetBox.ShowExactValue;
+        }
+
+        private void MenuItemDisplayMeasureShowDecimals_Click(object sender, EventArgs e)
+        {
+            var targetBox = (LengthValueBox)menuMeasureBox.Tag;
+            targetBox.ShowExactValue = !targetBox.ShowExactValue;
+            UpdateMeasureBoxBounds(targetBox);
+            Invalidate();
+        }
+
+        private void MenuItemDisplayMeasure_Click(object sender, EventArgs e)
+        {
+            var targetBox = (LengthValueBox)menuMeasureBox.Tag;
+            var newUnit = (UnitOfMeasure)(sender as ToolStripMenuItem).Tag;
+            if (newUnit != targetBox.DisplayUnit)
+            {
+                targetBox.DisplayUnit = newUnit;
+                targetBox.ShowExactValue = false;
+                UpdateMeasureBoxBounds(targetBox);
+                Invalidate();
+            }
         }
 
         private void ClearMeasuring()
@@ -411,6 +611,7 @@ namespace SiGen.UI
             if (_CurrentMeasure != null)
             {
                 _CurrentMeasure = null;
+                MeasureBoxes = new LengthValueBox[3];
                 if (IsHandleCreated)
                     Invalidate();
             }
@@ -430,19 +631,24 @@ namespace SiGen.UI
             MeasureBoxes[0] = ConstructMeasureBox(_CurrentMeasure, LengthType.Length);
             MeasureBoxes[1] = ConstructMeasureBox(_CurrentMeasure, LengthType.Width);
             MeasureBoxes[2] = ConstructMeasureBox(_CurrentMeasure, LengthType.Height);
-            UpdateMeasureBoxBounds();
             Invalidate();
         }
 
         private LengthValueBox ConstructMeasureBox(LayoutMeasure selection, LengthType type)
         {
-            var box = new LengthValueBox() { Value = selection[type], Type = type };
-            var minY = Measure.Min(selection.FirstPoint.Y, selection.LastPoint.Y);
+            var box = new LengthValueBox()
+            {
+                Value = selection[type],
+                Type = type,
+                DisplayUnit = DisplayConfig.DefaultDisplayUnit
+            };
+
             var corner1 = new PointM(selection.FirstPoint.X, selection.LastPoint.Y);
             var center = PointM.Average(selection.FirstPoint, selection.LastPoint, corner1);
             var centerV = center.ToVector();
             var p1v = selection.FirstPoint.ToVector();
             var p2v = selection.LastPoint.ToVector();
+
             switch (type)
             {
                 case LengthType.Length:
@@ -467,6 +673,7 @@ namespace SiGen.UI
                     }
                     break;
             }
+
             if(type != LengthType.Length && Vector.EqualOrClose(centerV, box.TargetPos, 0.01))
                 box.Suppressed = true;
 
@@ -474,28 +681,50 @@ namespace SiGen.UI
             {
                 SizeF textSize = SizeF.Empty;
                 using (var g = CreateGraphics())
-                    textSize = g.MeasureString(box.Value.ToString(DisplayUnit), Font);
-                box.BoxSize = new SizeF(textSize.Width + 2, textSize.Height + 3);
+                    textSize = g.MeasureString(box.Value.ToString(box.DisplayUnit), Font);
+                box.Size = new SizeF(textSize.Width + 2, textSize.Height + 2);
 
                 var measureLine = Line.FromPoints(box.P1, box.P2);
                 var perp = measureLine.GetPerpendicular(box.TargetPos);
                 Vector perpCenter = perp.GetClosestPointOnLine(centerV);
-                if ((box.TargetPos - perpCenter).Length < 0.01)
+                if ((box.TargetPos - perpCenter).Length < 0.001)
                     perpCenter = box.TargetPos + perp.Vector * 2;
 
                 var centerUI = WorldToLocal(perpCenter, _Zoom, true);
                 var targetUI = WorldToLocal(box.TargetPos, _Zoom, true);
 
-                var pointOnRec = GetRectIntersect((targetUI - centerUI), box.BoxSize);
+                var pointOnRec = GetRectIntersect((targetUI - centerUI), box.Size);
                 if (!pointOnRec.IsEmpty)
-                {
-                    box.PixelOffset = ((targetUI - centerUI).Normalized * (pointOnRec.Length + 5)) * FlipY;
-                }
+                    box.LocalOffset = ((targetUI - centerUI).Normalized * (pointOnRec.Length + (FontHeight / 2)));
                 else
-                    box.PixelOffset = ((targetUI - centerUI).Normalized * 30) * FlipY;
+                    box.Suppressed = true;
+                box.OriginalOffset = box.LocalOffset;
             }
             
             return box;
+        }
+
+        private void UpdateMeasureBoxBounds(LengthValueBox box)
+        {
+            if (!box.Suppressed)
+            {
+                var oldSize = box.Size;
+                SizeF textSize = SizeF.Empty;
+                using (var g = CreateGraphics())
+                    textSize = g.MeasureString(box.Value.ToString(box.DisplayUnit, box.ShowExactValue ? Measure.MeasureFormatFlag.HighPrecision | Measure.MeasureFormatFlag.ForceDecimal : Measure.MeasureFormatFlag.Default), Font);
+                box.Size = new SizeF(textSize.Width + 2, textSize.Height + 2);
+
+                var centerUI = WorldToLocal(box.TargetPos, _Zoom, true);
+                var targetUI = centerUI + box.OriginalOffset;
+
+                var pointOnRec = GetRectIntersect((targetUI - centerUI), box.Size);
+                var wasMoved = box.OriginalOffset != box.LocalOffset;
+                if (!pointOnRec.IsEmpty)
+                    box.OriginalOffset = ((targetUI - centerUI).Normalized * (pointOnRec.Length + (FontHeight / 2)));
+
+                if(!wasMoved)
+                    box.LocalOffset = box.OriginalOffset;
+            }
         }
 
         private Vector GetRectIntersect(Vector dir, SizeF boxSize)
@@ -516,31 +745,11 @@ namespace SiGen.UI
             if (line.Intersect(Line.FromPoints(tr, br), out inter))
                 inters.Add(inter);
 
-            inters = inters.Where(x => Vector.EqualOrClose((Vector.Zero - x).Normalized, dir.Normalized)).ToList();
+            inters = inters.Where(x => Vector.EqualOrClose((Vector.Zero - x).Normalized, dir.Normalized, 0.001)).ToList();
+            if (inters.Count > 0)
+                return inters.OrderBy(i => i.Length).First();
 
-            foreach (var inter2 in inters)
-            {
-                if (Vector.EqualOrClose((Vector.Zero - inter2).Normalized, dir.Normalized))
-                    return inter2;
-            }
             return Vector.Empty;
-        }
-
-        private void UpdateMeasureBoxBounds()
-        {
-            if(CurrentMeasure != null && MeasureBoxes[0] != null)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    var box = MeasureBoxes[i];
-                    if (!box.Suppressed)
-                    {
-                        var targetUI = WorldToDisplay(box.TargetPos, _Zoom, true);
-                        var centerUI = new PointF(targetUI.X + (float)box.PixelOffset.X, targetUI.Y + (float)box.PixelOffset.Y);
-                        box.DisplayBounds = new RectangleF(centerUI.X - box.BoxSize.Width / 2, centerUI.Y - box.BoxSize.Height / 2, box.BoxSize.Width, box.BoxSize.Height);
-                    }
-                }
-            }
         }
 
         private bool GetLayoutPointNear(Point pt, double range, out Vector vec)
@@ -559,13 +768,29 @@ namespace SiGen.UI
             LayoutIntersections.Clear();
             if (CurrentLayout != null && CurrentLayout.VisualElements.Count > 0)
             {
-                var fretPos = CurrentLayout.VisualElements.OfType<FretLine>().SelectMany(fl => fl.Segments.Where(s => !s.IsVirtual)).Select(s => s.PointOnString).Distinct();
+                var fretLines = CurrentLayout.VisualElements.OfType<FretLine>();
+                var stringLines = CurrentLayout.VisualElements.OfType<StringLine>();
+                var stringCenters = CurrentLayout.VisualElements.OfType<StringCenter>();
+                var fingerboardEdges = CurrentLayout.VisualElements.OfType<FingerboardEdge>();
 
+                var fretPos = fretLines.SelectMany(fl => fl.Segments.Where(s => !s.IsVirtual)).Select(s => s.PointOnString).Distinct();
                 LayoutIntersections.AddRange(fretPos.Select(p => p.ToVector()));
+
+                LayoutIntersections.AddRange(stringCenters.SelectMany(s => fretLines.Select(f => f.GetIntersection(s).ToVector())));
+                LayoutIntersections.RemoveAll(p => p.IsEmpty);
+
+                LayoutIntersections.AddRange(stringLines.SelectMany(s => fingerboardEdges.Where(f=> !(f is FingerboardSideEdge)).Select(f => f.GetIntersection(s).ToVector())));
+                LayoutIntersections.RemoveAll(p => p.IsEmpty);
+
+                LayoutIntersections.AddRange(stringCenters.SelectMany(s => fingerboardEdges.Where(f => !(f is FingerboardSideEdge)).Select(f => f.GetIntersection(s).ToVector())));
+                LayoutIntersections.RemoveAll(p => p.IsEmpty);
+
                 LayoutIntersections.AddRange(CurrentLayout.VisualElements.OfType<FretLine>().Select(fl => fl.Points.First().ToVector()));
                 LayoutIntersections.AddRange(CurrentLayout.VisualElements.OfType<FretLine>().Select(fl => fl.Points.Last().ToVector()));
                 LayoutIntersections.AddRange(CurrentLayout.VisualElements.OfType<LayoutLine>().Select(fl => fl.P1.ToVector()));
                 LayoutIntersections.AddRange(CurrentLayout.VisualElements.OfType<LayoutLine>().Select(fl => fl.P2.ToVector()));
+
+                LayoutIntersections.RemoveAll(p => p.IsEmpty);
                 LayoutIntersections = LayoutIntersections.Distinct().ToList();
             }
         }

@@ -115,6 +115,7 @@
       <DependentUpon>TextBoxEx.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Designers\MeasureEditor.cs" />
+    <Compile Include="UI\Designers\UnitOfMeasureEditor.cs" />
     <Compile Include="UI\Windows\FrmLayoutBuilder.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -166,6 +167,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UI\Controls\LayoutViewer.resx">
+      <DependentUpon>LayoutViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\FrmLayoutBuilder.resx">
       <DependentUpon>FrmLayoutBuilder.cs</DependentUpon>
     </EmbeddedResource>

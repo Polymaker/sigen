@@ -295,7 +295,8 @@ namespace SiGen.Measuring
             Default,
             HideUnit = 1 ,
             ForceDecimal = 2,
-            DisableApproximation = 4
+            DisableApproximation = 4,
+            HighPrecision = 8
         }
 
         public override string ToString()
@@ -322,9 +323,10 @@ namespace SiGen.Measuring
                 return Value.ToString();
 
             var displayedUnit = flags.HasFlag(MeasureFormatFlag.HideUnit) ? string.Empty : unit.Symbol;
+            var extraDigits = flags.HasFlag(MeasureFormatFlag.HighPrecision) ? "######" : string.Empty;
 
             if (flags.HasFlag(MeasureFormatFlag.ForceDecimal))
-                return string.Format("{0:0.###}{1}", this[unit], displayedUnit);
+                return string.Format("{0:0.000" + extraDigits + "}{1}", this[unit], displayedUnit);
 
             const double sixtyfourth = 0.015625d;
 
@@ -348,8 +350,9 @@ namespace SiGen.Measuring
                         baseFrac /= 2;
                         sixtyFourCount /= 2;
                     }
-
-                    if (remain < 0.002 || !flags.HasFlag(MeasureFormatFlag.DisableApproximation))
+                    if(remain <= sixtyfourth /2 && whole == 0)
+                        return string.Format("{0:0.###" + extraDigits + "}{1}", this[unit], displayedUnit);
+                    if ( remain < 0.002 || !flags.HasFlag(MeasureFormatFlag.DisableApproximation))
                     {
                         if (whole == 0)
                             return string.Format("{3}{0}/{1}{2}", sixtyFourCount, baseFrac, displayedUnit, remain > 0.002 ? "~" : string.Empty);
@@ -371,7 +374,7 @@ namespace SiGen.Measuring
                     return string.Format("~{0}{1}", whole, displayedUnit);
             }
 
-            return string.Format("{0:0.###}{1}", this[unit], displayedUnit);
+            return string.Format("{0:0.###" + extraDigits + "}{1}", this[unit], displayedUnit);
         }
 
         #endregion
