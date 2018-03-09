@@ -299,9 +299,47 @@ namespace SiGen.Measuring
             HighPrecision = 8
         }
 
+        public class MeasureFormat
+        {
+            public UnitOfMeasure OverrideUnit { get; set; }
+            public int MinimumDecimals { get; set; }
+            public int MaximumDecimals { get; set; }
+
+            public bool ShowFractions { get; set; }
+            public bool AllowApproximation { get; set; }
+            public bool ShowUnitOfMeasure { get; set; }
+
+            public static MeasureFormat DefaultFormat
+            {
+                get { return new MeasureFormat(); }
+            }
+
+            public MeasureFormat()
+            {
+                MinimumDecimals = 0;
+                MaximumDecimals = 3;
+                ShowUnitOfMeasure = true;
+                ShowFractions = true;
+                AllowApproximation = true;
+                OverrideUnit = null;
+            }
+
+            internal MeasureFormat Clone()
+            {
+                return new MeasureFormat()
+                {
+                    AllowApproximation = AllowApproximation,
+                    MaximumDecimals = MaximumDecimals,
+                    MinimumDecimals = MinimumDecimals,
+                    ShowFractions = ShowFractions,
+                    ShowUnitOfMeasure = ShowUnitOfMeasure
+                };
+            }
+        }
+
         public override string ToString()
         {
-            return ToString(MeasureFormatFlag.Default);
+            return ToString(MeasureFormat.DefaultFormat);
         }
 
         public string ToString(UnitOfMeasure unit, bool forceDecimal = false)
@@ -375,6 +413,75 @@ namespace SiGen.Measuring
             }
 
             return string.Format("{0:0.###" + extraDigits + "}{1}", this[unit], displayedUnit);
+        }
+
+        public string ToString(MeasureFormat format)
+        {
+            if (IsEmpty)
+                return "N/A";
+
+            var usedUnit = format.OverrideUnit ?? Unit;
+
+            string digitFormat = string.Empty;
+            if (format.MinimumDecimals > 0 || format.MaximumDecimals > 0)
+                digitFormat = ":0.";
+
+            if (format.MinimumDecimals > 0)
+                digitFormat = digitFormat.PadRight(3 + format.MinimumDecimals, '0');
+            if (format.MaximumDecimals > 0)
+                digitFormat = digitFormat.PadRight(3 + format.MaximumDecimals, '#');
+
+            if (usedUnit == null)
+                return string.Format("{0" + digitFormat + "}", Value);
+
+            var displayedUnit = format.ShowUnitOfMeasure ? usedUnit.Symbol : string.Empty;
+
+            const double sixtyfourth = 0.015625d;
+
+            if (usedUnit == UnitOfMeasure.Inches && format.ShowFractions)
+            {
+                double value = this[usedUnit];
+                int whole = (int)Math.Floor(value);
+                double remain = value - whole;
+
+                if (remain >= sixtyfourth)
+                {
+                    int sixtyFourCount = 0;
+                    while (remain >= sixtyfourth || Math.Abs(remain - sixtyfourth) < 0.000001)
+                    {
+                        sixtyFourCount++;
+                        remain -= sixtyfourth;
+                    }
+                    int baseFrac = 64;
+                    while ((sixtyFourCount / 2d) % 2d == 0d || (sixtyFourCount / 2d) % 2d == 1d)
+                    {
+                        baseFrac /= 2;
+                        sixtyFourCount /= 2;
+                    }
+
+                    if((whole > 0 || remain > sixtyfourth / 2) && (format.AllowApproximation || remain < 0.002))
+                    {
+                        if (whole == 0)
+                            return string.Format("{3}{0}/{1}{2}", sixtyFourCount, baseFrac, displayedUnit, remain > 0.002 ? "~" : string.Empty);
+                        else
+                            return string.Format("{0} {4}{1}/{2}{3}", whole, sixtyFourCount, baseFrac, displayedUnit, remain > 0.002 ? "~" : string.Empty);
+                    }
+                }
+                else if (remain > 0.002 && whole > 0 && format.AllowApproximation)
+                    return string.Format("~{0}{1}", whole, displayedUnit);
+            }
+            else if (usedUnit == UnitOfMeasure.Feets && format.ShowFractions)
+            {
+                double value = this[usedUnit];
+                int whole = (int)Math.Floor(value);
+                double remain = value - whole;
+                if (remain >= sixtyfourth / 12d && format.ShowUnitOfMeasure)
+                    return string.Format("{0}{1} {2}", whole, usedUnit.Symbol, Inches(remain * 12d).ToString(format.Clone()));
+                else if (whole > 0 && remain > 0 && remain < sixtyfourth / 12d && format.AllowApproximation)
+                    return string.Format("~{0}{1}", whole, displayedUnit);
+            }
+
+            return string.Format("{0" + digitFormat + "}{1}", this[usedUnit], displayedUnit);
         }
 
         #endregion

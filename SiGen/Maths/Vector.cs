@@ -185,6 +185,11 @@ namespace SiGen.Maths
             return new Vector(pt.X, pt.Y);
         }
 
+        public static double Dot(Vector left, Vector right)
+        {
+            return left.X * right.X + left.Y * right.Y;
+        }
+
         #endregion
 
         public override string ToString()

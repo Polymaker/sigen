@@ -131,82 +131,73 @@ namespace SiGen.UI
 
         private void RenderMeasureTool(Graphics g)
         {
-            if (measurePos2.IsEmpty)
+            if (MeasureLastSelection.IsEmpty)
             {
                 using (var pen = new Pen(Color.Black, 2))
-                    g.DrawLine(pen, WorldToDisplay(measurePos1, _Zoom, true), PointToClient(Cursor.Position));
+                    g.DrawLine(pen, WorldToDisplay(MeasureFirstSelection, _Zoom, true), PointToClient(Cursor.Position));
             }
             else
             {
                 if(CurrentMeasure != null)
                 {
-                    bool showLengthOnly = false;
-                    for (int i = 0; i < 3; i++)
-                    {
-                        var box = MeasureBoxes[i];
-                        if (box == null || (box.Type != LengthType.Length && box.Value.NormalizedValue * _Zoom < 2))
-                        {
-                            showLengthOnly = true;
-                            break;
-                        }
-                        box.Visible = true;
-                    }
+                    var lengthMeasureBoxes = MeasureBoxes.OfType<LengthValueBox>();
+                    bool showLengthOnly = lengthMeasureBoxes.Any(b=>b.Type != LengthType.Length && !b.IsMeasureVisible());
 
-                    for (int i = 0; i < 3; i++)
+                    //Draw Measures Lines
+                    foreach (var lengthBox in lengthMeasureBoxes)
                     {
-                        var box = MeasureBoxes[i];
-                        if (box.Suppressed || (showLengthOnly && box.Type != LengthType.Length))
-                        {
-                            box.Visible = false;
+                        if (lengthBox.Suppressed || (showLengthOnly && lengthBox.Type != LengthType.Length))
                             continue;
-                        }
-                        
-                        var p1UI = WorldToDisplay(box.P1, _Zoom, true);
-                        var p2UI = WorldToDisplay(box.P2, _Zoom, true);
-                        using (var pen = new Pen(GetMeasureTypeColor(box.Type), 2))
+
+                        var p1UI = WorldToDisplay(lengthBox.P1, _Zoom, true);
+                        var p2UI = WorldToDisplay(lengthBox.P2, _Zoom, true);
+                        using (var pen = new Pen(GetMeasureTypeColor(lengthBox.Type), 2))
                             g.DrawLine(pen, p1UI, p2UI);
                     }
 
-                    for (int i = 0; i < 3; i++)
+                    //Draw Pointer Lines
+                    foreach (var lengthBox in MeasureBoxes)
                     {
-                        var box = MeasureBoxes[i];
-                        if (box.Suppressed || (showLengthOnly && box.Type != LengthType.Length))
+                        if (lengthBox.Suppressed || (lengthBox is LengthValueBox && (showLengthOnly && (lengthBox as LengthValueBox).Type != LengthType.Length)))
                             continue;
 
-                        var targetUI = WorldToDisplay(box.TargetPos, _Zoom, true);
-                        var centerUI = new PointF(targetUI.X + (float)box.LocalOffset.X, targetUI.Y + (float)box.LocalOffset.Y*-1f);
+                        var targetUI = WorldToDisplay(lengthBox.TargetPosition, _Zoom, true);
+                        var centerUI = new PointF(targetUI.X + (float)lengthBox.LocalOffset.X, targetUI.Y + (float)lengthBox.LocalOffset.Y*-1f);
                         g.DrawLine(Pens.Black, targetUI, centerUI);
                     }
 
-                    for (int i = 0; i < 3; i++)
+                    //Draw Measure Boxes
+                    foreach (var lengthBox in lengthMeasureBoxes)
                     {
-                        var box = MeasureBoxes[i];
-                        if (box.Suppressed || (showLengthOnly && box.Type != LengthType.Length))
+                        if (lengthBox.Suppressed || (showLengthOnly && lengthBox.Type != LengthType.Length))
                             continue;
 
-                        var textBounds = GetMeasureBoxBounds(box);
-  
                         g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+                        g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.None;
 
-                        g.FillRectangle(Brushes.White, textBounds);
+                        g.FillRectangle(Brushes.White, lengthBox.DisplayBounds);
 
-                        using (var pen = new Pen(GetMeasureTypeColor(box.Type), 1.5f))
-                            g.DrawRectangle(pen, textBounds.X, textBounds.Y, textBounds.Width, textBounds.Height);
-
+                        using (var pen = new Pen(GetMeasureTypeColor(lengthBox.Type), 1f))
+                            g.DrawRectangle(pen, lengthBox.DisplayBounds);
+                        g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
                         g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
                         using (var sf = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Far })
-                            g.DrawString(box.Value.ToString(box.DisplayUnit, 
-                                box.ShowExactValue ? Measure.MeasureFormatFlag.HighPrecision | Measure.MeasureFormatFlag.ForceDecimal : Measure.MeasureFormatFlag.Default), 
-                                Font, Brushes.Black, textBounds, sf);
+                            g.DrawString(lengthBox.GetDisplayValue(), Font, Brushes.Black, lengthBox.DisplayBounds, sf);
+                    }
+
+                    foreach(var box in MeasureBoxes.OfType<AngleValueBox>())
+                    {
+                        using (var sf = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Far })
+                            g.DrawString(box.GetDisplayValue(), Font, Brushes.Black, box.DisplayBounds, sf);
                     }
                 }
             }
         }
 
-        private RectangleF GetMeasureBoxBounds(LengthValueBox box)
+        private RectangleF GetMeasureBoxBounds(MeasureValueBox box)
         {
-            var boxCorner = LocalToDisplay(WorldToLocal(box.TargetPos, _Zoom, true) + box.LocalOffset);
+            var boxCorner = LocalToDisplay(WorldToLocal(box.TargetPosition, _Zoom, true) + box.LocalOffset);
             boxCorner.X -= box.Size.Width / 2f;
             boxCorner.Y -= box.Size.Height / 2f;
             return new RectangleF(boxCorner, box.Size);
@@ -224,34 +215,6 @@ namespace SiGen.UI
                 case LengthType.Height:
                     return Color.Red;
             }
-        }
-
-        private void DrawMeasureBox(Graphics g, Measure value, Color color, PointF center, StringAlignment alignment, Orientation offsetDir)
-        {
-            SizeF textSize = g.MeasureString(value.ToString(DisplayUnit), Font);
-            var txtBounds = new RectangleF(center.X, center.Y - (textSize.Height / 2), textSize.Width, textSize.Height);
-
-            if (alignment == StringAlignment.Center)
-                txtBounds.X -= (textSize.Width / 2);
-            else if (alignment == StringAlignment.Far)
-                txtBounds.X -= textSize.Width;
-
-            if (offsetDir == Orientation.Horizontal)
-                txtBounds.Y += (textSize.Height / 2) + 6;
-            else
-            {
-                if (alignment == StringAlignment.Near)
-                    txtBounds.X += 6;
-                else if (alignment == StringAlignment.Far)
-                    txtBounds.X -= 6;
-            }
-
-            txtBounds.Inflate(2, 2);
-            g.FillRectangle(Brushes.White, txtBounds);
-            using (var pen = new Pen(color, 1.5f))
-                g.DrawRectangle(pen, txtBounds.X, txtBounds.Y, txtBounds.Width, txtBounds.Height);
-            using (var sf = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
-                g.DrawString(value.ToString(DisplayUnit), Font, Brushes.Black, txtBounds, sf);
         }
 
     }

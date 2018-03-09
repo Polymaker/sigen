@@ -72,6 +72,19 @@ namespace SiGen.Maths
             return FromRadians(Math.Atan2(dirVec.Y, dirVec.X));
         }
 
+        public static Angle FromPoints(Vector center, Vector v1, Vector v2)
+        {
+            var ab = v1 - center;
+            var bc = v2 - center;
+            return FromRadians(Math.Acos(Vector.Dot(ab, bc) / (ab.Length * bc.Length)));
+        }
+
+        public static Angle FromDirectionVector(Vector vec)
+        {
+            var dirVec = vec.Length == 1 ? vec : vec.Normalized;
+            return FromRadians(Math.Atan2(dirVec.Y, dirVec.X));
+        }
+
         #endregion
 
         #region Arithmetic operators
@@ -218,6 +231,15 @@ namespace SiGen.Maths
         {
             return string.Format("{0}°", Degrees);
         }
+
+        public string ToString(AngleUnit unit)
+        {
+            if(unit == AngleUnit.Degrees)
+                return string.Format("{0:0.##}°", Degrees);
+            else
+                return string.Format("{0:0.##}°", Radians);
+        }
+
         #endregion
     }
 }
