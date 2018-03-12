@@ -53,12 +53,12 @@ namespace SiGen.UI
                 MusicalNote.EqualNote(NoteName.E, 2)
                 );
             layout.Strings.MassAssign(s => s.PhysicalProperties,
-                new StringProperties(Measure.Inches(0.009), Measure.Inches(0.009), 0.00001794, 29442660.75919),
-                new StringProperties(Measure.Inches(0.011), Measure.Inches(0.011), 0.00002680, 29442660.75919),
-                new StringProperties(Measure.Inches(0.016), Measure.Inches(0.016), 0.00005671, 29442660.75919),
-                new StringProperties(Measure.Inches(0.014), Measure.Inches(0.024), 0.00010857, 29442660.75919),
-                new StringProperties(Measure.Inches(0.015), Measure.Inches(0.032), 0.00019347, 29442660.75919),
-                new StringProperties(Measure.Inches(0.018), Measure.Inches(0.042), 0.00032279, 29442660.75919)
+                new StringProperties(Measure.Inches(0.010), Measure.Inches(0.010), 0.00002215, 29442660.75919),
+                new StringProperties(Measure.Inches(0.013), Measure.Inches(0.013), 0.00003744, 29442660.75919),
+                new StringProperties(Measure.Inches(0.017), Measure.Inches(0.017), 0.00006402, 29442660.75919),
+                new StringProperties(Measure.Inches(0.014), Measure.Inches(0.026), 0.00012671, 29442660.75919),
+                new StringProperties(Measure.Inches(0.014), Measure.Inches(0.036), 0.00023964, 29442660.75919),
+                new StringProperties(Measure.Inches(0.016), Measure.Inches(0.046), 0.00038216, 29442660.75919)
                 );
             layout.Strings.MassAssign(s => s.ActionAtTwelfthFret,
                 Measure.Inches(0.063),

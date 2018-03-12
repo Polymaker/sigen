@@ -4,6 +4,7 @@ using SiGen.StringedInstruments.Layout.Visual;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +40,11 @@ namespace SiGen.UI
         private Pen GetPen(Color color, Measure size)
         {
             return new Pen(color, (float)size.NormalizedValue);
+        }
+
+        private Pen GetPen(Color color, Measure size, double offset)
+        {
+            return new Pen(color, (float)size.NormalizedValue + (float)(offset / _Zoom));
         }
 
         private Pen GetPen(Color color, double size)
@@ -106,7 +112,6 @@ namespace SiGen.UI
                     g.DrawLines(penToUse, fretPoints);
                 else
                     g.DrawCurve(penToUse, fretPoints, 0.3f);
-
             }
             nutPen.Dispose();
             fretPen.Dispose();
@@ -114,17 +119,23 @@ namespace SiGen.UI
 
         private void RenderStrings(Graphics g)
         {
-            using(var stringPen = GetPen(Color.Black, 1))
+            using(var defaultPen = GetPen(Color.Black, 1))
             {
                 foreach (var stringLine in CurrentLayout.VisualElements.OfType<StringLine>())
                 {
                     if (DisplayConfig.RenderRealStrings && stringLine.String.Gauge != Measure.Empty && stringLine.String.Gauge > Measure.Zero)
                     {
-                        using (var gaugePen = GetPen(Color.Black, stringLine.String.Gauge))
+                        var outlineColor = stringLine.String.Gauge.NormalizedValue >= 0.06090 ? Color.Gray : Color.DarkGray;
+                        var stringColor = stringLine.String.Gauge.NormalizedValue >= 0.06090 ? Color.Silver : Color.Gainsboro;
+
+                        using (var gaugePen = GetPen(outlineColor, stringLine.String.Gauge, 1.5))
+                            DrawLine(g, gaugePen, stringLine.P1, stringLine.P2);
+
+                        using (var gaugePen = GetPen(stringColor, stringLine.String.Gauge))
                             DrawLine(g, gaugePen, stringLine.P1, stringLine.P2);
                     }
                     else
-                        DrawLine(g, stringPen, stringLine.P1, stringLine.P2);
+                        DrawLine(g, defaultPen, stringLine.P1, stringLine.P2);
                 }
             }
         }
@@ -154,43 +165,47 @@ namespace SiGen.UI
                         using (var pen = new Pen(GetMeasureTypeColor(lengthBox.Type), 2))
                             g.DrawLine(pen, p1UI, p2UI);
                     }
-
-                    //Draw Pointer Lines
-                    foreach (var lengthBox in MeasureBoxes)
+                    if (!IsMovingCamera)
                     {
-                        if (lengthBox.Suppressed || (lengthBox is LengthValueBox && (showLengthOnly && (lengthBox as LengthValueBox).Type != LengthType.Length)))
-                            continue;
+                        //Draw Pointer Lines
+                        foreach (var lengthBox in MeasureBoxes)
+                        {
+                            if (lengthBox.Suppressed || (lengthBox is LengthValueBox && (showLengthOnly && (lengthBox as LengthValueBox).Type != LengthType.Length)))
+                                continue;
 
-                        var targetUI = WorldToDisplay(lengthBox.TargetPosition, _Zoom, true);
-                        var centerUI = new PointF(targetUI.X + (float)lengthBox.LocalOffset.X, targetUI.Y + (float)lengthBox.LocalOffset.Y*-1f);
-                        g.DrawLine(Pens.Black, targetUI, centerUI);
+                            var targetUI = WorldToDisplay(lengthBox.TargetPosition, _Zoom, true);
+                            var centerUI = new PointF(targetUI.X + (float)lengthBox.LocalOffset.X, targetUI.Y + (float)lengthBox.LocalOffset.Y * -1f);
+                            g.DrawLine(Pens.Black, targetUI, centerUI);
+                        }
+
+                        //Draw Measure Boxes
+                        foreach (var lengthBox in lengthMeasureBoxes)
+                        {
+                            if (lengthBox.Suppressed || (showLengthOnly && lengthBox.Type != LengthType.Length))
+                                continue;
+
+                            g.SmoothingMode = SmoothingMode.HighSpeed;
+                            g.PixelOffsetMode = PixelOffsetMode.None;
+
+                            g.FillRectangle(Brushes.White, lengthBox.DisplayBounds);
+
+                            using (var pen = new Pen(GetMeasureTypeColor(lengthBox.Type), 1f))
+                                g.DrawRectangle(pen, lengthBox.DisplayBounds);
+
+                            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                            g.SmoothingMode = SmoothingMode.AntiAlias;
+
+                            using (var sf = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Far })
+                                g.DrawString(lengthBox.GetDisplayValue(), Font, Brushes.Black, lengthBox.DisplayBounds, sf);
+                        }
+
+                        foreach (var box in MeasureBoxes.OfType<AngleValueBox>())
+                        {
+                            using (var sf = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Far })
+                                g.DrawString(box.GetDisplayValue(), Font, Brushes.Black , box.DisplayBounds, sf);
+                        }
                     }
-
-                    //Draw Measure Boxes
-                    foreach (var lengthBox in lengthMeasureBoxes)
-                    {
-                        if (lengthBox.Suppressed || (showLengthOnly && lengthBox.Type != LengthType.Length))
-                            continue;
-
-                        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
-                        g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.None;
-
-                        g.FillRectangle(Brushes.White, lengthBox.DisplayBounds);
-
-                        using (var pen = new Pen(GetMeasureTypeColor(lengthBox.Type), 1f))
-                            g.DrawRectangle(pen, lengthBox.DisplayBounds);
-                        g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-                        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-                        using (var sf = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Far })
-                            g.DrawString(lengthBox.GetDisplayValue(), Font, Brushes.Black, lengthBox.DisplayBounds, sf);
-                    }
-
-                    foreach(var box in MeasureBoxes.OfType<AngleValueBox>())
-                    {
-                        using (var sf = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Far })
-                            g.DrawString(box.GetDisplayValue(), Font, Brushes.Black, box.DisplayBounds, sf);
-                    }
+                    
                 }
             }
         }

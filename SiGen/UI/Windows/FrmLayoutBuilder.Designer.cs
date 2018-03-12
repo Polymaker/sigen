@@ -471,19 +471,19 @@
             // tsmiOpenFile
             // 
             this.tsmiOpenFile.Name = "tsmiOpenFile";
-            this.tsmiOpenFile.Size = new System.Drawing.Size(164, 22);
+            this.tsmiOpenFile.Size = new System.Drawing.Size(165, 22);
             this.tsmiOpenFile.Text = "Open File...";
             // 
             // tsmiOpenTemplate
             // 
             this.tsmiOpenTemplate.Name = "tsmiOpenTemplate";
-            this.tsmiOpenTemplate.Size = new System.Drawing.Size(164, 22);
+            this.tsmiOpenTemplate.Size = new System.Drawing.Size(165, 22);
             this.tsmiOpenTemplate.Text = "Open Template...";
             // 
             // tsSeparatorOpen
             // 
             this.tsSeparatorOpen.Name = "tsSeparatorOpen";
-            this.tsSeparatorOpen.Size = new System.Drawing.Size(161, 6);
+            this.tsSeparatorOpen.Size = new System.Drawing.Size(162, 6);
             // 
             // tssbSave
             // 
@@ -566,7 +566,6 @@
             // layoutViewer1
             // 
             this.layoutViewer1.BackColor = System.Drawing.Color.White;
-            this.layoutViewer1.CurrentLayout = null;
             this.layoutViewer1.DisplayConfig.RenderRealStrings = true;
             this.layoutViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layoutViewer1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

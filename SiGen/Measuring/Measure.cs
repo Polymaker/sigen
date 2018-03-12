@@ -236,6 +236,13 @@ namespace SiGen.Measuring
             return FromNormalizedValue(Math.Abs(value.normalizedValue), value.Unit);
         }
 
+        public static Measure Avg(Measure value1, Measure value2)
+        {
+            value1.EnsureIsNotNaN();
+            value2.EnsureIsNotNaN();
+            return FromNormalizedValue((value1.normalizedValue + value2.normalizedValue) / 2d, value1.Unit ?? value2.Unit);
+        }
+
         public static Measure Min(Measure value1, Measure value2)
         {
             if (value1.IsEmpty)

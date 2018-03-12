@@ -102,6 +102,9 @@
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingManual.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElement.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElementType.cs" />
+    <Compile Include="UI\Controls\LayoutViewer.Measuring.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\Controls\NumericBox.cs">
       <SubType>Component</SubType>
     </Compile>

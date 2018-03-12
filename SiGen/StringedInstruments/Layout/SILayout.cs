@@ -199,7 +199,17 @@ namespace SiGen.StringedInstruments.Layout
                 if (oldStrings != null && i < oldStrings.Length)
                     _Strings[i] = oldStrings[i];
                 else
+                {
                     _Strings[i] = new SIString(this, i);
+                    if (i >= 2 && !_Strings[i - 2].Gauge.IsEmpty && !_Strings[i - 1].Gauge.IsEmpty)
+                    {
+                        var gaugeDiff = _Strings[i - 1].Gauge - _Strings[i - 2].Gauge;
+                        var estGauge = _Strings[i - 1].Gauge * 1.3;
+                        _Strings[i].Gauge = Measure.Avg(_Strings[i - 1].Gauge + gaugeDiff, estGauge);
+                    }
+                    if (i >= 1 && !_Strings[i - 1].Gauge.IsEmpty)
+                        _Strings[i].Gauge = _Strings[i - 1].Gauge * 1.3;
+                }
             }
 
             foreach (var comp in _Component)
