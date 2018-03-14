@@ -76,8 +76,8 @@ namespace SiGen
                 );
             test.Margins.Edges = Measure.Mm(3.5);
 
-            test.StringSpacing.SetSpacing(0, Measure.Mm(7), true);
-            test.StringSpacing.SetSpacing(0, Measure.Mm(10), false);
+            test.StringSpacing.SetSpacing(FingerboardEnd.Nut, 0, Measure.Mm(7));
+            test.StringSpacing.SetSpacing(FingerboardEnd.Bridge, 0, Measure.Mm(10));
             //(test.StringSpacing as StringSpacingSimple).NutSpacingMode = NutSpacingMode.BetweenStrings;
             //test.Strings[6].StartingFret = -2;
             //test.Strings[5].StartingFret = -2;
@@ -111,8 +111,8 @@ namespace SiGen
             //test.Strings[3].NumberOfFrets = 18;
             test.Margins.Edges = Measure.Mm(3.5);
 
-            test.StringSpacing.SetSpacing(0, Measure.Mm(7), true);
-            test.StringSpacing.SetSpacing(0, Measure.Mm(10), false);
+            test.StringSpacing.SetSpacing(FingerboardEnd.Nut, 0, Measure.Mm(7));
+            test.StringSpacing.SetSpacing(FingerboardEnd.Bridge, 0, Measure.Mm(10));
             
             test.RebuildLayout();
             layoutViewer1.CurrentLayout = test;

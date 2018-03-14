@@ -15,6 +15,11 @@ namespace SiGen.StringedInstruments.Layout
         private NutSpacingMode _NutSpacingMode;
         private Measure[] AdjustedNutSlots;
 
+        public override StringSpacingType Type
+        {
+            get { return StringSpacingType.Simple; }
+        }
+
         public Measure StringSpacingAtNut
         {
             get { return _StringSpacingAtNut; }
@@ -84,16 +89,16 @@ namespace SiGen.StringedInstruments.Layout
             AdjustedNutSlots = new Measure[0];
         }
 
-        public override Measure GetSpacing(int index, bool atNut)
+        public override Measure GetSpacing(int index, FingerboardEnd side)
         {
-            if (atNut && NutSpacingMode == NutSpacingMode.BetweenStrings && AdjustedNutSlots.Length > 0)
+            if (side == FingerboardEnd.Nut && NutSpacingMode == NutSpacingMode.BetweenStrings && AdjustedNutSlots.Length > 0)
                 return AdjustedNutSlots[index];
-            return atNut ? StringSpacingAtNut : StringSpacingAtBridge;
+            return side == FingerboardEnd.Nut ? StringSpacingAtNut : StringSpacingAtBridge;
         }
 
-        public override void SetSpacing(int index, Measure value, bool atNut)
+        public override void SetSpacing(FingerboardEnd side, int index, Measure value)
         {
-            if (atNut)
+            if (side == FingerboardEnd.Nut)
                 _StringSpacingAtNut = value;
             else
                 _StringSpacingAtBridge = value;
@@ -102,9 +107,16 @@ namespace SiGen.StringedInstruments.Layout
         public override XElement Serialize(string elemName)
         {
             var elem = base.Serialize(elemName);
+            elem.Add(new XAttribute("NutSpacingMode", NutSpacingMode));
             elem.Add(StringSpacingAtNut.SerializeAsAttribute("StringSpacingAtNut"));
             elem.Add(StringSpacingAtBridge.SerializeAsAttribute("StringSpacingAtBridge"));
             return elem;
+        }
+
+        public override void Deserialize(XElement elem)
+        {
+            base.Deserialize(elem);
+            NutSpacingMode = (NutSpacingMode)Enum.Parse(typeof(NutSpacingMode), elem.Attribute("NutSpacingMode").Value);
         }
 
         public void CalculateNutSlotPositions()

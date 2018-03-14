@@ -68,11 +68,9 @@ namespace SiGen.UI
                 Measure.Inches(0.088),
                 Measure.Inches(0.094)
                 );
-            var spacing = (StringSpacingSimple)layout.StringSpacing;
-            spacing.StringSpacingAtNut = Measure.Mm(7.3);
-            spacing.StringSpacingAtBridge = Measure.Mm(10.5);
-            //spacing.NutSpacingMode = NutSpacingMode.BetweenStrings;
-            spacing.NutAlignment = StringSpacingAlignment.SpacingMiddle;
+
+            layout.SimpleStringSpacing.StringSpacingAtNut = Measure.Mm(7.3);
+            layout.SimpleStringSpacing.StringSpacingAtBridge = Measure.Mm(10.5);
 
             layout.Margins.Edges = Measure.Mm(3.25);
             layout.Margins.LastFret = Measure.Mm(10);
@@ -198,24 +196,23 @@ namespace SiGen.UI
             if (!isLoading && !internalChange && layoutViewer1.CurrentLayout != null)
             {
                 var layout = layoutViewer1.CurrentLayout;
-                if(layout.StringSpacing is StringSpacingSimple)
+                if(layout.StringSpacingMode == StringSpacingType.Simple)
                 {
-                    var spacing = (StringSpacingSimple)layout.StringSpacing;
                     if(sender == meSpacingNut1)
                     {
-                        spacing.StringSpacingAtNut = meSpacingNut1.Value;
+                        layout.SimpleStringSpacing.StringSpacingAtNut = meSpacingNut1.Value;
                     }
                     else if (sender == meSpacingNut2)
                     {
-                        spacing.StringSpreadAtNut = meSpacingNut2.Value;
+                        layout.SimpleStringSpacing.StringSpreadAtNut = meSpacingNut2.Value;
                     }
                     else if (sender == meSpacingBridge1)
                     {
-                        spacing.StringSpacingAtBridge = meSpacingBridge1.Value;
+                        layout.SimpleStringSpacing.StringSpacingAtBridge = meSpacingBridge1.Value;
                     }
                     else if (sender == meSpacingBridge2)
                     {
-                        spacing.StringSpreadAtBridge = meSpacingBridge2.Value;
+                        layout.SimpleStringSpacing.StringSpreadAtBridge = meSpacingBridge2.Value;
                     }
                     FillSpacingValues();
                     RebuildLayoutIfNeeded();
@@ -225,11 +222,11 @@ namespace SiGen.UI
 
         private void FillSpacingValues()
         {
-            var spacing = (StringSpacingSimple)layoutViewer1.CurrentLayout.StringSpacing;
-            SetControlValue(meSpacingNut1, spacing.StringSpacingAtNut);
-            SetControlValue(meSpacingNut2, spacing.StringSpreadAtNut);
-            SetControlValue(meSpacingBridge1, spacing.StringSpacingAtBridge);
-            SetControlValue(meSpacingBridge2, spacing.StringSpreadAtBridge);
+            var layout = layoutViewer1.CurrentLayout;
+            SetControlValue(meSpacingNut1, layout.SimpleStringSpacing.StringSpacingAtNut);
+            SetControlValue(meSpacingNut2, layout.SimpleStringSpacing.StringSpreadAtNut);
+            SetControlValue(meSpacingBridge1, layout.SimpleStringSpacing.StringSpacingAtBridge);
+            SetControlValue(meSpacingBridge2, layout.SimpleStringSpacing.StringSpreadAtBridge);
         }
 
         #endregion
@@ -263,15 +260,7 @@ namespace SiGen.UI
 
         private void button3_Click(object sender, EventArgs e)
         {
-            SvgLayoutExporter.ExportLayout("test.svg", layoutViewer1.CurrentLayout,
-                new LayoutExportOptions()
-                {
-                    ExportStrings = false,
-                    ExportStringCenters = false,
-                    ExtendFretSlots = Measure.Mm(1.5)
-                });
-            //layoutViewer1.CurrentLayout.LeftHanded = !layoutViewer1.CurrentLayout.LeftHanded;
-            //RebuildLayoutIfNeeded();
+
         }
 
         #region Save
@@ -325,7 +314,22 @@ namespace SiGen.UI
 
         private void exportAsSVGToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            using (var sfd = new SaveFileDialog())
+            {
+                sfd.FileName = "layout.svg";
+                sfd.Filter = "Scalable Vector Graphics File (*.svg)|*.svg";
+                sfd.DefaultExt = ".svg";
 
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    SvgLayoutExporter.ExportLayout(sfd.FileName, layoutViewer1.CurrentLayout,
+                        new LayoutExportOptions()
+                        {
+                            ExportStrings = false,
+                            ExportStringCenters = false
+                        });
+                }
+            }
         }
     }
 }

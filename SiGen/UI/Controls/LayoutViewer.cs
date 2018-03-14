@@ -159,9 +159,7 @@ namespace SiGen.UI
             base.OnSizeChanged(e);
 
             if (!manualZoom)
-            {
                 ZoomToFit();
-            }
         }
 
         #endregion
@@ -234,12 +232,11 @@ namespace SiGen.UI
             Measure2,
             Measure3
         }
-
-        private DragEntity DragTarget;
-        private object DraggedObject;
+        
+        private HitTestInfo DragTarget;
         private Dictionary<MouseButtons, Vector> MouseDownPos;
 
-        private bool CanDrag { get { return DragTarget != DragEntity.None; } }
+        private bool CanDrag { get { return DragTarget != null; } }
         private bool IsDragging;
 
         private Vector lastMousePos;
@@ -254,7 +251,7 @@ namespace SiGen.UI
             {
                 if (e.Button == MouseButtons.Middle)
                 {
-                    DragTarget = DragEntity.Camera;
+                    DragTarget = new HitTestInfo();
                     lastMousePos = DisplayToLocal(e.Location);
                 }
                 else if (e.Button == MouseButtons.Left)
@@ -262,8 +259,7 @@ namespace SiGen.UI
                     var hitInfo = HitTest(e.Location);
                     if (hitInfo.Type == LayoutViewerHitTestType.MeasureBox)
                     {
-                        DragTarget = DragEntity.Measure;
-                        DraggedObject = MeasureBoxes[hitInfo.MeasureBoxIndex];
+                        DragTarget = hitInfo;
                         lastMousePos = DisplayToLocal(e.Location);
                     }
                 }
@@ -320,7 +316,7 @@ namespace SiGen.UI
 
         private void PerformDragMove(Vector dragVector)
         {
-            if (DragTarget == DragEntity.Camera)
+            if (DragTarget.Type == LayoutViewerHitTestType.None)
             {
                 IsMovingCamera = true;
                 manualZoom = true;
@@ -328,9 +324,9 @@ namespace SiGen.UI
                 cameraPosition += dragVector / _Zoom;
                 OnCameraChanged(true);
             }
-            else if (DragTarget == DragEntity.Measure)
+            else if (DragTarget.Type == LayoutViewerHitTestType.MeasureBox)
             {
-                var selectedBox = (MeasureValueBox)DraggedObject;
+                var selectedBox = MeasureBoxes[DragTarget.MeasureBoxIndex];
                 selectedBox.LocalOffset += dragVector;
                 selectedBox.NotifyDirty();
                 Invalidate();
@@ -342,8 +338,7 @@ namespace SiGen.UI
             if (CanDrag || IsDragging)
             {
                 lastMousePos = Vector.Empty;
-                DragTarget = DragEntity.None;
-                DraggedObject = null;
+                DragTarget = null;
                 IsDragging = false;
                 IsMovingCamera = false;
                 Invalidate();
@@ -453,6 +448,13 @@ namespace SiGen.UI
                 _MeasureBoxIndex = -1;
                 _ButtonID = -1;
             }
+
+            internal HitTestInfo(LayoutViewerHitTestType type)
+            {
+                _Type = type;
+                _MeasureBoxIndex = -1;
+                _ButtonID = -1;
+            }
         }
 
         public HitTestInfo HitTest(Point pt)
@@ -469,6 +471,15 @@ namespace SiGen.UI
                 }
             }
             return hitInfo;
+        }
+
+        #endregion
+
+        #region Keyboard Handling
+
+        protected override void OnKeyPress(KeyPressEventArgs e)
+        {
+            base.OnKeyPress(e);
         }
 
         #endregion

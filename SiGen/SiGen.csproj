@@ -89,6 +89,7 @@
     <Compile Include="StringedInstruments\Layout\SIString.cs" />
     <Compile Include="StringedInstruments\Layout\ScaleLength\LengthFunction.cs" />
     <Compile Include="StringedInstruments\Layout\SILayout.cs" />
+    <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingType.cs" />
     <Compile Include="StringedInstruments\Layout\StringSpacing\NutSpacingMode.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FingerboardEdge.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FretLine.cs" />
@@ -150,6 +151,12 @@
     <Compile Include="UI\Windows\LayoutExportDialog.Designer.cs">
       <DependentUpon>LayoutExportDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Windows\LayoutViewerDisplayConfigWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Windows\LayoutViewerDisplayConfigWindow.Designer.cs">
+      <DependentUpon>LayoutViewerDisplayConfigWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\ArrayProperty.cs" />
     <Compile Include="Utilities\ExtensionMethods\CollectionHelper.cs" />
     <Compile Include="Utilities\MeasureConverter.cs" />
@@ -184,6 +191,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\LayoutExportDialog.resx">
       <DependentUpon>LayoutExportDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Windows\LayoutViewerDisplayConfigWindow.resx">
+      <DependentUpon>LayoutViewerDisplayConfigWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

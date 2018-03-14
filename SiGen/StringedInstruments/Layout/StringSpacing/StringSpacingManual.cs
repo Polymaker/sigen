@@ -12,6 +12,11 @@ namespace SiGen.StringedInstruments.Layout
         private Measure[] _NutSpacing;
         private Measure[] _BridgeSpacing;
 
+        public override StringSpacingType Type
+        {
+            get { return StringSpacingType.Manual; }
+        }
+
         public Measure[] NutSpacing { get { return _NutSpacing; } }
         public Measure[] BridgeSpacing { get { return _BridgeSpacing; } }
 
@@ -49,14 +54,14 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
-        public override Measure GetSpacing(int index, bool atNut)
+        public override Measure GetSpacing(int index, FingerboardEnd end)
         {
-            return atNut ? _NutSpacing[index] : _BridgeSpacing[index];
+            return end == FingerboardEnd.Nut ? _NutSpacing[index] : _BridgeSpacing[index];
         }
 
-        public override void SetSpacing(int index, Measure value, bool atNut)
+        public override void SetSpacing(FingerboardEnd end, int index, Measure value)
         {
-            if (atNut)
+            if (end == FingerboardEnd.Nut)
                 _NutSpacing[index] = value;
             else
                 _BridgeSpacing[index] = value;

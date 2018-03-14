@@ -22,7 +22,7 @@ namespace SiGen.StringedInstruments.Layout
         public LayoutComponent(SILayout layout)
         {
             _Layout = layout;
-            _Layout._Component.Add(this);
+            _Layout._Components.Add(this);
         }
 
         ~LayoutComponent()
@@ -34,7 +34,7 @@ namespace SiGen.StringedInstruments.Layout
         public void Dispose()
         {
             isDisposed = true;
-            _Layout._Component.Remove(this);
+            _Layout._Components.Remove(this);
             _Layout = null;
         }
 

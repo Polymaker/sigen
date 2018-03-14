@@ -17,15 +17,18 @@ namespace SiGen.StringedInstruments.Layout
     {
         #region Fields
 
-        internal List<LayoutComponent> _Component;
+        internal List<LayoutComponent> _Components;
         private Temperament _FretsTemperament;
         private bool _LeftHanded;
         private int _NumberOfStrings;
         private SIString[] _Strings;
         private bool _CompensateFretPositions;
-        private StringSpacingManager _StringSpacing;
-        private ScaleLengthType _ScaleLengthMode;
+        
         private FingerboardMargin _Margins;
+        private StringSpacingType _StringSpacingMode;
+        private StringSpacingSimple _SimpleStringSpacing;
+        private StringSpacingManual _ManualStringSpacing;
+        private ScaleLengthType _ScaleLengthMode;
         private ScaleLengthManager.SingleScale _SingleScaleMgr;
         private ScaleLengthManager.MultiScale _MultiScaleMgr;
         private ScaleLengthManager.Individual _ManualScaleMgr;
@@ -53,7 +56,7 @@ namespace SiGen.StringedInstruments.Layout
 
         public string LayoutName { get; set; }
 
-        #region Scale length management
+        #region Scale Length Management
 
         public ScaleLengthType ScaleLengthMode
         {
@@ -104,6 +107,48 @@ namespace SiGen.StringedInstruments.Layout
 
         #endregion
 
+        #region String Spacing Management
+
+        public StringSpacingType StringSpacingMode
+        {
+            get { return _StringSpacingMode; }
+            set
+            {
+                if (value != _StringSpacingMode)
+                {
+                    _StringSpacingMode = value;
+                    NotifyLayoutChanged(this, "StringSpacingMode");
+                }
+            }
+        }
+
+        public StringSpacingManager StringSpacing
+        {
+            get
+            {
+                switch (StringSpacingMode)
+                {
+                    default:
+                    case StringSpacingType.Simple:
+                        return _SimpleStringSpacing;
+                    case StringSpacingType.Manual:
+                        return _ManualStringSpacing;
+                }
+            }
+        }
+
+        public StringSpacingSimple SimpleStringSpacing
+        {
+            get { return _SimpleStringSpacing; }
+        }
+
+        public StringSpacingManual ManualStringSpacing
+        {
+            get { return _ManualStringSpacing; }
+        }
+
+        #endregion
+
         public FingerboardMargin Margins { get { return _Margins; } }
 
         public Temperament FretsTemperament
@@ -115,21 +160,7 @@ namespace SiGen.StringedInstruments.Layout
                 {
                     _FretsTemperament = value;
                     AdjustStringsTuning();
-                    //AdjustStringsTuning();
                     NotifyLayoutChanged(this, "FretsTemperament");
-                }
-            }
-        }
-
-        public StringSpacingManager StringSpacing
-        {
-            get { return _StringSpacing; }
-            set
-            {
-                if (value != _StringSpacing)
-                {
-                    _StringSpacing = value;
-                    NotifyLayoutChanged(this, "StringSpacing");
                 }
             }
         }
@@ -167,14 +198,17 @@ namespace SiGen.StringedInstruments.Layout
         #region Events
 
         public event EventHandler LayoutUpdated;
+        public event EventHandler NumberOfStringsChanged;
 
         #endregion
 
         public SILayout()
         {
-            _Component = new List<LayoutComponent>();
+            _Components = new List<LayoutComponent>();
             _Margins = new FingerboardMargin(this);
-            _StringSpacing = new StringSpacingSimple(this);
+            _StringSpacingMode = StringSpacingType.Simple;
+            _SimpleStringSpacing = new StringSpacingSimple(this);
+            _ManualStringSpacing = new StringSpacingManual(this);
             _SingleScaleMgr = new ScaleLengthManager.SingleScale(this);
             _MultiScaleMgr = new ScaleLengthManager.MultiScale(this);
             _ManualScaleMgr = new ScaleLengthManager.Individual(this);
@@ -191,6 +225,7 @@ namespace SiGen.StringedInstruments.Layout
                 return;
             if (newValue == 1)
                 _ScaleLengthMode = ScaleLengthType.Single;
+
             _NumberOfStrings = newValue;
             var oldStrings = _Strings;
             _Strings = new SIString[NumberOfStrings];
@@ -212,7 +247,7 @@ namespace SiGen.StringedInstruments.Layout
                 }
             }
 
-            foreach (var comp in _Component)
+            foreach (var comp in _Components)
                 (comp as ILayoutComponent).OnStringConfigurationChanged();
 
             if (CompensateFretPositions && !Strings.All(s => s.CanCalculateCompensation))
@@ -220,6 +255,15 @@ namespace SiGen.StringedInstruments.Layout
 
             NotifyLayoutChanged(this, "Strings");
 
+            if (oldStrings != null)
+                OnNumberOfStringsChanged();
+        }
+
+        protected void OnNumberOfStringsChanged()
+        {
+            var handler = NumberOfStringsChanged;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         public void SetStringsTuning(params MusicalNote[] tunings)
@@ -283,26 +327,6 @@ namespace SiGen.StringedInstruments.Layout
                 isLayoutDirty = true;
         }
 
-        //public bool VerifyFretboardHasStraightFrets()
-        //{
-        //    if (FretsTemperament != Temperament.Equal || _CompensateFretPositions)
-        //        return false;
-
-        //    if (!Strings.AllEqual(s => s.RelativeScaleLengthOffset))
-        //        return false;
-        //    if (Strings.Length > 2 && !Strings.AllEqual(s => s.ScaleLength))
-        //    {
-        //        var diff = Measure.Abs(Strings[0].ScaleLength - Strings[1].ScaleLength);
-        //        for (int i = 1; i < NumberOfStrings - 1; i++)
-        //        {
-        //            var scaleDiff = Measure.Abs(Strings[i].ScaleLength - Strings[i + 1].ScaleLength);
-        //            if (!Measure.EqualOrClose(diff, scaleDiff, Measure.Mm(0.0001)))
-        //                return false;
-        //        }
-        //    }
-        //    return true;
-        //}
-
         public RectangleM GetBounds()
         {
             if (VisualElements.Count == 0)
@@ -349,9 +373,13 @@ namespace SiGen.StringedInstruments.Layout
             if (!string.IsNullOrEmpty(LayoutName))
                 root.Add(new XAttribute("Name", LayoutName));
 
+            root.Add(new XComment("Temperaments: " + Enum.GetNames(typeof(Temperament)).Aggregate((i, j) => i + ", " + j)));
             root.Add(SerializeProperty("Temperament", FretsTemperament));
+            
             root.Add(SerializeProperty("LeftHanded", LeftHanded));
             root.Add(SerializeProperty("FretCompensation", CompensateFretPositions));
+
+            root.Add(new XComment("LengthFunctions: " + Enum.GetNames(typeof(LengthFunction)).Aggregate((i, j) => i + ", " + j)));
             root.Add(CurrentScaleLength.Serialize("ScaleLength"));
             root.Add(Margins.Serialize("FingerboardMargins"));
 
@@ -362,8 +390,15 @@ namespace SiGen.StringedInstruments.Layout
                 //stringsElem.Add(Strings[i].Serialize(ScaleLengthMode == ScaleLengthType.Individual));
             }
             root.Add(stringsElem);
+
             if(NumberOfStrings > 1)
+            {
+                root.Add(new XComment(string.Format("StringSpacingAlignment: {0}",
+                    Enum.GetNames(typeof(StringSpacingAlignment)).Aggregate((i, j) => i + ", " + j)
+                    )
+                ));
                 root.Add(StringSpacing.Serialize("StringSpacings"));
+            }
 
             var doc = new XDocument(root);
             doc.Save(stream);
@@ -401,6 +436,12 @@ namespace SiGen.StringedInstruments.Layout
 
             if (root.ContainsElement("FretCompensation"))
                 layout.CompensateFretPositions = DeserializeProperty<bool>(root.Element("FretCompensation"));
+
+            if (root.ContainsElement("StringSpacings"))
+            {
+                layout.StringSpacingMode = DeserializeProperty<StringSpacingType>(root.Element("StringSpacings").Attribute("Type"));
+                layout.StringSpacing.Deserialize(root.Element("StringSpacings"));
+            }
 
             layout.isLoading = false;
             layout.isLayoutDirty = true;

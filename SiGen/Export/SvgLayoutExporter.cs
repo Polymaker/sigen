@@ -19,11 +19,12 @@ namespace SiGen.Export
         {
             var svgDoc = new SvgDocument();
             var layoutBounds = layout.GetBounds();
-            svgDoc.ViewBox = new SvgViewBox(0, 0, (float)layoutBounds.Width.NormalizedValue, (float)layoutBounds.Height.NormalizedValue);
-
-            svgDoc.Width = new SvgUnit(SvgUnitType.Centimeter, svgDoc.ViewBox.Width);
-            svgDoc.Height = new SvgUnit(SvgUnitType.Centimeter, svgDoc.ViewBox.Height);
-            var ppi = svgDoc.Ppi;
+            //svgDoc.ViewBox = new SvgViewBox(0, 0, (float)layoutBounds.Width.NormalizedValue, (float)layoutBounds.Height.NormalizedValue);
+            svgDoc.X = new SvgUnit(0);
+            svgDoc.Y = new SvgUnit(0);
+            svgDoc.Width = new SvgUnit(SvgUnitType.Centimeter, (float)layoutBounds.Width.NormalizedValue);
+            svgDoc.Height = new SvgUnit(SvgUnitType.Centimeter, (float)layoutBounds.Height.NormalizedValue);
+            //var ppi = svgDoc.Ppi;
 
             var centerOffset = new PointM(layoutBounds.Location.X * -1, layoutBounds.Location.Y);
 
@@ -151,10 +152,10 @@ namespace SiGen.Export
         {
             var svgLine = new SvgLine()
             {
-                StartX = new SvgUnit((float)(p1.X + offset.X).NormalizedValue),
-                StartY = new SvgUnit((float)(p1.Y * -1 + offset.Y).NormalizedValue),
-                EndX = new SvgUnit((float)(p2.X + offset.X).NormalizedValue),
-                EndY = new SvgUnit((float)(p2.Y * -1 + offset.Y).NormalizedValue),
+                StartX = GetScaledUnit((p1.X + offset.X)),
+                StartY = GetScaledUnit((p1.Y * -1 + offset.Y)),
+                EndX = GetScaledUnit((p2.X + offset.X)),
+                EndY = GetScaledUnit((p2.Y * -1 + offset.Y)),
                 StrokeWidth = stroke,
                 Stroke = new SvgColourServer(color)
             };
@@ -170,16 +171,16 @@ namespace SiGen.Export
 
         private static SvgUnit GetScaledUnit(double value, SvgUnitType type)
         {
-            if (type == SvgUnitType.Pixel)
-                return new SvgUnit((float)value / 35.43307365614753f);
-            else if (type == SvgUnitType.Point)
-                return new SvgUnit((float)value / 28.34645490730993f);
-            return new SvgUnit((float)value);
+            //if (type == SvgUnitType.Pixel)
+            //    return new SvgUnit((float)value / 35.43307365614753f);
+            //else if (type == SvgUnitType.Point)
+            //    return new SvgUnit((float)value / 28.34645490730993f);
+            return new SvgUnit(type, (float)value);
         }
 
         private static SvgUnit GetScaledUnit(Measure value)
         {
-            return new SvgUnit((float)value.NormalizedValue);
+            return new SvgUnit((float)value.NormalizedValue * 35.43307365614753f);
         }
 
         private class SvgPolylineSegment : SvgPathSegment

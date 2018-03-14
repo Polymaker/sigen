@@ -22,8 +22,6 @@ namespace SiGen.UI
             {
                 Viewer = owner;
             }
-
-
         }
 
         public enum MeasureType
@@ -336,7 +334,7 @@ namespace SiGen.UI
             MeasureBoxes.Add(CreateLengthMeasureBox(_CurrentMeasure, LengthType.Width));
             MeasureBoxes.Add(CreateLengthMeasureBox(_CurrentMeasure, LengthType.Height));
             //MeasureBoxes.Add(CreateAngleMeasureBox(_CurrentMeasure));
-            CreateAngleMeasureBox2(_CurrentMeasure);
+            //CreateAngleMeasureBox2(_CurrentMeasure);
             MeasureBoxes.RemoveAll(m => m == null);
 
             Invalidate();
@@ -591,61 +589,72 @@ namespace SiGen.UI
                 LayoutIntersections = LayoutIntersections.Distinct().ToList();
             }
         }
+        private FloatingTextBox measureEditor;
 
         private void ShowMeasureTextbox(MeasureValueBox box)
         {
-            var boxBounds = GetMeasureBoxBounds(box);
-            var popupForm = new Form()
-            {
-                FormBorderStyle = FormBorderStyle.None,
-                StartPosition = FormStartPosition.Manual,
-                Padding = Padding.Empty,
-                ShowInTaskbar = false
-            };
+            if (measureEditor == null)
+                measureEditor = new FloatingTextBox(this);
 
-            var valueTextbox = new Controls.TextBoxEx()
-            {
-                ReadOnly = true,
-                BackColor = SystemColors.Window,
-                Text = box.GetEditValue(),
-                BorderStyle = BorderStyle.None,
-                Font = Font,
-                TextAlign = HorizontalAlignment.Center
-            };
+            measureEditor.Font = Font;
 
-            popupForm.Controls.Add(valueTextbox);
-            valueTextbox.Location = new Point(0, 0);
-            valueTextbox.Width = (int)(boxBounds.Width - 2);
+            var boxBounds = box.DisplayBounds;
 
-            var finalSize = new Size(valueTextbox.Width, valueTextbox.PreferredHeight);
-            var screenPos = PointToScreen(new Point((int)boxBounds.X, (int)boxBounds.Y));
+            var finalSize = new Size(boxBounds.Width - 2, measureEditor.textbox.PreferredHeight);
+            var screenPos = PointToScreen(boxBounds.Location);
+
             screenPos.Y += (int)Math.Round((boxBounds.Height - (double)finalSize.Height) / 2d);
             screenPos.X += (int)Math.Round((boxBounds.Width - (double)finalSize.Width) / 2d);
-            
-            popupForm.Location = screenPos;
-            popupForm.Show(this);
-            
-            popupForm.Size = finalSize;
-            valueTextbox.Focus();
 
-            popupForm.Deactivate += PopupForm_Deactivate;
-            valueTextbox.Validated += PopupForm_Deactivate;
-            valueTextbox.CommandKeyPressed += ValueTextbox_CommandKeyPressed;
+            measureEditor.ShowAt(new Rectangle(screenPos, finalSize), box.GetEditValue());
         }
 
-        private void ValueTextbox_CommandKeyPressed(object sender, KeyEventArgs e)
+        private class FloatingTextBox : Form
         {
-            if (e.KeyCode == Keys.Escape)
-                PopupForm_Deactivate(sender, EventArgs.Empty);
-        }
+            internal Controls.TextBoxEx textbox;
+            private LayoutViewer owner;
 
-        private void PopupForm_Deactivate(object sender, EventArgs e)
-        {
-            if (sender is Form)
-                (sender as Form).Close();
-            else if (sender is Control)
-                (sender as Control).FindForm().Close();
-        }
+            public FloatingTextBox(LayoutViewer viewer)
+            {
+                owner = viewer;
+                FormBorderStyle = FormBorderStyle.None;
+                StartPosition = FormStartPosition.Manual;
+                Padding = Padding.Empty;
+                ShowInTaskbar = false;
+                textbox = new Controls.TextBoxEx()
+                {
+                    ReadOnly = true,
+                    BackColor = SystemColors.Window,
+                    BorderStyle = BorderStyle.None,
+                    TextAlign = HorizontalAlignment.Center
+                };
+                
+                Controls.Add(textbox);
+                textbox.CommandKeyPressed += Textbox_CommandKeyPressed;
+                Deactivate += FloatingTextBox_Deactivate;
+                textbox.LostFocus += FloatingTextBox_Deactivate;
+            }
 
+            private void FloatingTextBox_Deactivate(object sender, EventArgs e)
+            {
+                Hide();
+            }
+
+            private void Textbox_CommandKeyPressed(object sender, KeyEventArgs e)
+            {
+                if (e.KeyCode == Keys.Escape || e.KeyCode == Keys.Tab)
+                    Hide();
+            }
+
+            public void ShowAt(Rectangle bounds, string value)
+            {
+                textbox.Text = value;
+                Location = bounds.Location;
+                Show();
+                Size = bounds.Size;
+                textbox.Width = bounds.Width;
+                textbox.Focus();
+            }
+        }
     }
 }

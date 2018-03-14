@@ -277,33 +277,60 @@ namespace SiGen.StringedInstruments.Layout.Visual
             var intersection = PointM.Empty;
             if(Points.Count == 2)
             {
-                IntersectSegmentWithLine(other.Equation, 0, 1, out intersection);
+                IntersectSegmentWithLine(other.Equation, 0, 1, out intersection, SegmentHitBounds.Any);
             }
             else
             {
                 for (int i = 0; i < Points.Count - 1; i++)
                 {
-                    if (IntersectSegmentWithLine(other.Equation, i, i + 1, out intersection))
+                    var hitFlags = (i == 0 ? SegmentHitBounds.AllowLeft : (i == Points.Count - 2 ? SegmentHitBounds.AllowRight : SegmentHitBounds.InBounds));
+                    if (IntersectSegmentWithLine(other.Equation, i, i + 1, out intersection, hitFlags))
                         return intersection;
                 }
             }
             return intersection;
         }
 
-        private bool IntersectSegmentWithLine(Line line, int idx1, int idx2, out PointM inter)
+        //private bool IntersectSegmentWithLine(Line line, int idx1, int idx2, out PointM inter)
+        //{
+        //    var segLine = Line.FromPoints(Points[idx1].ToVector(), Points[idx2].ToVector());
+        //    Vector virtualInter;
+        //    inter = PointM.Empty;
+        //    if (segLine.Intersect(line, out virtualInter))
+        //    {
+        //        if(virtualInter.X >= Points[idx1].X.NormalizedValue && virtualInter.X <= Points[idx2].X.NormalizedValue)
+        //        {
+        //            inter = PointM.FromVector(virtualInter, UnitOfMeasure.Centimeters);
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
+
+        private bool IntersectSegmentWithLine(Line line, int idx1, int idx2, out PointM inter, SegmentHitBounds flags)
         {
             var segLine = Line.FromPoints(Points[idx1].ToVector(), Points[idx2].ToVector());
             Vector virtualInter;
             inter = PointM.Empty;
             if (segLine.Intersect(line, out virtualInter))
             {
-                if(virtualInter.X >= Points[idx1].X.NormalizedValue && virtualInter.X <= Points[idx2].X.NormalizedValue)
+                if ((virtualInter.X >= Points[idx1].X.NormalizedValue || flags.HasFlag(SegmentHitBounds.AllowLeft)) && 
+                    (virtualInter.X <= Points[idx2].X.NormalizedValue || flags.HasFlag(SegmentHitBounds.AllowRight)))
                 {
                     inter = PointM.FromVector(virtualInter, UnitOfMeasure.Centimeters);
                     return true;
                 }
             }
             return false;
+        }
+
+        [Flags]
+        private enum SegmentHitBounds
+        {
+            InBounds = 0,
+            AllowLeft = 1,
+            AllowRight = 2,
+            Any = 4
         }
 
         internal override void FlipHandedness()

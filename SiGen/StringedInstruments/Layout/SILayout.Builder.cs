@@ -25,17 +25,15 @@ namespace SiGen.StringedInstruments.Layout
 
             Measure nutCenter = Measure.Zero;
             Measure bridgeCenter = Measure.Zero;
-            Measure[] nutStringPos = StringSpacing.GetStringPositions(true, out nutCenter);
-            Measure[] bridgeStringPos = StringSpacing.GetStringPositions(false, out bridgeCenter);
+            Measure[] nutStringPos = StringSpacing.GetStringPositions(FingerboardEnd.Nut, out nutCenter);
+            Measure[] bridgeStringPos = StringSpacing.GetStringPositions(FingerboardEnd.Bridge, out bridgeCenter);
 
             LayoutStrings(nutStringPos, bridgeStringPos);
             CreateFingerboardEdges();
             PlaceFrets();
             FinishFingerboardShape();
             if (LeftHanded)
-            {
                 VisualElements.ForEach(e => e.FlipHandedness());
-            }
             isLayoutDirty = false;
             OnLayoutUpdated();
         }
@@ -227,7 +225,8 @@ namespace SiGen.StringedInstruments.Layout
             var trebleNutFret = VisualElements.OfType<FretLine>().First(f => f.IsNut && f.Strings.Contains(FirstString));
             var bassNutFret = VisualElements.OfType<FretLine>().First(f => f.IsNut && f.Strings.Contains(LastString));
 
-            if (!Strings.AllEqual(s => s.StartingFret) || !Strings.AllEqual(s => s.NumberOfFrets))
+            //create inward fingerboard edges from nut
+            if (!Strings.AllEqual(s => s.StartingFret))
             {
                 foreach (var str in Strings)
                 {
@@ -239,17 +238,13 @@ namespace SiGen.StringedInstruments.Layout
                 }
             }
 
-            if (trebleNutFret.IsStraight)
-            {
-                var tmpLine = new LayoutLine(trebleNutFret.Points[0], trebleNutFret.Points[1]);
-                trebleSideEdge.P1 = trebleSideEdge.GetIntersection(tmpLine);
-            }
+            var trebSideNutInter = trebleNutFret.GetIntersection(trebleSideEdge);
+            if (!trebSideNutInter.IsEmpty)
+                trebleSideEdge.P1 = trebSideNutInter;
 
-            if (bassNutFret.IsStraight)
-            {
-                var tmpLine = new LayoutLine(bassNutFret.Points[0], bassNutFret.Points[1]);
-                bassSideEdge.P1 = bassSideEdge.GetIntersection(tmpLine);
-            }
+            var bassSideNutInter = bassNutFret.GetIntersection(bassSideEdge);
+            if (!bassSideNutInter.IsEmpty)
+                bassSideEdge.P1 = bassSideNutInter;
 
             var trebleLastFret = VisualElements.OfType<FretLine>().First(f => f.FretIndex == FirstString.NumberOfFrets && f.Strings.Contains(FirstString));
             var bassLastFret = VisualElements.OfType<FretLine>().First(f => f.FretIndex == LastString.NumberOfFrets && f.Strings.Contains(LastString));
@@ -261,7 +256,6 @@ namespace SiGen.StringedInstruments.Layout
             {
                 trebleEndPoint += trebleSideEdge.Direction * Margins.LastFret;
                 bassEndPoint += bassSideEdge.Direction * Margins.LastFret;
-
             }
 
             var virtualTrebleEdge = AddVisualElement(new LayoutLine(trebleEndPoint, trebleSideEdge.P2, VisualElementType.GuideLine));
@@ -285,15 +279,15 @@ namespace SiGen.StringedInstruments.Layout
                     var bassSide = GetStringBoundaryLine(Strings[i], FingerboardSide.Bass);
                     var pt1 = strLastFret.GetIntersection(bassSide);
                     var pt2 = strLastFret.GetIntersection(trebleSide);
+
                     if (pt1.IsEmpty)
                         pt1 = strLastFret.Points.First();
                     if (pt2.IsEmpty)
                         pt2 = strLastFret.Points.Last();
-                    //if (!Margins.LastFret.IsEmpty)
-                    //{
+
                     pt1 += bassSide.Direction * Margins.LastFret;
                     pt2 += trebleSide.Direction * Margins.LastFret;
-                    //}
+
                     edgePoints.Add(pt1);
                     edgePoints.Add(pt2);
                 }

@@ -13,6 +13,8 @@ namespace SiGen.StringedInstruments.Layout
         private StringSpacingAlignment _BridgeAlignment;
         private StringSpacingAlignment _NutAlignment;
 
+        public abstract StringSpacingType Type { get; }
+
         public StringSpacingAlignment BridgeAlignment
         {
             get { return _BridgeAlignment; }
@@ -41,34 +43,34 @@ namespace SiGen.StringedInstruments.Layout
 
         public virtual Measure StringSpreadAtBridge
         {
-            get { return GetSpacingBetweenStrings(0, Layout.NumberOfStrings - 1, false); }
+            get { return GetSpacingBetweenStrings(0, Layout.NumberOfStrings - 1,  FingerboardEnd.Bridge); }
         }
 
         public virtual Measure StringSpreadAtNut
         {
-            get { return GetSpacingBetweenStrings(0, Layout.NumberOfStrings - 1, true); }
+            get { return GetSpacingBetweenStrings(0, Layout.NumberOfStrings - 1, FingerboardEnd.Nut); }
         }
 
         public StringSpacingManager(SILayout layout) : base(layout)
         {
         }
 
-        public Measure GetSpacingBetweenStrings(int index1, int index2, bool atNut)
+        public Measure GetSpacingBetweenStrings(int index1, int index2, FingerboardEnd side)
         {
             if (index1 == index2)
                 return Measure.Zero;
 
             Measure total = Measure.Zero;
             for (int i = Math.Min(index1, index2); i < Math.Max(index1, index2); i++)
-                total += GetSpacing(i, atNut);
+                total += GetSpacing(i, side);
             return total;
         }
 
-        public abstract Measure GetSpacing(int index, bool atNut);
+        public abstract Measure GetSpacing(int index, FingerboardEnd side);
 
-        public abstract void SetSpacing(int index, Measure value, bool atNut);
+        public abstract void SetSpacing(FingerboardEnd side, int index, Measure value);
 
-        public Measure[] GetStringPositions(bool atNut, out Measure center)
+        public Measure[] GetStringPositions(FingerboardEnd side, out Measure center)
         {
             var stringPos = new Measure[NumberOfStrings];
             for (int i = 0; i < NumberOfStrings; i++)
@@ -76,10 +78,10 @@ namespace SiGen.StringedInstruments.Layout
                 if (i == 0)
                     stringPos[i] = Measure.Zero;
                 else
-                    stringPos[i] = stringPos[i - 1] + GetSpacingBetweenStrings(i - 1, i, atNut);
+                    stringPos[i] = stringPos[i - 1] + GetSpacingBetweenStrings(i - 1, i, side);
             }
-            if ((atNut ? NutAlignment : BridgeAlignment) == StringSpacingAlignment.SpacingMiddle)
-                center = (atNut ? StringSpreadAtNut : StringSpreadAtBridge) / 2d;
+            if ((side == FingerboardEnd.Nut ? NutAlignment : BridgeAlignment) == StringSpacingAlignment.SpacingMiddle)
+                center = (side == FingerboardEnd.Nut ? StringSpreadAtNut : StringSpreadAtBridge) / 2d;
             else if (NumberOfStrings % 2 == 1)//odd number of strings
                 center = stringPos[(NumberOfStrings - 1) / 2];
             else//even number of strings
@@ -104,8 +106,8 @@ namespace SiGen.StringedInstruments.Layout
             var newSpacing = new StringSpacingManual(Layout);
             for (int i = 0; i < Layout.NumberOfStrings - 1; i++)
             {
-                newSpacing.SetSpacing(i, GetSpacing(i, true), true);
-                newSpacing.SetSpacing(i, GetSpacing(i, false), false);
+                newSpacing.SetSpacing(FingerboardEnd.Nut, i, GetSpacing(i, FingerboardEnd.Nut));
+                newSpacing.SetSpacing(FingerboardEnd.Bridge, i, GetSpacing(i, FingerboardEnd.Bridge));
             }
             return newSpacing;
         }
@@ -115,15 +117,18 @@ namespace SiGen.StringedInstruments.Layout
             if (this is StringSpacingSimple)
                 return (StringSpacingSimple)this;
             var newSpacing = new StringSpacingSimple(Layout);
-            newSpacing.StringSpacingAtNut = StringSpreadAtNut / (Layout.NumberOfStrings - 1);
-            newSpacing.StringSpreadAtBridge = StringSpreadAtBridge / (Layout.NumberOfStrings - 1);
+            if(Layout.NumberOfStrings > 1)
+            {
+                newSpacing.StringSpacingAtNut = StringSpreadAtNut / (Layout.NumberOfStrings - 1);
+                newSpacing.StringSpreadAtBridge = StringSpreadAtBridge / (Layout.NumberOfStrings - 1);
+            }
             return newSpacing;
         }
 
         public virtual XElement Serialize(string elemName)
         {
             var elem = new XElement(elemName,
-                new XAttribute("Mode", (this is StringSpacingSimple) ? "Auto" : "Manual"),
+                new XAttribute("Mode", (this is StringSpacingSimple) ? "Simple" : "Manual"),
                 new XAttribute("NutAlignment", NutAlignment),
                 StringSpreadAtNut.SerializeAsAttribute("StringSpreadAtNut"),
                 new XAttribute("BridgeAlignment", BridgeAlignment),
@@ -131,18 +136,20 @@ namespace SiGen.StringedInstruments.Layout
             for (int i = 0; i < NumberOfStrings - 1; i++)
                 elem.Add(new XElement("Spacing", 
                     new XAttribute("Index", i), 
-                    GetSpacing(i, true).SerializeAsAttribute("Nut"),
-                    GetSpacing(i, false).SerializeAsAttribute("Bridge")));
+                    GetSpacing(i, FingerboardEnd.Nut).SerializeAsAttribute("Nut"),
+                    GetSpacing(i, FingerboardEnd.Bridge).SerializeAsAttribute("Bridge")));
             return elem;
         }
 
-        public static StringSpacingManager Parse(XElement elem)
+        public virtual void Deserialize(XElement elem)
         {
-            if(elem.Attribute("Mode").Value == "Auto")
+            NutAlignment = (StringSpacingAlignment)Enum.Parse(typeof(StringSpacingAlignment), elem.Attribute("NutAlignment").Value);
+            BridgeAlignment = (StringSpacingAlignment)Enum.Parse(typeof(StringSpacingAlignment), elem.Attribute("BridgeAlignment").Value);
+            foreach(var spacingElem in elem.Elements("Spacing"))
             {
-
+                SetSpacing(FingerboardEnd.Nut, spacingElem.GetIntAttribute("Index"), Measure.TryParse(spacingElem.Attribute("Nut").Value, Measure.Zero));
+                SetSpacing(FingerboardEnd.Bridge, spacingElem.GetIntAttribute("Index"), Measure.TryParse(spacingElem.Attribute("Bridge").Value, Measure.Zero));
             }
-            return null;
         }
     }
 }
