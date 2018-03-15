@@ -153,7 +153,7 @@ namespace SiGen.StringedInstruments.Layout
                 boundary = VisualElements.OfType<StringCenter>().FirstOrDefault(c => c.Left.Index == str.Index);
 
             if (boundary == null)
-                return VisualElements.OfType<FingerboardSideEdge>().First(e => e.IsAtSideOf(dir, null));
+                return VisualElements.OfType<FingerboardSideEdge>().First(e => e.Side == dir);
 
             return boundary;
         }

@@ -78,9 +78,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringedInstruments\Data\StringProperties.cs" />
     <Compile Include="StringedInstruments\Data\StringTuning.cs" />
-    <Compile Include="StringedInstruments\Layout\FingerboardEnd.cs" />
-    <Compile Include="StringedInstruments\Layout\FingerboardMargin.cs" />
-    <Compile Include="StringedInstruments\Layout\FingerboardSide.cs" />
+    <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardEnd.cs" />
+    <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardMargin.cs" />
+    <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardSide.cs" />
     <Compile Include="StringedInstruments\Layout\ILayoutComponent.cs" />
     <Compile Include="StringedInstruments\Layout\LayoutComponent.cs" />
     <Compile Include="StringedInstruments\Layout\ScaleLength\ScaleLengthManager.cs" />

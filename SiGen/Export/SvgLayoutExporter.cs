@@ -14,6 +14,7 @@ namespace SiGen.Export
 {
     public static class SvgLayoutExporter
     {
+        private const double CmToPixel = 35.43307365614753d;
 
         public static void ExportLayout(string filename, SILayout layout, LayoutExportOptions options)
         {
@@ -24,14 +25,11 @@ namespace SiGen.Export
             svgDoc.Y = new SvgUnit(0);
             svgDoc.Width = new SvgUnit(SvgUnitType.Centimeter, (float)layoutBounds.Width.NormalizedValue);
             svgDoc.Height = new SvgUnit(SvgUnitType.Centimeter, (float)layoutBounds.Height.NormalizedValue);
-            //var ppi = svgDoc.Ppi;
 
             var centerOffset = new PointM(layoutBounds.Location.X * -1, layoutBounds.Location.Y);
 
-
             var guideLinesGroup = new SvgGroup() { ID = "Layout" };
-            svgDoc.Children.Add(guideLinesGroup);
-
+            
             var dashPattern = new SvgUnitCollection();
             dashPattern.Add(GetScaledUnit(6, SvgUnitType.Point));
             dashPattern.Add(GetScaledUnit(4, SvgUnitType.Point));
@@ -72,8 +70,10 @@ namespace SiGen.Export
                 }
             }
 
-            //Fingerboard
+            if (guideLinesGroup.Children.Count > 0)
+                svgDoc.Children.Add(guideLinesGroup);
 
+            //Fingerboard
             var fingerboardGroup = new SvgGroup() { ID = "Fingerboard" };
             svgDoc.Children.Add(fingerboardGroup);
 
@@ -117,13 +117,12 @@ namespace SiGen.Export
             }
 
             //Strings
-
-            var stringsGroup = new SvgGroup() { ID = "Strings" };
-            svgDoc.Children.Add(stringsGroup);
-
             if (options.ExportStrings)
             {
-                foreach(var stringLine in layout.VisualElements.OfType<StringLine>().OrderBy(sl=>sl.Index))
+                var stringsGroup = new SvgGroup() { ID = "Strings" };
+                svgDoc.Children.Add(stringsGroup);
+
+                foreach (var stringLine in layout.VisualElements.OfType<StringLine>().OrderBy(sl=>sl.Index))
                 {
                     var svgLine = CreateLine(stringsGroup, stringLine, centerOffset, 
                         options.UseStringGauge && !stringLine.String.Gauge.IsEmpty ? 
@@ -152,10 +151,10 @@ namespace SiGen.Export
         {
             var svgLine = new SvgLine()
             {
-                StartX = GetScaledUnit((p1.X + offset.X)),
-                StartY = GetScaledUnit((p1.Y * -1 + offset.Y)),
-                EndX = GetScaledUnit((p2.X + offset.X)),
-                EndY = GetScaledUnit((p2.Y * -1 + offset.Y)),
+                StartX = GetScaledUnit(p1.X + offset.X),
+                StartY = GetScaledUnit(p1.Y * -1 + offset.Y),
+                EndX = GetScaledUnit(p2.X + offset.X),
+                EndY = GetScaledUnit(p2.Y * -1 + offset.Y),
                 StrokeWidth = stroke,
                 Stroke = new SvgColourServer(color)
             };
@@ -172,7 +171,7 @@ namespace SiGen.Export
         private static SvgUnit GetScaledUnit(double value, SvgUnitType type)
         {
             //if (type == SvgUnitType.Pixel)
-            //    return new SvgUnit((float)value / 35.43307365614753f);
+            //    return new SvgUnit((float)value / CmToPixel);
             //else if (type == SvgUnitType.Point)
             //    return new SvgUnit((float)value / 28.34645490730993f);
             return new SvgUnit(type, (float)value);
@@ -180,7 +179,7 @@ namespace SiGen.Export
 
         private static SvgUnit GetScaledUnit(Measure value)
         {
-            return new SvgUnit((float)value.NormalizedValue * 35.43307365614753f);
+            return new SvgUnit((float)(value.NormalizedValue * CmToPixel));
         }
 
         private class SvgPolylineSegment : SvgPathSegment
@@ -190,18 +189,18 @@ namespace SiGen.Export
             public SvgPolylineSegment(IEnumerable<PointM> points)
             {
                 _Points = points.ToList();
-                Start = (PointF)_Points.First().ToVector();
-                End = (PointF)_Points.Last().ToVector();
+                Start = (PointF)(_Points.First().ToVector() * CmToPixel);
+                End = (PointF)(_Points.Last().ToVector() * CmToPixel);
             }
 
             public override void AddToPath(System.Drawing.Drawing2D.GraphicsPath graphicsPath)
             {
-                graphicsPath.AddLines(_Points.Select(p => (PointF)p.ToVector()).ToArray());
+                graphicsPath.AddLines(_Points.Select(p => (PointF)(p.ToVector() * CmToPixel)).ToArray());
             }
 
             public override string ToString()
             {
-                return "M " + _Points.Select(p => string.Format("{0},{1}", p.X.NormalizedValue, p.Y.NormalizedValue)).Aggregate((i, j) => i + " " + j);
+                return "M " + _Points.Select(p => string.Format("{0},{1}", p.X.NormalizedValue * CmToPixel, p.Y.NormalizedValue * CmToPixel)).Aggregate((i, j) => i + " " + j);
             }
         }
 
