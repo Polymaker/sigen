@@ -189,7 +189,7 @@ namespace SiGen.UI
 
             if (CurrentLayout != null)
             {
-                var layoutBounds = CurrentLayout.GetBounds();
+                var layoutBounds = CurrentLayout.GetLayoutBounds();
                 if (!layoutBounds.IsEmpty)
                 {
                     if (DisplayConfig.FretboardOrientation == Orientation.Horizontal)

@@ -197,6 +197,7 @@ namespace SiGen.StringedInstruments.Layout
 
         #region Events
 
+        public event EventHandler LayoutChanged;
         public event EventHandler LayoutUpdated;
         public event EventHandler NumberOfStringsChanged;
 
@@ -323,11 +324,19 @@ namespace SiGen.StringedInstruments.Layout
 
         internal void NotifyLayoutChanged(object sender, string propname)
         {
-            if(!isLoading)
+            if (!isLoading)
+            {
                 isLayoutDirty = true;
+                OnLayoutChanged();
+            }
         }
 
-        public RectangleM GetBounds()
+        protected void OnLayoutChanged()
+        {
+            LayoutChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public RectangleM GetLayoutBounds()
         {
             if (VisualElements.Count == 0)
                 return RectangleM.Empty;

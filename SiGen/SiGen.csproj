@@ -103,6 +103,18 @@
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingManual.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElement.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElementType.cs" />
+    <Compile Include="UI\Controls\FingerboardMarginEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\FingerboardMarginEditor.Designer.cs">
+      <DependentUpon>FingerboardMarginEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\LayoutPropertyEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\LayoutPropertyEditor.Designer.cs">
+      <DependentUpon>LayoutPropertyEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Controls\LayoutViewer.Measuring.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -177,6 +189,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UI\Controls\FingerboardMarginEditor.resx">
+      <DependentUpon>FingerboardMarginEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutViewer.resx">
       <DependentUpon>LayoutViewer.cs</DependentUpon>
     </EmbeddedResource>

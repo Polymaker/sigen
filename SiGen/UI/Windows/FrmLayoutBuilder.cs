@@ -33,6 +33,7 @@ namespace SiGen.UI
             _CurrentFile = new LayoutFile() { Layout = CreateDefaultLayout() };
             layoutViewer1.CurrentLayout = _CurrentFile.Layout;
             layoutViewer1.Select();
+            fingerboardMarginEditor1.CurrentLayout = _CurrentFile.Layout;
             UpdateParameters();
         }
 
@@ -323,7 +324,7 @@ namespace SiGen.UI
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
                     SvgLayoutExporter.ExportLayout(sfd.FileName, layoutViewer1.CurrentLayout,
-                        new LayoutExportOptions()
+                        new LayoutSvgExportOptions()
                         {
                             ExportStrings = false,
                             ExportStringCenters = false

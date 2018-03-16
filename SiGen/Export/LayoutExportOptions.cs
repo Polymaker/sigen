@@ -23,4 +23,16 @@ namespace SiGen.Export
             FretLineThickness = Measure.Empty;
         }
     }
+
+    public class LayoutSvgExportOptions : LayoutExportOptions
+    {
+        public bool InkscapeCompatible { get; set; }
+        public int TargetDPI { get; set; }
+
+        public LayoutSvgExportOptions() : base()
+        {
+            InkscapeCompatible = true;
+            TargetDPI = 90;
+        }
+    }
 }
