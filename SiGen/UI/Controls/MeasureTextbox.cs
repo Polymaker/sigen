@@ -242,18 +242,20 @@ namespace SiGen.UI
                 preventFocus = true;
 
             if (e.Button == MouseButtons.Left && measureBounds.Contains(e.Location))
-                ShowTextBox();
+                ShowTextBox(true);
 
             base.OnMouseDown(e);
         }
 
-        protected void ShowTextBox()
+        protected void ShowTextBox(bool select = false)
         {
             if (!innerTextbox.Visible)
             {
                 innerTextbox.BackColor = BackColor;
                 innerTextbox.Visible = true;
                 innerTextbox.Focus();
+                if(select)
+                    innerTextbox.SelectAll();
             }
         }
 
@@ -480,6 +482,8 @@ namespace SiGen.UI
                     e.Handled = true;
                 }      
             }
+            else if(e.KeyData == Keys.Tab)
+                Parent.SelectNextControl(this, Control.ModifierKeys != Keys.Shift, true, true, true);
         }
 
         #endregion

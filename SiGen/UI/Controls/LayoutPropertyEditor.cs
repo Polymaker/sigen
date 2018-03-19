@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SiGen.StringedInstruments.Layout;
+using SiGen.Utilities;
 
 namespace SiGen.UI.Controls
 {
@@ -15,6 +16,7 @@ namespace SiGen.UI.Controls
     public partial class LayoutPropertyEditor : UserControl
     {
         private SILayout _CurrentLayout;
+        protected FlagList FlagManager;
         private bool _IsLoading;
 
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -29,6 +31,7 @@ namespace SiGen.UI.Controls
         public LayoutPropertyEditor()
         {
             InitializeComponent();
+            FlagManager = new FlagList();
         }
 
         private void BindLayout(SILayout layout)
@@ -40,19 +43,28 @@ namespace SiGen.UI.Controls
                 _CurrentLayout = layout;
                 //if (_CurrentLayout != null)
                 //    _CurrentLayout.LayoutUpdated += LayoutUpdated;
+                OnLayoutChanged();
                 ReloadPropertyValues();
             }
         }
 
+        protected virtual void OnLayoutChanged()
+        {
+
+        }
+
         //private void LayoutUpdated(object sender, EventArgs e)
         //{
-            
+
         //}
 
         public void ReloadPropertyValues()
         {
             _IsLoading = true;
-            ReadLayoutProperties();
+
+            using (FlagManager.UseFlag("ReloadPropertyValues"))
+                ReadLayoutProperties();
+
             _IsLoading = false;
         }
 

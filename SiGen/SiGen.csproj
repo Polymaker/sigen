@@ -171,6 +171,7 @@
     </Compile>
     <Compile Include="Utilities\ArrayProperty.cs" />
     <Compile Include="Utilities\ExtensionMethods\CollectionHelper.cs" />
+    <Compile Include="Utilities\FlagList.cs" />
     <Compile Include="Utilities\MeasureConverter.cs" />
     <Compile Include="Utilities\ExtensionMethods\NumberHelper.cs" />
     <Compile Include="Utilities\ExtensionMethods\XmlLinqExtensions.cs" />

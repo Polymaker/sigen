@@ -293,6 +293,7 @@ namespace SiGen.UI
             if (_CurrentFile != null)
                 SaveLayout(string.IsNullOrEmpty(_CurrentFile.FileName));
         }
+
         private void tsmiSave_Click(object sender, EventArgs e)
         {
             if (_CurrentFile != null)

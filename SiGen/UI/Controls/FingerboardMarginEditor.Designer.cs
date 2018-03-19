@@ -41,6 +41,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.lblEditMode = new System.Windows.Forms.Label();
             this.lblTreble = new System.Windows.Forms.Label();
+            this.cboMarginEditMode = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,22 +62,24 @@
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.lblEditMode, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblTreble, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.cboMarginEditMode, 1, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowCount = 6;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(264, 121);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(264, 131);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // lblBridge
             // 
             this.lblBridge.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.lblBridge.AutoSize = true;
-            this.lblBridge.Location = new System.Drawing.Point(29, 75);
+            this.lblBridge.Location = new System.Drawing.Point(29, 69);
             this.lblBridge.Name = "lblBridge";
             this.lblBridge.Size = new System.Drawing.Size(37, 13);
             this.lblBridge.TabIndex = 2;
@@ -86,7 +89,7 @@
             // 
             this.lblNut.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.lblNut.AutoSize = true;
-            this.lblNut.Location = new System.Drawing.Point(42, 49);
+            this.lblNut.Location = new System.Drawing.Point(42, 45);
             this.lblNut.Name = "lblNut";
             this.lblNut.Size = new System.Drawing.Size(24, 13);
             this.lblNut.TabIndex = 2;
@@ -96,7 +99,7 @@
             // 
             this.lblBass.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblBass.AutoSize = true;
-            this.lblBass.Location = new System.Drawing.Point(102, 30);
+            this.lblBass.Location = new System.Drawing.Point(102, 27);
             this.lblBass.Name = "lblBass";
             this.lblBass.Size = new System.Drawing.Size(30, 13);
             this.lblBass.TabIndex = 1;
@@ -104,7 +107,8 @@
             // 
             // mtbBridgeTreble
             // 
-            this.mtbBridgeTreble.Location = new System.Drawing.Point(169, 72);
+            this.mtbBridgeTreble.Location = new System.Drawing.Point(169, 67);
+            this.mtbBridgeTreble.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
             this.mtbBridgeTreble.Name = "mtbBridgeTreble";
             this.mtbBridgeTreble.Size = new System.Drawing.Size(92, 20);
             this.mtbBridgeTreble.TabIndex = 2;
@@ -112,7 +116,8 @@
             // 
             // mtbBridgeBass
             // 
-            this.mtbBridgeBass.Location = new System.Drawing.Point(72, 72);
+            this.mtbBridgeBass.Location = new System.Drawing.Point(72, 67);
+            this.mtbBridgeBass.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
             this.mtbBridgeBass.Name = "mtbBridgeBass";
             this.mtbBridgeBass.Size = new System.Drawing.Size(91, 20);
             this.mtbBridgeBass.TabIndex = 2;
@@ -120,7 +125,8 @@
             // 
             // mtbNutTreble
             // 
-            this.mtbNutTreble.Location = new System.Drawing.Point(169, 46);
+            this.mtbNutTreble.Location = new System.Drawing.Point(169, 43);
+            this.mtbNutTreble.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
             this.mtbNutTreble.Name = "mtbNutTreble";
             this.mtbNutTreble.Size = new System.Drawing.Size(92, 20);
             this.mtbNutTreble.TabIndex = 2;
@@ -128,7 +134,8 @@
             // 
             // mtbNutBass
             // 
-            this.mtbNutBass.Location = new System.Drawing.Point(72, 46);
+            this.mtbNutBass.Location = new System.Drawing.Point(72, 43);
+            this.mtbNutBass.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
             this.mtbNutBass.Name = "mtbNutBass";
             this.mtbNutBass.Size = new System.Drawing.Size(91, 20);
             this.mtbNutBass.TabIndex = 1;
@@ -137,7 +144,7 @@
             // mtbLastFret
             // 
             this.mtbLastFret.AllowEmptyValue = true;
-            this.mtbLastFret.Location = new System.Drawing.Point(72, 98);
+            this.mtbLastFret.Location = new System.Drawing.Point(72, 91);
             this.mtbLastFret.Name = "mtbLastFret";
             this.mtbLastFret.Size = new System.Drawing.Size(91, 20);
             this.mtbLastFret.TabIndex = 1;
@@ -147,7 +154,7 @@
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 95);
+            this.label2.Location = new System.Drawing.Point(7, 88);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(54, 26);
             this.label2.TabIndex = 1;
@@ -158,19 +165,30 @@
             this.lblEditMode.AutoSize = true;
             this.lblEditMode.Location = new System.Drawing.Point(3, 0);
             this.lblEditMode.Name = "lblEditMode";
-            this.lblEditMode.Size = new System.Drawing.Size(45, 26);
+            this.lblEditMode.Size = new System.Drawing.Size(59, 26);
             this.lblEditMode.TabIndex = 0;
-            this.lblEditMode.Text = "Specify margins";
+            this.lblEditMode.Text = "Define Margins By";
             // 
             // lblTreble
             // 
             this.lblTreble.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblTreble.AutoSize = true;
-            this.lblTreble.Location = new System.Drawing.Point(196, 30);
+            this.lblTreble.Location = new System.Drawing.Point(196, 27);
             this.lblTreble.Name = "lblTreble";
             this.lblTreble.Size = new System.Drawing.Size(37, 13);
             this.lblTreble.TabIndex = 3;
             this.lblTreble.Text = "Treble";
+            // 
+            // cboMarginEditMode
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.cboMarginEditMode, 2);
+            this.cboMarginEditMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboMarginEditMode.FormattingEnabled = true;
+            this.cboMarginEditMode.Location = new System.Drawing.Point(72, 3);
+            this.cboMarginEditMode.Name = "cboMarginEditMode";
+            this.cboMarginEditMode.Size = new System.Drawing.Size(148, 21);
+            this.cboMarginEditMode.TabIndex = 4;
+            this.cboMarginEditMode.SelectedIndexChanged += new System.EventHandler(this.cboMarginEditMode_SelectedIndexChanged);
             // 
             // FingerboardMarginEditor
             // 
@@ -199,5 +217,6 @@
         private System.Windows.Forms.Label lblNut;
         private System.Windows.Forms.Label lblBass;
         private System.Windows.Forms.Label lblTreble;
+        private System.Windows.Forms.ComboBox cboMarginEditMode;
     }
 }

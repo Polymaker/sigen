@@ -24,24 +24,38 @@ namespace SiGen.UI.Controls
         }
 
         private MarginEditMode EditMode;
+        private Dictionary<MarginEditMode, Measure[]> CachedValues;
+        private bool MarginModified;
 
         public FingerboardMarginEditor()
         {
             InitializeComponent();
+            CachedValues = new Dictionary<MarginEditMode, Measure[]>();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            foreach(MarginEditMode value in Enum.GetValues(typeof(MarginEditMode)))
+                cboMarginEditMode.Items.Add(value);
+            cboMarginEditMode.SelectedItem = MarginEditMode.Edges;
+        }
+
+        protected override void OnLayoutChanged()
+        {
+            base.OnLayoutChanged();
+            CachedValues.Clear();
         }
 
         protected override void ReadLayoutProperties()
         {
             mtbLastFret.Enabled = (CurrentLayout != null);
             mtbNutBass.Enabled = (CurrentLayout != null);
+            MarginModified = false;
 
             if (CurrentLayout != null)
             {
-                mtbLastFret.Value = CurrentLayout.Margins.LastFret;
-                mtbNutBass.Value = CurrentLayout.Margins.NutMargins[FingerboardSide.Bass];
-                mtbNutTreble.Value = CurrentLayout.Margins.NutMargins[FingerboardSide.Treble];
-                mtbBridgeBass.Value = CurrentLayout.Margins.BridgeMargins[FingerboardSide.Bass];
-                mtbBridgeTreble.Value = CurrentLayout.Margins.BridgeMargins[FingerboardSide.Treble];
+                ReadMarginValues();
             }
             else
             {
@@ -53,7 +67,17 @@ namespace SiGen.UI.Controls
             }
 
             EditMode = GetMarginsEditMode();
+            cboMarginEditMode.SelectedItem = EditMode;
             UpdateMarginsUI();
+        }
+
+        private void ReadMarginValues()
+        {
+            mtbLastFret.Value = CurrentLayout.Margins.LastFret;
+            mtbNutBass.Value = CurrentLayout.Margins.NutMargins[FingerboardSide.Bass];
+            mtbNutTreble.Value = CurrentLayout.Margins.NutMargins[FingerboardSide.Treble];
+            mtbBridgeBass.Value = CurrentLayout.Margins.BridgeMargins[FingerboardSide.Bass];
+            mtbBridgeTreble.Value = CurrentLayout.Margins.BridgeMargins[FingerboardSide.Treble];
         }
 
         private MarginEditMode GetMarginsEditMode()
@@ -85,62 +109,125 @@ namespace SiGen.UI.Controls
         private void mtbLastFret_ValueChanged(object sender, EventArgs e)
         {
             if (!IsLoading && CurrentLayout != null)
+            {
                 CurrentLayout.Margins.LastFret = mtbLastFret.Value;
+                CurrentLayout.RebuildLayout();
+            }
         }
 
         private void mtbFingerboardMargins_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsLoading && CurrentLayout != null)
+            if (!(IsLoading || FlagManager["ForceRead"]) && CurrentLayout != null)
+            {
                 SetMarginValues(sender);
+                MarginModified = true;
+            }
         }
 
         private void SetMarginValues(object sender)
         {
-            switch (EditMode)
+            if (CurrentLayout != null)
             {
-                case MarginEditMode.Edges:
-                    CurrentLayout.Margins.Edges = mtbNutBass.Value;
-                    break;
-                case MarginEditMode.NutBridge:
-                    if (sender == mtbNutBass)
-                        CurrentLayout.Margins.MarginAtNut = mtbNutBass.Value;
-                    else if (sender == mtbBridgeBass)
-                        CurrentLayout.Margins.MarginAtBridge = mtbBridgeBass.Value;
-                    else
-                    {
-                        CurrentLayout.Margins.MarginAtNut = mtbNutBass.Value;
-                        CurrentLayout.Margins.MarginAtBridge = mtbBridgeBass.Value;
-                    }
-                    break;
-                case MarginEditMode.BassTreble:
-                    if (sender == mtbNutBass)
-                        CurrentLayout.Margins.Bass = mtbNutBass.Value;
-                    else if (sender == mtbNutTreble)
-                        CurrentLayout.Margins.Treble = mtbNutTreble.Value;
-                    else
-                    {
-                        CurrentLayout.Margins.Bass = mtbNutBass.Value;
-                        CurrentLayout.Margins.Treble = mtbNutTreble.Value;
-                    }
-                    break;
-                case MarginEditMode.All:
+                switch (EditMode)
+                {
+                    case MarginEditMode.Edges:
+                        CurrentLayout.Margins.Edges = mtbNutBass.Value;
+                        break;
+                    case MarginEditMode.NutBridge:
+                        if (sender == mtbNutBass)
+                            CurrentLayout.Margins.MarginAtNut = mtbNutBass.Value;
+                        else if (sender == mtbBridgeBass)
+                            CurrentLayout.Margins.MarginAtBridge = mtbBridgeBass.Value;
+                        else
+                        {
+                            CurrentLayout.Margins.MarginAtNut = mtbNutBass.Value;
+                            CurrentLayout.Margins.MarginAtBridge = mtbBridgeBass.Value;
+                        }
+                        break;
+                    case MarginEditMode.BassTreble:
+                        if (sender == mtbNutBass)
+                            CurrentLayout.Margins.Bass = mtbNutBass.Value;
+                        else if (sender == mtbNutTreble)
+                            CurrentLayout.Margins.Treble = mtbNutTreble.Value;
+                        else
+                        {
+                            CurrentLayout.Margins.Bass = mtbNutBass.Value;
+                            CurrentLayout.Margins.Treble = mtbNutTreble.Value;
+                        }
+                        break;
+                    case MarginEditMode.All:
 
-                    if (sender == mtbNutBass)
-                        CurrentLayout.Margins.NutMargins[FingerboardSide.Bass] = mtbNutBass.Value;
-                    else if (sender == mtbNutTreble)
-                        CurrentLayout.Margins.NutMargins[FingerboardSide.Treble] = mtbNutTreble.Value;
-                    else if (sender == mtbBridgeBass)
-                        CurrentLayout.Margins.BridgeMargins[FingerboardSide.Bass] = mtbBridgeBass.Value;
-                    else if (sender == mtbBridgeTreble)
-                        CurrentLayout.Margins.BridgeMargins[FingerboardSide.Treble] = mtbBridgeTreble.Value;
+                        if (sender == mtbNutBass)
+                            CurrentLayout.Margins.NutMargins[FingerboardSide.Bass] = mtbNutBass.Value;
+                        else if (sender == mtbNutTreble)
+                            CurrentLayout.Margins.NutMargins[FingerboardSide.Treble] = mtbNutTreble.Value;
+                        else if (sender == mtbBridgeBass)
+                            CurrentLayout.Margins.BridgeMargins[FingerboardSide.Bass] = mtbBridgeBass.Value;
+                        else if (sender == mtbBridgeTreble)
+                            CurrentLayout.Margins.BridgeMargins[FingerboardSide.Treble] = mtbBridgeTreble.Value;
+                        else
+                        {
+                            CurrentLayout.Margins.NutMargins[FingerboardSide.Bass] = mtbNutBass.Value;
+                            CurrentLayout.Margins.NutMargins[FingerboardSide.Treble] = mtbNutTreble.Value;
+                            CurrentLayout.Margins.BridgeMargins[FingerboardSide.Bass] = mtbBridgeBass.Value;
+                            CurrentLayout.Margins.BridgeMargins[FingerboardSide.Treble] = mtbBridgeTreble.Value;
+                        }
+                        break;
+                }
+                CurrentLayout.RebuildLayout();
+            } 
+        }
+
+        private void cboMarginEditMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(!IsLoading && CurrentLayout != null)
+            {
+                if(MarginModified)
+                {
+                    CacheCurrentValues();
+                    if (CachedValues.ContainsKey(MarginEditMode.All) && EditMode != MarginEditMode.All)
+                        CachedValues.Remove(MarginEditMode.All);
+                }
+
+                EditMode = (MarginEditMode)cboMarginEditMode.SelectedItem;
+
+                using (FlagManager.UseFlag("ForceRead"))
+                {
+                    if (CachedValues.ContainsKey(EditMode))
+                        ReadCachedValues();
                     else
-                    {
-                        CurrentLayout.Margins.NutMargins[FingerboardSide.Bass] = mtbNutBass.Value;
-                        CurrentLayout.Margins.NutMargins[FingerboardSide.Treble] = mtbNutTreble.Value;
-                        CurrentLayout.Margins.BridgeMargins[FingerboardSide.Bass] = mtbBridgeBass.Value;
-                        CurrentLayout.Margins.BridgeMargins[FingerboardSide.Treble] = mtbBridgeTreble.Value;
-                    }
-                    break;
+                        ReadMarginValues();
+                }
+
+                MarginModified = false;
+                SetMarginValues(null);
+                UpdateMarginsUI();
+            }
+        }
+
+        private void CacheCurrentValues()
+        {
+            var values = new Measure[]
+            {
+                CurrentLayout.Margins.NutMargins[FingerboardSide.Bass],
+                CurrentLayout.Margins.NutMargins[FingerboardSide.Treble],
+                CurrentLayout.Margins.BridgeMargins[FingerboardSide.Bass],
+                CurrentLayout.Margins.BridgeMargins[FingerboardSide.Treble]
+            };
+            if (!CachedValues.ContainsKey(EditMode))
+                CachedValues.Add(EditMode, values);
+            else
+                CachedValues[EditMode] = values;
+        }
+
+        private void ReadCachedValues()
+        {
+            if (CachedValues.ContainsKey(EditMode))
+            {
+                mtbNutBass.Value = CachedValues[EditMode][0];
+                mtbNutTreble.Value = CachedValues[EditMode][1];
+                mtbBridgeBass.Value = CachedValues[EditMode][2];
+                mtbBridgeTreble.Value = CachedValues[EditMode][3];
             }
         }
     }
