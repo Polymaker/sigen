@@ -126,11 +126,11 @@
     <Compile Include="UI\Controls\ValueEditors\NumericBox.Designer.cs">
       <DependentUpon>NumericBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\LayoutEditors\ScaleLengthEditorcs.cs">
+    <Compile Include="UI\Controls\LayoutEditors\ScaleLengthEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\Controls\LayoutEditors\ScaleLengthEditorcs.Designer.cs">
-      <DependentUpon>ScaleLengthEditorcs.cs</DependentUpon>
+    <Compile Include="UI\Controls\LayoutEditors\ScaleLengthEditor.Designer.cs">
+      <DependentUpon>ScaleLengthEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\ValueEditors\TextBoxEx.cs">
       <SubType>Component</SubType>
@@ -202,6 +202,9 @@
     </Compile>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\FingerboardMarginEditor.resx">
       <DependentUpon>FingerboardMarginEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\ScaleLengthEditor.resx">
+      <DependentUpon>ScaleLengthEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutViewer.resx">
       <DependentUpon>LayoutViewer.cs</DependentUpon>

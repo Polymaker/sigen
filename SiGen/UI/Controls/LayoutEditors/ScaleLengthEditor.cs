@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace SiGen.UI.Controls
 {
-    public partial class ScaleLengthEditorcs : UserControl
+    public partial class ScaleLengthEditor : LayoutPropertyEditor
     {
-        public ScaleLengthEditorcs()
+        public ScaleLengthEditor()
         {
             InitializeComponent();
         }
