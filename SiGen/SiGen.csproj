@@ -81,12 +81,13 @@
     <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardEnd.cs" />
     <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardMargin.cs" />
     <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardSide.cs" />
+    <Compile Include="StringedInstruments\Layout\Strings\FretManager.cs" />
     <Compile Include="StringedInstruments\Layout\ILayoutComponent.cs" />
     <Compile Include="StringedInstruments\Layout\LayoutComponent.cs" />
     <Compile Include="StringedInstruments\Layout\ScaleLength\ScaleLengthManager.cs" />
     <Compile Include="StringedInstruments\Layout\ScaleLength\ScaleLengthType.cs" />
     <Compile Include="StringedInstruments\Layout\SILayout.Builder.cs" />
-    <Compile Include="StringedInstruments\Layout\SIString.cs" />
+    <Compile Include="StringedInstruments\Layout\Strings\SIString.cs" />
     <Compile Include="StringedInstruments\Layout\ScaleLength\LengthFunction.cs" />
     <Compile Include="StringedInstruments\Layout\SILayout.cs" />
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingType.cs" />

@@ -395,8 +395,8 @@ namespace SiGen.StringedInstruments.Layout
             var stringsElem = new XElement("Strings", new XAttribute("Count", NumberOfStrings));
             for (int i = 0; i < NumberOfStrings; i++)
             {
-                stringsElem.Add(SerializationHelper.GenericSerialize(Strings[i], "String"));
-                //stringsElem.Add(Strings[i].Serialize(ScaleLengthMode == ScaleLengthType.Individual));
+                //stringsElem.Add(SerializationHelper.GenericSerialize(Strings[i], "String"));
+                stringsElem.Add(Strings[i].Serialize("String"));
             }
             root.Add(stringsElem);
 
@@ -439,8 +439,8 @@ namespace SiGen.StringedInstruments.Layout
             for(int i = 0;i < layout.NumberOfStrings; i++)
             {
                 var stringElem = root.Element("Strings").Elements("String").First(s => s.Attribute("Index").Value == i.ToString());
-                SerializationHelper.GenericDeserialize(layout.Strings[i], stringElem);
-                //layout.Strings[i].Deserialize(stringElem);
+                //SerializationHelper.GenericDeserialize(layout.Strings[i], stringElem);
+                layout.Strings[i].Deserialize(stringElem);
             }
 
             if (root.ContainsElement("FretCompensation"))
@@ -448,7 +448,7 @@ namespace SiGen.StringedInstruments.Layout
 
             if (root.ContainsElement("StringSpacings"))
             {
-                layout.StringSpacingMode = DeserializeProperty<StringSpacingType>(root.Element("StringSpacings").Attribute("Type"));
+                layout.StringSpacingMode = DeserializeProperty<StringSpacingType>(root.Element("StringSpacings").Attribute("Mode"));
                 layout.StringSpacing.Deserialize(root.Element("StringSpacings"));
             }
 

@@ -1,6 +1,7 @@
 ﻿using SiGen.Measuring;
 using SiGen.Physics;
 using SiGen.StringedInstruments.Data;
+using SiGen.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,8 @@ namespace SiGen.StringedInstruments.Layout
         private StringTuning _Tuning;
         private StringProperties _PhysicalProperties;
         private Measure _ActionAtTwelfthFret;
-        private double _RelativeScaleLengthOffset;
+        private double _MultiScaleRatio;
+        private FretManager _Frets;
 
         #endregion
 
@@ -115,15 +117,15 @@ namespace SiGen.StringedInstruments.Layout
         /// This value affects the placement of this string relative to the longest scale length.</para>
         /// </summary>
         [XmlAttribute("MultiScaleRatio")]
-        public double RelativeScaleLengthOffset
+        public double MultiScaleRatio
         {
-            get { return _RelativeScaleLengthOffset; }
+            get { return _MultiScaleRatio; }
             set
             {
-                if (value != _RelativeScaleLengthOffset)
+                if (value != _MultiScaleRatio)
                 {
-                    _RelativeScaleLengthOffset = value;
-                    Layout.NotifyLayoutChanged(this, "RelativeScaleLengthOffset");
+                    _MultiScaleRatio = value;
+                    Layout.NotifyLayoutChanged(this, "MultiScaleRatio");
                 }
             }
         }
@@ -243,8 +245,9 @@ namespace SiGen.StringedInstruments.Layout
         {
             _Index = stringIndex;
             _ActionAtTwelfthFret = Measure.Empty;
-            _RelativeScaleLengthOffset = 0.5;
+            _MultiScaleRatio = 0.5;
             _NumberOfFrets = 24;
+            _Frets = new FretManager(this);
         }
 
         public bool HasFret(int fretNo)
@@ -263,31 +266,58 @@ namespace SiGen.StringedInstruments.Layout
 
         #region XML serialization
 
-        internal XElement Serialize(bool includeScale = false)
+        internal XElement Serialize(string elemName)
         {
-            var elem = new XElement("String", 
-                new XAttribute("Index", Index),
-                new XAttribute("StartingFret", StartingFret),
-                new XAttribute("NumberOfFrets", NumberOfFrets),
-                new XAttribute("MultiScaleRatio", RelativeScaleLengthOffset),
-                //new XAttribute("LengthMethod", LengthCalculationMethod),
-                //ScaleLength.SerializeAsAttribute("ScaleLength"),
-                ActionAtTwelfthFret.SerializeAsAttribute("ActionAtTwelfthFret"));
-            if (includeScale)
-                elem.Add(ScaleLength.SerializeAsAttribute("ScaleLength"));
+            
+            var stringElem = new XElement(elemName, new XAttribute("Index", Index));
+
+            //if (includeScale)
+            //    stringElem.Add(ScaleLength.SerializeAsAttribute("ScaleLength"));
+
+            if (!Layout.Strings.AllEqual(s => s.MultiScaleRatio))
+                stringElem.Add(new XAttribute("MultiScaleRatio", MultiScaleRatio));
+
+            var fretElem = new XElement("Frets",
+                    new XAttribute("StartingFret", StartingFret),
+                    new XAttribute("NumberOfFrets", NumberOfFrets));
+
+            stringElem.Add(fretElem);
+
+            if (!ActionAtTwelfthFret.IsEmpty)
+            {
+                var actionElem = new XElement("Action",
+                    Measure.Empty.SerializeAsAttribute("AtFirstFret"),
+                    ActionAtTwelfthFret.SerializeAsAttribute("AtTwelfthFret"));
+                stringElem.Add(actionElem);
+            }
+
             if (Tuning != null)
-                elem.Add(new XElement("Tuning"));
+                stringElem.Add(Tuning.Serialize("Tuning"));
             if (PhysicalProperties != null)
-                elem.Add(new XElement("Properties"));
-            return elem;
+                stringElem.Add(SerializationHelper.GenericSerialize(PhysicalProperties, "Properties"));
+            return stringElem;
         }
 
         internal void Deserialize(XElement elem)
         {
-            _StartingFret = elem.GetIntAttribute("StartingFret");
-            _NumberOfFrets = elem.GetIntAttribute("NumberOfFrets");
-            _RelativeScaleLengthOffset = double.Parse(elem.Attribute("MultiScaleRatio").Value);
-            _ActionAtTwelfthFret = Measure.Parse(elem.Attribute("ActionAtTwelfthFret").Value);
+            var fretElem = elem.Element("Frets");
+
+            _StartingFret = fretElem.GetIntAttribute("StartingFret");
+            _NumberOfFrets = fretElem.GetIntAttribute("NumberOfFrets");
+
+            if(elem.ContainsAttribute("MultiScaleRatio"))
+                _MultiScaleRatio = double.Parse(elem.Attribute("MultiScaleRatio").Value);
+            else
+                _MultiScaleRatio = 0.5d;
+
+            if (elem.ContainsElement("Tuning"))
+                _Tuning = StringTuning.Deserialize(elem.Element("Tuning"));
+
+            if (elem.ContainsElement("Action"))
+            {
+                var actionElem = elem.Element("Action");
+                _ActionAtTwelfthFret = Measure.Parse(actionElem.Attribute("AtTwelfthFret").Value);
+            }
         }
 
         #endregion

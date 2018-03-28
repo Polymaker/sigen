@@ -139,7 +139,7 @@ namespace SiGen.StringedInstruments.Layout
                 set
                 {
                     _PerpendicularFretRatio = value;
-                    Layout.Strings.SetAll(s => s.RelativeScaleLengthOffset, value);
+                    Layout.Strings.SetAll(s => s.MultiScaleRatio, value);
                 }
             }
 
@@ -186,6 +186,8 @@ namespace SiGen.StringedInstruments.Layout
                 base.Deserialize(elem);
                 Treble = Measure.Parse(elem.Attribute("Treble").Value);
                 Bass = Measure.Parse(elem.Attribute("Bass").Value);
+                if (Layout.Strings.AllEqual(s => s.MultiScaleRatio))
+                    _PerpendicularFretRatio = Layout.Strings[0].MultiScaleRatio;
             }
         }
 

@@ -137,7 +137,7 @@ namespace SiGen.StringedInstruments.Layout
         /// <param name="maxPerpHeight"></param>
         private void AdjustStringVerticalPosition(StringLine stringLine, Measure maxPerpHeight)
         {
-            var offsetY = (maxPerpHeight - stringLine.Bounds.Height) * (0.5 - stringLine.String.RelativeScaleLengthOffset);
+            var offsetY = (maxPerpHeight - stringLine.Bounds.Height) * (0.5 - stringLine.String.MultiScaleRatio);
             stringLine.P1 += new PointM(Measure.Zero, offsetY);
             stringLine.P2 += new PointM(Measure.Zero, offsetY);
             stringLine.FretZero = stringLine.P1;//keep pos of fret 0 usefull because starting fret can be negative
@@ -424,6 +424,35 @@ namespace SiGen.StringedInstruments.Layout
 
             var fretRatio = NoteConverter.CentsToIntonationRatio(fretCents - openCents);
             return 1d / fretRatio;
+        }
+
+        public bool ShouldHaveStraightFrets()
+        {
+            if (NumberOfStrings == 1)
+                return true;
+
+            if (FretsTemperament != Temperament.Equal || CompensateFretPositions)
+                return false;
+
+            if(ScaleLengthMode == ScaleLengthType.Multiple)
+            {
+                return Strings.AllEqual(s => s.MultiScaleRatio);
+            }
+            else if(ScaleLengthMode == ScaleLengthType.Individual)
+            {
+                if(Strings.AllEqual(s => s.MultiScaleRatio))
+                {
+                    var scaleDiff = Measure.Abs(LastString.ScaleLength - FirstString.ScaleLength) / (NumberOfStrings - 1);
+                    for(int i = 0; i < NumberOfStrings - 1; i++)
+                    {
+                        var diff = Measure.Abs(Strings[i + 1].ScaleLength - Strings[i].ScaleLength);
+                        if (1 - (diff.NormalizedValue / scaleDiff.NormalizedValue) > 0.1)
+                            return false;
+                    }
+                    return true;
+                }
+            }
+            return ScaleLengthMode == ScaleLengthType.Single;
         }
 
         private StringTuning GetDefaultTuning()

@@ -72,7 +72,7 @@ namespace SiGen.UI
 
             layout.SimpleStringSpacing.StringSpacingAtNut = Measure.Mm(7.3);
             layout.SimpleStringSpacing.StringSpacingAtBridge = Measure.Mm(10.5);
-
+            layout.SimpleStringSpacing.NutSpacingMode = NutSpacingMode.BetweenStrings;
             layout.Margins.Edges = Measure.Mm(3.25);
             layout.Margins.LastFret = Measure.Mm(10);
             layout.RebuildLayout();
@@ -308,6 +308,31 @@ namespace SiGen.UI
 
         #endregion
 
+        private void tssbOpen_ButtonClick(object sender, EventArgs e)
+        {
+            using (var ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "SI Layout file (*.sil)|*.sil";
+                if(ofd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        var layout = SILayout.Load(ofd.FileName);
+                        layout.RebuildLayout();
+                        _CurrentFile = new LayoutFile() { Layout = layout, FileName = ofd.FileName };
+                        layoutViewer1.CurrentLayout = _CurrentFile.Layout;
+                        layoutViewer1.Select();
+                        fingerboardMarginEditor1.CurrentLayout = _CurrentFile.Layout;
+                        UpdateParameters();
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show("An error occured: " + ex.ToString());
+                    }
+                }
+            }
+        }
+
         private class LayoutFile
         {
             public SILayout Layout { get; set; }
@@ -333,5 +358,7 @@ namespace SiGen.UI
                 }
             }
         }
+
+        
     }
 }

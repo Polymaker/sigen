@@ -112,15 +112,21 @@ namespace SiGen.StringedInstruments.Layout.Visual
         {
             Angle avgAngle = Angle.FromPoints(points.First().ToVector(), points.Last().ToVector());
             avgAngle.Normalize();
-
+            double tolerance = Layout.ShouldHaveStraightFrets() ? 3 : 1;
+            double maxDiff = 0;
             for (int i = 0; i < points.Count() - 1; i++)
             {
-                var curAngle = Angle.FromPoints(points.ElementAt(i).ToVector(), points.ElementAt(i + 1).ToVector());
+                var curAngle = Angle.FromPoints(points.First().ToVector(), points.ElementAt(i + 1).ToVector());
                 curAngle.Normalize();
-                if (Math.Abs(curAngle.Degrees - avgAngle.Degrees) > 0.9)
-                    return false;
+                var angleDiff = Math.Abs(curAngle.Degrees - avgAngle.Degrees);
+                //if (angleDiff > tolerance)
+                //    return false;
+                if (angleDiff > maxDiff)
+                    maxDiff = angleDiff;
             }
-            return true;
+            if (maxDiff >= 1)
+                Console.WriteLine(string.Format("max diff for fret {0}: {1}", FretIndex, Angle.FromDegrees(maxDiff)));
+            return maxDiff <= tolerance;
         }
 
         public void BuildLayout()

@@ -112,7 +112,11 @@ namespace SiGen.UI
                     g.DrawLines(penToUse, fretPoints);
                 else
                     g.DrawCurve(penToUse, fretPoints, 0.3f);
+
+                if(fretLine.Strings.Count() > 1)
+                    g.DrawLines(nutPen, fretLine.Segments.Where(s => !s.IsVirtual).Select(s => PointToDisplay(s.PointOnString)).ToArray());
             }
+
             nutPen.Dispose();
             fretPen.Dispose();
         }
@@ -205,7 +209,6 @@ namespace SiGen.UI
                                 g.DrawString(box.GetDisplayValue(), Font, Brushes.Black , box.DisplayBounds, sf);
                         }
                     }
-                    
                 }
             }
         }
