@@ -14,6 +14,7 @@ namespace SiGen.UI
         private bool _ShowStrings;
         private bool _ShowFrets;
         private bool _ShowMidlines;
+        private bool _ShowTheoreticalFrets;
         private bool _RenderRealStrings;
         private bool _RenderRealFrets;
         private UnitOfMeasure _DefaultDisplayUnit;
@@ -44,6 +45,20 @@ namespace SiGen.UI
                 {
                     _ShowFrets = value;
                     OnPropertyChanged("ShowFrets");
+                }
+            }
+        }
+
+        [DefaultValue(false)]
+        public bool ShowTheoreticalFrets
+        {
+            get { return _ShowTheoreticalFrets; }
+            set
+            {
+                if (value != _ShowTheoreticalFrets)
+                {
+                    _ShowTheoreticalFrets = value;
+                    OnPropertyChanged("ShowTheoreticalFrets");
                 }
             }
         }
@@ -138,6 +153,7 @@ namespace SiGen.UI
         {
             _ShowStrings = true;
             _ShowFrets = true;
+            _ShowTheoreticalFrets = false;
             _ShowMidlines = true;
             _RenderRealFrets = true;
             _FretboardOrientation = Orientation.Horizontal;

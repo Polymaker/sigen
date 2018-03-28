@@ -247,6 +247,7 @@ namespace SiGen.StringedInstruments.Layout
             _ActionAtTwelfthFret = Measure.Empty;
             _MultiScaleRatio = 0.5;
             _NumberOfFrets = 24;
+            RealScaleLength = Measure.Empty;
             _Frets = new FretManager(this);
         }
 
@@ -318,6 +319,9 @@ namespace SiGen.StringedInstruments.Layout
                 var actionElem = elem.Element("Action");
                 _ActionAtTwelfthFret = Measure.Parse(actionElem.Attribute("AtTwelfthFret").Value);
             }
+
+            if (elem.ContainsElement("Properties"))
+                _PhysicalProperties = SerializationHelper.GenericDeserialize<StringProperties>(elem.Element("Properties"));
         }
 
         #endregion

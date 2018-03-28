@@ -19,6 +19,7 @@ namespace SiGen.StringedInstruments.Layout
 
         internal List<LayoutComponent> _Components;
         private Temperament _FretsTemperament;
+        private FretInterpolationMethod _FretInterpolation;
         private bool _LeftHanded;
         private int _NumberOfStrings;
         private SIString[] _Strings;
@@ -67,6 +68,8 @@ namespace SiGen.StringedInstruments.Layout
                 {
                     if (NumberOfStrings == 1)
                         return;
+                    if (value == ScaleLengthType.Individual)
+                        _ManualScaleMgr.InitializeIfNeeded();
                     _ScaleLengthMode = value;
                     NotifyLayoutChanged(this, "ScaleLengthMode");
                 }
@@ -165,6 +168,19 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
+        public FretInterpolationMethod FretInterpolation
+        {
+            get { return _FretInterpolation; }
+            set
+            {
+                if (value != _FretInterpolation)
+                {
+                    _FretInterpolation = value;
+                    NotifyLayoutChanged(this, "FretInterpolation");
+                }
+            }
+        }
+
         public bool CompensateFretPositions
         {
             get { return _CompensateFretPositions; }
@@ -216,6 +232,7 @@ namespace SiGen.StringedInstruments.Layout
             _VisualElements = new List<VisualElement>();
             _ScaleLengthMode = ScaleLengthType.Single;
             _FretsTemperament = Temperament.Equal;
+            _FretInterpolation = FretInterpolationMethod.Spline;
             _CachedBounds = RectangleM.Empty;
             LayoutName = string.Empty;
         }

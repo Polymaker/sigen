@@ -46,7 +46,7 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
-        public new Measure StringSpreadAtNut
+        public override Measure StringSpreadAtNut
         {
             get
             {
@@ -58,7 +58,7 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
-        public new Measure StringSpreadAtBridge
+        public override Measure StringSpreadAtBridge
         {
             get
             {
@@ -117,6 +117,18 @@ namespace SiGen.StringedInstruments.Layout
         {
             base.Deserialize(elem);
             NutSpacingMode = (NutSpacingMode)Enum.Parse(typeof(NutSpacingMode), elem.Attribute("NutSpacingMode").Value);
+
+            if(NutSpacingMode == NutSpacingMode.BetweenStrings)
+            {
+                StringSpacingAtNut = Measure.Parse(elem.Attribute("StringSpacingAtNut").Value);
+                StringSpacingAtBridge = Measure.Parse(elem.Attribute("StringSpacingAtBridge").Value);
+                AdjustedNutSlots = new Measure[elem.Elements("Spacing").Count()];
+                foreach (var spacingElem in elem.Elements("Spacing"))
+                {
+                    int spacingIndex = spacingElem.GetIntAttribute("Index");
+                    AdjustedNutSlots[spacingIndex] = Measure.Parse(spacingElem.Attribute("Nut").Value);
+                }
+            }
         }
 
         public void CalculateNutSlotPositions()

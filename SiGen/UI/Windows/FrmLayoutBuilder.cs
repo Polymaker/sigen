@@ -30,11 +30,7 @@ namespace SiGen.UI
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            _CurrentFile = new LayoutFile() { Layout = CreateDefaultLayout() };
-            layoutViewer1.CurrentLayout = _CurrentFile.Layout;
-            layoutViewer1.Select();
-            fingerboardMarginEditor1.CurrentLayout = _CurrentFile.Layout;
-            UpdateParameters();
+            LoadLayout(new LayoutFile(CreateDefaultLayout()));
         }
 
         private static SILayout CreateDefaultLayout()
@@ -73,6 +69,7 @@ namespace SiGen.UI
             layout.SimpleStringSpacing.StringSpacingAtNut = Measure.Mm(7.3);
             layout.SimpleStringSpacing.StringSpacingAtBridge = Measure.Mm(10.5);
             layout.SimpleStringSpacing.NutSpacingMode = NutSpacingMode.BetweenStrings;
+            //layout.ScaleLengthMode = ScaleLengthType.Individual;
             layout.Margins.Edges = Measure.Mm(3.25);
             layout.Margins.LastFret = Measure.Mm(10);
             layout.RebuildLayout();
@@ -261,7 +258,8 @@ namespace SiGen.UI
 
         private void button3_Click(object sender, EventArgs e)
         {
-
+            layoutViewer1.DisplayConfig.ShowTheoreticalFrets = !layoutViewer1.DisplayConfig.ShowTheoreticalFrets;
+            
         }
 
         #region Save
@@ -317,13 +315,8 @@ namespace SiGen.UI
                 {
                     try
                     {
-                        var layout = SILayout.Load(ofd.FileName);
-                        layout.RebuildLayout();
-                        _CurrentFile = new LayoutFile() { Layout = layout, FileName = ofd.FileName };
-                        layoutViewer1.CurrentLayout = _CurrentFile.Layout;
-                        layoutViewer1.Select();
-                        fingerboardMarginEditor1.CurrentLayout = _CurrentFile.Layout;
-                        UpdateParameters();
+                        var layoutToOpen = new LayoutFile(ofd.FileName);
+                        LoadLayout(layoutToOpen);
                     }
                     catch(Exception ex)
                     {
@@ -337,6 +330,40 @@ namespace SiGen.UI
         {
             public SILayout Layout { get; set; }
             public string FileName { get; set; }
+
+            public LayoutFile(SILayout layout)
+            {
+                Layout = layout;
+                FileName = string.Empty;
+            }
+
+            public LayoutFile(string filename)
+            {
+                FileName = filename;
+                Layout = SILayout.Load(filename);
+            }
+        }
+
+        private void LoadLayout(LayoutFile layout)
+        {
+            _CurrentFile = layout;
+
+            if(layout == null)
+            {
+                layoutViewer1.CurrentLayout = null;
+                fingerboardMarginEditor1.CurrentLayout = null;
+
+            }
+            else
+            {
+                if (_CurrentFile.Layout.VisualElements.Count == 0 || _CurrentFile.Layout.IsLayoutDirty)
+                    _CurrentFile.Layout.RebuildLayout();
+
+                layoutViewer1.CurrentLayout = _CurrentFile.Layout;
+                layoutViewer1.Select();
+                fingerboardMarginEditor1.CurrentLayout = _CurrentFile.Layout;
+                UpdateParameters();
+            }
         }
 
         private void exportAsSVGToolStripMenuItem_Click(object sender, EventArgs e)
@@ -359,6 +386,5 @@ namespace SiGen.UI
             }
         }
 
-        
     }
 }

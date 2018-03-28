@@ -44,11 +44,13 @@ namespace SiGen.StringedInstruments.Layout
         public virtual Measure StringSpreadAtBridge
         {
             get { return GetSpacingBetweenStrings(0, Layout.NumberOfStrings - 1,  FingerboardEnd.Bridge); }
+            set { throw new NotSupportedException(); }
         }
 
         public virtual Measure StringSpreadAtNut
         {
             get { return GetSpacingBetweenStrings(0, Layout.NumberOfStrings - 1, FingerboardEnd.Nut); }
+            set { throw new NotSupportedException(); }
         }
 
         public StringSpacingManager(SILayout layout) : base(layout)

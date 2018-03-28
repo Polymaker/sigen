@@ -110,5 +110,30 @@ namespace SiGen.Utilities
                 }
             }
         }
+
+        public static T GenericDeserialize<T>(XElement elem)
+        {
+            T obj = Activator.CreateInstance<T>();
+            foreach (var propInfo in typeof(T).GetProperties())
+            {
+                if (!propInfo.CanWrite)
+                    continue;
+
+                var xmlAttr = (XmlAttributeAttribute[])propInfo.GetCustomAttributes(typeof(XmlAttributeAttribute), true);
+                var xmlElem = (XmlElementAttribute[])propInfo.GetCustomAttributes(typeof(XmlElementAttribute), true);
+
+                if (xmlAttr.Length > 0 && elem.ContainsAttribute(xmlAttr[0].AttributeName))
+                    propInfo.SetValue(obj, DeserializeValue(propInfo.PropertyType, elem.Attribute(xmlAttr[0].AttributeName).Value));
+
+                if (xmlElem.Length > 0 && elem.ContainsElement(xmlElem[0].ElementName))
+                {
+                    object propVal = Activator.CreateInstance(propInfo.PropertyType);
+                    GenericDeserialize(propVal, elem.Element(xmlElem[0].ElementName));
+                    propInfo.SetValue(obj, propVal);
+                }
+            }
+            return obj;
+        }
+
     }
 }

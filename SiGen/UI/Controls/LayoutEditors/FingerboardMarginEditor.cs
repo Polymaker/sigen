@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SiGen.Measuring;
 using SiGen.StringedInstruments.Layout;
+using SiGen.Utilities;
 
 namespace SiGen.UI.Controls
 {
@@ -18,8 +19,11 @@ namespace SiGen.UI.Controls
         private enum MarginEditMode
         {
             Edges,
+            [Description("Nut & Bridge")]
             NutBridge,
+            [Description("Bass & Treble")]
             BassTreble,
+            [Description("All Sides")]
             All
         }
 
@@ -36,9 +40,18 @@ namespace SiGen.UI.Controls
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            foreach(MarginEditMode value in Enum.GetValues(typeof(MarginEditMode)))
-                cboMarginEditMode.Items.Add(value);
-            cboMarginEditMode.SelectedItem = MarginEditMode.Edges;
+            InitializeCombobox();
+        }
+
+        private void InitializeCombobox()
+        {
+            var modeList = new List<Tuple<MarginEditMode, string>>();
+            foreach (MarginEditMode value in Enum.GetValues(typeof(MarginEditMode)))
+                modeList.Add(new Tuple<MarginEditMode, string>(value, EnumHelper.GetEnumDescription(typeof(MarginEditMode), value)));
+            cboMarginEditMode.DataSource = modeList;
+            cboMarginEditMode.ValueMember = "Item1";
+            cboMarginEditMode.DisplayMember = "Item2";
+            cboMarginEditMode.SelectedValue = MarginEditMode.Edges;
         }
 
         protected override void OnLayoutChanged()
@@ -67,7 +80,7 @@ namespace SiGen.UI.Controls
             }
 
             EditMode = GetMarginsEditMode();
-            cboMarginEditMode.SelectedItem = EditMode;
+            cboMarginEditMode.SelectedValue = EditMode;
             UpdateMarginsUI();
         }
 
@@ -189,7 +202,7 @@ namespace SiGen.UI.Controls
                         CachedValues.Remove(MarginEditMode.All);
                 }
 
-                EditMode = (MarginEditMode)cboMarginEditMode.SelectedItem;
+                EditMode = (MarginEditMode)cboMarginEditMode.SelectedValue;
 
                 using (FlagManager.UseFlag("ForceRead"))
                 {

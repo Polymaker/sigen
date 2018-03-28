@@ -18,6 +18,11 @@ namespace SiGen.StringedInstruments.Data
             get { return Note.Pitch + PitchOffset; }
         }
 
+        public StringTuning()
+        {
+            Note = MusicalNote.CreateNote(NoteName.A, 4, IntonationMethod.EqualTempered);
+        }
+
         public StringTuning(MusicalNote note)
         {
             Note = note;

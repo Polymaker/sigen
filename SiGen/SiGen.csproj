@@ -81,6 +81,7 @@
     <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardEnd.cs" />
     <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardMargin.cs" />
     <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardSide.cs" />
+    <Compile Include="StringedInstruments\Layout\Fingerboard\FretInterpolationMethod.cs" />
     <Compile Include="StringedInstruments\Layout\Strings\FretManager.cs" />
     <Compile Include="StringedInstruments\Layout\ILayoutComponent.cs" />
     <Compile Include="StringedInstruments\Layout\LayoutComponent.cs" />
@@ -104,35 +105,41 @@
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingManual.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElement.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElementType.cs" />
-    <Compile Include="UI\Controls\FingerboardMarginEditor.cs">
+    <Compile Include="UI\Controls\LayoutEditors\FingerboardMarginEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\Controls\FingerboardMarginEditor.Designer.cs">
+    <Compile Include="UI\Controls\LayoutEditors\FingerboardMarginEditor.Designer.cs">
       <DependentUpon>FingerboardMarginEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\LayoutPropertyEditor.cs">
+    <Compile Include="UI\Controls\LayoutEditors\LayoutPropertyEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\Controls\LayoutPropertyEditor.Designer.cs">
+    <Compile Include="UI\Controls\LayoutEditors\LayoutPropertyEditor.Designer.cs">
       <DependentUpon>LayoutPropertyEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\LayoutViewer.Measuring.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\Controls\NumericBox.cs">
+    <Compile Include="UI\Controls\ValueEditors\NumericBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\Controls\NumericBox.Designer.cs">
+    <Compile Include="UI\Controls\ValueEditors\NumericBox.Designer.cs">
       <DependentUpon>NumericBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\TextBoxEx.cs">
+    <Compile Include="UI\Controls\LayoutEditors\ScaleLengthEditorcs.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\LayoutEditors\ScaleLengthEditorcs.Designer.cs">
+      <DependentUpon>ScaleLengthEditorcs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\ValueEditors\TextBoxEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\Controls\TextBoxEx.Designer.cs">
+    <Compile Include="UI\Controls\ValueEditors\TextBoxEx.Designer.cs">
       <DependentUpon>TextBoxEx.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Designers\MeasureEditor.cs" />
-    <Compile Include="UI\Designers\UnitOfMeasureEditor.cs" />
+    <Compile Include="UI\Controls\ValueEditors\MeasureEditor.cs" />
+    <Compile Include="UI\Controls\ValueEditors\UnitOfMeasureEditor.cs" />
     <Compile Include="UI\Windows\FrmLayoutBuilder.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -146,16 +153,16 @@
       <DependentUpon>LayoutViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\LayoutViewerDisplayConfig.cs" />
-    <Compile Include="UI\Controls\MeasureEdit.cs">
+    <Compile Include="UI\Controls\ValueEditors\MeasureEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\Controls\MeasureEdit.Designer.cs">
+    <Compile Include="UI\Controls\ValueEditors\MeasureEdit.Designer.cs">
       <DependentUpon>MeasureEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\MeasureTextbox.cs">
+    <Compile Include="UI\Controls\ValueEditors\MeasureTextbox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\Controls\MeasureTextbox.Designer.cs">
+    <Compile Include="UI\Controls\ValueEditors\MeasureTextbox.Designer.cs">
       <DependentUpon>MeasureTextbox.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Windows\LayoutExportDialog.cs">
@@ -171,7 +178,9 @@
       <DependentUpon>LayoutViewerDisplayConfigWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\ArrayProperty.cs" />
+    <Compile Include="Utilities\EnumHelper.cs" />
     <Compile Include="Utilities\ExtensionMethods\CollectionHelper.cs" />
+    <Compile Include="Utilities\ExtensionMethods\ReflectionHelper.cs" />
     <Compile Include="Utilities\FlagList.cs" />
     <Compile Include="Utilities\MeasureConverter.cs" />
     <Compile Include="Utilities\ExtensionMethods\NumberHelper.cs" />
@@ -191,7 +200,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UI\Controls\FingerboardMarginEditor.resx">
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\FingerboardMarginEditor.resx">
       <DependentUpon>FingerboardMarginEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutViewer.resx">
@@ -200,10 +209,10 @@
     <EmbeddedResource Include="UI\Windows\FrmLayoutBuilder.resx">
       <DependentUpon>FrmLayoutBuilder.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Controls\MeasureEdit.resx">
+    <EmbeddedResource Include="UI\Controls\ValueEditors\MeasureEdit.resx">
       <DependentUpon>MeasureEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Controls\MeasureTextbox.resx">
+    <EmbeddedResource Include="UI\Controls\ValueEditors\MeasureTextbox.resx">
       <DependentUpon>MeasureTextbox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\LayoutExportDialog.resx">

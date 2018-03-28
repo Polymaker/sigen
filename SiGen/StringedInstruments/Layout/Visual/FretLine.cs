@@ -112,21 +112,26 @@ namespace SiGen.StringedInstruments.Layout.Visual
         {
             Angle avgAngle = Angle.FromPoints(points.First().ToVector(), points.Last().ToVector());
             avgAngle.Normalize();
-            double tolerance = Layout.ShouldHaveStraightFrets() ? 3 : 1;
-            double maxDiff = 0;
-            for (int i = 0; i < points.Count() - 1; i++)
+
+            double tolerance = Layout.ShouldHaveStraightFrets() ? 2.5 : 1;
+            //double maxDiff = 0;
+
+            for (int i = 1; i < points.Count() - 1; i++)
             {
-                var curAngle = Angle.FromPoints(points.First().ToVector(), points.ElementAt(i + 1).ToVector());
+                var curAngle = Angle.FromPoints(points.First().ToVector(), points.ElementAt(i).ToVector());
                 curAngle.Normalize();
                 var angleDiff = Math.Abs(curAngle.Degrees - avgAngle.Degrees);
-                //if (angleDiff > tolerance)
-                //    return false;
-                if (angleDiff > maxDiff)
-                    maxDiff = angleDiff;
+                if (angleDiff > tolerance)
+                    return false;
+                //if (angleDiff > maxDiff)
+                //    maxDiff = angleDiff;
             }
-            if (maxDiff >= 1)
-                Console.WriteLine(string.Format("max diff for fret {0}: {1}", FretIndex, Angle.FromDegrees(maxDiff)));
-            return maxDiff <= tolerance;
+
+            return true;
+
+            //if (maxDiff >= 1)
+            //    Console.WriteLine(string.Format("max diff for fret {0}: {1}", FretIndex, Angle.FromDegrees(maxDiff)));
+            //return maxDiff <= tolerance;
         }
 
         public void BuildLayout()
@@ -154,21 +159,43 @@ namespace SiGen.StringedInstruments.Layout.Visual
             }
             else
             {
-                _Points.Add(Segments.First(fs => !fs.IsVirtual).P2);//first segment is toward treble side so edge is at right (P2)
-
-                foreach (var seg in Segments.Where(s => !s.IsVirtual))
+                if (Layout.FretInterpolation != FretInterpolationMethod.NotchedSpline || Strings.Count() == 1)
                 {
-                    _Points.Add(PointM.Average(seg.P2, seg.PointOnString));
-                    _Points.Add(seg.PointOnString);
-                    _Points.Add(PointM.Average(seg.P1, seg.PointOnString));
+                    _Points.Add(Segments.First(fs => !fs.IsVirtual).P2);//first segment is toward treble side so edge is at right (P2)
+                    foreach (var seg in Segments.Where(s => !s.IsVirtual))
+                        _Points.Add(seg.PointOnString);
+                    _Points.Add(Segments.Last(fs => !fs.IsVirtual).P1);//last segment is toward bass side so edge is at left (P1)
                 }
-
-                _Points.Add(Segments.Last(fs => !fs.IsVirtual).P1);//last segment is toward bass side so edge is at left (P1)
+                else if(Layout.FretInterpolation == FretInterpolationMethod.NotchedSpline)
+                {
+                    _Points.Add(Segments.First(fs => !fs.IsVirtual).P2);//first segment is toward treble side so edge is at right (P2)
+                    foreach (var seg in Segments.Where(s => !s.IsVirtual))
+                    {
+                        _Points.Add(PointM.Average(seg.P2, seg.PointOnString));
+                        _Points.Add(seg.PointOnString);
+                        _Points.Add(PointM.Average(seg.P1, seg.PointOnString));
+                    }
+                    _Points.Add(Segments.Last(fs => !fs.IsVirtual).P1);//last segment is toward bass side so edge is at left (P1)
+                }
+                else
+                {
+                    //InterpolateSpline();
+                }
 
                 _Points.Reverse();
             }
 
             _Bounds = RectangleM.BoundingRectangle(Points);
+        }
+
+        private void InterpolateSpline()
+        {
+            var points = new List<PointM>();
+            points.Add(Segments.First(fs => !fs.IsVirtual).P2);//first segment is toward treble side so edge is at right (P2)
+            foreach (var seg in Segments.Where(s => !s.IsVirtual))
+                points.Add(seg.PointOnString);
+            points.Add(Segments.Last(fs => !fs.IsVirtual).P1);//last segment is toward bass side so edge is at left (P1)
+
         }
 
         private void BuildCurve()

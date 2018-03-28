@@ -568,8 +568,12 @@ namespace SiGen.UI
                 var stringCenters = CurrentLayout.VisualElements.OfType<StringCenter>();
                 var fingerboardEdges = CurrentLayout.VisualElements.OfType<FingerboardEdge>();
 
-                var fretPos = fretLines.SelectMany(fl => fl.Segments.Where(s => !s.IsVirtual)).Select(s => s.PointOnString).Distinct();
-                LayoutIntersections.AddRange(fretPos.Select(p => p.ToVector()));
+                foreach(var fretLine in fretLines)
+                {
+                    LayoutIntersections.AddRange(stringLines.Select(s => fretLine.GetIntersection(s).ToVector()));
+                }
+                //var fretPos = fretLines.SelectMany(fl => fl.Segments.Where(s => !s.IsVirtual)).Select(s => s.PointOnString).Distinct();
+                //LayoutIntersections.AddRange(fretPos.Select(p => p.ToVector()));
 
                 LayoutIntersections.AddRange(stringCenters.SelectMany(s => fretLines.Select(f => f.GetIntersection(s).ToVector())));
                 LayoutIntersections.RemoveAll(p => p.IsEmpty);
@@ -580,8 +584,8 @@ namespace SiGen.UI
                 LayoutIntersections.AddRange(stringCenters.SelectMany(s => fingerboardEdges.Where(f => !(f is FingerboardSideEdge)).Select(f => f.GetIntersection(s).ToVector())));
                 LayoutIntersections.RemoveAll(p => p.IsEmpty);
 
-                LayoutIntersections.AddRange(CurrentLayout.VisualElements.OfType<FretLine>().Select(fl => fl.Points.First().ToVector()));
-                LayoutIntersections.AddRange(CurrentLayout.VisualElements.OfType<FretLine>().Select(fl => fl.Points.Last().ToVector()));
+                LayoutIntersections.AddRange(fretLines.Select(fl => fl.Points.First().ToVector()));
+                LayoutIntersections.AddRange(fretLines.Select(fl => fl.Points.Last().ToVector()));
                 LayoutIntersections.AddRange(CurrentLayout.VisualElements.OfType<LayoutLine>().Select(fl => fl.P1.ToVector()));
                 LayoutIntersections.AddRange(CurrentLayout.VisualElements.OfType<LayoutLine>().Select(fl => fl.P2.ToVector()));
 
@@ -589,6 +593,7 @@ namespace SiGen.UI
                 LayoutIntersections = LayoutIntersections.Distinct().ToList();
             }
         }
+
         private FloatingTextBox measureEditor;
 
         private void ShowMeasureTextbox(MeasureValueBox box)

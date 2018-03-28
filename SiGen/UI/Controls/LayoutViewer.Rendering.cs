@@ -108,18 +108,19 @@ namespace SiGen.UI
             {
                 var penToUse = fretLine.IsNut ? nutPen : fretPen;
                 var fretPoints = fretLine.Points.Select(p => PointToDisplay(p)).ToArray();
-                if (fretLine.IsStraight)
+                if (fretLine.IsStraight || CurrentLayout.FretInterpolation == StringedInstruments.Layout.FretInterpolationMethod.Linear)
                     g.DrawLines(penToUse, fretPoints);
                 else
                     g.DrawCurve(penToUse, fretPoints, 0.3f);
 
-                if(fretLine.Strings.Count() > 1)
+                if(DisplayConfig.ShowTheoreticalFrets && fretLine.Strings.Count() > 1)
                     g.DrawLines(nutPen, fretLine.Segments.Where(s => !s.IsVirtual).Select(s => PointToDisplay(s.PointOnString)).ToArray());
             }
 
             nutPen.Dispose();
             fretPen.Dispose();
         }
+
 
         private void RenderStrings(Graphics g)
         {

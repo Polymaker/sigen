@@ -157,6 +157,8 @@ namespace SiGen.Measuring
 
         public Vector ToVector()
         {
+            if (IsEmpty)
+                return Vector.Empty;
             return new Vector(X.NormalizedValue, Y.NormalizedValue);
         }
 

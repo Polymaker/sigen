@@ -154,11 +154,12 @@
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 88);
+            this.label2.Location = new System.Drawing.Point(4, 88);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(54, 26);
+            this.label2.Size = new System.Drawing.Size(60, 26);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Last Fret Overhang";
+            this.label2.Text = "Overhang at Last Fret";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // lblEditMode
             // 
@@ -168,6 +169,7 @@
             this.lblEditMode.Size = new System.Drawing.Size(59, 26);
             this.lblEditMode.TabIndex = 0;
             this.lblEditMode.Text = "Define Margins By";
+            this.lblEditMode.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // lblTreble
             // 
@@ -186,7 +188,7 @@
             this.cboMarginEditMode.FormattingEnabled = true;
             this.cboMarginEditMode.Location = new System.Drawing.Point(72, 3);
             this.cboMarginEditMode.Name = "cboMarginEditMode";
-            this.cboMarginEditMode.Size = new System.Drawing.Size(148, 21);
+            this.cboMarginEditMode.Size = new System.Drawing.Size(124, 21);
             this.cboMarginEditMode.TabIndex = 4;
             this.cboMarginEditMode.SelectedIndexChanged += new System.EventHandler(this.cboMarginEditMode_SelectedIndexChanged);
             // 

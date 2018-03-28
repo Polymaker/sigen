@@ -207,6 +207,18 @@ namespace SiGen.StringedInstruments.Layout
 
             }
 
+            internal void InitializeIfNeeded()
+            {
+                if(_Lengths == null || _Lengths.Length != NumberOfStrings)
+                {
+                    _Lengths = new Measure[Layout.NumberOfStrings];
+                    for (int i = 0; i < Layout.NumberOfStrings; i++)
+                    {
+                        _Lengths[i] = !Layout.Strings[i].RealScaleLength.IsEmpty ? Layout.Strings[i].RealScaleLength : Layout.Strings[i].ScaleLength;
+                    }
+                }
+            }
+
             protected override void OnStringConfigurationChanged()
             {
                 if (_Lengths != null && _Lengths.Length > 0)
@@ -221,12 +233,12 @@ namespace SiGen.StringedInstruments.Layout
                             _Lengths[i] = oldLengths[oldLengths.Length - 1];
                     }
                 }
-                else
-                {
-                    _Lengths = new Measure[Layout.NumberOfStrings];
-                    for (int i = 0; i < Layout.NumberOfStrings; i++)
-                        _Lengths[i] = Measure.Inches(25.5);
-                }
+                //else
+                //{
+                //    _Lengths = new Measure[Layout.NumberOfStrings];
+                //    for (int i = 0; i < Layout.NumberOfStrings; i++)
+                //        _Lengths[i] = Measure.Inches(25.5);
+                //}
             }
 
             public override Measure GetLength(int index)
