@@ -447,6 +447,9 @@ namespace SiGen.StringedInstruments.Layout
             layout.CurrentScaleLength.Deserialize(root.Element("ScaleLength"));
             layout.Margins.Deserialize(root.Element("FingerboardMargins"));
 
+            if (root.ContainsAttribute("Name"))
+                layout.LayoutName = root.Attribute("Name").Value;
+
             if (root.ContainsElement("Temperament"))
                 layout.FretsTemperament = DeserializeProperty<Temperament>(root.Element("Temperament"));
 

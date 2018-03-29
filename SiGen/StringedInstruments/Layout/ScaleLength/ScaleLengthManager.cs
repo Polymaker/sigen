@@ -135,7 +135,12 @@ namespace SiGen.StringedInstruments.Layout
 
             public double PerpendicularFretRatio
             {
-                get { return _PerpendicularFretRatio; }
+                get
+                {
+                    //if (!Layout.Strings.AllEqual(s => s.MultiScaleRatio))
+                    //    return -1;
+                    return _PerpendicularFretRatio;
+                }
                 set
                 {
                     _PerpendicularFretRatio = value;
@@ -178,6 +183,8 @@ namespace SiGen.StringedInstruments.Layout
                 var elem = base.Serialize(elemName);
                 elem.Add(Treble.SerializeAsAttribute("Treble"));
                 elem.Add(Bass.SerializeAsAttribute("Bass"));
+                if (Layout.Strings.AllEqual(s => s.MultiScaleRatio))
+                    elem.Add(new XAttribute("MultiScaleRatio", PerpendicularFretRatio));
                 return elem;
             }
 
@@ -186,7 +193,9 @@ namespace SiGen.StringedInstruments.Layout
                 base.Deserialize(elem);
                 Treble = Measure.Parse(elem.Attribute("Treble").Value);
                 Bass = Measure.Parse(elem.Attribute("Bass").Value);
-                if (Layout.Strings.AllEqual(s => s.MultiScaleRatio))
+                if (elem.ContainsAttribute("MultiScaleRatio"))
+                    PerpendicularFretRatio = double.Parse(elem.Attribute("MultiScaleRatio").Value);
+                else if (Layout.Strings.AllEqual(s => s.MultiScaleRatio))
                     _PerpendicularFretRatio = Layout.Strings[0].MultiScaleRatio;
             }
         }

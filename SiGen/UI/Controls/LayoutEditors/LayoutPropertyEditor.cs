@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SiGen.StringedInstruments.Layout;
 using SiGen.Utilities;
+using System.Collections;
 
 namespace SiGen.UI.Controls
 {
@@ -16,6 +17,12 @@ namespace SiGen.UI.Controls
     public partial class LayoutPropertyEditor : UserControl
     {
         private SILayout _CurrentLayout;
+        /// <summary>
+        /// Used to store display state information
+        /// </summary>
+        protected Dictionary<SILayout, Hashtable> CachedLayoutData;
+        internal bool Docking;
+
         protected FlagList FlagManager;
         private bool _IsLoading;
 
@@ -26,37 +33,53 @@ namespace SiGen.UI.Controls
             set { BindLayout(value); }
         }
 
-        protected bool IsLoading { get { return _IsLoading; } }
+        protected bool IsLoading { get { return _IsLoading; /* FlagManager["ReloadPropertyValues"] */} }
 
         public LayoutPropertyEditor()
         {
             InitializeComponent();
             FlagManager = new FlagList();
+            CachedLayoutData = new Dictionary<SILayout, Hashtable>();
         }
 
         private void BindLayout(SILayout layout)
         {
             if(_CurrentLayout != layout)
             {
-                //if(_CurrentLayout != null)
-                //    _CurrentLayout.LayoutUpdated -= LayoutUpdated;
+                if (_CurrentLayout != null)
+                    CacheCurrentLayoutValues();
+
+                if (_CurrentLayout != null)
+                    _CurrentLayout.NumberOfStringsChanged -= CurrentLayout_NumberOfStringsChanged;
+
                 _CurrentLayout = layout;
-                //if (_CurrentLayout != null)
-                //    _CurrentLayout.LayoutUpdated += LayoutUpdated;
                 OnLayoutChanged();
                 ReloadPropertyValues();
+
+                if(_CurrentLayout != null)
+                    _CurrentLayout.NumberOfStringsChanged += CurrentLayout_NumberOfStringsChanged;
+
+                if (layout == null)
+                    ClearLayoutCache(null);
+                else if (CachedLayoutData.ContainsKey(layout))
+                    RestoreCachedLayoutValues();
             }
+        }
+
+        private void CurrentLayout_NumberOfStringsChanged(object sender, EventArgs e)
+        {
+            OnNumberOfStringsChanged();
+        }
+
+        protected virtual void OnNumberOfStringsChanged()
+        {
+
         }
 
         protected virtual void OnLayoutChanged()
         {
 
         }
-
-        //private void LayoutUpdated(object sender, EventArgs e)
-        //{
-
-        //}
 
         public void ReloadPropertyValues()
         {
@@ -70,7 +93,26 @@ namespace SiGen.UI.Controls
 
         protected virtual void ReadLayoutProperties()
         {
+            
+        }
 
+        protected virtual void CacheCurrentLayoutValues()
+        {
+            if (!CachedLayoutData.ContainsKey(CurrentLayout))
+                CachedLayoutData.Add(CurrentLayout, new Hashtable());
+        }
+
+        protected virtual void RestoreCachedLayoutValues()
+        {
+
+        }
+
+        public virtual void ClearLayoutCache(SILayout layout)
+        {
+            if (layout == null)
+                CachedLayoutData.Clear();
+            else if (CachedLayoutData.ContainsKey(layout))
+                CachedLayoutData.Remove(layout);
         }
     }
 }

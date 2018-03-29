@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -29,6 +30,8 @@ namespace SiGen.UI.Controls
 
         private MarginEditMode EditMode;
         private Dictionary<MarginEditMode, Measure[]> CachedValues;
+        
+
         private bool MarginModified;
 
         public FingerboardMarginEditor()
@@ -41,6 +44,7 @@ namespace SiGen.UI.Controls
         {
             base.OnLoad(e);
             InitializeCombobox();
+            ReadLayoutProperties();
         }
 
         private void InitializeCombobox()
@@ -60,8 +64,23 @@ namespace SiGen.UI.Controls
             CachedValues.Clear();
         }
 
+        protected override void CacheCurrentLayoutValues()
+        {
+            base.CacheCurrentLayoutValues();
+            CachedLayoutData[CurrentLayout]["EditMode"] = (MarginEditMode)cboMarginEditMode.SelectedValue;
+            CachedLayoutData[CurrentLayout]["Values"] = CachedValues;
+        }
+
+        protected override void RestoreCachedLayoutValues()
+        {
+            base.RestoreCachedLayoutValues();
+            cboMarginEditMode.SelectedValue = CachedLayoutData[CurrentLayout]["EditMode"];
+            CachedValues = (Dictionary<MarginEditMode, Measure[]>)CachedLayoutData[CurrentLayout]["Values"];
+        }
+
         protected override void ReadLayoutProperties()
         {
+            cboMarginEditMode.Enabled = (CurrentLayout != null);
             mtbLastFret.Enabled = (CurrentLayout != null);
             mtbNutBass.Enabled = (CurrentLayout != null);
             MarginModified = false;
@@ -73,7 +92,7 @@ namespace SiGen.UI.Controls
             else
             {
                 mtbLastFret.Value = Measure.Empty;
-                mtbNutBass.Value = Measure.Zero;
+                mtbNutBass.Value = Measure.Empty;
                 mtbNutTreble.Value = Measure.Zero;
                 mtbBridgeBass.Value = Measure.Zero;
                 mtbBridgeTreble.Value = Measure.Zero;
@@ -117,6 +136,13 @@ namespace SiGen.UI.Controls
             mtbBridgeBass.Visible = (EditMode == MarginEditMode.NutBridge || EditMode == MarginEditMode.All);
             lblBass.Visible = lblTreble.Visible = (EditMode == MarginEditMode.BassTreble || EditMode == MarginEditMode.All);
             lblNut.Visible = lblBridge.Visible = (EditMode == MarginEditMode.NutBridge || EditMode == MarginEditMode.All);
+            tableLayoutPanel1.PerformLayout();
+
+            int totalHeight = 0;
+            var rowHeights = tableLayoutPanel1.GetRowHeights();
+            for (int i = 0; i < rowHeights.Length - 1; i++)
+                totalHeight += rowHeights[i];
+            tableLayoutPanel1.Height = totalHeight;
         }
 
         private void mtbLastFret_ValueChanged(object sender, EventArgs e)

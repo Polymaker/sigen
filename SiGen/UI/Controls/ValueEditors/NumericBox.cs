@@ -26,7 +26,7 @@ namespace SiGen.UI.Controls
 
         #region Fields
 
-        //private bool _AllowDecimals;
+        private bool _AllowDecimals;
         //private int _DecimalPlaces;
         private double _Value;
         private double _MinimumValue;
@@ -89,6 +89,21 @@ namespace SiGen.UI.Controls
             }
         }
 
+        [DefaultValue(true)]
+        public bool AllowDecimals
+        {
+            get { return _AllowDecimals; }
+            set
+            {
+                if(value != _AllowDecimals)
+                {
+                    _AllowDecimals = value;
+                    if (!_AllowDecimals)
+                        Value = Math.Round(Value);
+                }
+            }
+        }
+
         #endregion
 
         #region Events
@@ -103,7 +118,7 @@ namespace SiGen.UI.Controls
         {
             InitializeComponent();
             _MaximumValue = 100;
-            
+            _AllowDecimals = true;
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -169,13 +184,15 @@ namespace SiGen.UI.Controls
                 double value;
                 if (double.TryParse(base.Text, out value))
                 {
-                    Value = ConstraintValue(value);
+                    if(AllowDecimals || value % 1d == 0d)
+                        Value = ConstraintValue(value);
                     //success
                 }
                 else
                 {
                     //fail
                 }
+                UpdateTextboxValue();
             }
         }
 
@@ -217,7 +234,31 @@ namespace SiGen.UI.Controls
             if (e.Cancel)
                 CancelEdit();
             else
-                PerformEndEdit();
+            {
+                if (!updatingText && _IsEditing)
+                {
+                    double value;
+                    if (double.TryParse(base.Text, out value))
+                    {
+                        if(!AllowDecimals && value % 1d != 0)
+                        {
+                            System.Media.SystemSounds.Exclamation.Play();
+                            e.Cancel = true;
+                        }
+                    }
+                    else
+                    {
+                        System.Media.SystemSounds.Exclamation.Play();
+                        e.Cancel = true;
+                    }
+                }
+            }
+        }
+
+        protected override void OnValidated(EventArgs e)
+        {
+            base.OnValidated(e);
+            PerformEndEdit();
         }
 
         //private const int WM_PASTE = 0x0302;

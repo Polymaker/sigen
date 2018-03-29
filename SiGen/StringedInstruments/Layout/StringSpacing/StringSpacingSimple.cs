@@ -107,6 +107,8 @@ namespace SiGen.StringedInstruments.Layout
         public override XElement Serialize(string elemName)
         {
             var elem = base.Serialize(elemName);
+            if(NutSpacingMode == NutSpacingMode.BetweenStrings && AdjustedNutSlots != null && AdjustedNutSlots.Length > 0)
+                elem.AddFirst(new XComment("Nut slot positions are adjusted in consideration of the strings gauge"));
             elem.Add(new XAttribute("NutSpacingMode", NutSpacingMode));
             elem.Add(StringSpacingAtNut.SerializeAsAttribute("StringSpacingAtNut"));
             elem.Add(StringSpacingAtBridge.SerializeAsAttribute("StringSpacingAtBridge"));
@@ -148,6 +150,7 @@ namespace SiGen.StringedInstruments.Layout
                 for(int i = 0; i < NumberOfStrings - 1; i++)
                 {
                     AdjustedNutSlots[i] = (Layout.Strings[i].Gauge / 2) + spacing + (Layout.Strings[i + 1].Gauge / 2);
+                    AdjustedNutSlots[i].Unit = StringSpacingAtNut.Unit;
                 }
             }
             else

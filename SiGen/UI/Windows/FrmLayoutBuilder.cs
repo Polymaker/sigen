@@ -3,34 +3,129 @@ using SiGen.Measuring;
 using SiGen.Physics;
 using SiGen.StringedInstruments.Data;
 using SiGen.StringedInstruments.Layout;
+using SiGen.UI.Controls;
+using SiGen.UI.Controls.LayoutEditors;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace SiGen.UI
 {
     public partial class FrmLayoutBuilder : Form
     {
+        private LayoutEditorPanel<FingerboardMarginEditor> layoutMarginPanel;
+        private LayoutEditorPanel<ScaleLengthEditor> scaleLengthPanel;
 
-        private bool isLoading;
-        private bool internalChange;
-        private LayoutFile _CurrentFile;
+        private LayoutFile CurrentFile
+        {
+            get
+            {
+                if(dockPanel1.ActiveDocument != null)
+                    return (LayoutFile)(dockPanel1.ActiveDocument as DockContent).Tag;
+                return null;
+            }
+        }
 
         public FrmLayoutBuilder()
         {
             InitializeComponent();
+            //dockPanel1.Theme = vS2005Theme1;
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            
+            //splitContainer1.Panel1.Controls.Remove(layoutViewer1);
+            InitializeEditingPanels();
+            
             LoadLayout(new LayoutFile(CreateDefaultLayout()));
+        }
+
+        #region Document Management
+
+        private void InitializeEditingPanels()
+        {
+
+            dockPanel1.DockBottomPortion = 150;
+            scaleLengthPanel = new LayoutEditorPanel<ScaleLengthEditor>();
+            scaleLengthPanel.Show(dockPanel1, DockState.DockBottom);
+            scaleLengthPanel.Text = "Scale Length Configuration";
+
+            layoutMarginPanel = new LayoutEditorPanel<FingerboardMarginEditor>();
+            layoutMarginPanel.Show(scaleLengthPanel.Pane, DockAlignment.Right, 0.5);
+            layoutMarginPanel.Text = "Fingerboard Margins";
+        }
+
+        private void dockPanel1_ActiveDocumentChanged(object sender, EventArgs e)
+        {
+            foreach(var panel in dockPanel1.Contents.OfType<ILayoutEditorPanel>())
+            {
+                if (dockPanel1.ActiveDocument == null)
+                    panel.CurrentLayout = null;
+                else
+                    panel.CurrentLayout = (((DockContent)dockPanel1.ActiveDocument).Tag as LayoutFile).Layout;
+            }
+        }
+
+        private DockContent CreateDocumentPanel(LayoutFile layoutFile)
+        {
+            var documentPanel = new DockContent();
+            if (string.IsNullOrEmpty(layoutFile.FileName))
+                documentPanel.Text = "New Layout";
+            else if (!string.IsNullOrEmpty(layoutFile.Layout.LayoutName))
+                documentPanel.Text = layoutFile.Layout.LayoutName;
+            else
+                documentPanel.Text = Path.GetFileNameWithoutExtension(layoutFile.FileName);
+            if (!string.IsNullOrEmpty(layoutFile.FileName))
+                documentPanel.ToolTipText = layoutFile.FileName;
+
+            documentPanel.DockAreas = DockAreas.Document;// | DockAreas.Float;
+            var viewer = new LayoutViewer();
+            documentPanel.Controls.Add(viewer);
+            viewer.Dock = DockStyle.Fill;
+            if (layoutFile.Layout.VisualElements.Count == 0 || layoutFile.Layout.IsLayoutDirty)
+                layoutFile.Layout.RebuildLayout();
+            viewer.CurrentLayout = layoutFile.Layout;
+            viewer.BackColor = Color.White;
+            viewer.Select();
+            documentPanel.Tag = layoutFile;
+            documentPanel.FormClosing += DocumentPanel_FormClosing;
+            documentPanel.FormClosed += DocumentPanel_FormClosed;
+            return documentPanel;
+        }
+
+        private void DocumentPanel_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            var documentFile = (LayoutFile)((DockContent)dockPanel1.ActiveDocument).Tag;
+            foreach (var panel in dockPanel1.Contents.OfType<ILayoutEditorPanel>())
+                panel.Editor.ClearLayoutCache(documentFile.Layout);
+        }
+
+        private void DocumentPanel_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            
+        }
+
+        #endregion
+
+        private DockContent CreateDockPanel(Control ctrl, string name)
+        {
+            var tmpDoc = new DockContent();
+            tmpDoc.CloseButtonVisible = false;
+            tmpDoc.AllowEndUserDocking = false;
+            tmpDoc.Text = name;
+            tmpDoc.Controls.Add(ctrl);
+            ctrl.Dock = DockStyle.Fill;
+            return tmpDoc;
         }
 
         private static SILayout CreateDefaultLayout()
@@ -75,233 +170,52 @@ namespace SiGen.UI
             layout.RebuildLayout();
             return layout;
         }
-
-        private void UpdateParameters()
-        {
-            isLoading = true;
-            var layout = layoutViewer1.CurrentLayout;
-            switch (layout.ScaleLengthMode)
-            {
-                case ScaleLengthType.Single:
-                    rbSingleScale.Checked = true;
-                    break;
-                case ScaleLengthType.Multiple:
-                    rbMultiScale.Checked = true;
-                    break;
-                case ScaleLengthType.Individual:
-                    radioButton1.Checked = true;
-                    break;
-            }
-            nudNumberOfStrings.Value = layout.NumberOfStrings;
-            SetControlValue(nudNumberOfFrets, layout.Strings[0].NumberOfFrets);
-            meSingleScale.Value = layout.SingleScaleConfig.Length;
-            meTrebleScale.Value = layout.MultiScaleConfig.Treble;
-            meBassScale.Value = layout.MultiScaleConfig.Bass;
-            nudMultiScaleOffset.Value = (decimal)layout.MultiScaleConfig.PerpendicularFretRatio;
-            FillSpacingValues();
-            isLoading = false;
-        }
-
-        private void meSingleScale_ValueChanged(object sender, EventArgs e)
-        {
-            if (!isLoading)
-            {
-                layoutViewer1.CurrentLayout.SingleScaleConfig.Length = meSingleScale.Value;
-                RebuildLayoutIfNeeded();
-            }
-        }
-
-        private void nudNumberOfStrings_ValueChanged(object sender, EventArgs e)
-        {
-            if (!isLoading)
-            {
-                layoutViewer1.CurrentLayout.NumberOfStrings = (int)nudNumberOfStrings.Value;
-                FillSpacingValues();
-                RebuildLayoutIfNeeded();
-            }
-        }
-
-        private void meTrebleScale_ValueChanged(object sender, EventArgs e)
-        {
-            if (!isLoading)
-            {
-                layoutViewer1.CurrentLayout.MultiScaleConfig.Treble = meTrebleScale.Value;
-                RebuildLayoutIfNeeded();
-            }
-        }
-
-        private void meBassScale_ValueChanged(object sender, EventArgs e)
-        {
-            if (!isLoading)
-            {
-                layoutViewer1.CurrentLayout.MultiScaleConfig.Bass = meBassScale.Value;
-                RebuildLayoutIfNeeded();
-            }
-        }
-
-        private void nudMultiScaleOffset_ValueChanged(object sender, EventArgs e)
-        {
-            if (!isLoading && !internalChange)
-            {
-                layoutViewer1.CurrentLayout.MultiScaleConfig.PerpendicularFretRatio = (double)nudMultiScaleOffset.Value;
-                var valueStr = layoutViewer1.CurrentLayout.MultiScaleConfig.PerpendicularFretRatio.ToString();
-                if (valueStr.Contains("."))
-                    nudMultiScaleOffset.DecimalPlaces = valueStr.Length - (valueStr.IndexOf('.') + 1);
-                RebuildLayoutIfNeeded();
-            }
-        }
-
-        private void ScaleLengthMode_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!isLoading)
-            {
-                var button = (RadioButton)sender;
-                if (button.Checked)
-                {
-                    var layout = layoutViewer1.CurrentLayout;
-                    if (button == rbSingleScale)
-                        layout.ScaleLengthMode = ScaleLengthType.Single;
-                    else if (button == rbMultiScale)
-                        layout.ScaleLengthMode = ScaleLengthType.Multiple;
-
-                    RebuildLayoutIfNeeded();
-
-                }
-            }
-
-            lblScaleLength.Visible = rbSingleScale.Checked;
-            meSingleScale.Visible = rbSingleScale.Checked;
-
-            lblTrebleLength.Visible = rbMultiScale.Checked;
-            meTrebleScale.Visible = rbMultiScale.Checked;
-            lblBassLength.Visible = rbMultiScale.Checked;
-            meBassScale.Visible = rbMultiScale.Checked;
-            nudMultiScaleOffset.Visible = rbMultiScale.Checked;
-            lblMultiScaleRatio.Visible = rbMultiScale.Checked;
-            gbxScaleLength.Height = tlpScaleLenghts.Bottom + 6;
-        }
-
-        private void RebuildLayoutIfNeeded()
-        {
-            if (layoutViewer1.CurrentLayout.IsLayoutDirty)
-                layoutViewer1.CurrentLayout.RebuildLayout();
-        }
-
-        #region String spacing
-
-        private void StringSpacingChanged(object sender, EventArgs e)
-        {
-            if (!isLoading && !internalChange && layoutViewer1.CurrentLayout != null)
-            {
-                var layout = layoutViewer1.CurrentLayout;
-                if(layout.StringSpacingMode == StringSpacingType.Simple)
-                {
-                    if(sender == meSpacingNut1)
-                    {
-                        layout.SimpleStringSpacing.StringSpacingAtNut = meSpacingNut1.Value;
-                    }
-                    else if (sender == meSpacingNut2)
-                    {
-                        layout.SimpleStringSpacing.StringSpreadAtNut = meSpacingNut2.Value;
-                    }
-                    else if (sender == meSpacingBridge1)
-                    {
-                        layout.SimpleStringSpacing.StringSpacingAtBridge = meSpacingBridge1.Value;
-                    }
-                    else if (sender == meSpacingBridge2)
-                    {
-                        layout.SimpleStringSpacing.StringSpreadAtBridge = meSpacingBridge2.Value;
-                    }
-                    FillSpacingValues();
-                    RebuildLayoutIfNeeded();
-                }
-            }
-        }
-
-        private void FillSpacingValues()
-        {
-            var layout = layoutViewer1.CurrentLayout;
-            SetControlValue(meSpacingNut1, layout.SimpleStringSpacing.StringSpacingAtNut);
-            SetControlValue(meSpacingNut2, layout.SimpleStringSpacing.StringSpreadAtNut);
-            SetControlValue(meSpacingBridge1, layout.SimpleStringSpacing.StringSpacingAtBridge);
-            SetControlValue(meSpacingBridge2, layout.SimpleStringSpacing.StringSpreadAtBridge);
-        }
-
-        #endregion
-
-        private void SetControlValue(Control ctrl, object value, string propName = "Value")
-        {
-            internalChange = true;
-            var valueProp = TypeDescriptor.GetProperties(ctrl.GetType())[propName];
-            if (value != null && value.GetType() != valueProp.PropertyType)
-            {
-                if (value is IConvertible)
-                    TypeDescriptor.GetProperties(ctrl.GetType())[propName].SetValue(ctrl, Convert.ChangeType(value, valueProp.PropertyType));
-                else
-                    TypeDescriptor.GetProperties(ctrl.GetType())[propName].SetValue(ctrl, TypeDescriptor.GetConverter(valueProp.PropertyType).ConvertFrom(value));
-            }
-            else
-                TypeDescriptor.GetProperties(ctrl.GetType())[propName].SetValue(ctrl, value);
-
-            internalChange = false;
-        }
-
-        private void nudNumberOfFrets_ValueChanged(object sender, EventArgs e)
-        {
-            if(!isLoading && !internalChange)
-            {
-                var layout = layoutViewer1.CurrentLayout;
-                layout.Strings.SetAll(s => s.NumberOfFrets, (int)nudNumberOfFrets.Value);
-                RebuildLayoutIfNeeded();
-            }
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            layoutViewer1.DisplayConfig.ShowTheoreticalFrets = !layoutViewer1.DisplayConfig.ShowTheoreticalFrets;
-            
-        }
-
+        
         #region Save
 
-        private void SaveLayout(bool selectPath)
+        private void SaveLayout(LayoutFile file, bool selectPath)
         {
             if (selectPath)
             {
                 using (var sfd = new SaveFileDialog())
                 {
-                    sfd.FileName = "test.sil";
+                    if(!string.IsNullOrEmpty(file.FileName))
+                        sfd.FileName = file.FileName;
+                    else
+                        sfd.FileName = "test.sil";
                     sfd.Filter = "SI Layout file (*.sil)|*.sil";
                     sfd.DefaultExt = ".sil";
 
                     if (sfd.ShowDialog() == DialogResult.OK)
                     {
-                        _CurrentFile.FileName = sfd.FileName;
+                        file.FileName = sfd.FileName;
                     }
                     else
                         return;
                 }
             }
 
-            _CurrentFile.Layout.Save(_CurrentFile.FileName);
+            if (string.IsNullOrEmpty(file.Layout.LayoutName))
+                file.Layout.LayoutName = Path.GetFileNameWithoutExtension(file.FileName);
+            file.Layout.Save(file.FileName);
         }
 
         private void tssbSave_ButtonClick(object sender, EventArgs e)
         {
-            if (_CurrentFile != null)
-                SaveLayout(string.IsNullOrEmpty(_CurrentFile.FileName));
+            if (CurrentFile != null)
+                SaveLayout(CurrentFile, string.IsNullOrEmpty(CurrentFile.FileName));
         }
 
         private void tsmiSave_Click(object sender, EventArgs e)
         {
-            if (_CurrentFile != null)
-                SaveLayout(string.IsNullOrEmpty(_CurrentFile.FileName));
+            if (CurrentFile != null)
+                SaveLayout(CurrentFile, string.IsNullOrEmpty(CurrentFile.FileName));
         }
 
         private void tsmiSaveAs_Click(object sender, EventArgs e)
         {
-            if (_CurrentFile != null)
-                SaveLayout(true);
+            if (CurrentFile != null)
+                SaveLayout(CurrentFile, true);
         }
 
         #endregion
@@ -346,24 +260,8 @@ namespace SiGen.UI
 
         private void LoadLayout(LayoutFile layout)
         {
-            _CurrentFile = layout;
-
-            if(layout == null)
-            {
-                layoutViewer1.CurrentLayout = null;
-                fingerboardMarginEditor1.CurrentLayout = null;
-
-            }
-            else
-            {
-                if (_CurrentFile.Layout.VisualElements.Count == 0 || _CurrentFile.Layout.IsLayoutDirty)
-                    _CurrentFile.Layout.RebuildLayout();
-
-                layoutViewer1.CurrentLayout = _CurrentFile.Layout;
-                layoutViewer1.Select();
-                fingerboardMarginEditor1.CurrentLayout = _CurrentFile.Layout;
-                UpdateParameters();
-            }
+            var documentPanel = CreateDocumentPanel(layout);
+            documentPanel.Show(dockPanel1, DockState.Document);
         }
 
         private void exportAsSVGToolStripMenuItem_Click(object sender, EventArgs e)
@@ -374,17 +272,16 @@ namespace SiGen.UI
                 sfd.Filter = "Scalable Vector Graphics File (*.svg)|*.svg";
                 sfd.DefaultExt = ".svg";
 
-                if (sfd.ShowDialog() == DialogResult.OK)
-                {
-                    SvgLayoutExporter.ExportLayout(sfd.FileName, layoutViewer1.CurrentLayout,
-                        new LayoutSvgExportOptions()
-                        {
-                            ExportStrings = false,
-                            ExportStringCenters = false
-                        });
-                }
+                //if (sfd.ShowDialog() == DialogResult.OK)
+                //{
+                //    SvgLayoutExporter.ExportLayout(sfd.FileName, layoutViewer1.CurrentLayout,
+                //        new LayoutSvgExportOptions()
+                //        {
+                //            ExportStrings = false,
+                //            ExportStringCenters = false
+                //        });
+                //}
             }
         }
-
     }
 }

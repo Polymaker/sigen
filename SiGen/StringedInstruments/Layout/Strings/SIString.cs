@@ -35,6 +35,10 @@ namespace SiGen.StringedInstruments.Layout
         public Measure ScaleLength
         {
             get { return Layout.CurrentScaleLength.GetLength(Index)/*_ScaleLength*/; }
+            set
+            {
+                Layout.CurrentScaleLength.SetLength(Index, value);
+            }
         }
 
         /// <summary>

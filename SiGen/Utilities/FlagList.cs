@@ -28,6 +28,11 @@ namespace SiGen.Utilities
 
         public bool All { get { return mFlags.Values.All(v => v == true); } }
 
+        public IReadOnlyDictionary<bool, string> Flags
+        {
+            get { return (IReadOnlyDictionary<bool, string>)mFlags; }
+        }
+
         public FlagList()
         {
             mFlags = new Dictionary<string, bool>();

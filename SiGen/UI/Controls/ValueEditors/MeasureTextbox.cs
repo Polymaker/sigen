@@ -238,13 +238,15 @@ namespace SiGen.UI
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if (!ContainsFocus && e.Button == MouseButtons.Right)
-                preventFocus = true;
-
-            if (e.Button == MouseButtons.Left && measureBounds.Contains(e.Location))
-                ShowTextBox(true);
+            var hadFocus = ContainsFocus;
 
             base.OnMouseDown(e);
+
+            if (!hadFocus && e.Button == MouseButtons.Right)
+                preventFocus = true;
+
+            if (ContainsFocus && e.Button == MouseButtons.Left && measureBounds.Contains(e.Location))
+                ShowTextBox(true);
         }
 
         protected void ShowTextBox(bool select = false)
@@ -487,6 +489,7 @@ namespace SiGen.UI
         }
 
         #endregion
+
     }
 
     internal class MeasureTextboxDesigner : ControlDesigner
