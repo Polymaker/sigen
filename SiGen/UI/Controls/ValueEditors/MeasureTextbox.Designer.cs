@@ -123,7 +123,7 @@
             this.ContextMenuStrip = this.cmsConvert;
             this.Controls.Add(this.innerTextbox);
             this.Name = "MeasureTextbox";
-            this.Size = new System.Drawing.Size(111, 49);
+            this.Size = new System.Drawing.Size(100, 49);
             this.cmsConvert.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -345,7 +345,11 @@ namespace SiGen.UI
             if (MeasureFirstSelection.IsEmpty || !MeasureLastSelection.IsEmpty)
             {
                 if (!MeasureLastSelection.IsEmpty)
+                {
+                    if (measureEditor != null && (DateTime.Now - measureEditor.LastClosedTime).TotalMilliseconds < 200)
+                        return;
                     ClearMeasuring();
+                }
                 var pos = GrabMeasureLocation(position);
                 if (!pos.IsEmpty)
                 {
@@ -617,11 +621,13 @@ namespace SiGen.UI
         private class FloatingTextBox : Form
         {
             internal Controls.TextBoxEx textbox;
+            internal DateTime LastClosedTime;
             private LayoutViewer owner;
 
             public FloatingTextBox(LayoutViewer viewer)
             {
                 owner = viewer;
+                LastClosedTime = DateTime.Today;
                 FormBorderStyle = FormBorderStyle.None;
                 StartPosition = FormStartPosition.Manual;
                 Padding = Padding.Empty;
@@ -643,6 +649,7 @@ namespace SiGen.UI
             private void FloatingTextBox_Deactivate(object sender, EventArgs e)
             {
                 Hide();
+                LastClosedTime = DateTime.Now;
             }
 
             private void Textbox_CommandKeyPressed(object sender, KeyEventArgs e)

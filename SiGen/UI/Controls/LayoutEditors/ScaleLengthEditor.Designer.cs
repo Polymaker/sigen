@@ -100,7 +100,6 @@
             // 
             this.flowLayoutPanel1.AutoSize = true;
             this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.flowLayoutPanel1.CausesValidation = false;
             this.flowLayoutPanel1.Controls.Add(this.rbSingle);
             this.flowLayoutPanel1.Controls.Add(this.rbDual);
             this.flowLayoutPanel1.Controls.Add(this.rbMultiple);
@@ -238,6 +237,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "ScaleLengthEditor";
             this.Size = new System.Drawing.Size(309, 202);

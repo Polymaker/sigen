@@ -93,6 +93,7 @@
             this.tsbNew.Name = "tsbNew";
             this.tsbNew.Size = new System.Drawing.Size(90, 22);
             this.tsbNew.Text = "New Layout";
+            this.tsbNew.Click += new System.EventHandler(this.tsbNew_Click);
             // 
             // tssbOpen
             // 
@@ -110,19 +111,19 @@
             // tsmiOpenFile
             // 
             this.tsmiOpenFile.Name = "tsmiOpenFile";
-            this.tsmiOpenFile.Size = new System.Drawing.Size(165, 22);
+            this.tsmiOpenFile.Size = new System.Drawing.Size(164, 22);
             this.tsmiOpenFile.Text = "Open File...";
             // 
             // tsmiOpenTemplate
             // 
             this.tsmiOpenTemplate.Name = "tsmiOpenTemplate";
-            this.tsmiOpenTemplate.Size = new System.Drawing.Size(165, 22);
+            this.tsmiOpenTemplate.Size = new System.Drawing.Size(164, 22);
             this.tsmiOpenTemplate.Text = "Open Template...";
             // 
             // tsSeparatorOpen
             // 
             this.tsSeparatorOpen.Name = "tsSeparatorOpen";
-            this.tsSeparatorOpen.Size = new System.Drawing.Size(162, 6);
+            this.tsSeparatorOpen.Size = new System.Drawing.Size(161, 6);
             // 
             // tssbSave
             // 

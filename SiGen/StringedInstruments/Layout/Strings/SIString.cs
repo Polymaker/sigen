@@ -312,8 +312,8 @@ namespace SiGen.StringedInstruments.Layout
 
             if(elem.ContainsAttribute("MultiScaleRatio"))
                 _MultiScaleRatio = double.Parse(elem.Attribute("MultiScaleRatio").Value);
-            else
-                _MultiScaleRatio = 0.5d;
+            //else
+            //    _MultiScaleRatio = 0.5d;
 
             if (elem.ContainsElement("Tuning"))
                 _Tuning = StringTuning.Deserialize(elem.Element("Tuning"));

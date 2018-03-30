@@ -24,20 +24,43 @@ namespace SiGen.UI.Controls
             dgvScaleLengths.AutoGenerateColumns = false;
         }
 
+        #region RadioButton Glitch Handling
+
+        //For some reasons, when the control is activated, the RadioButton that was last clicked by the user get checked
+        //
+
         private bool enteringControl;
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            (ParentForm as WeifenLuo.WinFormsUI.Docking.DockContent).DockPanel.ActiveContentChanged += DockPanel_ActiveContentChanged;
+        }
 
         protected override void OnEnter(EventArgs e)
         {
             base.OnEnter(e);
-            enteringControl = true;
+            if (ParentForm is WeifenLuo.WinFormsUI.Docking.DockContent)
+            {
+                enteringControl = true;
+                rbSingle.AutoCheck = false;
+                rbDual.AutoCheck = false;
+                rbMultiple.AutoCheck = false;
+            }
         }
 
-        protected override void OnMouseUp(MouseEventArgs e)
+        private void DockPanel_ActiveContentChanged(object sender, EventArgs e)
         {
-            base.OnMouseUp(e);
             if (enteringControl)
+            {
                 enteringControl = false;
+                rbSingle.AutoCheck = true;
+                rbDual.AutoCheck = true;
+                rbMultiple.AutoCheck = true;
+            }
         }
+
+        #endregion
 
         private void FetchFretPositions()
         {
@@ -59,8 +82,8 @@ namespace SiGen.UI.Controls
         protected override void OnNumberOfStringsChanged()
         {
             base.OnNumberOfStringsChanged();
-            //if (EditMode == ScaleLengthType.Individual)
-            //    ApplyLayout();
+            if (CurrentLayout != null)
+                dgvScaleLengths.DataSource = CurrentLayout.Strings;
         }
 
         protected override void ReadLayoutProperties()
@@ -95,20 +118,20 @@ namespace SiGen.UI.Controls
             nubMultiScaleRatio.Visible = (EditMode == ScaleLengthType.Multiple);
             dgvScaleLengths.Visible = (EditMode == ScaleLengthType.Individual);
 
-            using (FlagManager.UseFlag("SetMode"))
-                SetSelectedEditMode(EditMode);
+            SetSelectedEditMode(EditMode);
 
             if (CurrentLayout != null)
             {
-                mtbTrebleLength.AllowEmptyValue = false;
                 switch (EditMode)
                 {
                     case ScaleLengthType.Single:
                         mtbTrebleLength.Value = CurrentLayout.SingleScaleConfig.Length;
+                        mtbTrebleLength.AllowEmptyValue = false;
                         break;
                     case ScaleLengthType.Multiple:
                         {
                             mtbTrebleLength.Value = CurrentLayout.MultiScaleConfig.Treble;
+                            mtbTrebleLength.AllowEmptyValue = false;
                             mtbBassLength.Value = CurrentLayout.MultiScaleConfig.Bass;
                             nubMultiScaleRatio.Value = CurrentLayout.MultiScaleConfig.PerpendicularFretRatio;
                             //if (_FretPositions.Values.Contains(CurrentLayout.MultiScaleConfig.PerpendicularFretRatio))
@@ -123,11 +146,24 @@ namespace SiGen.UI.Controls
                         dgvScaleLengths.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
                         break;
                 }
+
+                
+
+                int totalHeight = 0;
+                var rowHeights = tableLayoutPanel1.GetRowHeights();
+                for (int i = 0; i < rowHeights.Length - 1; i++)
+                    totalHeight += rowHeights[i];
+                if (dgvScaleLengths.Visible)
+                    totalHeight += dgvScaleLengths.MinimumSize.Height;
+                tableLayoutPanel1.MinimumSize = new Size(0, totalHeight);
+                AutoScrollMinSize = new Size(0, totalHeight);
             }
             else
             {
                 mtbTrebleLength.AllowEmptyValue = true;
                 mtbTrebleLength.Value = Measure.Empty;
+                tableLayoutPanel1.MinimumSize = Size.Empty;
+                AutoScrollMinSize = Size.Empty;
             }
         }
 
@@ -136,7 +172,10 @@ namespace SiGen.UI.Controls
             if (!IsLoading && !FlagManager["SetMode"] && (sender as RadioButton).Checked)
             {
                 if (enteringControl)
+                {
+                    SetSelectedEditMode(EditMode);
                     return;
+                }
 
                 EditMode = GetSelectedEditMode();
                 if (CurrentLayout != null)
@@ -163,18 +202,21 @@ namespace SiGen.UI.Controls
 
         private void SetSelectedEditMode(ScaleLengthType mode)
         {
-            switch (mode)
+            using (FlagManager.UseFlag("SetMode"))
             {
-                default:
-                case ScaleLengthType.Single:
-                    rbSingle.Checked = true;
-                    break;
-                case ScaleLengthType.Multiple:
-                    rbDual.Checked = true;
-                    break;
-                case ScaleLengthType.Individual:
-                    rbMultiple.Checked = true;
-                    break;
+                switch (mode)
+                {
+                    default:
+                    case ScaleLengthType.Single:
+                        rbSingle.Checked = true;
+                        break;
+                    case ScaleLengthType.Multiple:
+                        rbDual.Checked = true;
+                        break;
+                    case ScaleLengthType.Individual:
+                        rbMultiple.Checked = true;
+                        break;
+                }
             }
         }
 
@@ -257,7 +299,7 @@ namespace SiGen.UI.Controls
             }
         }
 
-        #endregion
 
+        #endregion
     }
 }

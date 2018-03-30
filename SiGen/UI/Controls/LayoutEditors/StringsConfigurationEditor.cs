@@ -16,5 +16,29 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             InitializeComponent();
         }
+
+        protected override void ReadLayoutProperties()
+        {
+            base.ReadLayoutProperties();
+            numericBox1.Enabled = (CurrentLayout != null);
+
+            if (CurrentLayout != null)
+            {
+                numericBox1.Value = CurrentLayout.NumberOfStrings;
+            }
+            else
+            {
+                numericBox1.Value = 6;
+            }
+        }
+
+        private void numericBox1_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoading && CurrentLayout != null)
+            {
+                CurrentLayout.NumberOfStrings = (int)numericBox1.Value;
+                CurrentLayout.RebuildLayout();
+            }
+        }
     }
 }

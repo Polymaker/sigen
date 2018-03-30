@@ -21,6 +21,8 @@ namespace SiGen.UI
 {
     public partial class FrmLayoutBuilder : Form
     {
+        private LayoutEditorPanel<StringSpacingEditor> stringSpacingPanel;
+        private LayoutEditorPanel<StringsConfigurationEditor> stringConfigPanel;
         private LayoutEditorPanel<FingerboardMarginEditor> layoutMarginPanel;
         private LayoutEditorPanel<ScaleLengthEditor> scaleLengthPanel;
 
@@ -54,14 +56,22 @@ namespace SiGen.UI
 
         private void InitializeEditingPanels()
         {
+            dockPanel1.DockBottomPortion = 200d / (double)Height;
 
-            dockPanel1.DockBottomPortion = 150;
+            stringConfigPanel = new LayoutEditorPanel<StringsConfigurationEditor>();
+            stringConfigPanel.Show(dockPanel1, DockState.DockBottom);
+            stringConfigPanel.Text = "Strings Configuration";
+
+            stringSpacingPanel = new LayoutEditorPanel<StringSpacingEditor>();
+            stringSpacingPanel.Show(stringConfigPanel.Pane, DockAlignment.Right, 0.80);
+            stringSpacingPanel.Text = "String Spacing";
+
             scaleLengthPanel = new LayoutEditorPanel<ScaleLengthEditor>();
-            scaleLengthPanel.Show(dockPanel1, DockState.DockBottom);
+            scaleLengthPanel.Show(stringSpacingPanel.Pane, DockAlignment.Right, 0.66);
             scaleLengthPanel.Text = "Scale Length Configuration";
 
             layoutMarginPanel = new LayoutEditorPanel<FingerboardMarginEditor>();
-            layoutMarginPanel.Show(scaleLengthPanel.Pane, DockAlignment.Right, 0.5);
+            layoutMarginPanel.Show(scaleLengthPanel.Pane, DockAlignment.Right, .5);
             layoutMarginPanel.Text = "Fingerboard Margins";
         }
 
@@ -85,6 +95,18 @@ namespace SiGen.UI
                 documentPanel.Text = layoutFile.Layout.LayoutName;
             else
                 documentPanel.Text = Path.GetFileNameWithoutExtension(layoutFile.FileName);
+
+            int num = 0;
+            string origName = documentPanel.Text;
+            foreach (DockContent otherDoc in dockPanel1.Documents)
+            {
+                if (otherDoc.Text == documentPanel.Text)
+                {
+                    num++;
+                    documentPanel.Text = origName + " " + num;
+                }
+            }
+
             if (!string.IsNullOrEmpty(layoutFile.FileName))
                 documentPanel.ToolTipText = layoutFile.FileName;
 
@@ -96,6 +118,8 @@ namespace SiGen.UI
                 layoutFile.Layout.RebuildLayout();
             viewer.CurrentLayout = layoutFile.Layout;
             viewer.BackColor = Color.White;
+            viewer.Font = new Font(Font.FontFamily, Font.Size + 3);
+            viewer.DisplayConfig.RenderRealStrings = true;
             viewer.Select();
             documentPanel.Tag = layoutFile;
             documentPanel.FormClosing += DocumentPanel_FormClosing;
@@ -220,6 +244,11 @@ namespace SiGen.UI
 
         #endregion
 
+        private void tsbNew_Click(object sender, EventArgs e)
+        {
+            LoadLayout(new LayoutFile(CreateDefaultLayout()));
+        }
+
         private void tssbOpen_ButtonClick(object sender, EventArgs e)
         {
             using (var ofd = new OpenFileDialog())
@@ -268,20 +297,26 @@ namespace SiGen.UI
         {
             using (var sfd = new SaveFileDialog())
             {
-                sfd.FileName = "layout.svg";
+                if (!string.IsNullOrEmpty(CurrentFile.Layout.LayoutName))
+                    sfd.FileName = CurrentFile.Layout.LayoutName + ".svg";
+                else
+                    sfd.FileName = "layout.svg";
+
                 sfd.Filter = "Scalable Vector Graphics File (*.svg)|*.svg";
                 sfd.DefaultExt = ".svg";
 
-                //if (sfd.ShowDialog() == DialogResult.OK)
-                //{
-                //    SvgLayoutExporter.ExportLayout(sfd.FileName, layoutViewer1.CurrentLayout,
-                //        new LayoutSvgExportOptions()
-                //        {
-                //            ExportStrings = false,
-                //            ExportStringCenters = false
-                //        });
-                //}
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    SvgLayoutExporter.ExportLayout(sfd.FileName, CurrentFile.Layout,
+                        new LayoutSvgExportOptions()
+                        {
+                            ExportStrings = false,
+                            ExportStringCenters = false
+                        });
+                }
             }
         }
+
+        
     }
 }

@@ -21,7 +21,6 @@ namespace SiGen.UI.Controls
         /// Used to store display state information
         /// </summary>
         protected Dictionary<SILayout, Hashtable> CachedLayoutData;
-        internal bool Docking;
 
         protected FlagList FlagManager;
         private bool _IsLoading;

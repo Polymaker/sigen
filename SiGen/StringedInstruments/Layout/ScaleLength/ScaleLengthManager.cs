@@ -195,8 +195,8 @@ namespace SiGen.StringedInstruments.Layout
                 Bass = Measure.Parse(elem.Attribute("Bass").Value);
                 if (elem.ContainsAttribute("MultiScaleRatio"))
                     PerpendicularFretRatio = double.Parse(elem.Attribute("MultiScaleRatio").Value);
-                else if (Layout.Strings.AllEqual(s => s.MultiScaleRatio))
-                    _PerpendicularFretRatio = Layout.Strings[0].MultiScaleRatio;
+                //else if (Layout.Strings.AllEqual(s => s.MultiScaleRatio))
+                //    _PerpendicularFretRatio = Layout.Strings[0].MultiScaleRatio;
             }
         }
 

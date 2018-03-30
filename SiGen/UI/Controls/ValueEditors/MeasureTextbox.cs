@@ -238,15 +238,13 @@ namespace SiGen.UI
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            var hadFocus = ContainsFocus;
+            if (!ContainsFocus && e.Button == MouseButtons.Right)
+                preventFocus = true;
 
             base.OnMouseDown(e);
 
-            if (!hadFocus && e.Button == MouseButtons.Right)
-                preventFocus = true;
-
-            if (ContainsFocus && e.Button == MouseButtons.Left && measureBounds.Contains(e.Location))
-                ShowTextBox(true);
+            if (ContainsFocus && e.Button == MouseButtons.Left /*&& measureBounds.Contains(e.Location)*/)
+                ShowTextBox(measureBounds.Contains(e.Location));
         }
 
         protected void ShowTextBox(bool select = false)
@@ -256,9 +254,10 @@ namespace SiGen.UI
                 innerTextbox.BackColor = BackColor;
                 innerTextbox.Visible = true;
                 innerTextbox.Focus();
-                if(select)
-                    innerTextbox.SelectAll();
             }
+
+            if (select)
+                innerTextbox.SelectAll();
         }
 
         protected override void OnLostFocus(EventArgs e)

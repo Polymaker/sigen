@@ -130,6 +130,12 @@
     <Compile Include="UI\Controls\LayoutEditors\StringsConfigurationEditor.Designer.cs">
       <DependentUpon>StringsConfigurationEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Controls\LayoutEditors\StringSpacingEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\LayoutEditors\StringSpacingEditor.Designer.cs">
+      <DependentUpon>StringSpacingEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Controls\LayoutViewer.Measuring.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -221,6 +227,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\StringsConfigurationEditor.resx">
       <DependentUpon>StringsConfigurationEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\StringSpacingEditor.resx">
+      <DependentUpon>StringSpacingEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutViewer.resx">
       <DependentUpon>LayoutViewer.cs</DependentUpon>
