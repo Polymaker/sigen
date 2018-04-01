@@ -311,7 +311,8 @@ namespace SiGen.UI
                         new LayoutSvgExportOptions()
                         {
                             ExportStrings = false,
-                            ExportStringCenters = false
+                            ExportStringCenters = false,
+                            ExtendFretSlots = Measure.Mm(3)
                         });
                 }
             }

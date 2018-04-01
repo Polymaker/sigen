@@ -45,6 +45,8 @@ namespace SiGen.Export
 
             Document.X = new SvgUnit(0);
             Document.Y = new SvgUnit(0);
+            Document.Width = new SvgUnit(SvgUnitType.Centimeter, (float)LayoutBounds.Width.NormalizedValue);
+            Document.Height = new SvgUnit(SvgUnitType.Centimeter, (float)LayoutBounds.Height.NormalizedValue);
 
             if (Options.InkscapeCompatible)
             {
