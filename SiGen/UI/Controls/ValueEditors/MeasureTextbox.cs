@@ -22,6 +22,8 @@ namespace SiGen.UI
         private bool _IsEditing;
         private bool _AllowEmptyValue;
         private bool isMouseOver;
+        private bool _HideBorders;
+
         private Rectangle measureBounds;
 
         [DefaultValue(false), RefreshProperties(RefreshProperties.All | RefreshProperties.Repaint)]
@@ -37,6 +39,21 @@ namespace SiGen.UI
                         ShowTextBox();
                     else if (!ContainsFocus)
                         innerTextbox.Visible = false;
+                    Invalidate();
+                }
+            }
+        }
+
+        [DefaultValue(false), RefreshProperties(RefreshProperties.All | RefreshProperties.Repaint)]
+        public bool HideBorders
+        {
+            get { return _HideBorders; }
+            set
+            {
+                if (value != _HideBorders)
+                {
+                    _HideBorders = value;
+                    SetBounds(0, 0, 0, 0, BoundsSpecified.Height);
                     Invalidate();
                 }
             }
@@ -145,7 +162,9 @@ namespace SiGen.UI
         {
             base.OnPaint(pe);
 
-            if (VisualStyleRenderer.IsSupported)
+            if (HideBorders)
+                pe.Graphics.Clear(BackColor);
+            else if (VisualStyleRenderer.IsSupported)
                 RenderVisualStyleTextBox(pe.Graphics);
 
             using (var sf = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
@@ -198,14 +217,16 @@ namespace SiGen.UI
         {
             base.OnMouseEnter(e);
             isMouseOver = true;
-            Invalidate();
+            if (!HideBorders)
+                Invalidate();
         }
 
         protected override void OnMouseLeave(EventArgs e)
         {
             base.OnMouseLeave(e);
             isMouseOver = false;
-            Invalidate();
+            if (!HideBorders)
+                Invalidate();
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -223,7 +244,10 @@ namespace SiGen.UI
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-            Height = FontHeight + (SystemInformation.BorderSize.Height * 4) + 3;
+            if (!HideBorders)
+                Height = FontHeight + (SystemInformation.BorderSize.Height * 4) + 3;
+            else
+                Height = FontHeight + 3;
             UpdateMeasureBounds();
         }
 
@@ -247,14 +271,16 @@ namespace SiGen.UI
                 ShowTextBox();
             preventFocus = false;
 
-            Invalidate();//repaint border
+            if (!HideBorders)
+                Invalidate();//repaint border
 
             base.OnGotFocus(e);
         }
 
         private void innerTextbox_Enter(object sender, EventArgs e)
         {
-            Invalidate();//repaint border
+            if (!HideBorders)
+                Invalidate();//repaint border
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -284,18 +310,23 @@ namespace SiGen.UI
         protected override void OnLostFocus(EventArgs e)
         {
             base.OnLostFocus(e);
-            Invalidate();//repaint border
+            if (!HideBorders)
+                Invalidate();//repaint border
         }
 
         protected override void OnEnabledChanged(EventArgs e)
         {
             base.OnEnabledChanged(e);
-            Invalidate();
+            if (!HideBorders)
+                Invalidate();
         }
 
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            height = FontHeight + (SystemInformation.BorderSize.Height * 4) + 3;
+            if (!HideBorders)
+                height = FontHeight + (SystemInformation.BorderSize.Height * 4) + 3;
+            else
+                height = FontHeight + 3;
             base.SetBoundsCore(x, y, width, height, specified);
             RepositionTextbox();
         }
@@ -522,10 +553,14 @@ namespace SiGen.UI
                 {
                     innerTextbox.Visible = false;
                     e.Handled = true;
-                }      
+                }
             }
-            else if(e.KeyData == Keys.Tab)
+            else if (e.KeyData == Keys.Tab)
+            {
                 Parent.SelectNextControl(this, Control.ModifierKeys != Keys.Shift, true, true, true);
+                if(ReadOnly)
+                    e.Handled = true;
+            }
         }
 
         private void innerTextbox_KeyDown(object sender, KeyEventArgs e)

@@ -24,10 +24,11 @@ namespace SiGen.UI.Controls.LayoutEditors
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            using(var g = CreateGraphics())
-            {
-                ScreenDPI = g.DpiY;
-            }
+            //using(var g = CreateGraphics())
+            //{
+            //    ScreenDPI = g.DpiY;
+            //}
+            ScreenDPI = 109;
         }
 
         private void toolStripStatusLabel1_Click(object sender, EventArgs e)
@@ -39,10 +40,8 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             var currentZoom = Viewer.Zoom;
             var dpi = ScreenDPI == 0 ? 96 : ScreenDPI;
-            var realSize = Viewer.DisplayConfig.FretboardOrientation == Orientation.Horizontal ? layoutViewer1.Width : layoutViewer1.Height;
-            var totalInches = (double)realSize / dpi;
-
-            tsLblZoom.Text = string.Format("Zoom: {0:0.##}%", currentZoom);
+            
+            tsLblZoom.Text = string.Format("Zoom: {0:0.##}%", (currentZoom / (dpi / 2.54)) * 100);
         }
     }
 }

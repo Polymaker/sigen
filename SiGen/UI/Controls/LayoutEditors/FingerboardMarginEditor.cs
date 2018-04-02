@@ -80,13 +80,12 @@ namespace SiGen.UI.Controls
 
         protected override void ReadLayoutProperties()
         {
-            cboMarginEditMode.Enabled = (CurrentLayout != null);
-            mtbLastFret.Enabled = (CurrentLayout != null);
-            mtbNutBass.Enabled = (CurrentLayout != null);
+            tableLayoutPanel1.Enabled = (CurrentLayout != null);
             MarginModified = false;
 
             if (CurrentLayout != null)
             {
+                chkCompensateGauge.Checked = CurrentLayout.Margins.CompensateStringGauge;
                 ReadMarginValues();
             }
             else
@@ -96,6 +95,7 @@ namespace SiGen.UI.Controls
                 mtbNutTreble.Value = Measure.Zero;
                 mtbBridgeBass.Value = Measure.Zero;
                 mtbBridgeTreble.Value = Measure.Zero;
+                chkCompensateGauge.Checked = false;
             }
 
             EditMode = GetMarginsEditMode();
@@ -138,11 +138,11 @@ namespace SiGen.UI.Controls
             lblNut.Visible = lblBridge.Visible = (EditMode == MarginEditMode.NutBridge || EditMode == MarginEditMode.All);
             tableLayoutPanel1.PerformLayout();
 
-            int totalHeight = 0;
-            var rowHeights = tableLayoutPanel1.GetRowHeights();
-            for (int i = 0; i < rowHeights.Length - 1; i++)
-                totalHeight += rowHeights[i];
-            tableLayoutPanel1.Height = totalHeight;
+            //int totalHeight = 0;
+            //var rowHeights = tableLayoutPanel1.GetRowHeights();
+            //for (int i = 0; i < rowHeights.Length - 1; i++)
+            //    totalHeight += rowHeights[i];
+            //tableLayoutPanel1.Height = totalHeight;
         }
 
         private void mtbLastFret_ValueChanged(object sender, EventArgs e)
@@ -150,6 +150,15 @@ namespace SiGen.UI.Controls
             if (!IsLoading && CurrentLayout != null)
             {
                 CurrentLayout.Margins.LastFret = mtbLastFret.Value;
+                CurrentLayout.RebuildLayout();
+            }
+        }
+
+        private void chkCompensateGauge_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!IsLoading && CurrentLayout != null)
+            {
+                CurrentLayout.Margins.CompensateStringGauge = chkCompensateGauge.Checked;
                 CurrentLayout.RebuildLayout();
             }
         }
@@ -269,5 +278,7 @@ namespace SiGen.UI.Controls
                 mtbBridgeTreble.Value = CachedValues[EditMode][3];
             }
         }
+
+        
     }
 }

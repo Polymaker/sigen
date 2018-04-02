@@ -42,7 +42,17 @@ namespace SiGen.UI.Controls.LayoutEditors
             _Editor.Dock = System.Windows.Forms.DockStyle.Fill;
             CloseButtonVisible = false;
             DockAreas ^= DockAreas.Document;
-            
+            MaximizeBox = true;
         }
+
+        protected override void OnDockStateChanged(EventArgs e)
+        {
+            base.OnDockStateChanged(e);
+            if (DockState == DockState.Float && Text.Contains("&&"))
+                Text = Text.Replace("&&", "&");
+            else if(DockState != DockState.Float && Text.Contains(" & "))
+                Text = Text.Replace(" & ", " && ");
+        }
+
     }
 }

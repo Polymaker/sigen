@@ -171,6 +171,12 @@
     </Compile>
     <Compile Include="UI\Controls\ValueEditors\MeasureEditor.cs" />
     <Compile Include="UI\Controls\ValueEditors\UnitOfMeasureEditor.cs" />
+    <Compile Include="UI\Windows\DetectScreenDPI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Windows\DetectScreenDPI.Designer.cs">
+      <DependentUpon>DetectScreenDPI.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Windows\FrmLayoutBuilder.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -251,6 +257,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutViewer.resx">
       <DependentUpon>LayoutViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Windows\DetectScreenDPI.resx">
+      <DependentUpon>DetectScreenDPI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\FrmLayoutBuilder.resx">
       <DependentUpon>FrmLayoutBuilder.cs</DependentUpon>

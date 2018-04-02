@@ -82,7 +82,7 @@
             this.mtbBridgeSpacing.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
             this.mtbBridgeSpacing.Name = "mtbBridgeSpacing";
             this.mtbBridgeSpacing.Size = new System.Drawing.Size(122, 20);
-            this.mtbBridgeSpacing.TabIndex = 2;
+            this.mtbBridgeSpacing.TabIndex = 0;
             this.mtbBridgeSpacing.ValueChanging += new System.EventHandler<SiGen.UI.MeasureTextbox.ValueChangingEventArgs>(this.mtbSpacings_ValueChanging);
             this.mtbBridgeSpacing.ValueChanged += new System.EventHandler(this.mtbBridgeSpacing_ValueChanged);
             // 
@@ -93,7 +93,7 @@
             this.mtbBridgeSpread.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
             this.mtbBridgeSpread.Name = "mtbBridgeSpread";
             this.mtbBridgeSpread.Size = new System.Drawing.Size(122, 20);
-            this.mtbBridgeSpread.TabIndex = 3;
+            this.mtbBridgeSpread.TabIndex = 1;
             this.mtbBridgeSpread.ValueChanging += new System.EventHandler<SiGen.UI.MeasureTextbox.ValueChangingEventArgs>(this.mtbSpacings_ValueChanging);
             this.mtbBridgeSpread.ValueChanged += new System.EventHandler(this.mtbBridgeSpread_ValueChanged);
             // 
@@ -117,7 +117,7 @@
             this.cboNutSpacingMethod.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
             this.cboNutSpacingMethod.Name = "cboNutSpacingMethod";
             this.cboNutSpacingMethod.Size = new System.Drawing.Size(250, 21);
-            this.cboNutSpacingMethod.TabIndex = 10;
+            this.cboNutSpacingMethod.TabIndex = 2;
             this.cboNutSpacingMethod.SelectedIndexChanged += new System.EventHandler(this.cboNutSpacingMethod_SelectedIndexChanged);
             // 
             // lblNutSpacingMethod
@@ -209,7 +209,7 @@
             this.cboNutSpacingAlignment.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
             this.cboNutSpacingAlignment.Name = "cboNutSpacingAlignment";
             this.cboNutSpacingAlignment.Size = new System.Drawing.Size(250, 21);
-            this.cboNutSpacingAlignment.TabIndex = 4;
+            this.cboNutSpacingAlignment.TabIndex = 3;
             this.cboNutSpacingAlignment.SelectedIndexChanged += new System.EventHandler(this.cboNutSpacingAlignment_SelectedIndexChanged);
             // 
             // lblNutSpacingAlignment
@@ -261,7 +261,7 @@
             this.cboBridgeSpacingAlignment.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
             this.cboBridgeSpacingAlignment.Name = "cboBridgeSpacingAlignment";
             this.cboBridgeSpacingAlignment.Size = new System.Drawing.Size(250, 21);
-            this.cboBridgeSpacingAlignment.TabIndex = 10;
+            this.cboBridgeSpacingAlignment.TabIndex = 3;
             this.cboBridgeSpacingAlignment.SelectedIndexChanged += new System.EventHandler(this.cboBridgeSpacingAlignment_SelectedIndexChanged);
             // 
             // cboBridgeSpacingMethod
@@ -274,7 +274,7 @@
             this.cboBridgeSpacingMethod.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
             this.cboBridgeSpacingMethod.Name = "cboBridgeSpacingMethod";
             this.cboBridgeSpacingMethod.Size = new System.Drawing.Size(250, 21);
-            this.cboBridgeSpacingMethod.TabIndex = 11;
+            this.cboBridgeSpacingMethod.TabIndex = 2;
             this.cboBridgeSpacingMethod.SelectedIndexChanged += new System.EventHandler(this.cboBridgeSpacingMethod_SelectedIndexChanged);
             // 
             // lblBridgeSpacingMethod

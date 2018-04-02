@@ -369,7 +369,7 @@ namespace SiGen.UI
                 if (e.Delta > 0)
                     _Zoom *= 1.1;
                 else
-                    _Zoom *= 0.9;
+                    _Zoom *= 0.90909090909090909090909090909091;
 
                 var curWorldPos = DisplayToWorldFast(mousePos, oldZoom);
                 var finalWorldPos = DisplayToWorldFast(mousePos);

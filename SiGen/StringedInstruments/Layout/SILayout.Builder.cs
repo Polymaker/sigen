@@ -186,14 +186,21 @@ namespace SiGen.StringedInstruments.Layout
         private void CreateFingerboardEdges()
         {
             var trebleLine = FirstString.LayoutLine;
+            var trebleOffset = Measure.Zero;
+            if (Margins.CompensateStringGauge && !FirstString.Gauge.IsEmpty)
+                trebleOffset += FirstString.Gauge / 2;
             var trebleFretboardEdge = AddVisualElement(new FingerboardSideEdge(
-               trebleLine.GetPerpendicularPoint(trebleLine.P1, Margins.TrebleMargins[FingerboardEnd.Nut]),
-               trebleLine.GetPerpendicularPoint(trebleLine.P2, Margins.TrebleMargins[FingerboardEnd.Bridge]),
+               trebleLine.GetPerpendicularPoint(trebleLine.P1, Margins.TrebleMargins[FingerboardEnd.Nut] + trebleOffset),
+               trebleLine.GetPerpendicularPoint(trebleLine.P2, Margins.TrebleMargins[FingerboardEnd.Bridge] + trebleOffset),
                FingerboardSide.Treble));
+
             var bassLine = LastString.LayoutLine;
+            var bassOffset = Measure.Zero;
+            if (Margins.CompensateStringGauge && !LastString.Gauge.IsEmpty)
+                bassOffset += LastString.Gauge / 2;
             var bassFretboardEdge = AddVisualElement(new FingerboardSideEdge(
-               bassLine.GetPerpendicularPoint(bassLine.P1, Margins.BassMargins[FingerboardEnd.Nut] * -1), //*-1 to offset towards left
-               bassLine.GetPerpendicularPoint(bassLine.P2, Margins.BassMargins[FingerboardEnd.Bridge] * -1),
+               bassLine.GetPerpendicularPoint(bassLine.P1, (Margins.BassMargins[FingerboardEnd.Nut] + bassOffset) * -1), //*-1 to offset towards left
+               bassLine.GetPerpendicularPoint(bassLine.P2, (Margins.BassMargins[FingerboardEnd.Bridge] + bassOffset) * -1),
                FingerboardSide.Bass));
 
             if(ScaleLengthMode != ScaleLengthType.Individual && NumberOfStrings > 1)

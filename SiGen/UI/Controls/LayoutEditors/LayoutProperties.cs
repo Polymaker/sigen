@@ -19,7 +19,11 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             InitializeComponent();
         }
-
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            Parent.Padding = Padding.Empty;
+        }
         protected override void ReadLayoutProperties()
         {
             base.ReadLayoutProperties();

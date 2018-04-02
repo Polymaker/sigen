@@ -5,6 +5,7 @@ using SiGen.StringedInstruments.Data;
 using SiGen.StringedInstruments.Layout;
 using SiGen.UI.Controls;
 using SiGen.UI.Controls.LayoutEditors;
+using SiGen.UI.Windows;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -73,7 +74,8 @@ namespace SiGen.UI
 
             layoutInfoPanel = new LayoutEditorPanel<LayoutProperties>();
             layoutInfoPanel.Show(layoutMarginPanel.Pane, DockAlignment.Bottom, .4);
-            layoutInfoPanel.Text = "Layout Properties && Information";
+            
+            layoutInfoPanel.Text = "Layout Properties";
 
             scaleLengthPanel = new LayoutEditorPanel<ScaleLengthEditor>();
             scaleLengthPanel.Show(stringConfigPanel.Pane, DockAlignment.Bottom, 0.6);
@@ -325,7 +327,8 @@ namespace SiGen.UI
 
         private void exportAsDXFToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            dockPanel1.SaveAsXml("UI_Layout.xml");
+            using (var frm = new DetectScreenDPI())
+                frm.ShowDialog();
         }
     }
 }

@@ -19,6 +19,8 @@ namespace SiGen.StringedInstruments.Layout
         private Measure _BridgeTrebleMargin;
         private Measure _BridgeBassMargin;
         private Measure _LastFret;
+        private bool _CompensateStringGauge;
+
         private ArrayProperty<Measure, FingerboardSide> _NutMargins;
         private ArrayProperty<Measure, FingerboardSide> _BridgeMargins;
         private ArrayProperty<Measure, FingerboardEnd> _TrebleMargins;
@@ -117,11 +119,23 @@ namespace SiGen.StringedInstruments.Layout
                 if (value != _LastFret)
                 {
                     _LastFret = value;
-                    Layout.NotifyLayoutChanged(this, "FingerboardMargin");
+                    Layout.NotifyLayoutChanged(this, "LastFret");
                 }
             }
         }
 
+        public bool CompensateStringGauge
+        {
+            get { return _CompensateStringGauge; }
+            set
+            {
+                if (_CompensateStringGauge != value)
+                {
+                    _CompensateStringGauge = value;
+                    Layout.NotifyLayoutChanged(this, "CompensateStringGauge");
+                }
+            }
+        }
 
         public FingerboardMargin(SILayout layout) : base(layout)
         {
@@ -184,7 +198,10 @@ namespace SiGen.StringedInstruments.Layout
                 elem.Add(_BridgeTrebleMargin.SerializeAsAttribute("BridgeTreble"));
                 elem.Add(_BridgeBassMargin.SerializeAsAttribute("BridgeBass"));
             }
+            
+            elem.Add(new XAttribute("Compensated", CompensateStringGauge));
             elem.Add(LastFret.SerializeAsAttribute("LastFret"));
+
             return elem;
         }
 
@@ -225,6 +242,9 @@ namespace SiGen.StringedInstruments.Layout
                 else
                     _BridgeBassMargin = Measure.Zero;
             }
+
+            if (elem.ContainsAttribute("Compensated"))
+                CompensateStringGauge = bool.Parse(elem.Attribute("Compensated").Value);
         }
     }
 }
