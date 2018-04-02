@@ -25,6 +25,7 @@ namespace SiGen.UI
         private LayoutEditorPanel<StringsConfigurationEditor> stringConfigPanel;
         private LayoutEditorPanel<FingerboardMarginEditor> layoutMarginPanel;
         private LayoutEditorPanel<ScaleLengthEditor> scaleLengthPanel;
+        private LayoutEditorPanel<LayoutProperties> layoutInfoPanel;
 
         private LayoutFile CurrentFile
         {
@@ -56,23 +57,28 @@ namespace SiGen.UI
 
         private void InitializeEditingPanels()
         {
-            dockPanel1.DockBottomPortion = 200d / (double)Height;
-
+            dockPanel1.DockBottomPortion = 220d / (double)dockPanel1.Height;
+            
             stringConfigPanel = new LayoutEditorPanel<StringsConfigurationEditor>();
             stringConfigPanel.Show(dockPanel1, DockState.DockBottom);
             stringConfigPanel.Text = "Strings Configuration";
 
             stringSpacingPanel = new LayoutEditorPanel<StringSpacingEditor>();
-            stringSpacingPanel.Show(stringConfigPanel.Pane, DockAlignment.Right, 0.80);
+            stringSpacingPanel.Show(stringConfigPanel.Pane, DockAlignment.Right, 0.65);
             stringSpacingPanel.Text = "String Spacing";
 
+            layoutMarginPanel = new LayoutEditorPanel<FingerboardMarginEditor>();
+            layoutMarginPanel.Show(stringSpacingPanel.Pane, DockAlignment.Right, .5);
+            layoutMarginPanel.Text = "Fingerboard Margins";
+
+            layoutInfoPanel = new LayoutEditorPanel<LayoutProperties>();
+            layoutInfoPanel.Show(layoutMarginPanel.Pane, DockAlignment.Bottom, .4);
+            layoutInfoPanel.Text = "Layout Properties && Information";
+
             scaleLengthPanel = new LayoutEditorPanel<ScaleLengthEditor>();
-            scaleLengthPanel.Show(stringSpacingPanel.Pane, DockAlignment.Right, 0.66);
+            scaleLengthPanel.Show(stringConfigPanel.Pane, DockAlignment.Bottom, 0.6);
             scaleLengthPanel.Text = "Scale Length Configuration";
 
-            layoutMarginPanel = new LayoutEditorPanel<FingerboardMarginEditor>();
-            layoutMarginPanel.Show(scaleLengthPanel.Pane, DockAlignment.Right, .5);
-            layoutMarginPanel.Text = "Fingerboard Margins";
         }
 
         private void dockPanel1_ActiveDocumentChanged(object sender, EventArgs e)
@@ -88,7 +94,7 @@ namespace SiGen.UI
 
         private DockContent CreateDocumentPanel(LayoutFile layoutFile)
         {
-            var documentPanel = new DockContent();
+            var documentPanel = new LayoutViewerPanel();
             if (string.IsNullOrEmpty(layoutFile.FileName))
                 documentPanel.Text = "New Layout";
             else if (!string.IsNullOrEmpty(layoutFile.Layout.LayoutName))
@@ -111,16 +117,15 @@ namespace SiGen.UI
                 documentPanel.ToolTipText = layoutFile.FileName;
 
             documentPanel.DockAreas = DockAreas.Document;// | DockAreas.Float;
-            var viewer = new LayoutViewer();
-            documentPanel.Controls.Add(viewer);
-            viewer.Dock = DockStyle.Fill;
+
             if (layoutFile.Layout.VisualElements.Count == 0 || layoutFile.Layout.IsLayoutDirty)
                 layoutFile.Layout.RebuildLayout();
-            viewer.CurrentLayout = layoutFile.Layout;
-            viewer.BackColor = Color.White;
-            viewer.Font = new Font(Font.FontFamily, Font.Size + 3);
-            viewer.DisplayConfig.RenderRealStrings = true;
-            viewer.Select();
+
+            documentPanel.Viewer.CurrentLayout = layoutFile.Layout;
+            documentPanel.Viewer.BackColor = Color.White;
+            documentPanel.Viewer.Font = new Font(Font.FontFamily, Font.Size + 3);
+            documentPanel.Viewer.DisplayConfig.RenderRealStrings = true;
+            documentPanel.Viewer.Select();
             documentPanel.Tag = layoutFile;
             documentPanel.FormClosing += DocumentPanel_FormClosing;
             documentPanel.FormClosed += DocumentPanel_FormClosed;
@@ -187,7 +192,7 @@ namespace SiGen.UI
 
             layout.SimpleStringSpacing.StringSpacingAtNut = Measure.Mm(7.3);
             layout.SimpleStringSpacing.StringSpacingAtBridge = Measure.Mm(10.5);
-            layout.SimpleStringSpacing.NutSpacingMode = NutSpacingMode.BetweenStrings;
+            layout.SimpleStringSpacing.NutSpacingMode = StringSpacingMethod.BetweenStrings;
             //layout.ScaleLengthMode = ScaleLengthType.Individual;
             layout.Margins.Edges = Measure.Mm(3.25);
             layout.Margins.LastFret = Measure.Mm(10);
@@ -318,6 +323,9 @@ namespace SiGen.UI
             }
         }
 
-        
+        private void exportAsDXFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            dockPanel1.SaveAsXml("UI_Layout.xml");
+        }
     }
 }

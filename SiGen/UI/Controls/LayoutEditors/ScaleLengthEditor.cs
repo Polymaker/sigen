@@ -73,9 +73,9 @@ namespace SiGen.UI.Controls
             _FretPositions.Add(-1, 1d);
         }
 
-        protected override void OnLayoutChanged()
+        protected override void OnCurrentLayoutChanged()
         {
-            base.OnLayoutChanged();
+            base.OnCurrentLayoutChanged();
             FetchFretPositions();
         }
 

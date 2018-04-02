@@ -471,7 +471,8 @@ namespace SiGen.UI
         {
             if (!box.Suppressed)
             {
-                var oldSize = box.Size;
+                var oldBounds = box.DisplayBounds;
+
                 box.UpdateSize();
 
                 var wasMoved = box.OriginalOffset != box.LocalOffset;
@@ -486,13 +487,17 @@ namespace SiGen.UI
                     box.LocalOffset = box.OriginalOffset;
 
                 box.NotifyDirty();
-
-                var boxBounds = GetMeasureBoxBounds(box);
-                if (oldSize.Width > box.Size.Width)
-                    boxBounds.Inflate((oldSize.Width - box.Size.Width) / 2f, 0);
-                boxBounds.Inflate((float)box.LocalOffset.Length + 10f, (float)box.LocalOffset.Length + 10f);
+                
                 if (box.IsMeasureVisible())
-                    Invalidate(new Rectangle((int)boxBounds.X, (int)boxBounds.Y, (int)boxBounds.Width, (int)boxBounds.Height));
+                {
+                    var newBounds = box.DisplayBounds;
+                    oldBounds.Inflate(10, 10);
+                    newBounds.Inflate(10, 10);
+                    //oldBounds.Inflate((int)box.LocalOffset.Length + 10, (int)box.LocalOffset.Length + 10);
+                    //newBounds.Inflate((int)box.LocalOffset.Length + 10, (int)box.LocalOffset.Length + 10);
+                    Invalidate(oldBounds);
+                    Invalidate(newBounds);
+                }
             }
         }
 

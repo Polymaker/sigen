@@ -42,6 +42,7 @@ namespace SiGen.UI.Controls.LayoutEditors
             _Editor.Dock = System.Windows.Forms.DockStyle.Fill;
             CloseButtonVisible = false;
             DockAreas ^= DockAreas.Document;
+            
         }
     }
 }

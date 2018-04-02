@@ -58,9 +58,9 @@ namespace SiGen.UI.Controls
             cboMarginEditMode.SelectedValue = MarginEditMode.Edges;
         }
 
-        protected override void OnLayoutChanged()
+        protected override void OnCurrentLayoutChanged()
         {
-            base.OnLayoutChanged();
+            base.OnCurrentLayoutChanged();
             CachedValues.Clear();
         }
 

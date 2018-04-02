@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SiGen.StringedInstruments.Layout
 {
-    public enum NutSpacingMode
+    public enum StringSpacingMethod
     {
         StringsCenter,
         BetweenStrings

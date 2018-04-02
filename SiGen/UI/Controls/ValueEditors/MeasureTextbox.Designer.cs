@@ -53,6 +53,8 @@
             this.innerTextbox.ValidateOnEnter = true;
             this.innerTextbox.CommandKeyPressed += new System.Windows.Forms.KeyEventHandler(this.innerTextbox_CommandKeyPressed);
             this.innerTextbox.TextChanged += new System.EventHandler(this.innerTextbox_TextChanged);
+            this.innerTextbox.Enter += new System.EventHandler(this.innerTextbox_Enter);
+            this.innerTextbox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.innerTextbox_KeyDown);
             this.innerTextbox.Validating += new System.ComponentModel.CancelEventHandler(this.innerTextbox_Validating);
             this.innerTextbox.Validated += new System.EventHandler(this.innerTextbox_Validated);
             // 

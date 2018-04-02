@@ -70,6 +70,12 @@ namespace SiGen.UI
 
         #endregion
 
+        #region Events
+
+        public event EventHandler ZoomChanged;
+
+        #endregion
+
         public LayoutViewer()
         {
             InitializeComponent();
@@ -210,6 +216,7 @@ namespace SiGen.UI
             }
             manualZoom = false;
             OnCameraChanged(false);
+            OnZoomChanged();
         }
 
         private void OnCameraChanged(bool invalidate)
@@ -218,6 +225,13 @@ namespace SiGen.UI
 
             if (invalidate && IsHandleCreated)
                 Invalidate();
+        }
+
+        private void OnZoomChanged()
+        {
+            var handler = ZoomChanged;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         #endregion
@@ -357,10 +371,11 @@ namespace SiGen.UI
                 else
                     _Zoom *= 0.9;
 
-                var curWorldPos = DisplayToWorld(mousePos, oldZoom);
-                var finalWorldPos = DisplayToWorld(mousePos);
+                var curWorldPos = DisplayToWorldFast(mousePos, oldZoom);
+                var finalWorldPos = DisplayToWorldFast(mousePos);
                 cameraPosition -= (finalWorldPos - curWorldPos);
                 OnCameraChanged(true);
+                OnZoomChanged();
             }
         }
 
@@ -553,15 +568,20 @@ namespace SiGen.UI
             return LocalToDisplay(WorldToLocal(vec, zoom, fixOrientation));
         }
 
+        public Vector DisplayToWorld(Point pt)
+        {
+            return DisplayToWorld(pt, _Zoom, true);
+        }
+
         #endregion
 
-        private Vector DisplayToWorld(Point pt)
+        private Vector DisplayToWorldFast(Point pt)
         {
             return DisplayToWorld(pt, _Zoom, false);
             //return DisplayToWorld(pt, _Zoom);
         }
 
-        private Vector DisplayToWorld(Point pt, double zoom)
+        private Vector DisplayToWorldFast(Point pt, double zoom)
         {
             return DisplayToWorld(pt, zoom, false);
             //return (DisplayToLocal(pt) / zoom) + cameraPosition;

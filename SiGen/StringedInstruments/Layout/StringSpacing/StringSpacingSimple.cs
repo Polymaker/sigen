@@ -12,8 +12,11 @@ namespace SiGen.StringedInstruments.Layout
     {
         private Measure _StringSpacingAtNut;
         private Measure _StringSpacingAtBridge;
-        private NutSpacingMode _NutSpacingMode;
-        private Measure[] AdjustedNutSlots;
+        private StringSpacingMethod _NutSpacingMode;
+        private StringSpacingMethod _BridgeSpacingMode;
+
+        private Measure[] AdjustedNutSpacings;
+        private Measure[] AdjustedBridgeSpacings;
 
         public override StringSpacingType Type
         {
@@ -70,12 +73,12 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
-        public NutSpacingMode NutSpacingMode
+        public StringSpacingMethod NutSpacingMode
         {
             get { return _NutSpacingMode; }
             set
             {
-                if(value != NutSpacingMode)
+                if(value != _NutSpacingMode)
                 {
                     _NutSpacingMode = value;
                     Layout.NotifyLayoutChanged(this, "NutSpacingMode");
@@ -83,16 +86,34 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
+        public StringSpacingMethod BridgeSpacingMode
+        {
+            get { return _BridgeSpacingMode; }
+            set
+            {
+                if (value != _BridgeSpacingMode)
+                {
+                    _BridgeSpacingMode = value;
+                    Layout.NotifyLayoutChanged(this, "BridgeSpacingMode");
+                }
+            }
+        }
+
         public StringSpacingSimple(SILayout layout) : base(layout)
         {
-            _NutSpacingMode = NutSpacingMode.StringsCenter;
-            AdjustedNutSlots = new Measure[0];
+            _NutSpacingMode = StringSpacingMethod.StringsCenter;
+            _BridgeSpacingMode = StringSpacingMethod.StringsCenter;
+            AdjustedNutSpacings = new Measure[0];
+            AdjustedBridgeSpacings = new Measure[0];
         }
 
         public override Measure GetSpacing(int index, FingerboardEnd side)
         {
-            if (side == FingerboardEnd.Nut && NutSpacingMode == NutSpacingMode.BetweenStrings && AdjustedNutSlots.Length > 0)
-                return AdjustedNutSlots[index];
+            if (side == FingerboardEnd.Nut && NutSpacingMode == StringSpacingMethod.BetweenStrings && AdjustedNutSpacings.Length > 0)
+                return AdjustedNutSpacings[index];
+            else if (side == FingerboardEnd.Bridge && BridgeSpacingMode == StringSpacingMethod.BetweenStrings && AdjustedBridgeSpacings.Length > 0)
+                return AdjustedBridgeSpacings[index];
+
             return side == FingerboardEnd.Nut ? StringSpacingAtNut : StringSpacingAtBridge;
         }
 
@@ -107,9 +128,10 @@ namespace SiGen.StringedInstruments.Layout
         public override XElement Serialize(string elemName)
         {
             var elem = base.Serialize(elemName);
-            if(NutSpacingMode == NutSpacingMode.BetweenStrings && AdjustedNutSlots != null && AdjustedNutSlots.Length > 0)
+            if(NutSpacingMode == StringSpacingMethod.BetweenStrings && AdjustedNutSpacings != null && AdjustedNutSpacings.Length > 0)
                 elem.AddFirst(new XComment("Nut slot positions are adjusted in consideration of the strings gauge"));
             elem.Add(new XAttribute("NutSpacingMode", NutSpacingMode));
+            elem.Add(new XAttribute("BridgeSpacingMode", BridgeSpacingMode));
             elem.Add(StringSpacingAtNut.SerializeAsAttribute("StringSpacingAtNut"));
             elem.Add(StringSpacingAtBridge.SerializeAsAttribute("StringSpacingAtBridge"));
             return elem;
@@ -118,43 +140,71 @@ namespace SiGen.StringedInstruments.Layout
         public override void Deserialize(XElement elem)
         {
             base.Deserialize(elem);
-            NutSpacingMode = (NutSpacingMode)Enum.Parse(typeof(NutSpacingMode), elem.Attribute("NutSpacingMode").Value);
-
-            if(NutSpacingMode == NutSpacingMode.BetweenStrings)
+            if (elem.ContainsAttribute("NutSpacingMode"))
             {
-                StringSpacingAtNut = Measure.Parse(elem.Attribute("StringSpacingAtNut").Value);
-                StringSpacingAtBridge = Measure.Parse(elem.Attribute("StringSpacingAtBridge").Value);
-                AdjustedNutSlots = new Measure[elem.Elements("Spacing").Count()];
-                foreach (var spacingElem in elem.Elements("Spacing"))
+                NutSpacingMode = (StringSpacingMethod)Enum.Parse(typeof(StringSpacingMethod), elem.Attribute("NutSpacingMode").Value);
+
+                if (NutSpacingMode == StringSpacingMethod.BetweenStrings)
                 {
-                    int spacingIndex = spacingElem.GetIntAttribute("Index");
-                    AdjustedNutSlots[spacingIndex] = Measure.Parse(spacingElem.Attribute("Nut").Value);
+                    StringSpacingAtNut = Measure.Parse(elem.Attribute("StringSpacingAtNut").Value);
+                    AdjustedNutSpacings = new Measure[elem.Elements("Spacing").Count()];
+                    foreach (var spacingElem in elem.Elements("Spacing"))
+                    {
+                        int spacingIndex = spacingElem.GetIntAttribute("Index");
+                        AdjustedNutSpacings[spacingIndex] = Measure.Parse(spacingElem.Attribute("Nut").Value);
+                    }
+                }
+            }
+            if (elem.ContainsAttribute("BridgeSpacingMode"))
+            {
+                BridgeSpacingMode = (StringSpacingMethod)Enum.Parse(typeof(StringSpacingMethod), elem.Attribute("BridgeSpacingMode").Value);
+
+                if (BridgeSpacingMode == StringSpacingMethod.BetweenStrings)
+                {
+                    StringSpacingAtBridge = Measure.Parse(elem.Attribute("StringSpacingAtBridge").Value);
+                    AdjustedBridgeSpacings = new Measure[elem.Elements("Spacing").Count()];
+                    foreach (var spacingElem in elem.Elements("Spacing"))
+                    {
+                        int spacingIndex = spacingElem.GetIntAttribute("Index");
+                        AdjustedBridgeSpacings[spacingIndex] = Measure.Parse(spacingElem.Attribute("Nut").Value);
+                    }
                 }
             }
         }
 
-        public void CalculateNutSlotPositions()
+        public void CalculateAdjustedPositions()
         {
-            if (NutSpacingMode != NutSpacingMode.BetweenStrings || NumberOfStrings < 2)
-            {
-                AdjustedNutSlots = new Measure[0];
-                return;
-            }
+            AdjustedNutSpacings = new Measure[0];
+            AdjustedBridgeSpacings = new Measure[0];
 
-            if(Layout.Strings.All(s=>s.Gauge != Measure.Empty))
+            if (Layout.Strings.All(s => s.Gauge != Measure.Empty) && NumberOfStrings >= 2)
             {
-                AdjustedNutSlots = new Measure[NumberOfStrings - 1];
-                var spacing = StringSpreadAtNut - Layout.Strings.Sum(s => s.Gauge);
-                spacing += (Layout.FirstString.Gauge / 2) + (Layout.LastString.Gauge / 2);
-                spacing /= NumberOfStrings - 1;
-                for(int i = 0; i < NumberOfStrings - 1; i++)
+                if(NutSpacingMode == StringSpacingMethod.BetweenStrings)
                 {
-                    AdjustedNutSlots[i] = (Layout.Strings[i].Gauge / 2) + spacing + (Layout.Strings[i + 1].Gauge / 2);
-                    AdjustedNutSlots[i].Unit = StringSpacingAtNut.Unit;
+                    AdjustedNutSpacings = new Measure[NumberOfStrings - 1];
+                    var spacing = StringSpreadAtNut - Layout.Strings.Sum(s => s.Gauge);
+                    spacing += (Layout.FirstString.Gauge / 2) + (Layout.LastString.Gauge / 2);
+                    spacing /= NumberOfStrings - 1;
+                    for (int i = 0; i < NumberOfStrings - 1; i++)
+                    {
+                        AdjustedNutSpacings[i] = (Layout.Strings[i].Gauge / 2) + spacing + (Layout.Strings[i + 1].Gauge / 2);
+                        AdjustedNutSpacings[i].Unit = StringSpacingAtNut.Unit;
+                    }
+                }
+
+                if (BridgeSpacingMode == StringSpacingMethod.BetweenStrings)
+                {
+                    AdjustedBridgeSpacings = new Measure[NumberOfStrings - 1];
+                    var spacing = StringSpreadAtBridge - Layout.Strings.Sum(s => s.Gauge);
+                    spacing += (Layout.FirstString.Gauge / 2) + (Layout.LastString.Gauge / 2);
+                    spacing /= NumberOfStrings - 1;
+                    for (int i = 0; i < NumberOfStrings - 1; i++)
+                    {
+                        AdjustedBridgeSpacings[i] = (Layout.Strings[i].Gauge / 2) + spacing + (Layout.Strings[i + 1].Gauge / 2);
+                        AdjustedBridgeSpacings[i].Unit = StringSpacingAtBridge.Unit;
+                    }
                 }
             }
-            else
-                AdjustedNutSlots = new Measure[0];
         }
     }
 }

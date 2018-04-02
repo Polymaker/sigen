@@ -21,7 +21,7 @@ namespace SiGen.StringedInstruments.Layout
             _CachedBounds = RectangleM.Empty;
 
             if (StringSpacing is StringSpacingSimple)
-                (StringSpacing as StringSpacingSimple).CalculateNutSlotPositions();
+                (StringSpacing as StringSpacingSimple).CalculateAdjustedPositions();
 
             Measure nutCenter = Measure.Zero;
             Measure bridgeCenter = Measure.Zero;
@@ -61,6 +61,11 @@ namespace SiGen.StringedInstruments.Layout
             {
                 var theta = Math.Asin(opp.NormalizedValue / str.ScaleLength.NormalizedValue);
                 adj = Math.Cos(theta) * str.ScaleLength;
+            }
+
+            if (adj.IsEmpty)
+            {
+
             }
 
             var p1 = new PointM(nutPos, (adj / 2d));

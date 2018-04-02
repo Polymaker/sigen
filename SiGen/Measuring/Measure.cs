@@ -75,11 +75,11 @@ namespace SiGen.Measuring
             }
         }
 
-        [XmlIgnore, Obsolete("Use IsEmpty")]
-        public bool IsNaN
-        {
-            get { return double.IsNaN(normalizedValue); }
-        }
+        //[XmlIgnore, Obsolete("Use IsEmpty")]
+        //public bool IsNaN
+        //{
+        //    get { return double.IsNaN(normalizedValue); }
+        //}
 
         [XmlIgnore]
         public bool IsEmpty
@@ -296,16 +296,6 @@ namespace SiGen.Measuring
 
         #region ToString
 
-        [Flags]
-        public enum MeasureFormatFlag
-        {
-            Default,
-            HideUnit = 1 ,
-            ForceDecimal = 2,
-            DisableApproximation = 4,
-            HighPrecision = 8
-        }
-
         public class MeasureFormat
         {
             public UnitOfMeasure OverrideUnit { get; set; }
@@ -349,77 +339,9 @@ namespace SiGen.Measuring
             return ToString(MeasureFormat.DefaultFormat);
         }
 
-        public string ToString(UnitOfMeasure unit, bool forceDecimal = false)
+        public string ToString(UnitOfMeasure unit)
         {
-            return ToString(unit, forceDecimal ? MeasureFormatFlag.ForceDecimal : MeasureFormatFlag.Default);
-        }
-
-        public string ToString(MeasureFormatFlag flags)
-        {
-            return ToString(Unit, flags);
-        }
-
-        public string ToString(UnitOfMeasure unit, MeasureFormatFlag flags)
-        {
-            if (IsEmpty)
-                return "N/A";
-
-            if (unit == null)
-                return Value.ToString();
-
-            var displayedUnit = flags.HasFlag(MeasureFormatFlag.HideUnit) ? string.Empty : unit.Symbol;
-            var extraDigits = flags.HasFlag(MeasureFormatFlag.HighPrecision) ? "######" : string.Empty;
-
-            if (flags.HasFlag(MeasureFormatFlag.ForceDecimal))
-                return string.Format("{0:0.000" + extraDigits + "}{1}", this[unit], displayedUnit);
-
-            const double sixtyfourth = 0.015625d;
-
-            if (unit == UnitOfMeasure.Inches)
-            {
-                double value = this[unit];
-                int whole = (int)Math.Floor(value);
-                double remain = value - whole;
-
-                if (remain >= sixtyfourth)
-                {
-                    int sixtyFourCount = 0;
-                    while (remain >= 0.015625d || Math.Abs(remain - 0.015625d) < 0.000001)
-                    {
-                        sixtyFourCount++;
-                        remain -= 0.015625d;
-                    }
-                    int baseFrac = 64;
-                    while ((sixtyFourCount / 2d) % 2d == 0d || (sixtyFourCount / 2d) % 2d == 1d)
-                    {
-                        baseFrac /= 2;
-                        sixtyFourCount /= 2;
-                    }
-                    if(remain <= sixtyfourth /2 && whole == 0)
-                        return string.Format("{0:0.###" + extraDigits + "}{1}", this[unit], displayedUnit);
-                    if ( remain < 0.002 || !flags.HasFlag(MeasureFormatFlag.DisableApproximation))
-                    {
-                        if (whole == 0)
-                            return string.Format("{3}{0}/{1}{2}", sixtyFourCount, baseFrac, displayedUnit, remain > 0.002 ? "~" : string.Empty);
-                        else
-                            return string.Format("{0} {4}{1}/{2}{3}", whole, sixtyFourCount, baseFrac, displayedUnit, remain > 0.002 ? "~" : string.Empty);
-                    }
-                }
-                else if (remain > 0.002 && whole > 0 && !flags.HasFlag(MeasureFormatFlag.DisableApproximation))
-                    return string.Format("~{0}{1}", whole, displayedUnit);
-            }
-            else if (unit == UnitOfMeasure.Feets)
-            {
-                double value = this[unit];
-                int whole = (int)Math.Floor(value);
-                double remain = value - whole;
-                if (remain >= sixtyfourth / 12d && !flags.HasFlag(MeasureFormatFlag.HideUnit))
-                    return string.Format("{0}{1} {2}", whole, unit.Symbol, Inches(remain * 12d).ToString(flags));
-                else if (whole > 0 && remain > 0 && remain < sixtyfourth / 12d && !flags.HasFlag(MeasureFormatFlag.DisableApproximation))
-                    return string.Format("~{0}{1}", whole, displayedUnit);
-            }
-
-            return string.Format("{0:0.###" + extraDigits + "}{1}", this[unit], displayedUnit);
+            return ToString(new MeasureFormat() { OverrideUnit = unit });
         }
 
         public string ToString(MeasureFormat format)

@@ -49,15 +49,21 @@ namespace SiGen.UI.Controls
                     CacheCurrentLayoutValues();
 
                 if (_CurrentLayout != null)
+                {
                     _CurrentLayout.NumberOfStringsChanged -= CurrentLayout_NumberOfStringsChanged;
+                    _CurrentLayout.LayoutUpdated -= CurrentLayout_LayoutUpdated;
+                }
 
                 _CurrentLayout = layout;
-                OnLayoutChanged();
+                OnCurrentLayoutChanged();
                 ReloadPropertyValues();
 
                 if(_CurrentLayout != null)
+                {
                     _CurrentLayout.NumberOfStringsChanged += CurrentLayout_NumberOfStringsChanged;
-
+                    _CurrentLayout.LayoutUpdated += CurrentLayout_LayoutUpdated;
+                }
+                
                 if (layout == null)
                     ClearLayoutCache(null);
                 else if (CachedLayoutData.ContainsKey(layout))
@@ -70,16 +76,26 @@ namespace SiGen.UI.Controls
             OnNumberOfStringsChanged();
         }
 
+        private void CurrentLayout_LayoutUpdated(object sender, EventArgs e)
+        {
+            OnLayoutUpdated();
+        }
+
         protected virtual void OnNumberOfStringsChanged()
         {
 
         }
 
-        protected virtual void OnLayoutChanged()
+        protected virtual void OnLayoutUpdated()
         {
 
         }
 
+        protected virtual void OnCurrentLayoutChanged()
+        {
+
+        }
+        
         public void ReloadPropertyValues()
         {
             _IsLoading = true;
@@ -112,6 +128,19 @@ namespace SiGen.UI.Controls
                 CachedLayoutData.Clear();
             else if (CachedLayoutData.ContainsKey(layout))
                 CachedLayoutData.Remove(layout);
+        }
+
+        protected LayoutViewer GetCurrentViewer()
+        {
+            if(Parent != null && Parent is WeifenLuo.WinFormsUI.Docking.DockContent)
+            {
+                var activeDoc = (Parent as WeifenLuo.WinFormsUI.Docking.DockContent).DockPanel.ActiveDocument;
+                if(activeDoc != null)
+                {
+                    return (activeDoc as WeifenLuo.WinFormsUI.Docking.DockContent).Controls.OfType<LayoutViewer>().FirstOrDefault();
+                }
+            }
+            return null;
         }
     }
 }

@@ -96,7 +96,7 @@
     <Compile Include="StringedInstruments\Layout\ScaleLength\LengthFunction.cs" />
     <Compile Include="StringedInstruments\Layout\SILayout.cs" />
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingType.cs" />
-    <Compile Include="StringedInstruments\Layout\StringSpacing\NutSpacingMode.cs" />
+    <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingMethod.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FingerboardEdge.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FretLine.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FretSegment.cs" />
@@ -118,11 +118,23 @@
     <Compile Include="UI\Controls\LayoutEditors\LayoutEditorPanel.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UI\Controls\LayoutEditors\LayoutProperties.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\LayoutEditors\LayoutProperties.Designer.cs">
+      <DependentUpon>LayoutProperties.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Controls\LayoutEditors\LayoutPropertyEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UI\Controls\LayoutEditors\LayoutPropertyEditor.Designer.cs">
       <DependentUpon>LayoutPropertyEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\LayoutEditors\LayoutViewerPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\LayoutEditors\LayoutViewerPanel.Designer.cs">
+      <DependentUpon>LayoutViewerPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\LayoutEditors\StringsConfigurationEditor.cs">
       <SubType>UserControl</SubType>
@@ -221,6 +233,12 @@
     </Compile>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\FingerboardMarginEditor.resx">
       <DependentUpon>FingerboardMarginEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\LayoutProperties.resx">
+      <DependentUpon>LayoutProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\LayoutViewerPanel.resx">
+      <DependentUpon>LayoutViewerPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\ScaleLengthEditor.resx">
       <DependentUpon>ScaleLengthEditor.cs</DependentUpon>

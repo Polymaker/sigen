@@ -33,6 +33,10 @@ namespace SiGen.UI
                 if(value != innerTextbox.ReadOnly)
                 {
                     innerTextbox.ReadOnly = value;
+                    if (value)
+                        ShowTextBox();
+                    else if (!ContainsFocus)
+                        innerTextbox.Visible = false;
                     Invalidate();
                 }
             }
@@ -78,6 +82,7 @@ namespace SiGen.UI
 
         public event EventHandler BeginEdit;
         public event EventHandler EndEdit;
+        public event EventHandler<ValueChangingEventArgs> ValueChanging;
         public event EventHandler ValueChanged;
 
         #endregion
@@ -97,6 +102,8 @@ namespace SiGen.UI
             base.OnLoad(e);
             UpdateMeasureBounds();
             SynchronizeValueToTextbox();
+            if (ReadOnly)
+                ShowTextBox();
         }
 
         private void SynchronizeValueToTextbox()
@@ -106,9 +113,7 @@ namespace SiGen.UI
                 innerTextbox.Text = string.Empty;
             else
             {
-                var valueStr = _Value.ToString(Measure.MeasureFormatFlag.DisableApproximation);
-                //if (valueStr.Contains("~"))
-                //    valueStr = _Value.ToString(_Value.Unit, true);
+                var valueStr = _Value.ToString(new Measure.MeasureFormat() { AllowApproximation = false });
                 innerTextbox.Text = valueStr;
             }
             internalChange = false;
@@ -116,6 +121,17 @@ namespace SiGen.UI
             if (IsHandleCreated)
                 Invalidate();
             UpdateMeasureBounds();
+        }
+
+
+        public void ChangeDisplayedUnit(UnitOfMeasure unit)
+        {
+            if(!_Value.IsEmpty)
+            {
+                PerformEndEdit(true);
+                _Value.Unit = unit;
+                SynchronizeValueToTextbox();
+            }
         }
 
         #region Drawing
@@ -236,6 +252,11 @@ namespace SiGen.UI
             base.OnGotFocus(e);
         }
 
+        private void innerTextbox_Enter(object sender, EventArgs e)
+        {
+            Invalidate();//repaint border
+        }
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (!ContainsFocus && e.Button == MouseButtons.Right)
@@ -243,8 +264,8 @@ namespace SiGen.UI
 
             base.OnMouseDown(e);
 
-            if (ContainsFocus && e.Button == MouseButtons.Left /*&& measureBounds.Contains(e.Location)*/)
-                ShowTextBox(measureBounds.Contains(e.Location));
+            //if (ContainsFocus && e.Button == MouseButtons.Left /*&& measureBounds.Contains(e.Location)*/)
+            //    ShowTextBox(measureBounds.Contains(e.Location));
         }
 
         protected void ShowTextBox(bool select = false)
@@ -253,7 +274,7 @@ namespace SiGen.UI
             {
                 innerTextbox.BackColor = BackColor;
                 innerTextbox.Visible = true;
-                innerTextbox.Focus();
+                //innerTextbox.Focus();
             }
 
             if (select)
@@ -385,22 +406,35 @@ namespace SiGen.UI
             if (_IsEditing)
             {
                 Measure newValue = Measure.Empty;
+                bool validValue = true;
 
                 if(!string.IsNullOrEmpty(innerTextbox.Text) || !AllowEmptyValue)
                 {
                     if (!MeasureParser.TryParse(innerTextbox.Text, out newValue, _Value.Unit))
+                    {
                         newValue = _Value;
+                        validValue = false;
+                    }
                 }
 
-                _IsEditing = false;
-                if(!keepTextBoxVisible)
-                    innerTextbox.Visible = false;
+                var vcArgs = new ValueChangingEventArgs(_Value, newValue, true);
+                if (validValue)
+                    OnValueChanging(vcArgs);
 
-                OnEndEdit(EventArgs.Empty);
-                if (newValue != Value)
-                    Value = newValue;
+                if (!vcArgs.Cancel)
+                {
+                    _IsEditing = false;
+                    if (!keepTextBoxVisible)
+                        innerTextbox.Visible = false;
+
+                    OnEndEdit(EventArgs.Empty);
+                    if (newValue != Value)
+                        Value = newValue;
+                    else
+                        SynchronizeValueToTextbox();
+                }
                 else
-                    SynchronizeValueToTextbox();
+                    CancelEdit();
             }
             else if (innerTextbox.Visible && !keepTextBoxVisible)
                 innerTextbox.Visible = false;
@@ -461,10 +495,17 @@ namespace SiGen.UI
                 }
             }
         }
+        
+        protected void OnValueChanging(ValueChangingEventArgs args)
+        {
+            var handler = ValueChanging;
+            if (handler != null)
+                handler(this, args);
+        }
 
         private void innerTextbox_Validated(object sender, EventArgs e)
         {
-            PerformEndEdit();
+            PerformEndEdit(ReadOnly);
             Invalidate();
         }
 
@@ -487,8 +528,71 @@ namespace SiGen.UI
                 Parent.SelectNextControl(this, Control.ModifierKeys != Keys.Shift, true, true, true);
         }
 
+        private void innerTextbox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (!innerTextbox.Visible)
+            {
+                char keyChar = (char)e.KeyValue;
+                if (char.IsDigit(keyChar) || e.KeyCode == Keys.OemPeriod || e.KeyCode.ToString().StartsWith("NumPad"))
+                {
+                    ShowTextBox(true);
+                }
+                else
+                {
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
+                    innerTextbox.SelectAll();
+                }
+            }
+        }
+
+        public class ValueChangingEventArgs : EventArgs
+        {
+            private readonly Measure _PreviousValue;
+            private readonly Measure _NewValue;
+            private readonly bool _UserChange;
+
+            public Measure PreviousValue { get { return _PreviousValue; } }
+            public Measure NewValue { get { return _NewValue; } }
+            public bool UserChange { get { return _UserChange; } }
+            public bool Cancel { get; set; }
+
+            public ValueChangingEventArgs(Measure prevValue, Measure newValue, bool byUser)
+            {
+                _PreviousValue = prevValue;
+                _NewValue = newValue;
+                _UserChange = byUser;
+            }
+        }
+
         #endregion
 
+        protected override void WndProc(ref Message m)
+        {
+            bool handleMessage = true;
+            if(m.Msg == 0x201)
+            {
+                int posX = ((short)((int)m.LParam & 65535));
+                int posY = ((short)((int)m.LParam >> 16 & 65535));
+
+                if (innerTextbox.Bounds.Contains(posX, posY))
+                {
+                    ShowTextBox();
+                    m.Result = SendMessage(innerTextbox.Handle, m.Msg, m.WParam, m.LParam);
+                    handleMessage = false;
+                }
+            }
+
+            if(handleMessage)
+                base.WndProc(ref m);
+        }
+
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        public static extern IntPtr DefWindowProc(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+
+        
     }
 
     internal class MeasureTextboxDesigner : ControlDesigner

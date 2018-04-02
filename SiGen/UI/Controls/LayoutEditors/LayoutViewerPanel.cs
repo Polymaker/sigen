@@ -1,0 +1,48 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+
+namespace SiGen.UI.Controls.LayoutEditors
+{
+    public partial class LayoutViewerPanel : DockContent
+    {
+        private double ScreenDPI;
+        public LayoutViewer Viewer { get { return layoutViewer1; } }
+
+        public LayoutViewerPanel()
+        {
+            InitializeComponent();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            using(var g = CreateGraphics())
+            {
+                ScreenDPI = g.DpiY;
+            }
+        }
+
+        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
+        {
+            Viewer.ResetCamera();
+        }
+
+        private void layoutViewer1_ZoomChanged(object sender, EventArgs e)
+        {
+            var currentZoom = Viewer.Zoom;
+            var dpi = ScreenDPI == 0 ? 96 : ScreenDPI;
+            var realSize = Viewer.DisplayConfig.FretboardOrientation == Orientation.Horizontal ? layoutViewer1.Width : layoutViewer1.Height;
+            var totalInches = (double)realSize / dpi;
+
+            tsLblZoom.Text = string.Format("Zoom: {0:0.##}%", currentZoom);
+        }
+    }
+}
