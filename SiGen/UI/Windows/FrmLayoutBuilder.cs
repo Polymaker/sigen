@@ -41,17 +41,13 @@ namespace SiGen.UI
         public FrmLayoutBuilder()
         {
             InitializeComponent();
-            //dockPanel1.Theme = vS2005Theme1;
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            
-            //splitContainer1.Panel1.Controls.Remove(layoutViewer1);
             InitializeEditingPanels();
-            
-            LoadLayout(new LayoutFile(CreateDefaultLayout()));
+            LoadLayout(new LayoutFile(SILayout.Load("DefaultLayout.sil")));
         }
 
         #region Document Management
@@ -80,7 +76,6 @@ namespace SiGen.UI
             scaleLengthPanel = new LayoutEditorPanel<ScaleLengthEditor>();
             scaleLengthPanel.Show(stringConfigPanel.Pane, DockAlignment.Bottom, 0.6);
             scaleLengthPanel.Text = "Scale Length Configuration";
-
         }
 
         private void dockPanel1_ActiveDocumentChanged(object sender, EventArgs e)
@@ -125,7 +120,7 @@ namespace SiGen.UI
 
             documentPanel.Viewer.CurrentLayout = layoutFile.Layout;
             documentPanel.Viewer.BackColor = Color.White;
-            documentPanel.Viewer.Font = new Font(Font.FontFamily, Font.Size + 3);
+            documentPanel.Viewer.Font = new Font(Font.FontFamily, Font.Size * 1.4f);
             documentPanel.Viewer.DisplayConfig.RenderRealStrings = true;
             documentPanel.Viewer.Select();
             documentPanel.Tag = layoutFile;
@@ -147,18 +142,7 @@ namespace SiGen.UI
         }
 
         #endregion
-
-        private DockContent CreateDockPanel(Control ctrl, string name)
-        {
-            var tmpDoc = new DockContent();
-            tmpDoc.CloseButtonVisible = false;
-            tmpDoc.AllowEndUserDocking = false;
-            tmpDoc.Text = name;
-            tmpDoc.Controls.Add(ctrl);
-            ctrl.Dock = DockStyle.Fill;
-            return tmpDoc;
-        }
-
+        /*
         private static SILayout CreateDefaultLayout()
         {
             var layout = new SILayout();
@@ -200,7 +184,7 @@ namespace SiGen.UI
             layout.Margins.LastFret = Measure.Mm(10);
             layout.RebuildLayout();
             return layout;
-        }
+        }*/
         
         #region Save
 
@@ -253,7 +237,7 @@ namespace SiGen.UI
 
         private void tsbNew_Click(object sender, EventArgs e)
         {
-            LoadLayout(new LayoutFile(CreateDefaultLayout()));
+            LoadLayout(new LayoutFile(SILayout.Load("DefaultLayout.sil")));
         }
 
         private void tssbOpen_ButtonClick(object sender, EventArgs e)

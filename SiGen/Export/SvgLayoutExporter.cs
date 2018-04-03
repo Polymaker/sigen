@@ -205,9 +205,13 @@ namespace SiGen.Export
             var fingerboardGroup = CreateLayer("Fingerboard");
             Document.Children.Add(fingerboardGroup);
 
-            foreach (var fingerboardEdge in Layout.VisualElements.OfType<FingerboardEdge>())
+            foreach (var fingerboardEdge in Layout.VisualElements.OfType<FingerboardSideEdge>())
                 CreateLine(fingerboardGroup, fingerboardEdge.P1, fingerboardEdge.P2, GetScaledUnit(1, SvgUnitType.Point), Color.Blue);
 
+            foreach (var fingerboardEdge in Layout.VisualElements.OfType<FingerboardEdge>())
+            {
+
+            }
             //Frets
 
             var fretsGroup = CreateLayer("Frets");

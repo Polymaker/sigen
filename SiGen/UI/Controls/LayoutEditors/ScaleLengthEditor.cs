@@ -134,20 +134,13 @@ namespace SiGen.UI.Controls
                             mtbTrebleLength.AllowEmptyValue = false;
                             mtbBassLength.Value = CurrentLayout.MultiScaleConfig.Bass;
                             nubMultiScaleRatio.Value = CurrentLayout.MultiScaleConfig.PerpendicularFretRatio;
-                            //if (_FretPositions.Values.Contains(CurrentLayout.MultiScaleConfig.PerpendicularFretRatio))
-                            //{
-                            //    var fretPos = _FretPositions.First(kv => kv.Value == CurrentLayout.MultiScaleConfig.PerpendicularFretRatio);
 
-                            //    Console.WriteLine("Aligned to fret " + fretPos.Key);
-                            //}
                         }
                         break;
                     case ScaleLengthType.Individual:
                         dgvScaleLengths.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
                         break;
                 }
-
-                
 
                 int totalHeight = 0;
                 var rowHeights = tableLayoutPanel1.GetRowHeights();

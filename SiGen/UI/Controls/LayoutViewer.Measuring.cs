@@ -575,7 +575,7 @@ namespace SiGen.UI
                 var fretLines = CurrentLayout.VisualElements.OfType<FretLine>();
                 var stringLines = CurrentLayout.VisualElements.OfType<StringLine>();
                 var stringCenters = CurrentLayout.VisualElements.OfType<StringCenter>();
-                var fingerboardEdges = CurrentLayout.VisualElements.OfType<FingerboardEdge>();
+                var fingerboardEdges = CurrentLayout.VisualElements.OfType<IFingerboardEdge>();
 
                 foreach(var fretLine in fretLines)
                 {
@@ -587,10 +587,10 @@ namespace SiGen.UI
                 LayoutIntersections.AddRange(stringCenters.SelectMany(s => fretLines.Select(f => f.GetIntersection(s).ToVector())));
                 LayoutIntersections.RemoveAll(p => p.IsEmpty);
 
-                LayoutIntersections.AddRange(stringLines.SelectMany(s => fingerboardEdges.Where(f => !(f is FingerboardSideEdge)).Select(f => f.GetIntersection(s).ToVector())));
+                LayoutIntersections.AddRange(stringLines.SelectMany(s => fingerboardEdges.Where(e => !e.IsSideEdge).Select(f => f.GetIntersection(s).ToVector())));
                 LayoutIntersections.RemoveAll(p => p.IsEmpty);
 
-                LayoutIntersections.AddRange(stringCenters.SelectMany(s => fingerboardEdges.Where(f => !(f is FingerboardSideEdge)).Select(f => f.GetIntersection(s).ToVector())));
+                LayoutIntersections.AddRange(stringCenters.SelectMany(s => fingerboardEdges.Where(e => !e.IsSideEdge).Select(f => f.GetIntersection(s).ToVector())));
                 LayoutIntersections.RemoveAll(p => p.IsEmpty);
 
                 LayoutIntersections.AddRange(fretLines.Select(fl => fl.Points.First().ToVector()));

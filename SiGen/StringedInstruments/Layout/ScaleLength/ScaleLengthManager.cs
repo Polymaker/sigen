@@ -144,7 +144,8 @@ namespace SiGen.StringedInstruments.Layout
                 set
                 {
                     _PerpendicularFretRatio = value;
-                    Layout.Strings.SetAll(s => s.MultiScaleRatio, value);
+                    if (Layout.CurrentScaleLength == this)
+                        Layout.Strings.SetAll(s => s.MultiScaleRatio, value);
                 }
             }
 
@@ -224,6 +225,7 @@ namespace SiGen.StringedInstruments.Layout
                     for (int i = 0; i < Layout.NumberOfStrings; i++)
                     {
                         _Lengths[i] = !Layout.Strings[i].RealScaleLength.IsEmpty ? Layout.Strings[i].RealScaleLength : Layout.Strings[i].ScaleLength;
+                        _Lengths[i].Unit = Layout.Strings[i].ScaleLength.Unit;
                     }
                 }
             }
@@ -269,6 +271,17 @@ namespace SiGen.StringedInstruments.Layout
                 _Lengths = lengths;
                 if (Layout.CurrentScaleLength == this)
                     Layout.NotifyLayoutChanged(this, "ScaleLength");
+            }
+
+            public override XElement Serialize(string elemName)
+            {
+                return base.Serialize(elemName);
+            }
+
+            internal override void Deserialize(XElement elem)
+            {
+                base.Deserialize(elem);
+                _Lengths = new Measure[NumberOfStrings];
             }
         }
     } 

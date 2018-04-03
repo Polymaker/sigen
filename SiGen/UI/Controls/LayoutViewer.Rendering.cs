@@ -57,6 +57,11 @@ namespace SiGen.UI
             g.DrawLine(pen, PointToDisplay(p1), PointToDisplay(p2));
         }
 
+        private void DrawLines(Graphics g, Pen pen, IEnumerable<PointM> points)
+        {
+            g.DrawLines(pen, points.Select(p => PointToDisplay(p)).ToArray());
+        }
+
         private void DrawRotatedString(Graphics g, string text, Font font, Brush brush, PointF center, Angle angle)
         {
             SizeF textSize = g.MeasureString(text, font);
@@ -80,6 +85,9 @@ namespace SiGen.UI
             using (var edgePen = GetPen(Color.Blue, 1))
             {
                 foreach (var edge in CurrentLayout.VisualElements.OfType<FingerboardEdge>())
+                    DrawLines(g, edgePen, edge.Points);
+
+                foreach (var edge in CurrentLayout.VisualElements.OfType<FingerboardSideEdge>())
                     DrawLine(g, edgePen, edge.P1, edge.P2);
             }
         }
@@ -120,7 +128,6 @@ namespace SiGen.UI
             nutPen.Dispose();
             fretPen.Dispose();
         }
-
 
         private void RenderStrings(Graphics g)
         {

@@ -95,6 +95,7 @@
             this.mtbLayoutWidth.ReadOnly = true;
             this.mtbLayoutWidth.Size = new System.Drawing.Size(133, 16);
             this.mtbLayoutWidth.TabIndex = 0;
+            this.mtbLayoutWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             // 
             // lblLayoutWidth
             // 
@@ -116,6 +117,7 @@
             this.measureTextbox1.ReadOnly = true;
             this.measureTextbox1.Size = new System.Drawing.Size(133, 16);
             this.measureTextbox1.TabIndex = 2;
+            this.measureTextbox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             // 
             // label3
             // 
@@ -138,6 +140,7 @@
             this.mtbShortFret.ReadOnly = true;
             this.mtbShortFret.Size = new System.Drawing.Size(133, 16);
             this.mtbShortFret.TabIndex = 3;
+            this.mtbShortFret.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             // 
             // mtbLayoutHeight
             // 
@@ -149,6 +152,7 @@
             this.mtbLayoutHeight.ReadOnly = true;
             this.mtbLayoutHeight.Size = new System.Drawing.Size(133, 16);
             this.mtbLayoutHeight.TabIndex = 1;
+            this.mtbLayoutHeight.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             // 
             // mtbLongFret
             // 
@@ -160,6 +164,7 @@
             this.mtbLongFret.ReadOnly = true;
             this.mtbLongFret.Size = new System.Drawing.Size(133, 16);
             this.mtbLongFret.TabIndex = 4;
+            this.mtbLongFret.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             // 
             // label2
             // 

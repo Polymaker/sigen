@@ -17,5 +17,11 @@ namespace SiGen
         {
             return Math.Abs(n1 - n2) <= tolerence;
         }
+
+        public static double Round(this double value, double step)
+        {
+            return Math.Round(value / step) * step;
+        }
+
     }
 }

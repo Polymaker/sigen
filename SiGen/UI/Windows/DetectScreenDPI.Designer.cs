@@ -38,14 +38,14 @@
             this.rbCM = new System.Windows.Forms.RadioButton();
             this.rbIN = new System.Windows.Forms.RadioButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.numDPI = new SiGen.UI.Controls.NumericBox();
             this.measureTextbox1 = new SiGen.UI.MeasureTextbox();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.pbxMeasureDPI)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -146,6 +146,19 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(168, 160);
             this.tableLayoutPanel1.TabIndex = 12;
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.flowLayoutPanel1.Controls.Add(this.rbCM);
+            this.flowLayoutPanel1.Controls.Add(this.rbIN);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(17, 137);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(133, 23);
+            this.flowLayoutPanel1.TabIndex = 6;
+            // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -175,19 +188,7 @@
             this.measureTextbox1.Name = "measureTextbox1";
             this.measureTextbox1.Size = new System.Drawing.Size(100, 20);
             this.measureTextbox1.TabIndex = 0;
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.flowLayoutPanel1.Controls.Add(this.rbCM);
-            this.flowLayoutPanel1.Controls.Add(this.rbIN);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(17, 137);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(133, 23);
-            this.flowLayoutPanel1.TabIndex = 6;
+            this.measureTextbox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // DetectScreenDPI
             // 
@@ -207,9 +208,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbxMeasureDPI)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

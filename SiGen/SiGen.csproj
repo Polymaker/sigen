@@ -100,6 +100,7 @@
     <Compile Include="StringedInstruments\Layout\Visual\FingerboardEdge.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FretLine.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FretSegment.cs" />
+    <Compile Include="StringedInstruments\Layout\Visual\LayoutPolyLine.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\StringCenter.cs" />
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingAlignment.cs" />
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingManager.cs" />
@@ -171,6 +172,12 @@
     </Compile>
     <Compile Include="UI\Controls\ValueEditors\MeasureEditor.cs" />
     <Compile Include="UI\Controls\ValueEditors\UnitOfMeasureEditor.cs" />
+    <Compile Include="UI\Windows\AppPreferencesWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Windows\AppPreferencesWindow.Designer.cs">
+      <DependentUpon>AppPreferencesWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Windows\DetectScreenDPI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -223,6 +230,7 @@
     <Compile Include="Utilities\ExtensionMethods\NumberHelper.cs" />
     <Compile Include="Utilities\ExtensionMethods\XmlLinqExtensions.cs" />
     <Compile Include="Utilities\MeasureParser.cs" />
+    <Compile Include="Utilities\ObservableCollectionEx.cs" />
     <Compile Include="Utilities\SerializationHelper.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -258,6 +266,9 @@
     <EmbeddedResource Include="UI\Controls\LayoutViewer.resx">
       <DependentUpon>LayoutViewer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Windows\AppPreferencesWindow.resx">
+      <DependentUpon>AppPreferencesWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\DetectScreenDPI.resx">
       <DependentUpon>DetectScreenDPI.cs</DependentUpon>
     </EmbeddedResource>
@@ -276,6 +287,9 @@
     <EmbeddedResource Include="UI\Windows\LayoutViewerDisplayConfigWindow.resx">
       <DependentUpon>LayoutViewerDisplayConfigWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="DefaultLayout.sil">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

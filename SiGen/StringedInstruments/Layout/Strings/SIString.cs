@@ -276,10 +276,10 @@ namespace SiGen.StringedInstruments.Layout
             
             var stringElem = new XElement(elemName, new XAttribute("Index", Index));
 
-            //if (includeScale)
-            //    stringElem.Add(ScaleLength.SerializeAsAttribute("ScaleLength"));
+            if (Layout.ScaleLengthMode == ScaleLengthType.Individual)
+                stringElem.Add(ScaleLength.SerializeAsAttribute("ScaleLength"));
 
-            if (!Layout.Strings.AllEqual(s => s.MultiScaleRatio))
+            if (!Layout.Strings.AllEqual(s => s.MultiScaleRatio) || Layout.ScaleLengthMode == ScaleLengthType.Individual)
                 stringElem.Add(new XAttribute("MultiScaleRatio", MultiScaleRatio));
 
             var fretElem = new XElement("Frets",
@@ -309,6 +309,9 @@ namespace SiGen.StringedInstruments.Layout
 
             _StartingFret = fretElem.GetIntAttribute("StartingFret");
             _NumberOfFrets = fretElem.GetIntAttribute("NumberOfFrets");
+
+            if (elem.ContainsAttribute("ScaleLength"))
+                ScaleLength = Measure.Parse(elem.Attribute("ScaleLength").Value);
 
             if(elem.ContainsAttribute("MultiScaleRatio"))
                 _MultiScaleRatio = double.Parse(elem.Attribute("MultiScaleRatio").Value);

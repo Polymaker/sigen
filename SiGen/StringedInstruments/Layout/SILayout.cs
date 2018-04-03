@@ -235,6 +235,7 @@ namespace SiGen.StringedInstruments.Layout
             _FretInterpolation = FretInterpolationMethod.Spline;
             _CachedBounds = RectangleM.Empty;
             LayoutName = string.Empty;
+            ChangedProperties = new List<string>();
         }
 
         private void InitializeStrings(int oldValue, int newValue)
@@ -344,6 +345,8 @@ namespace SiGen.StringedInstruments.Layout
             if (!isLoading)
             {
                 isLayoutDirty = true;
+                if (!ChangedProperties.Contains(propname))
+                    ChangedProperties.Add(propname);
                 OnLayoutChanged();
             }
         }
@@ -439,29 +442,36 @@ namespace SiGen.StringedInstruments.Layout
         public static SILayout Load(Stream stream)
         {
             var doc = XDocument.Load(stream);
-            var root = doc.Root;
+            if (doc != null)
+                return Load(doc);
+            return null;
+        }
+
+        public static SILayout Load(XDocument document)
+        {
+            var root = document.Root;
 
             var layout = new SILayout() { isLoading = true };
             layout.NumberOfStrings = root.Element("Strings").GetIntAttribute("Count");
             layout.ScaleLengthMode = DeserializeProperty<ScaleLengthType>(root.Element("ScaleLength").Attribute("Type"));
             layout.CurrentScaleLength.Deserialize(root.Element("ScaleLength"));
+
             layout.Margins.Deserialize(root.Element("FingerboardMargins"));
 
             if (root.ContainsAttribute("Name"))
                 layout.LayoutName = root.Attribute("Name").Value;
 
-            if (root.ContainsElement("Temperament"))
-                layout.FretsTemperament = DeserializeProperty<Temperament>(root.Element("Temperament"));
-
             if (root.ContainsElement("LeftHanded"))
                 layout.LeftHanded = DeserializeProperty<bool>(root.Element("LeftHanded"));
 
-            for(int i = 0;i < layout.NumberOfStrings; i++)
+            for (int i = 0; i < layout.NumberOfStrings; i++)
             {
                 var stringElem = root.Element("Strings").Elements("String").First(s => s.Attribute("Index").Value == i.ToString());
-                //SerializationHelper.GenericDeserialize(layout.Strings[i], stringElem);
                 layout.Strings[i].Deserialize(stringElem);
             }
+
+            if (root.ContainsElement("Temperament"))
+                layout.FretsTemperament = DeserializeProperty<Temperament>(root.Element("Temperament"));
 
             if (root.ContainsElement("FretCompensation"))
                 layout.CompensateFretPositions = DeserializeProperty<bool>(root.Element("FretCompensation"));
@@ -471,11 +481,65 @@ namespace SiGen.StringedInstruments.Layout
                 layout.StringSpacingMode = DeserializeProperty<StringSpacingType>(root.Element("StringSpacings").Attribute("Mode"));
                 layout.StringSpacing.Deserialize(root.Element("StringSpacings"));
             }
-
+            
+            layout.FillDefaultValues();
             layout.isLoading = false;
             layout.isLayoutDirty = true;
 
             return layout;
+        }
+
+        private void FillDefaultValues()
+        {
+            //set default values for other scale length managers
+            if (ScaleLengthMode == ScaleLengthType.Single)
+            {
+                MultiScaleConfig.Treble = SingleScaleConfig.Length;
+                MultiScaleConfig.Bass = SingleScaleConfig.Length + Measure.Inches(1);
+            }
+            else if (ScaleLengthMode == ScaleLengthType.Multiple)
+                SingleScaleConfig.Length = MultiScaleConfig.Treble;
+            else
+            {
+                MultiScaleConfig.Treble = ManualScaleConfig.Lengths.Min();
+                MultiScaleConfig.Treble = Measure.Round(MultiScaleConfig.Treble, GetRoundAmount(MultiScaleConfig.Treble));
+
+                MultiScaleConfig.Bass = ManualScaleConfig.Lengths.Max();
+                MultiScaleConfig.Bass = Measure.Round(MultiScaleConfig.Bass, GetRoundAmount(MultiScaleConfig.Bass));
+
+                if (MultiScaleConfig.Bass == MultiScaleConfig.Treble)
+                    MultiScaleConfig.Bass = MultiScaleConfig.Bass + Measure.Inches(1);
+
+                MultiScaleConfig.PerpendicularFretRatio = Strings.Average(s => s.MultiScaleRatio);
+
+                SingleScaleConfig.Length = ManualScaleConfig.Lengths.Average();
+                SingleScaleConfig.Length = Measure.Round(SingleScaleConfig.Length, GetRoundAmount(SingleScaleConfig.Length));
+            }
+            
+            if(StringSpacingMode == StringSpacingType.Simple)
+            {
+                for (int i = 0; i < NumberOfStrings - 1; i++)
+                {
+                    ManualStringSpacing.SetSpacing(FingerboardEnd.Nut, i, SimpleStringSpacing.GetSpacing(i, FingerboardEnd.Nut));
+                    ManualStringSpacing.SetSpacing(FingerboardEnd.Bridge, i, SimpleStringSpacing.GetSpacing(i, FingerboardEnd.Bridge));
+                }
+            }
+            else
+            {
+                SimpleStringSpacing.StringSpreadAtNut = ManualStringSpacing.StringSpreadAtNut;
+                SimpleStringSpacing.StringSpreadAtBridge = ManualStringSpacing.StringSpreadAtBridge;
+            }
+        }
+
+        private double GetRoundAmount(Measure value)
+        {
+            if (value.Unit == UnitOfMeasure.Cm)
+                return 0.01;
+            else if (value.Unit == UnitOfMeasure.Mm)
+                return 0.1;
+            else if (value.Unit == UnitOfMeasure.In)
+                return 1d / 16d;
+            return 1d;
         }
 
         private static XElement SerializeProperty(string name, object value)
