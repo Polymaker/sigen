@@ -234,7 +234,15 @@ namespace SiGen.StringedInstruments.Layout
 
             public void CopyValuesFromCurrentLayout()
             {
-                //if(Layout.)
+                if(Layout.Strings.All(s=>s.LayoutLine != null))
+                {
+                    _Lengths = new Measure[Layout.NumberOfStrings];
+                    for (int i = 0; i < Layout.NumberOfStrings; i++)
+                    {
+                        _Lengths[i] = !Layout.Strings[i].RealScaleLength.IsEmpty ? Layout.Strings[i].RealScaleLength : Layout.Strings[i].ScaleLength;
+                        _Lengths[i].Unit = Layout.Strings[i].ScaleLength.Unit;
+                    }
+                }
             }
 
             protected override void OnStringConfigurationChanged()
