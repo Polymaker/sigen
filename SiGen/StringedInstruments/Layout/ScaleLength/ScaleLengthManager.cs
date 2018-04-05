@@ -144,7 +144,8 @@ namespace SiGen.StringedInstruments.Layout
                 set
                 {
                     _PerpendicularFretRatio = value;
-                    Layout.Strings.SetAll(s => s.MultiScaleRatio, value);
+                    //if (Layout.CurrentScaleLength == this)
+                    //    Layout.Strings.SetAll(s => s.MultiScaleRatio, value);
                 }
             }
 
@@ -183,7 +184,7 @@ namespace SiGen.StringedInstruments.Layout
                 var elem = base.Serialize(elemName);
                 elem.Add(Treble.SerializeAsAttribute("Treble"));
                 elem.Add(Bass.SerializeAsAttribute("Bass"));
-                if (Layout.Strings.AllEqual(s => s.MultiScaleRatio))
+                //if (Layout.Strings.AllEqual(s => s.MultiScaleRatio))
                     elem.Add(new XAttribute("MultiScaleRatio", PerpendicularFretRatio));
                 return elem;
             }
@@ -195,6 +196,8 @@ namespace SiGen.StringedInstruments.Layout
                 Bass = Measure.Parse(elem.Attribute("Bass").Value);
                 if (elem.ContainsAttribute("MultiScaleRatio"))
                     PerpendicularFretRatio = double.Parse(elem.Attribute("MultiScaleRatio").Value);
+                else
+                    PerpendicularFretRatio = 0.5;
                 //else if (Layout.Strings.AllEqual(s => s.MultiScaleRatio))
                 //    _PerpendicularFretRatio = Layout.Strings[0].MultiScaleRatio;
             }
@@ -224,6 +227,20 @@ namespace SiGen.StringedInstruments.Layout
                     for (int i = 0; i < Layout.NumberOfStrings; i++)
                     {
                         _Lengths[i] = !Layout.Strings[i].RealScaleLength.IsEmpty ? Layout.Strings[i].RealScaleLength : Layout.Strings[i].ScaleLength;
+                        _Lengths[i].Unit = Layout.Strings[i].ScaleLength.Unit;
+                    }
+                }
+            }
+
+            public void CopyValuesFromCurrentLayout()
+            {
+                if(Layout.Strings.All(s=>s.LayoutLine != null))
+                {
+                    _Lengths = new Measure[Layout.NumberOfStrings];
+                    for (int i = 0; i < Layout.NumberOfStrings; i++)
+                    {
+                        _Lengths[i] = !Layout.Strings[i].RealScaleLength.IsEmpty ? Layout.Strings[i].RealScaleLength : Layout.Strings[i].ScaleLength;
+                        _Lengths[i].Unit = Layout.Strings[i].ScaleLength.Unit;
                     }
                 }
             }
@@ -269,6 +286,17 @@ namespace SiGen.StringedInstruments.Layout
                 _Lengths = lengths;
                 if (Layout.CurrentScaleLength == this)
                     Layout.NotifyLayoutChanged(this, "ScaleLength");
+            }
+
+            public override XElement Serialize(string elemName)
+            {
+                return base.Serialize(elemName);
+            }
+
+            internal override void Deserialize(XElement elem)
+            {
+                base.Deserialize(elem);
+                _Lengths = new Measure[NumberOfStrings];
             }
         }
     } 

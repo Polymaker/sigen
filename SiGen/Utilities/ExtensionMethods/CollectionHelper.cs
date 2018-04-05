@@ -70,6 +70,20 @@ namespace System.Collections.Generic
             }
         }
 
+        public static T Sum<T>(this IEnumerable<T> list)
+        {
+            var addOpp = typeof(T).GetMethod("op_Addition", new Type[] { typeof(T), typeof(T) });
+            if (addOpp != null)
+            {
+                T total = default(T);
+                foreach (T obj in list)
+                    total = (T)addOpp.Invoke(null, new object[] { total, obj });
+                return total;
+            }
+            else
+                throw new NotSupportedException("The type does not support addition.");
+        }
+
         public static V Sum<T, V>(this IEnumerable<T> list, Func<T, V> predicate)
         {
             var addOpp = typeof(V).GetMethod("op_Addition", new Type[] { typeof(V), typeof(V) });
@@ -83,6 +97,18 @@ namespace System.Collections.Generic
             else
                 throw new NotSupportedException("The type does not support addition.");
 
+        }
+
+        public static T Average<T>(this IEnumerable<T> list)
+        {
+            var divOpp = typeof(T).GetMethod("op_Division", new Type[] { typeof(T), typeof(int) });
+            if (divOpp != null)
+            {
+                T total = list.Sum();
+                return (T)divOpp.Invoke(null, new object[] { total, list.Count() });
+            }
+            else
+                throw new NotSupportedException("The type does not support division.");
         }
 
         public static V Max2<T, V>(this IEnumerable<T> list, Func<T, V> predicate)

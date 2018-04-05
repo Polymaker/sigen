@@ -55,6 +55,7 @@
             this.innerTextbox.TextChanged += new System.EventHandler(this.innerTextbox_TextChanged);
             this.innerTextbox.Enter += new System.EventHandler(this.innerTextbox_Enter);
             this.innerTextbox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.innerTextbox_KeyDown);
+            this.innerTextbox.Leave += new System.EventHandler(this.innerTextbox_Leave);
             this.innerTextbox.Validating += new System.ComponentModel.CancelEventHandler(this.innerTextbox_Validating);
             this.innerTextbox.Validated += new System.EventHandler(this.innerTextbox_Validated);
             // 

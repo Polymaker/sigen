@@ -47,7 +47,7 @@ namespace SiGen.StringedInstruments.Layout
         public Measure StringLength { get; private set; }
 
         /// <summary>
-        /// The string's real length, taking into accounts the neck taper and measured at the fret 0 (virtual nut)
+        /// The string's real scale length, taking into accounts the neck taper and measured at the fret 0 (virtual nut)
         /// </summary>
         public Measure RealScaleLength { get; private set; }
 
@@ -66,7 +66,7 @@ namespace SiGen.StringedInstruments.Layout
         }
 
         /// <summary>
-        /// Gets or sets the number of fret. This value d
+        /// Gets or sets the number of fret.
         /// </summary>
         [XmlAttribute("NumberOfFrets")]
         public int NumberOfFrets
@@ -85,9 +85,10 @@ namespace SiGen.StringedInstruments.Layout
 
         /// <summary>
         /// Gets or sets the starting fret. The default value is 0 (nut). 
-        /// A positive value places the starting fret (or nut) further down the fingerboard (eg: a banjo's first string starts at the fifth fret).
-        /// A negative value places the starting fret (or nut) behind the nut (a.k.a. negative fret).
+        /// <para>A positive value places the starting fret (or nut) further down the fingerboard (eg: a banjo's first string starts at the fifth fret).
+        /// A negative value places the starting fret (or nut) behind the nut (a.k.a. negative fret).</para>
         /// </summary>
+        /// <example>test</example>
         [XmlAttribute("StartingFret")]
         public int StartingFret
         {
@@ -105,7 +106,7 @@ namespace SiGen.StringedInstruments.Layout
 
         /// <summary>
         /// Gets or sets the total number of frets taking into account the starting fret.
-        /// E.g. the first string of a 22 frets banjo starts at the fifth fret so in total that string has 17 frets.
+        /// <para>E.g. the first string of a 22 frets banjo starts at the fifth fret so in total that string has 17 frets.</para>
         /// </summary>
         public int TotalNumberOfFrets
         {
@@ -118,8 +119,9 @@ namespace SiGen.StringedInstruments.Layout
 
         /// <summary>
         /// Gets or sets the relative offset of this string for a mutli scale length layout.
-        /// This value affects the placement of this string relative to the longest scale length.</para>
+        /// <para>This value affects the placement of this string relative to the longest scale length.</para>
         /// </summary>
+        /// <remarks>This value is now only used when the scale length mode is individual (manual)</remarks>
         [XmlAttribute("MultiScaleRatio")]
         public double MultiScaleRatio
         {
@@ -263,10 +265,16 @@ namespace SiGen.StringedInstruments.Layout
         internal void RecalculateLengths()
         {
             StringLength = LayoutLine.Length;
-            if (LayoutLine.FretZero != PointM.Empty)
+            if (LayoutLine.FretZero != PointM.Empty && LayoutLine.FretZero != LayoutLine.P1)
                 RealScaleLength = PointM.Distance(LayoutLine.FretZero, LayoutLine.P2);
             else
                 RealScaleLength = StringLength;
+        }
+
+        internal void ClearLayoutData()
+        {
+            StringLength = Measure.Empty;
+            RealScaleLength = Measure.Empty;
         }
 
         #region XML serialization
@@ -276,10 +284,10 @@ namespace SiGen.StringedInstruments.Layout
             
             var stringElem = new XElement(elemName, new XAttribute("Index", Index));
 
-            //if (includeScale)
-            //    stringElem.Add(ScaleLength.SerializeAsAttribute("ScaleLength"));
+            if (Layout.ScaleLengthMode == ScaleLengthType.Individual)
+                stringElem.Add(ScaleLength.SerializeAsAttribute("ScaleLength"));
 
-            if (!Layout.Strings.AllEqual(s => s.MultiScaleRatio))
+            if (/*!Layout.Strings.AllEqual(s => s.MultiScaleRatio) || */Layout.ScaleLengthMode == ScaleLengthType.Individual)
                 stringElem.Add(new XAttribute("MultiScaleRatio", MultiScaleRatio));
 
             var fretElem = new XElement("Frets",
@@ -309,6 +317,9 @@ namespace SiGen.StringedInstruments.Layout
 
             _StartingFret = fretElem.GetIntAttribute("StartingFret");
             _NumberOfFrets = fretElem.GetIntAttribute("NumberOfFrets");
+
+            if (elem.ContainsAttribute("ScaleLength"))
+                ScaleLength = Measure.Parse(elem.Attribute("ScaleLength").Value);
 
             if(elem.ContainsAttribute("MultiScaleRatio"))
                 _MultiScaleRatio = double.Parse(elem.Attribute("MultiScaleRatio").Value);

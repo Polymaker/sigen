@@ -12,7 +12,7 @@ using System.Xml.Serialization;
 namespace SiGen.Measuring
 {
     [Serializable, TypeConverter(typeof(Utilities.MeasureConverter))]
-    public struct Measure : ISerializable, IXmlSerializable
+    public struct Measure : ISerializable, IXmlSerializable, IComparable, IComparable<Measure>
     {
 
         #region Static Consts
@@ -178,6 +178,30 @@ namespace SiGen.Measuring
             return m1.NormalizedValue <= m2.NormalizedValue;
         }
 
+        public int CompareTo(Measure other)
+        {
+            if (this < other)
+                return -1;
+            else if (this > other)
+                return 1;
+            else if (this == other)
+                return 0;
+            if (!IsEmpty)
+                return 1;
+            if (!other.IsEmpty)
+                return -1;
+            return 0;
+        }
+
+        public int CompareTo(object other)
+        {
+            if (other == null)
+                return 1;
+            if (!(other is Measure))
+                throw new ArgumentException("");
+            return CompareTo((Measure)other);
+        }
+
         #endregion
 
         #region Arithmetic operators
@@ -204,6 +228,13 @@ namespace SiGen.Measuring
         {
             m1.EnsureIsNotNaN();
             return new Measure(m1.Value / value, m1.Unit);
+        }
+
+        public static double operator /(Measure m1, Measure m2)
+        {
+            m1.EnsureIsNotNaN();
+            m2.EnsureIsNotNaN();
+            return m1.normalizedValue / m2.normalizedValue;
         }
 
         //public static Measure operator /(double value, Measure m1)
@@ -279,6 +310,16 @@ namespace SiGen.Measuring
                 return res1;
             else
                 return res2;
+        }
+
+        public static Measure Round(Measure value)
+        {
+            return new Measure(Math.Round(value.Value), value.Unit);
+        }
+
+        public static Measure Round(Measure value, double step)
+        {
+            return new Measure(Math.Round(value.Value / step) * step, value.Unit);
         }
 
         #endregion

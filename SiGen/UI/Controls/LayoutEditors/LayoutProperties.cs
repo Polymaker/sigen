@@ -57,28 +57,25 @@ namespace SiGen.UI.Controls.LayoutEditors
                 Measure minSize = Measure.Empty;
                 Measure maxSize = Measure.Empty;
                 Measure totalLen = Measure.Zero;
+
                 foreach(var fretLine in CurrentLayout.VisualElements.OfType<FretLine>())
                 {
-                    Measure curSize = Measure.Zero;
-                    for(int i = 0; i < fretLine.Points.Count - 1; i++)
-                        curSize += PointM.Distance(fretLine.Points[i], fretLine.Points[i + 1]);
-
-                    totalLen += curSize;
+                    totalLen += fretLine.Length;
 
                     if (minSize.IsEmpty || maxSize.IsEmpty)
                     {
-                        minSize = curSize;
-                        maxSize = curSize;
+                        minSize = fretLine.Length;
+                        maxSize = fretLine.Length;
                     }
                     else
                     {
-                        if (curSize > maxSize)
-                            maxSize = curSize;
-                        if (curSize < minSize)
-                            minSize = curSize;
+                        if (fretLine.Length > maxSize)
+                            maxSize = fretLine.Length;
+                        if (fretLine.Length < minSize)
+                            minSize = fretLine.Length;
                     }
-
                 }
+
                 measureTextbox1.Value = totalLen;
                 measureTextbox1.ChangeDisplayedUnit(UnitOfMeasure.Inches);
                 mtbShortFret.Value = minSize;

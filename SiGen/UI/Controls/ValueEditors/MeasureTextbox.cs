@@ -23,6 +23,7 @@ namespace SiGen.UI
         private bool _AllowEmptyValue;
         private bool isMouseOver;
         private bool _HideBorders;
+        private HorizontalAlignment _TextAlign;
 
         private Rectangle measureBounds;
 
@@ -35,10 +36,10 @@ namespace SiGen.UI
                 if(value != innerTextbox.ReadOnly)
                 {
                     innerTextbox.ReadOnly = value;
-                    if (value)
-                        ShowTextBox();
-                    else if (!ContainsFocus)
-                        innerTextbox.Visible = false;
+                    //if (value)
+                    //    ShowTextBox();
+                    //else if (!ContainsFocus)
+                    //    innerTextbox.Visible = false;
                     Invalidate();
                 }
             }
@@ -89,6 +90,22 @@ namespace SiGen.UI
             }
         }
 
+        [DefaultValue(HorizontalAlignment.Center)]
+        public HorizontalAlignment TextAlign
+        {
+            get { return _TextAlign; }
+            set
+            {
+                if(value != _TextAlign)
+                {
+                    _TextAlign = value;
+                    innerTextbox.TextAlign = value;
+                    if (IsHandleCreated)
+                        Invalidate();
+                }
+            }
+        }
+
         [Browsable(false)]
         public bool IsEditing
         {
@@ -110,6 +127,7 @@ namespace SiGen.UI
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer | ControlStyles.Selectable, true);
             _Value = Measure.Mm(0);
             measureBounds = Rectangle.Empty;
+            _TextAlign = HorizontalAlignment.Center;
             innerTextbox.Visible = false;
             base.BackColor = Color.Empty;
         }
@@ -119,8 +137,8 @@ namespace SiGen.UI
             base.OnLoad(e);
             UpdateMeasureBounds();
             SynchronizeValueToTextbox();
-            if (ReadOnly)
-                ShowTextBox();
+            //if (ReadOnly)
+            //    ShowTextBox();
         }
 
         private void SynchronizeValueToTextbox()
@@ -167,10 +185,48 @@ namespace SiGen.UI
             else if (VisualStyleRenderer.IsSupported)
                 RenderVisualStyleTextBox(pe.Graphics);
 
-            using (var sf = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
+            var textColor = !Enabled ? SystemColors.GrayText : ForeColor;
+
+            if (VisualStyleRenderer.IsSupported)
             {
-                using (var b1 = new SolidBrush(!Enabled ? SystemColors.GrayText : ForeColor))
-                    pe.Graphics.DrawString(_Value.ToString(), Font, b1, ClientRectangle, sf);
+                TextRenderer.DrawText(pe.Graphics, _Value.ToString(), Font, innerTextbox.Bounds, textColor,
+                    GetTextFormatFlagsAlignment() | TextFormatFlags.Bottom | TextFormatFlags.NoPadding);
+            }
+            else
+            {
+                using (var sf = new StringFormat() { Alignment = GetStringFormatAlignment(), LineAlignment = StringAlignment.Center })
+                {
+                    using (var b1 = new SolidBrush(textColor))
+                        pe.Graphics.DrawString(_Value.ToString(), Font, b1, innerTextbox.Bounds, sf);
+                }
+            }
+        }
+
+        private TextFormatFlags GetTextFormatFlagsAlignment()
+        {
+            switch (TextAlign)
+            {
+                default:
+                case HorizontalAlignment.Center:
+                    return TextFormatFlags.HorizontalCenter;
+                case HorizontalAlignment.Left:
+                    return TextFormatFlags.Left;
+                case HorizontalAlignment.Right:
+                    return TextFormatFlags.Right;
+            }
+        }
+
+        private StringAlignment GetStringFormatAlignment()
+        {
+            switch (TextAlign)
+            {
+                default:
+                case HorizontalAlignment.Center:
+                    return StringAlignment.Center;
+                case HorizontalAlignment.Left:
+                    return StringAlignment.Near;
+                case HorizontalAlignment.Right:
+                    return StringAlignment.Far;
             }
         }
 
@@ -283,6 +339,19 @@ namespace SiGen.UI
                 Invalidate();//repaint border
         }
 
+        protected override void OnLostFocus(EventArgs e)
+        {
+            base.OnLostFocus(e);
+            if (!HideBorders)
+                Invalidate();//repaint border
+        }
+
+        private void innerTextbox_Leave(object sender, EventArgs e)
+        {
+            if (!ContainsFocus /*&& !ReadOnly*/ && innerTextbox.Visible)
+                innerTextbox.Visible = false;
+        }
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (!ContainsFocus && e.Button == MouseButtons.Right)
@@ -305,13 +374,6 @@ namespace SiGen.UI
 
             if (select)
                 innerTextbox.SelectAll();
-        }
-
-        protected override void OnLostFocus(EventArgs e)
-        {
-            base.OnLostFocus(e);
-            if (!HideBorders)
-                Invalidate();//repaint border
         }
 
         protected override void OnEnabledChanged(EventArgs e)
@@ -536,7 +598,7 @@ namespace SiGen.UI
 
         private void innerTextbox_Validated(object sender, EventArgs e)
         {
-            PerformEndEdit(ReadOnly);
+            PerformEndEdit(/*ReadOnly*/);
             Invalidate();
         }
 
@@ -558,8 +620,8 @@ namespace SiGen.UI
             else if (e.KeyData == Keys.Tab)
             {
                 Parent.SelectNextControl(this, Control.ModifierKeys != Keys.Shift, true, true, true);
-                if(ReadOnly)
-                    e.Handled = true;
+                //if(ReadOnly)
+                //    e.Handled = true;
             }
         }
 

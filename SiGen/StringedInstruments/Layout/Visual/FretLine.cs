@@ -8,11 +8,9 @@ using SiGen.Maths;
 
 namespace SiGen.StringedInstruments.Layout.Visual
 {
-    public class FretLine : VisualElement
+    public class FretLine : LayoutPolyLine
     {
         private List<FretSegment> _Segments;
-        private List<PointM> _Points;
-        private RectangleM _Bounds;
         private bool _IsStraight;
         private bool _IsNut;
 
@@ -21,19 +19,11 @@ namespace SiGen.StringedInstruments.Layout.Visual
             get { return _Segments; }
         }
 
-        public List<PointM> Points
-        {
-            get { return _Points; }
-        }
-
         public int FretIndex { get { return _Segments[0].FretIndex; } }
 
         public IEnumerable<SIString> Strings { get { return _Segments.Where(s => !s.IsVirtual).Select(s => s.String); } }
 
-        public override RectangleM Bounds
-        {
-            get { return _Bounds; }
-        }
+        public int StringCount { get { return _Segments.Count(s => !s.IsVirtual); } }
 
         public bool IsStraight
         {
@@ -48,8 +38,6 @@ namespace SiGen.StringedInstruments.Layout.Visual
         public FretLine(IEnumerable<FretSegment> segments)
         {
             _Segments = new List<FretSegment>(segments.OrderBy(s=>s.String.Index));
-            _Points = new List<PointM>();
-            _Bounds = RectangleM.Empty;
             _IsNut = Segments.All(s => s.IsNut || s.IsVirtual);
         }
 
@@ -134,7 +122,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
             //return maxDiff <= tolerance;
         }
 
-        public void BuildLayout()
+        public void ComputeFretShape()
         {
             VerifyIsStraight();
             //if (!IsStraight && !Layout.CompensateFretPositions && Layout.FretsTemperament == Physics.Temperament.Equal && CheckForHardBreak())
@@ -154,81 +142,75 @@ namespace SiGen.StringedInstruments.Layout.Visual
             if (IsStraight && Segments.Count > 1)
             {
                 var line = Line.FromPoints(Segments.First().PointOnString.ToVector(), Segments.Last().PointOnString.ToVector());
-                _Points.Add(PointM.FromVector(line.GetIntersection(leftBound.Equation), UnitOfMeasure.Centimeters));
-                _Points.Add(PointM.FromVector(line.GetIntersection(rightBound.Equation), UnitOfMeasure.Centimeters));
+                Points.Add(PointM.FromVector(line.GetIntersection(leftBound.Equation), UnitOfMeasure.Centimeters));
+                Points.Add(PointM.FromVector(line.GetIntersection(rightBound.Equation), UnitOfMeasure.Centimeters));
             }
             else
             {
-                if (Layout.FretInterpolation != FretInterpolationMethod.NotchedSpline || Strings.Count() == 1)
+                if (Layout.FretInterpolation == FretInterpolationMethod.Spline && StringCount >= 2)
                 {
-                    _Points.Add(Segments.First(fs => !fs.IsVirtual).P2);//first segment is toward treble side so edge is at right (P2)
                     foreach (var seg in Segments.Where(s => !s.IsVirtual))
-                        _Points.Add(seg.PointOnString);
-                    _Points.Add(Segments.Last(fs => !fs.IsVirtual).P1);//last segment is toward bass side so edge is at left (P1)
+                        Points.Add(seg.PointOnString);
+
+                    InterpolateCurve();
+
+                    ExtendToBorders();
                 }
-                else if(Layout.FretInterpolation == FretInterpolationMethod.NotchedSpline)
+                else if(Layout.FretInterpolation == FretInterpolationMethod.NotchedSpline && StringCount >= 2)
                 {
-                    _Points.Add(Segments.First(fs => !fs.IsVirtual).P2);//first segment is toward treble side so edge is at right (P2)
+                    
                     foreach (var seg in Segments.Where(s => !s.IsVirtual))
                     {
-                        _Points.Add(PointM.Average(seg.P2, seg.PointOnString));
-                        _Points.Add(seg.PointOnString);
-                        _Points.Add(PointM.Average(seg.P1, seg.PointOnString));
+                        Points.Add(PointM.Average(seg.P2, seg.PointOnString));
+                        Points.Add(seg.PointOnString);
+                        Points.Add(PointM.Average(seg.P1, seg.PointOnString));
                     }
-                    _Points.Add(Segments.Last(fs => !fs.IsVirtual).P1);//last segment is toward bass side so edge is at left (P1)
+
+                    InterpolateCurve();
+
+                    ExtendToBorders();
                 }
                 else
                 {
-                    //InterpolateSpline();
+                    foreach (var seg in Segments.Where(s => !s.IsVirtual))
+                        Points.Add(seg.PointOnString);
+                    ExtendToBorders();
                 }
 
-                _Points.Reverse();
+                (Points as ObservableCollectionEx<PointM>).Reverse();
+
+                //if (!IsStraight && Points.Count > 2 && Layout.FretInterpolation != FretInterpolationMethod.Linear)
+                //    InterpolateCurve();
+                
             }
-
-            _Bounds = RectangleM.BoundingRectangle(Points);
         }
 
-        private void InterpolateSpline()
+        private void ExtendToBorders()
         {
-            var points = new List<PointM>();
-            points.Add(Segments.First(fs => !fs.IsVirtual).P2);//first segment is toward treble side so edge is at right (P2)
-            foreach (var seg in Segments.Where(s => !s.IsVirtual))
-                points.Add(seg.PointOnString);
-            points.Add(Segments.Last(fs => !fs.IsVirtual).P1);//last segment is toward bass side so edge is at left (P1)
+            var firstSeg = Segments.First(fs => !fs.IsVirtual);
+            var firstBound = (IStringBoundary)Layout.GetStringBoundaryLine(firstSeg.String, FingerboardSide.Treble);//first segment is toward treble side so edge is at right (Treble)
 
-        }
+            var lastSeg = Segments.Last(fs => !fs.IsVirtual);
+            var lastBound = (IStringBoundary)Layout.GetStringBoundaryLine(lastSeg.String, FingerboardSide.Bass);//last segment is toward bass side so edge is at left (Bass)
 
-        private void BuildCurve()
-        {
-            var segLL = new LinkedList<FretSegment>(Segments);
-            var curSeg = segLL.First;
+            var p11 = firstBound.GetRelativePoint(firstSeg.String.LayoutLine, firstSeg.PointOnString);
+            var p21 = lastBound.GetRelativePoint(lastSeg.String.LayoutLine, lastSeg.PointOnString);
 
-            while (curSeg != null)
+            if (Points.Count >= 2)
             {
-                if (!curSeg.Value.IsVirtual)
-                {
-                    if (Points.Count == 0 && curSeg.Next != null)
-                    {
-                        var dir1 = (curSeg.Value.PointOnString - curSeg.Next.Value.PointOnString).Direction;
-                        var avgLine = Line.FromPoints(curSeg.Value.PointOnString.ToVector(), curSeg.Value.PointOnString.ToVector() + dir1);
-                        var lineBound = Layout.GetStringBoundaryLine(curSeg.Value.String, FingerboardSide.Treble);
-                        var testPs = lineBound.GetIntersection(avgLine);
-                        _Points.Add(PointM.Average(testPs, curSeg.Value.P2));
-                    }
-                    else if (Points.Count == 0)
-                        _Points.Add(Segments.First(fs => !fs.IsVirtual).P2);//first segment is toward treble side so edge is at right (P2)
-                    _Points.Add(curSeg.Value.PointOnString);
-                    if (curSeg.Next == null && curSeg.Previous != null)
-                    {
-                        var dir1 = (curSeg.Previous.Value.PointOnString - curSeg.Value.PointOnString).Direction;
-                        var avgLine = Line.FromPoints(curSeg.Value.PointOnString.ToVector(), curSeg.Value.PointOnString.ToVector() + dir1);
-                        var lineBound = Layout.GetStringBoundaryLine(curSeg.Value.String, FingerboardSide.Bass);
-                        var testPs = lineBound.GetIntersection(avgLine);
-                        _Points.Add(testPs);
-                    }
-                }
+                var p12 = new LayoutLine(Points[0], Points[1]).GetIntersection((LayoutLine)firstBound);
+                var p22 = new LayoutLine(Points[Points.Count - 1], Points[Points.Count - 2]).GetIntersection((LayoutLine)lastBound);
 
-                curSeg = curSeg.Next;
+                Points.Insert(0, p12);
+                Points.Add(p22);
+
+                //Points.Insert(0, PointM.Average(p11, p12));
+                //Points.Add(PointM.Average(p21, p22));
+            }
+            else
+            {
+                Points.Insert(0, p11);
+                Points.Add(p21);
             }
         }
 
@@ -251,7 +233,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
                     newLine.Layout = Layout;
                     Layout.VisualElements.Add(newLine);
                     nutLines.Add(newLine);
-                    newLine.BuildLayout();
+                    newLine.ComputeFretShape();
                     i += nutSegments.Count(s => !s.IsVirtual) - 1;
                 }
             }
@@ -273,7 +255,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
                     var newLine = new FretLine(fretSegments);
                     newLine.Layout = Layout;
                     Layout.VisualElements.Add(newLine);
-                    newLine.BuildLayout();
+                    newLine.ComputeFretShape();
                     i += origSegCount - 1;
                 }
             }
@@ -288,88 +270,13 @@ namespace SiGen.StringedInstruments.Layout.Visual
             Layout.VisualElements.Add(right);
 
             Layout.VisualElements.Remove(this);
-            left.BuildLayout();
-            right.BuildLayout();
-        }
-
-        internal PointM GetPointForX(Measure x)
-        {
-            for(int i = 0; i < Points.Count - 1; i++)
-            {
-                if(x>= Points[i].X && x <= Points[i + 1].X)
-                {
-                    var pt = Line.FromPoints(Points[i].ToVector(), Points[i + 1].ToVector()).GetPointForX(x.NormalizedValue);
-                    return PointM.FromVector(pt, UnitOfMeasure.Centimeters);
-                }
-            }
-            return PointM.Empty;
-        }
-
-        internal PointM GetIntersection(LayoutLine other)
-        {
-            var intersection = PointM.Empty;
-            if(Points.Count == 2)
-            {
-                IntersectSegmentWithLine(other.Equation, 0, 1, out intersection, SegmentHitBounds.Any);
-            }
-            else
-            {
-                for (int i = 0; i < Points.Count - 1; i++)
-                {
-                    var hitFlags = (i == 0 ? SegmentHitBounds.AllowLeft : (i == Points.Count - 2 ? SegmentHitBounds.AllowRight : SegmentHitBounds.InBounds));
-                    if (IntersectSegmentWithLine(other.Equation, i, i + 1, out intersection, hitFlags))
-                        return intersection;
-                }
-            }
-            return intersection;
-        }
-
-        //private bool IntersectSegmentWithLine(Line line, int idx1, int idx2, out PointM inter)
-        //{
-        //    var segLine = Line.FromPoints(Points[idx1].ToVector(), Points[idx2].ToVector());
-        //    Vector virtualInter;
-        //    inter = PointM.Empty;
-        //    if (segLine.Intersect(line, out virtualInter))
-        //    {
-        //        if(virtualInter.X >= Points[idx1].X.NormalizedValue && virtualInter.X <= Points[idx2].X.NormalizedValue)
-        //        {
-        //            inter = PointM.FromVector(virtualInter, UnitOfMeasure.Centimeters);
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
-
-        private bool IntersectSegmentWithLine(Line line, int idx1, int idx2, out PointM inter, SegmentHitBounds flags)
-        {
-            var segLine = Line.FromPoints(Points[idx1].ToVector(), Points[idx2].ToVector());
-            Vector virtualInter;
-            inter = PointM.Empty;
-            if (segLine.Intersect(line, out virtualInter))
-            {
-                if ((virtualInter.X >= Points[idx1].X.NormalizedValue || flags.HasFlag(SegmentHitBounds.AllowLeft)) && 
-                    (virtualInter.X <= Points[idx2].X.NormalizedValue || flags.HasFlag(SegmentHitBounds.AllowRight)))
-                {
-                    inter = PointM.FromVector(virtualInter, UnitOfMeasure.Centimeters);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        [Flags]
-        private enum SegmentHitBounds
-        {
-            InBounds = 0,
-            AllowLeft = 1,
-            AllowRight = 2,
-            Any = 4
+            left.ComputeFretShape();
+            right.ComputeFretShape();
         }
 
         internal override void FlipHandedness()
         {
             base.FlipHandedness();
-            _Points = _Points.Select(p => new PointM(p.X * -1, p.Y)).ToList();
             _Segments.ForEach(s => s.FlipHandedness());
         }
     }

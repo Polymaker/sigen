@@ -28,21 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.numericBox1 = new SiGen.UI.Controls.NumericBox();
+            this.nbxNumberOfStrings = new SiGen.UI.Controls.NumericBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.chkLeftHanded = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
-            // numericBox1
+            // nbxNumberOfStrings
             // 
-            this.numericBox1.AllowDecimals = false;
-            this.numericBox1.Location = new System.Drawing.Point(102, 3);
-            this.numericBox1.MaximumValue = 40D;
-            this.numericBox1.MinimumValue = 1D;
-            this.numericBox1.Name = "numericBox1";
-            this.numericBox1.Size = new System.Drawing.Size(66, 20);
-            this.numericBox1.TabIndex = 0;
-            this.numericBox1.Value = 1D;
-            this.numericBox1.ValueChanged += new System.EventHandler(this.numericBox1_ValueChanged);
+            this.nbxNumberOfStrings.AllowDecimals = false;
+            this.nbxNumberOfStrings.Location = new System.Drawing.Point(102, 3);
+            this.nbxNumberOfStrings.MaximumValue = 40D;
+            this.nbxNumberOfStrings.MinimumValue = 1D;
+            this.nbxNumberOfStrings.Name = "nbxNumberOfStrings";
+            this.nbxNumberOfStrings.Size = new System.Drawing.Size(66, 20);
+            this.nbxNumberOfStrings.TabIndex = 0;
+            this.nbxNumberOfStrings.Value = 1D;
+            this.nbxNumberOfStrings.ValueChanged += new System.EventHandler(this.nbxNumberOfStrings_ValueChanged);
             // 
             // label1
             // 
@@ -53,12 +54,24 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Number Of Strings";
             // 
+            // chkLeftHanded
+            // 
+            this.chkLeftHanded.AutoSize = true;
+            this.chkLeftHanded.Location = new System.Drawing.Point(174, 6);
+            this.chkLeftHanded.Name = "chkLeftHanded";
+            this.chkLeftHanded.Size = new System.Drawing.Size(85, 17);
+            this.chkLeftHanded.TabIndex = 2;
+            this.chkLeftHanded.Text = "Left Handed";
+            this.chkLeftHanded.UseVisualStyleBackColor = true;
+            this.chkLeftHanded.CheckedChanged += new System.EventHandler(this.chkLeftHanded_CheckedChanged);
+            // 
             // StringsConfigurationEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chkLeftHanded);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.numericBox1);
+            this.Controls.Add(this.nbxNumberOfStrings);
             this.Name = "StringsConfigurationEditor";
             this.Size = new System.Drawing.Size(329, 126);
             this.ResumeLayout(false);
@@ -68,7 +81,8 @@
 
         #endregion
 
-        private NumericBox numericBox1;
+        private NumericBox nbxNumberOfStrings;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox chkLeftHanded;
     }
 }

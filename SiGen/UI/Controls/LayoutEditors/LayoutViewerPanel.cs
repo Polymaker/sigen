@@ -24,10 +24,6 @@ namespace SiGen.UI.Controls.LayoutEditors
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            //using(var g = CreateGraphics())
-            //{
-            //    ScreenDPI = g.DpiY;
-            //}
             ScreenDPI = 109;
         }
 

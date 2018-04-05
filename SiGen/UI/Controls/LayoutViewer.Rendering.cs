@@ -57,6 +57,11 @@ namespace SiGen.UI
             g.DrawLine(pen, PointToDisplay(p1), PointToDisplay(p2));
         }
 
+        private void DrawLines(Graphics g, Pen pen, IEnumerable<PointM> points)
+        {
+            g.DrawLines(pen, points.Select(p => PointToDisplay(p)).ToArray());
+        }
+
         private void DrawRotatedString(Graphics g, string text, Font font, Brush brush, PointF center, Angle angle)
         {
             SizeF textSize = g.MeasureString(text, font);
@@ -70,16 +75,22 @@ namespace SiGen.UI
 
         private void RenderFingerboard(Graphics g)
         {
-            using(var guidePen = GetPen(Color.Gainsboro, 1))
+            if (DisplayConfig.ShowMidlines)
             {
-                guidePen.DashPattern = new float[] { 6, 4, 2, 4 };
-                foreach (var stringCenter in CurrentLayout.VisualElements.OfType<StringCenter>())
-                    DrawLine(g, guidePen, stringCenter.P1, stringCenter.P2);
+                using (var guidePen = GetPen(Color.Gainsboro, 1))
+                {
+                    guidePen.DashPattern = new float[] { 6, 4, 2, 4 };
+                    foreach (var stringCenter in CurrentLayout.VisualElements.OfType<StringCenter>())
+                        DrawLine(g, guidePen, stringCenter.P1, stringCenter.P2);
+                }
             }
 
             using (var edgePen = GetPen(Color.Blue, 1))
             {
                 foreach (var edge in CurrentLayout.VisualElements.OfType<FingerboardEdge>())
+                    DrawLines(g, edgePen, edge.Points);
+
+                foreach (var edge in CurrentLayout.VisualElements.OfType<FingerboardSideEdge>())
                     DrawLine(g, edgePen, edge.P1, edge.P2);
             }
         }
@@ -106,21 +117,26 @@ namespace SiGen.UI
 
             foreach (var fretLine in CurrentLayout.VisualElements.OfType<FretLine>())
             {
-                var penToUse = fretLine.IsNut ? nutPen : fretPen;
-                var fretPoints = fretLine.Points.Select(p => PointToDisplay(p)).ToArray();
-                if (fretLine.IsStraight || CurrentLayout.FretInterpolation == StringedInstruments.Layout.FretInterpolationMethod.Linear)
-                    g.DrawLines(penToUse, fretPoints);
-                else
-                    g.DrawCurve(penToUse, fretPoints, 0.3f);
+                if (DisplayConfig.ShowFrets)
+                {
+                    var penToUse = fretLine.IsNut ? nutPen : fretPen;
+                    var fretPoints = fretLine.Points.Select(p => PointToDisplay(p)).ToArray();
+                    if (fretLine.IsStraight || CurrentLayout.FretInterpolation == StringedInstruments.Layout.FretInterpolationMethod.Linear)
+                        g.DrawLines(penToUse, fretPoints);
+                    else
+                        g.DrawCurve(penToUse, fretPoints, 0.5f);
+                }
 
                 if(DisplayConfig.ShowTheoreticalFrets && fretLine.Strings.Count() > 1)
+                {
                     g.DrawLines(nutPen, fretLine.Segments.Where(s => !s.IsVirtual).Select(s => PointToDisplay(s.PointOnString)).ToArray());
+                    //g.DrawLines(nutPen, fretLine.Points.Select(p => PointToDisplay(p)).ToArray());
+                }
             }
 
             nutPen.Dispose();
             fretPen.Dispose();
         }
-
 
         private void RenderStrings(Graphics g)
         {

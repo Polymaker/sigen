@@ -101,31 +101,31 @@ namespace SiGen.StringedInstruments.Layout
             return stringPos;
         }
 
-        public StringSpacingManual ConvertToManual()
-        {
-            if (this is StringSpacingManual)
-                return (StringSpacingManual)this;
-            var newSpacing = new StringSpacingManual(Layout);
-            for (int i = 0; i < Layout.NumberOfStrings - 1; i++)
-            {
-                newSpacing.SetSpacing(FingerboardEnd.Nut, i, GetSpacing(i, FingerboardEnd.Nut));
-                newSpacing.SetSpacing(FingerboardEnd.Bridge, i, GetSpacing(i, FingerboardEnd.Bridge));
-            }
-            return newSpacing;
-        }
+        //public StringSpacingManual ConvertToManual()
+        //{
+        //    if (this is StringSpacingManual)
+        //        return (StringSpacingManual)this;
+        //    var newSpacing = new StringSpacingManual(Layout);
+        //    for (int i = 0; i < Layout.NumberOfStrings - 1; i++)
+        //    {
+        //        newSpacing.SetSpacing(FingerboardEnd.Nut, i, GetSpacing(i, FingerboardEnd.Nut));
+        //        newSpacing.SetSpacing(FingerboardEnd.Bridge, i, GetSpacing(i, FingerboardEnd.Bridge));
+        //    }
+        //    return newSpacing;
+        //}
 
-        public StringSpacingSimple ConvertToSimple()
-        {
-            if (this is StringSpacingSimple)
-                return (StringSpacingSimple)this;
-            var newSpacing = new StringSpacingSimple(Layout);
-            if(Layout.NumberOfStrings > 1)
-            {
-                newSpacing.StringSpacingAtNut = StringSpreadAtNut / (Layout.NumberOfStrings - 1);
-                newSpacing.StringSpreadAtBridge = StringSpreadAtBridge / (Layout.NumberOfStrings - 1);
-            }
-            return newSpacing;
-        }
+        //public StringSpacingSimple ConvertToSimple()
+        //{
+        //    if (this is StringSpacingSimple)
+        //        return (StringSpacingSimple)this;
+        //    var newSpacing = new StringSpacingSimple(Layout);
+        //    if(Layout.NumberOfStrings > 1)
+        //    {
+        //        newSpacing.StringSpacingAtNut = StringSpreadAtNut / (Layout.NumberOfStrings - 1);
+        //        newSpacing.StringSpreadAtBridge = StringSpreadAtBridge / (Layout.NumberOfStrings - 1);
+        //    }
+        //    return newSpacing;
+        //}
 
         public virtual XElement Serialize(string elemName)
         {

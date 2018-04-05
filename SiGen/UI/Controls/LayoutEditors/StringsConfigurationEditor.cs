@@ -20,26 +20,37 @@ namespace SiGen.UI.Controls.LayoutEditors
         protected override void ReadLayoutProperties()
         {
             base.ReadLayoutProperties();
-            numericBox1.Enabled = (CurrentLayout != null);
+            nbxNumberOfStrings.Enabled = (CurrentLayout != null);
+            chkLeftHanded.Enabled = (CurrentLayout != null);
 
             if (CurrentLayout != null)
             {
-                numericBox1.Value = CurrentLayout.NumberOfStrings;
+                nbxNumberOfStrings.Value = CurrentLayout.NumberOfStrings;
+                chkLeftHanded.Checked = CurrentLayout.LeftHanded;
             }
             else
             {
-                numericBox1.Value = 6;
+                nbxNumberOfStrings.Value = 6;
+                chkLeftHanded.Checked = false;
             }
         }
 
-        private void numericBox1_ValueChanged(object sender, EventArgs e)
+        private void nbxNumberOfStrings_ValueChanged(object sender, EventArgs e)
         {
             if (!IsLoading && CurrentLayout != null)
             {
-                CurrentLayout.NumberOfStrings = (int)numericBox1.Value;
+                CurrentLayout.NumberOfStrings = (int)nbxNumberOfStrings.Value;
                 CurrentLayout.RebuildLayout();
             }
         }
 
+        private void chkLeftHanded_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!IsLoading && CurrentLayout != null)
+            {
+                CurrentLayout.LeftHanded = chkLeftHanded.Checked;
+                CurrentLayout.RebuildLayout();
+            }
+        }
     }
 }
