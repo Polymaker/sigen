@@ -100,6 +100,7 @@
     <Compile Include="StringedInstruments\Layout\Visual\FingerboardEdge.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FretLine.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FretSegment.cs" />
+    <Compile Include="StringedInstruments\Layout\Visual\IStringBoundary.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\LayoutPolyLine.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\StringCenter.cs" />
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingAlignment.cs" />

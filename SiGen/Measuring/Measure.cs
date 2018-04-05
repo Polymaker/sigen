@@ -230,6 +230,13 @@ namespace SiGen.Measuring
             return new Measure(m1.Value / value, m1.Unit);
         }
 
+        public static double operator /(Measure m1, Measure m2)
+        {
+            m1.EnsureIsNotNaN();
+            m2.EnsureIsNotNaN();
+            return m1.normalizedValue / m2.normalizedValue;
+        }
+
         //public static Measure operator /(double value, Measure m1)
         //{
         //    m1.EnsureIsNotNaN();

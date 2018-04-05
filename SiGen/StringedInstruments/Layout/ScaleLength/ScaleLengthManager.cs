@@ -144,8 +144,8 @@ namespace SiGen.StringedInstruments.Layout
                 set
                 {
                     _PerpendicularFretRatio = value;
-                    if (Layout.CurrentScaleLength == this)
-                        Layout.Strings.SetAll(s => s.MultiScaleRatio, value);
+                    //if (Layout.CurrentScaleLength == this)
+                    //    Layout.Strings.SetAll(s => s.MultiScaleRatio, value);
                 }
             }
 
@@ -184,7 +184,7 @@ namespace SiGen.StringedInstruments.Layout
                 var elem = base.Serialize(elemName);
                 elem.Add(Treble.SerializeAsAttribute("Treble"));
                 elem.Add(Bass.SerializeAsAttribute("Bass"));
-                if (Layout.Strings.AllEqual(s => s.MultiScaleRatio))
+                //if (Layout.Strings.AllEqual(s => s.MultiScaleRatio))
                     elem.Add(new XAttribute("MultiScaleRatio", PerpendicularFretRatio));
                 return elem;
             }
@@ -196,6 +196,8 @@ namespace SiGen.StringedInstruments.Layout
                 Bass = Measure.Parse(elem.Attribute("Bass").Value);
                 if (elem.ContainsAttribute("MultiScaleRatio"))
                     PerpendicularFretRatio = double.Parse(elem.Attribute("MultiScaleRatio").Value);
+                else
+                    PerpendicularFretRatio = 0.5;
                 //else if (Layout.Strings.AllEqual(s => s.MultiScaleRatio))
                 //    _PerpendicularFretRatio = Layout.Strings[0].MultiScaleRatio;
             }
@@ -228,6 +230,11 @@ namespace SiGen.StringedInstruments.Layout
                         _Lengths[i].Unit = Layout.Strings[i].ScaleLength.Unit;
                     }
                 }
+            }
+
+            public void CopyValuesFromCurrentLayout()
+            {
+                //if(Layout.)
             }
 
             protected override void OnStringConfigurationChanged()

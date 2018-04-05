@@ -43,11 +43,13 @@ namespace SiGen.StringedInstruments.Layout.Visual
         }
     }
 
-    public class FingerboardSideEdge : LayoutLine, IFingerboardEdge
+    public class FingerboardSideEdge : LayoutLine, IFingerboardEdge, IStringBoundary
     {
         private FingerboardSide _Side;
 
         public FingerboardSide Side { get { return _Side; } }
+
+        public PointM RealEnd { get; set; }
 
         public bool IsSideEdge
         {
@@ -57,7 +59,21 @@ namespace SiGen.StringedInstruments.Layout.Visual
         public FingerboardSideEdge(PointM p1, PointM p2, FingerboardSide side) : base(p1, p2, VisualElementType.FingerboardEdge)
         {
             _Side = side;
+            RealEnd = PointM.Empty;
         }
 
+        public PointM GetRelativePoint(StringLine str, PointM pos)
+        {
+            PointM startPt = PointM.Empty;
+            if (str.Index == 0)
+                startPt = Side == FingerboardSide.Treble ? str.P1 : str.FretZero;
+            else if (str.Index == Layout.NumberOfStrings - 1)
+                startPt = Side == FingerboardSide.Bass ? str.P1 : str.FretZero;
+
+            var strPosRatio = PointM.Distance(pos, str.P2) / PointM.Distance(startPt, str.P2);
+            var endPt = RealEnd.IsEmpty ? P2 : RealEnd;
+            var dist = PointM.Distance(P1, endPt);
+            return endPt + (Direction * -1 * (dist * strPosRatio));
+        }
     }
 }

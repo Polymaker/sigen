@@ -124,8 +124,10 @@ namespace SiGen.UI
             {
                 RenderFingerboard(pe.Graphics);
                 RenderGuideLines(pe.Graphics);
+
                 RenderFrets(pe.Graphics);
-                RenderStrings(pe.Graphics);
+                if(DisplayConfig.ShowStrings)
+                    RenderStrings(pe.Graphics);
             }
 
             pe.Graphics.ResetTransform();
@@ -259,6 +261,7 @@ namespace SiGen.UI
         protected override void OnMouseDown(MouseEventArgs e)
         {
             Select();
+            Focus();
 
             MouseDownPos[e.Button] = DisplayToLocal(e.Location);
             if (!IsDragging)

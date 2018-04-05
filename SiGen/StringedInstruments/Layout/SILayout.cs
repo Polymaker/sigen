@@ -40,6 +40,8 @@ namespace SiGen.StringedInstruments.Layout
 
         #endregion
 
+        #region Properties
+
         public int NumberOfStrings
         {
             get { return _NumberOfStrings; }
@@ -186,7 +188,7 @@ namespace SiGen.StringedInstruments.Layout
             get { return _CompensateFretPositions; }
             set
             {
-                if(value != _CompensateFretPositions)
+                if (value != _CompensateFretPositions)
                 {
                     if (value && !Strings.All(s => s.CanCalculateCompensation))
                         return;
@@ -210,6 +212,9 @@ namespace SiGen.StringedInstruments.Layout
         }
 
         public List<VisualElement> VisualElements { get { return _VisualElements; } }
+
+        #endregion
+
 
         #region Events
 

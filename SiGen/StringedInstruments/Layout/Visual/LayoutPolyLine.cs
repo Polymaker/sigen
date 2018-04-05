@@ -68,6 +68,45 @@ namespace SiGen.StringedInstruments.Layout.Visual
             isDirty = false;
         }
 
+        protected void InterpolateCurve()
+        {
+            var basePoints = Points.ToArray();
+            var finalPoints = new List<PointM>();
+
+            for(int i = 0; i < basePoints.Length - 2; i++)
+            {
+                var p1 = basePoints[i];
+                var p2 = basePoints[i + 1];
+                var p3 = basePoints[i + 2];
+
+                var l1 = new LayoutLine(p1, p2);
+                var l2 = new LayoutLine(p3, p2);
+
+                var m1 = PointM.Average(p1, p2);
+                var m2 = PointM.Average(p2, p3);
+
+                l1 = new LayoutLine(m1, l1.GetPerpendicularPoint(m1, Measure.Cm(1)));
+                l2 = new LayoutLine(m2, l2.GetPerpendicularPoint(m2, Measure.Cm(1)));
+
+                var dir = (m2.ToVector() - m1.ToVector()).Normalized;
+                var tan = new LayoutLine(p2, p2 + (dir * Measure.Cm(1)));
+
+                var c1 = l1.GetIntersection(tan);
+                var c2 = l2.GetIntersection(tan);
+
+                finalPoints.Add(p1);
+                finalPoints.Add(PointM.Average(m1, c1));
+                if (i == basePoints.Length - 3)
+                {
+                    finalPoints.Add(p2);
+                    finalPoints.Add(PointM.Average(m2, c2));
+                    finalPoints.Add(p3);
+                }
+            }
+            //_Points.Clear();
+            //_Points.AddRange(finalPoints);
+        }
+
         #region Intersection
 
         public PointM GetIntersection(LayoutLine other)
@@ -93,7 +132,13 @@ namespace SiGen.StringedInstruments.Layout.Visual
             {
                 for (int i = 0; i < Points.Count - 1; i++)
                 {
-                    var hitFlags = (i == 0 ? SegmentHitBounds.AllowLeft : (i == Points.Count - 2 ? SegmentHitBounds.AllowRight : SegmentHitBounds.InBounds));
+
+                    SegmentHitBounds hitFlags = SegmentHitBounds.InBounds; // (i == 0 ? SegmentHitBounds.AllowLeft : (i == Points.Count - 2 ? SegmentHitBounds.AllowRight : SegmentHitBounds.InBounds));
+                    if (i == 0)
+                        hitFlags = Points[i + 1].X > Points[i].X ? SegmentHitBounds.AllowLeft : SegmentHitBounds.AllowRight;
+                    else if(i == Points.Count - 2)
+                        hitFlags = Points[i + 1].X > Points[i].X ? SegmentHitBounds.AllowRight : SegmentHitBounds.AllowLeft;
+
                     if (IntersectSegmentWithLine(line, i, i + 1, out intersection, hitFlags))
                         return true;
                 }
