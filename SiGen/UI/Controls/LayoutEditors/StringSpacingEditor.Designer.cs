@@ -179,6 +179,7 @@
             this.tlpNutSpacingAuto.Controls.Add(this.lblNutSpacingAlignment, 0, 3);
             this.tlpNutSpacingAuto.Dock = System.Windows.Forms.DockStyle.Top;
             this.tlpNutSpacingAuto.Location = new System.Drawing.Point(0, 0);
+            this.tlpNutSpacingAuto.MaximumSize = new System.Drawing.Size(350, 500);
             this.tlpNutSpacingAuto.MinimumSize = new System.Drawing.Size(250, 0);
             this.tlpNutSpacingAuto.Name = "tlpNutSpacingAuto";
             this.tlpNutSpacingAuto.RowCount = 4;
@@ -241,6 +242,7 @@
             this.tlpBridgeSpacingAuto.Controls.Add(this.lblBridgeSpacingAlignment, 0, 3);
             this.tlpBridgeSpacingAuto.Dock = System.Windows.Forms.DockStyle.Top;
             this.tlpBridgeSpacingAuto.Location = new System.Drawing.Point(0, 87);
+            this.tlpBridgeSpacingAuto.MaximumSize = new System.Drawing.Size(350, 500);
             this.tlpBridgeSpacingAuto.MinimumSize = new System.Drawing.Size(250, 0);
             this.tlpBridgeSpacingAuto.Name = "tlpBridgeSpacingAuto";
             this.tlpBridgeSpacingAuto.RowCount = 4;

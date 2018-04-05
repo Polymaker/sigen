@@ -41,14 +41,5 @@ namespace SiGen.UI.Controls.LayoutEditors
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            CurrentLayout.CompensateFretPositions = !CurrentLayout.CompensateFretPositions;
-            if (CurrentLayout.CompensateFretPositions)
-                CurrentLayout.FretsTemperament = Physics.Temperament.ThidellFormula;
-            else
-                CurrentLayout.FretsTemperament = Physics.Temperament.Equal;
-            CurrentLayout.RebuildLayout();
-        }
     }
 }
