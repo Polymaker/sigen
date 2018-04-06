@@ -68,8 +68,11 @@ namespace SiGen.StringedInstruments.Layout.Visual
             isDirty = false;
         }
 
-        protected void InterpolateCurve()
+        public void InterpolateCurve()
         {
+            if (Points.Count < 3)
+                return;
+
             var basePoints = Points.ToArray();
             var finalPoints = new List<PointM>();
 
@@ -103,8 +106,8 @@ namespace SiGen.StringedInstruments.Layout.Visual
                     finalPoints.Add(p3);
                 }
             }
-            //_Points.Clear();
-            //_Points.AddRange(finalPoints);
+            _Points.Clear();
+            _Points.AddRange(finalPoints);
         }
 
         #region Intersection
@@ -126,7 +129,8 @@ namespace SiGen.StringedInstruments.Layout.Visual
             intersection = PointM.Empty;
             if (Points.Count == 2)
             {
-                return IntersectSegmentWithLine(line, 0, 1, out intersection, SegmentHitBounds.Any);
+                bool flipOrientation = (Points[1].X < Points[0].X);
+                return IntersectSegmentWithLine(line, flipOrientation ? 1 : 0, flipOrientation ? 0 : 1, out intersection, SegmentHitBounds.Any);
             }
             else
             {
@@ -134,12 +138,14 @@ namespace SiGen.StringedInstruments.Layout.Visual
                 {
 
                     SegmentHitBounds hitFlags = SegmentHitBounds.InBounds; // (i == 0 ? SegmentHitBounds.AllowLeft : (i == Points.Count - 2 ? SegmentHitBounds.AllowRight : SegmentHitBounds.InBounds));
-                    if (i == 0)
-                        hitFlags = Points[i + 1].X > Points[i].X ? SegmentHitBounds.AllowLeft : SegmentHitBounds.AllowRight;
-                    else if(i == Points.Count - 2)
-                        hitFlags = Points[i + 1].X > Points[i].X ? SegmentHitBounds.AllowRight : SegmentHitBounds.AllowLeft;
+                    bool flipOrientation = (Points[i + 1].X < Points[i].X);
 
-                    if (IntersectSegmentWithLine(line, i, i + 1, out intersection, hitFlags))
+                    if (i == 0)
+                        hitFlags = !flipOrientation ? SegmentHitBounds.AllowLeft : SegmentHitBounds.AllowRight;
+                    else if(i == Points.Count - 2)
+                        hitFlags = !flipOrientation ? SegmentHitBounds.AllowRight : SegmentHitBounds.AllowLeft;
+
+                    if (IntersectSegmentWithLine(line, i + (flipOrientation ? 1 : 0), i + (flipOrientation ? 0 : 1), out intersection, hitFlags))
                         return true;
                 }
             }
@@ -184,7 +190,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
             InBounds = 0,
             AllowLeft = 1,
             AllowRight = 2,
-            Any = 4
+            Any = 3
         }
 
         #endregion

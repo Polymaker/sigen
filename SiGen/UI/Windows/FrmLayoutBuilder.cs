@@ -301,9 +301,9 @@ namespace SiGen.UI
                     SvgLayoutExporter.ExportLayout(sfd.FileName, CurrentFile.Layout,
                         new LayoutSvgExportOptions()
                         {
-                            ExportStrings = false,
-                            ExportStringCenters = false,
-                            ExtendFretSlots = Measure.Mm(3)
+                            ExportStrings = true,
+                            ExportStringCenters = false
+                            //,ExtendFretSlots = Measure.Mm(3)
                         });
                 }
             }

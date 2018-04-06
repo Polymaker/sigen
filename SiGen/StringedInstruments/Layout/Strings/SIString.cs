@@ -68,7 +68,6 @@ namespace SiGen.StringedInstruments.Layout
         /// <summary>
         /// Gets or sets the number of fret.
         /// </summary>
-        [XmlAttribute("NumberOfFrets")]
         public int NumberOfFrets
         {
             get { return _NumberOfFrets; }
@@ -89,7 +88,6 @@ namespace SiGen.StringedInstruments.Layout
         /// A negative value places the starting fret (or nut) behind the nut (a.k.a. negative fret).</para>
         /// </summary>
         /// <example>test</example>
-        [XmlAttribute("StartingFret")]
         public int StartingFret
         {
             get { return _StartingFret; }
@@ -122,7 +120,6 @@ namespace SiGen.StringedInstruments.Layout
         /// <para>This value affects the placement of this string relative to the longest scale length.</para>
         /// </summary>
         /// <remarks>This value is now only used when the scale length mode is individual (manual)</remarks>
-        [XmlAttribute("MultiScaleRatio")]
         public double MultiScaleRatio
         {
             get { return _MultiScaleRatio; }
@@ -157,7 +154,6 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
-        [XmlElement("Properties")]
         public StringProperties PhysicalProperties
         {
             get { return _PhysicalProperties; }
@@ -188,7 +184,6 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
-        [XmlElement("Tuning")]
         public StringTuning Tuning
         {
             get { return _Tuning; }
@@ -208,7 +203,6 @@ namespace SiGen.StringedInstruments.Layout
         /// Gets or sets the string action at the twelfth fret, measured above the fret.
         /// Used only for fret compensation calculation.
         /// </summary>
-        [XmlAttribute("ActionAtTwelfthFret")]
         public Measure ActionAtTwelfthFret
         {
             get { return _ActionAtTwelfthFret; }

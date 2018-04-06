@@ -130,8 +130,8 @@ namespace SiGen.UI
                 if(DisplayConfig.ShowTheoreticalFrets && fretLine.Strings.Count() > 1)
                 {
                     g.DrawLines(nutPen, fretLine.Segments.Where(s => !s.IsVirtual).Select(s => PointToDisplay(s.PointOnString)).ToArray());
-                    //g.DrawLines(nutPen, fretLine.Points.Select(p => PointToDisplay(p)).ToArray());
                 }
+                //g.DrawLines(nutPen, fretLine.Points.Select(p => PointToDisplay(p)).ToArray());
             }
 
             nutPen.Dispose();

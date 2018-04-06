@@ -379,7 +379,8 @@ namespace SiGen.StringedInstruments.Layout
 
                 //edgePoints.RemoveAll(p => p.IsEmpty);
                 edgePoints = edgePoints.Distinct().ToList();
-                AddVisualElement(new FingerboardEdge(edgePoints));
+                var fretboardEdge = AddVisualElement(new FingerboardEdge(edgePoints));
+                fretboardEdge.InterpolateCurve();
             }
         }
 
@@ -447,7 +448,7 @@ namespace SiGen.StringedInstruments.Layout
             {
                 for (int i = MinimumFret; i <= MaximumFret; i++)
                 {
-                    if (str.HasFret(i) || stringFrets[str.Index].Any(f=>f.FretIndex == i))
+                    if (stringFrets[str.Index].Any(f=>f.FretIndex == i))
                     {
                         var fretPos = stringFrets[str.Index].First(f => f.FretIndex == i);
                         var perpLine = str.LayoutLine.Equation.GetPerpendicular(fretPos.Position.ToVector());
@@ -455,11 +456,9 @@ namespace SiGen.StringedInstruments.Layout
                         var rightLine = GetStringBoundaryLine(str, FingerboardSide.Treble);
                         var p1 = PointM.FromVector(perpLine.GetIntersection(leftLine.Equation), fretPos.Position.Unit);
                         var p2 = PointM.FromVector(perpLine.GetIntersection(rightLine.Equation), fretPos.Position.Unit);
-                        //var seg = AddVisualElement(new FretSegment(i, str, fretPos.Position, p1, p2));
-                        var seg = new FretSegment(i, str, fretPos.Position, p1, p2);
-                        fretSegments.Add(seg);
-                        if (!str.HasFret(i))
-                            seg.IsVirtual = true;
+
+                        var fretSeg = new FretSegment(i, str, fretPos.Position, p1, p2) { IsVirtual = !str.HasFret(i) };
+                        fretSegments.Add(fretSeg);
                     }
                 }
             }

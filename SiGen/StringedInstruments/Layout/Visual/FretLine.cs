@@ -149,7 +149,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
             {
                 if (Layout.FretInterpolation == FretInterpolationMethod.Spline && StringCount >= 2)
                 {
-                    foreach (var seg in Segments.Where(s => !s.IsVirtual))
+                    foreach (var seg in Segments.Where(s => !s.IsVirtual || s.String.HasFret(s.FretIndex)))
                         Points.Add(seg.PointOnString);
 
                     InterpolateCurve();
@@ -179,8 +179,8 @@ namespace SiGen.StringedInstruments.Layout.Visual
 
                 (Points as ObservableCollectionEx<PointM>).Reverse();
 
-                //if (!IsStraight && Points.Count > 2 && Layout.FretInterpolation != FretInterpolationMethod.Linear)
-                //    InterpolateCurve();
+                if (Points.Count == 2)
+                    _IsStraight = true;
                 
             }
         }
@@ -193,25 +193,44 @@ namespace SiGen.StringedInstruments.Layout.Visual
             var lastSeg = Segments.Last(fs => !fs.IsVirtual);
             var lastBound = (IStringBoundary)Layout.GetStringBoundaryLine(lastSeg.String, FingerboardSide.Bass);//last segment is toward bass side so edge is at left (Bass)
 
-            var p11 = firstBound.GetRelativePoint(firstSeg.String.LayoutLine, firstSeg.PointOnString);
-            var p21 = lastBound.GetRelativePoint(lastSeg.String.LayoutLine, lastSeg.PointOnString);
+            var p1 = GetIntersection((LayoutLine)firstBound);
+            var p2 = GetIntersection((LayoutLine)lastBound);
 
-            if (Points.Count >= 2)
+            for(int i = 0; i < Points.Count - 1; i++)
             {
-                var p12 = new LayoutLine(Points[0], Points[1]).GetIntersection((LayoutLine)firstBound);
-                var p22 = new LayoutLine(Points[Points.Count - 1], Points[Points.Count - 2]).GetIntersection((LayoutLine)lastBound);
-
-                Points.Insert(0, p12);
-                Points.Add(p22);
-
-                //Points.Insert(0, PointM.Average(p11, p12));
-                //Points.Add(PointM.Average(p21, p22));
+                if (p1.X > Points[i].X)
+                    break;
+                Points.RemoveAt(0);
             }
-            else
+
+            for (int i = Points.Count - 1; i > 0; i--)
             {
-                Points.Insert(0, p11);
-                Points.Add(p21);
+                if (p2.X < Points[i].X)
+                    break;
+                Points.RemoveAt(i);
             }
+
+            Points.Insert(0, p1);
+            Points.Add(p2);
+            //var p11 = firstBound.GetRelativePoint(firstSeg.String.LayoutLine, firstSeg.PointOnString);
+            //var p21 = lastBound.GetRelativePoint(lastSeg.String.LayoutLine, lastSeg.PointOnString);
+
+            //if (Points.Count >= 2)
+            //{
+            //    var p12 = new LayoutLine(Points[0], Points[1]).GetIntersection((LayoutLine)firstBound);
+            //    var p22 = new LayoutLine(Points[Points.Count - 1], Points[Points.Count - 2]).GetIntersection((LayoutLine)lastBound);
+
+            //    Points.Insert(0, p12);
+            //    Points.Add(p22);
+
+            //    //Points.Insert(0, PointM.Average(p11, p12));
+            //    //Points.Add(PointM.Average(p21, p22));
+            //}
+            //else
+            //{
+            //    Points.Insert(0, p11);
+            //    Points.Add(p21);
+            //}
         }
 
         private void SeparateNutFromFrets()
