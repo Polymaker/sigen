@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SiGen.StringedInstruments.Layout;
 using SiGen.Measuring;
+using SiGen.Utilities;
 
 namespace SiGen.UI.Controls
 {
@@ -143,13 +144,14 @@ namespace SiGen.UI.Controls
                 }
 
                 int totalHeight = 0;
-                var rowHeights = tableLayoutPanel1.GetRowHeights();
-                for (int i = 0; i < rowHeights.Length - 1; i++)
-                    totalHeight += rowHeights[i];
+                totalHeight = tableLayoutPanel1.Height;
+                //var rowHeights = tableLayoutPanel1.GetRowHeights();
+                //for (int i = 0; i < rowHeights.Length - 1; i++)
+                //    totalHeight += rowHeights[i];
                 if (dgvScaleLengths.Visible)
                     totalHeight += dgvScaleLengths.MinimumSize.Height;
-                tableLayoutPanel1.MinimumSize = new Size(0, totalHeight);
-                AutoScrollMinSize = new Size(0, totalHeight);
+                //tableLayoutPanel1.MinimumSize = new Size(0, totalHeight);
+                AutoScrollMinSize = new Size(AutoScrollMinSize.Width, totalHeight);
             }
             else
             {
@@ -211,6 +213,13 @@ namespace SiGen.UI.Controls
                         break;
                 }
             }
+        }
+
+        protected override Point ScrollToControl(Control activeControl)
+        {
+            if(activeControl == dgvScaleLengths)
+                return DisplayRectangle.Location;
+            return base.ScrollToControl(activeControl);
         }
 
         #region Value Changed Events
@@ -283,16 +292,25 @@ namespace SiGen.UI.Controls
             {
                 double ratio = 0;
                 if (!double.TryParse((string)e.FormattedValue, out ratio) || ratio < 0 || ratio > 1)
-                {
-
-                    //dgvScaleLengths[e.ColumnIndex, e.RowIndex]
                     e.Cancel = true;
+            }
+        }
 
+        private void dgvScaleLengths_CellParsing(object sender, DataGridViewCellParsingEventArgs e)
+        {
+            if (e.ColumnIndex == colScaleLength.Index)
+            {
+                var rowStr = (SIString)dgvScaleLengths.Rows[e.RowIndex].DataBoundItem;
+                Measure newValue;
+                if (MeasureParser.TryParse((string)e.Value, out newValue, rowStr.ScaleLength.Unit))
+                {
+                    e.Value = newValue;
+                    e.ParsingApplied = true;
                 }
             }
         }
 
-
         #endregion
+   
     }
 }

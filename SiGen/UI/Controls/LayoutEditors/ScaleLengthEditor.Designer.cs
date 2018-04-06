@@ -52,6 +52,8 @@
             // 
             // tableLayoutPanel1
             // 
+            this.tableLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -63,17 +65,15 @@
             this.tableLayoutPanel1.Controls.Add(this.lblTreble, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.lblMultiScaleRatio, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.nubMultiScaleRatio, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.dgvScaleLengths, 0, 4);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
+            this.tableLayoutPanel1.RowCount = 4;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(309, 202);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(481, 95);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // lblBass
@@ -107,7 +107,7 @@
             this.flowLayoutPanel1.Location = new System.Drawing.Point(90, 0);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(219, 23);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(391, 23);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
             // rbSingle
@@ -202,14 +202,14 @@
             this.colStringNumber,
             this.colScaleLength,
             this.colMultiScaleRatio});
-            this.tableLayoutPanel1.SetColumnSpan(this.dgvScaleLengths, 2);
             this.dgvScaleLengths.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvScaleLengths.Location = new System.Drawing.Point(3, 98);
+            this.dgvScaleLengths.Location = new System.Drawing.Point(0, 95);
             this.dgvScaleLengths.MinimumSize = new System.Drawing.Size(0, 100);
             this.dgvScaleLengths.Name = "dgvScaleLengths";
             this.dgvScaleLengths.RowHeadersVisible = false;
-            this.dgvScaleLengths.Size = new System.Drawing.Size(303, 101);
+            this.dgvScaleLengths.Size = new System.Drawing.Size(481, 297);
             this.dgvScaleLengths.TabIndex = 8;
+            this.dgvScaleLengths.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.dgvScaleLengths_CellParsing);
             this.dgvScaleLengths.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dgvScaleLengths_CellValidating);
             this.dgvScaleLengths.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvScaleLengths_CellValueChanged);
             this.dgvScaleLengths.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgvScaleLengths_EditingControlShowing);
@@ -238,15 +238,18 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.AutoScrollMinSize = new System.Drawing.Size(250, 0);
+            this.Controls.Add(this.dgvScaleLengths);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "ScaleLengthEditor";
-            this.Size = new System.Drawing.Size(309, 202);
+            this.Size = new System.Drawing.Size(481, 392);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvScaleLengths)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

@@ -210,8 +210,12 @@ namespace SiGen.Export
 
             foreach (var fingerboardEdge in Layout.VisualElements.OfType<FingerboardEdge>())
             {
-
+                var edgePath = new SvgPath() { StrokeWidth = GetScaledUnit(1, SvgUnitType.Point), Stroke = new SvgColourServer(Color.Blue), Fill = SvgPaintServer.None };
+                var edgePoints = fingerboardEdge.Points.ToList();
+                edgePath.PathData.Add(new SvgPolylineSegment(edgePoints.Select(pt => new PointM(pt.X, pt.Y * -1) + OriginOffset)));
+                fingerboardGroup.Children.Add(edgePath);
             }
+
             //Frets
 
             var fretsGroup = CreateLayer("Frets");
