@@ -65,6 +65,8 @@
     </Compile>
     <Compile Include="Maths\Angle.cs" />
     <Compile Include="Maths\AngleUnit.cs" />
+    <Compile Include="Maths\BezierCurve.cs" />
+    <Compile Include="Maths\BezierSpline.cs" />
     <Compile Include="Maths\Line.cs" />
     <Compile Include="Maths\Vector.cs" />
     <Compile Include="Measuring\Measure.cs" />

@@ -15,6 +15,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
         private RectangleM _Bounds;
         private Measure _Length;
         private ObservableCollectionEx<PointM> _Points;
+        private BezierSpline _Spline;
 
         public IList<PointM> Points
         {
@@ -39,6 +40,12 @@ namespace SiGen.StringedInstruments.Layout.Visual
                     UpdateInfos();
                 return _Bounds;
             }
+        }
+
+        public BezierSpline Spline
+        {
+            get { return _Spline; }
+            protected set { _Spline = value; }
         }
 
         public LayoutPolyLine()
@@ -68,46 +75,42 @@ namespace SiGen.StringedInstruments.Layout.Visual
             isDirty = false;
         }
 
-        public void InterpolateCurve()
+        public void InterpolateSpline(double resolution = 0.25, double weight = 1)
         {
             if (Points.Count < 3)
                 return;
 
-            var basePoints = Points.ToArray();
+            if(_Spline == null)
+                _Spline = new BezierSpline(Points.Select(p => p.ToVector()), weight);
+
             var finalPoints = new List<PointM>();
-
-            for(int i = 0; i < basePoints.Length - 2; i++)
+            var splinePoints = _Spline.Interpolate(resolution);
+            finalPoints.AddRange(splinePoints.Select(v => PointM.FromVector(v, Points[0].Unit)));
+            
+            if (finalPoints.Count > 1)
             {
-                var p1 = basePoints[i];
-                var p2 = basePoints[i + 1];
-                var p3 = basePoints[i + 2];
-
-                var l1 = new LayoutLine(p1, p2);
-                var l2 = new LayoutLine(p3, p2);
-
-                var m1 = PointM.Average(p1, p2);
-                var m2 = PointM.Average(p2, p3);
-
-                l1 = new LayoutLine(m1, l1.GetPerpendicularPoint(m1, Measure.Cm(1)));
-                l2 = new LayoutLine(m2, l2.GetPerpendicularPoint(m2, Measure.Cm(1)));
-
-                var dir = (m2.ToVector() - m1.ToVector()).Normalized;
-                var tan = new LayoutLine(p2, p2 + (dir * Measure.Cm(1)));
-
-                var c1 = l1.GetIntersection(tan);
-                var c2 = l2.GetIntersection(tan);
-
-                finalPoints.Add(p1);
-                finalPoints.Add(PointM.Average(m1, c1));
-                if (i == basePoints.Length - 3)
-                {
-                    finalPoints.Add(p2);
-                    finalPoints.Add(PointM.Average(m2, c2));
-                    finalPoints.Add(p3);
-                }
+                _Points.Clear();
+                _Points.AddRange(finalPoints);
             }
-            _Points.Clear();
-            _Points.AddRange(finalPoints);
+        }
+
+        public void InterpolateSplineV2(double resolution = 0.1)
+        {
+            if (Points.Count < 3)
+                return;
+
+            if (_Spline == null)
+                _Spline = new BezierSpline(Points.Select(p => p.ToVector()).ToArray());
+
+            var finalPoints = new List<PointM>();
+            var splinePoints = _Spline.InterpolateV2(0.1);
+            finalPoints.AddRange(splinePoints.Select(v => PointM.FromVector(v, Points[0].Unit)));
+
+            if (finalPoints.Count > 1)
+            {
+                _Points.Clear();
+                _Points.AddRange(finalPoints);
+            }
         }
 
         #region Intersection
@@ -115,68 +118,54 @@ namespace SiGen.StringedInstruments.Layout.Visual
         public PointM GetIntersection(LayoutLine other)
         {
             var intersection = PointM.Empty;
-            Intersects(other, out intersection);
+            Intersects(other, out intersection, true);
             return intersection;
         }
 
-        public bool Intersects(LayoutLine line, out PointM intersection)
+        public PointM GetIntersection(LayoutLine other, bool infiniteLine)
         {
-            return Intersects(line.Equation, out intersection);
+            var intersection = PointM.Empty;
+            Intersects(other, out intersection, infiniteLine);
+            return intersection;
         }
 
-        public bool Intersects(Line line, out PointM intersection)
+        public PointM GetIntersection(LayoutLine other, out int segmentIndex, bool infiniteLine = true)
+        {
+            var intersection = PointM.Empty;
+            Intersects(other, out intersection, out segmentIndex, infiniteLine);
+            return intersection;
+        }
+
+        public bool Intersects(LayoutLine line, out PointM intersection, bool infiniteLine = true)
+        {
+            int dummy;
+            return Intersects(line, out intersection, out dummy, infiniteLine);
+        }
+
+        public bool Intersects(LayoutLine line, out PointM intersection, out int segmentIndex, bool infiniteLine = true)
         {
             intersection = PointM.Empty;
-            if (Points.Count == 2)
+            Vector virtualInter;
+
+            if (Intersects(line.Equation, out virtualInter, out segmentIndex, infiniteLine))
             {
-                bool flipOrientation = (Points[1].X < Points[0].X);
-                return IntersectSegmentWithLine(line, flipOrientation ? 1 : 0, flipOrientation ? 0 : 1, out intersection, SegmentHitBounds.Any);
+                intersection = PointM.FromVector(virtualInter, Points.First().Unit);
+                return true;
             }
-            else
-            {
-                for (int i = 0; i < Points.Count - 1; i++)
-                {
 
-                    SegmentHitBounds hitFlags = SegmentHitBounds.InBounds; // (i == 0 ? SegmentHitBounds.AllowLeft : (i == Points.Count - 2 ? SegmentHitBounds.AllowRight : SegmentHitBounds.InBounds));
-                    bool flipOrientation = (Points[i + 1].X < Points[i].X);
-
-                    if (i == 0)
-                        hitFlags = !flipOrientation ? SegmentHitBounds.AllowLeft : SegmentHitBounds.AllowRight;
-                    else if(i == Points.Count - 2)
-                        hitFlags = !flipOrientation ? SegmentHitBounds.AllowRight : SegmentHitBounds.AllowLeft;
-
-                    if (IntersectSegmentWithLine(line, i + (flipOrientation ? 1 : 0), i + (flipOrientation ? 0 : 1), out intersection, hitFlags))
-                        return true;
-                }
-            }
             return false;
         }
 
         public bool Intersects(LayoutPolyLine line, out PointM intersection)
         {
             intersection = PointM.Empty;
-
+            Vector virtualInter;
             for (int i = 0; i < line.Points.Count - 1; i++)
             {
                 var segLine = Line.FromPoints(line.Points[i].ToVector(), line.Points[i + 1].ToVector());
-                if (Intersects(segLine, out intersection))
-                    return true;
-            }
-
-            return false;
-        }
-
-        private bool IntersectSegmentWithLine(Line line, int idx1, int idx2, out PointM inter, SegmentHitBounds flags)
-        {
-            var segLine = Line.FromPoints(Points[idx1].ToVector(), Points[idx2].ToVector());
-            Vector virtualInter;
-            inter = PointM.Empty;
-            if (segLine.Intersect(line, out virtualInter))
-            {
-                if ((virtualInter.X >= Points[idx1].X.NormalizedValue || flags.HasFlag(SegmentHitBounds.AllowLeft)) &&
-                    (virtualInter.X <= Points[idx2].X.NormalizedValue || flags.HasFlag(SegmentHitBounds.AllowRight)))
+                if (Intersects(segLine, out virtualInter, false))
                 {
-                    inter = PointM.FromVector(virtualInter, UnitOfMeasure.Centimeters);
+
                     return true;
                 }
             }
@@ -184,13 +173,62 @@ namespace SiGen.StringedInstruments.Layout.Visual
             return false;
         }
 
-        [Flags]
-        private enum SegmentHitBounds
+        public bool Intersects(Line line, out Vector intersection, bool infiniteLine = true)
         {
-            InBounds = 0,
-            AllowLeft = 1,
-            AllowRight = 2,
-            Any = 3
+            int dummy;
+            return Intersects(line, out intersection, out dummy, infiniteLine);
+        }
+
+        public bool Intersects(Line line, out Vector intersection, out int segmentIndex, bool infiniteLine = true)
+        {
+            intersection = Vector.Empty;
+            segmentIndex = -1;
+            for (int i = 0; i < Points.Count - 1; i++)
+            {
+                var p1 = Points[i].ToVector();
+                var p2 = Points[i + 1].ToVector();
+                var segLine = Line.FromPoints(p1, p2);
+                Vector virtualInter;
+                if (line.Intersect(segLine, out virtualInter))
+                {
+                    var ptRelation = GetLocationRelativeToSegment(p1, p2, virtualInter);
+                    if (ptRelation == PointRelation.Inside ||
+                        (infiniteLine &&
+                        ((i == 0 && ptRelation == PointRelation.Before) ||
+                        (i == Points.Count - 2 && ptRelation == PointRelation.After))
+                        ))
+                    {
+                        segmentIndex = i;
+                        intersection = virtualInter;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public PointRelation GetLocationRelativeToSegment(Vector s1, Vector s2, Vector pt)
+        {
+            var dist = (s2 - s1).Length;
+            var dist1 = (pt - s1).Length;
+            var dist2 = (pt - s2).Length;
+
+            if ((dist1 <= dist || dist1.EqualOrClose(dist, 0.0001)) && (dist2 <= dist || dist2.EqualOrClose(dist, 0.0001)))
+                return PointRelation.Inside;
+            else if ((s2 - s1).Normalized.EqualOrClose((pt - s1).Normalized, 0.001))
+                return PointRelation.After;
+            else if ((s1 - s2).Normalized.EqualOrClose((pt - s2).Normalized, 0.001))
+                return PointRelation.Before;
+
+            return PointRelation.Invalid;
+        }
+
+        public enum PointRelation
+        {
+            Invalid,
+            Before,
+            Inside,
+            After
         }
 
         #endregion

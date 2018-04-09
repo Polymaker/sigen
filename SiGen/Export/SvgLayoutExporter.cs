@@ -1,4 +1,5 @@
-﻿using SiGen.Measuring;
+﻿using SiGen.Maths;
+using SiGen.Measuring;
 using SiGen.StringedInstruments.Layout;
 using SiGen.StringedInstruments.Layout.Visual;
 using Svg;
@@ -19,6 +20,7 @@ namespace SiGen.Export
         //dpi 90 = 35.43307086614173 (90 / 2.54)
         //dpi 92 = 36.22047244094488 (92 / 2.54)
         //dpi 96 = 37.79527559055118 (96 / 2.54)
+        private static readonly Vector FlipY = new Vector(1, -1);
 
         private SILayout Layout { get; set; }
         private LayoutSvgExportOptions Options { get; set; }
@@ -50,6 +52,7 @@ namespace SiGen.Export
 
             if (Options.InkscapeCompatible)
             {
+                Document.CustomAttributes.Add("xmlns:inkscape", "http://www.inkscape.org/namespaces/inkscape");
                 //The Svg library serializes the viewbox with comma and space, but this combination is not handled by the Inkscape DXF exporter
                 Document.CustomAttributes.Add("viewBox", string.Format("0,0,{0},{1}", LayoutBounds.Width.NormalizedValue, LayoutBounds.Height.NormalizedValue));
             }
@@ -80,6 +83,40 @@ namespace SiGen.Export
             if (owner != null)
                 owner.Children.Add(svgLine);
             return svgLine;
+        }
+
+        private SvgPath CreatePath(SvgElement owner, LayoutPolyLine line, SvgUnit stroke, Color color)
+        {
+            var path = new SvgPath() { StrokeWidth = stroke, Stroke = new SvgColourServer(color), Fill = SvgPaintServer.None };
+            if(line.Spline == null)
+            {
+                path.PathData.Add(new SvgMoveToSegment(WorldToDisplay(line.Points[0])));
+                for(int i = 0; i < line.Points.Count - 1; i++)
+                {
+                    path.PathData.Add(new SvgLineSegment(
+                        WorldToDisplay(line.Points[i]), 
+                        WorldToDisplay(line.Points[i + 1])));
+                }
+            }
+            else
+            {
+                var offsetVec = OriginOffset.ToVector();
+                path.PathData.Add(new SvgMoveToSegment((PointF)(offsetVec + line.Spline.Curves[0].StartPoint * FlipY)));
+                for (int i = 0; i < line.Spline.Curves.Length; i ++)
+                {
+                    var curve = line.Spline.Curves[i];
+                    //path.PathData.Add(new SvgMoveToSegment((PointF)(offsetVec + curve.StartPoint * FlipY)));
+                    path.PathData.Add(new SvgCubicCurveSegment(
+                        (PointF)(offsetVec + curve.StartPoint * FlipY),
+                        (PointF)(offsetVec + curve.ControlPoints[0] * FlipY),
+                        (PointF)(offsetVec + curve.ControlPoints[1] * FlipY),
+                        (PointF)(offsetVec + curve.EndPoint * FlipY)
+                        ));
+                }
+            }
+            if (owner != null)
+                owner.Children.Add(path);
+            return path;
         }
 
         private SvgLine CreateLine(LayoutLine line, SvgUnit stroke, Color color)
@@ -122,6 +159,11 @@ namespace SiGen.Export
         private SvgUnit GetScaledUnit(Measure value)
         {
             return new SvgUnit((float)value.NormalizedValue);
+        }
+
+        private PointF WorldToDisplay(PointM pos)
+        {
+            return (PointF)((pos.ToVector() * FlipY) + OriginOffset.ToVector());
         }
 
         private class SvgPolylineSegment : SvgPathSegment
@@ -210,10 +252,11 @@ namespace SiGen.Export
 
             foreach (var fingerboardEdge in Layout.VisualElements.OfType<FingerboardEdge>())
             {
-                var edgePath = new SvgPath() { StrokeWidth = GetScaledUnit(1, SvgUnitType.Point), Stroke = new SvgColourServer(Color.Blue), Fill = SvgPaintServer.None };
-                var edgePoints = fingerboardEdge.Points.ToList();
-                edgePath.PathData.Add(new SvgPolylineSegment(edgePoints.Select(pt => new PointM(pt.X, pt.Y * -1) + OriginOffset)));
-                fingerboardGroup.Children.Add(edgePath);
+                //var edgePath = new SvgPath() { StrokeWidth = GetScaledUnit(1, SvgUnitType.Point), Stroke = new SvgColourServer(Color.Blue), Fill = SvgPaintServer.None };
+                //var edgePoints = fingerboardEdge.Points.ToList();
+                //edgePath.PathData.Add(new SvgPolylineSegment(edgePoints.Select(pt => new PointM(pt.X, pt.Y * -1) + OriginOffset)));
+                //fingerboardGroup.Children.Add(edgePath);
+                CreatePath(fingerboardGroup, fingerboardEdge, GetScaledUnit(1, SvgUnitType.Point), Color.Blue);
             }
 
             //Frets
@@ -238,17 +281,25 @@ namespace SiGen.Export
                 }
                 else
                 {
-                    var fretPath = new SvgPath() { StrokeWidth = fretStroke, Stroke = new SvgColourServer(Color.Red), Fill = SvgPaintServer.None };
-                    var fretPoints = fretLine.Points.ToList();
-                    if (!Options.ExtendFretSlots.IsEmpty && Options.ExtendFretSlots != Measure.Zero && fretPoints.Count >= 2)
+                    fretLine.RebuildSpline();
+                    var fretPath = CreatePath(fretsGroup, fretLine, fretStroke, Color.Red);
+                    fretPath.CustomAttributes.Add("Index", fretLine.FretIndex.ToString());
+
+                    if (!Options.ExtendFretSlots.IsEmpty && Options.ExtendFretSlots != Measure.Zero && fretLine.Points.Count >= 2)
                     {
-                        var trebleLine = new LayoutLine(fretLine.Points[1], fretLine.Points[0]);
-                        fretPoints[0] = fretPoints[0] + (trebleLine.Direction * Options.ExtendFretSlots);
-                        var bassLine = new LayoutLine(fretLine.Points[fretLine.Points.Count - 2], fretLine.Points[fretLine.Points.Count - 1]);
-                        fretPoints[fretLine.Points.Count - 1] = fretPoints[fretLine.Points.Count - 1] + (bassLine.Direction * Options.ExtendFretSlots);
+
                     }
-                    fretPath.PathData.Add(new SvgPolylineSegment(fretPoints.Select(pt => new PointM(pt.X, pt.Y * -1) + OriginOffset)));
-                    fretsGroup.Children.Add(fretPath);
+                    //var fretPath = new SvgPath() { StrokeWidth = fretStroke, Stroke = new SvgColourServer(Color.Red), Fill = SvgPaintServer.None };
+                    //var fretPoints = fretLine.Points.ToList();
+                    //if (!Options.ExtendFretSlots.IsEmpty && Options.ExtendFretSlots != Measure.Zero && fretPoints.Count >= 2)
+                    //{
+                    //    var trebleLine = new LayoutLine(fretLine.Points[1], fretLine.Points[0]);
+                    //    fretPoints[0] = fretPoints[0] + (trebleLine.Direction * Options.ExtendFretSlots);
+                    //    var bassLine = new LayoutLine(fretLine.Points[fretLine.Points.Count - 2], fretLine.Points[fretLine.Points.Count - 1]);
+                    //    fretPoints[fretLine.Points.Count - 1] = fretPoints[fretLine.Points.Count - 1] + (bassLine.Direction * Options.ExtendFretSlots);
+                    //}
+                    //fretPath.PathData.Add(new SvgPolylineSegment(fretPoints.Select(pt => new PointM(pt.X, pt.Y * -1) + OriginOffset)));
+                    //fretsGroup.Children.Add(fretPath);
                 }
             }
 

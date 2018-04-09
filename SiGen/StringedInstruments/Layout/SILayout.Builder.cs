@@ -380,7 +380,7 @@ namespace SiGen.StringedInstruments.Layout
                 //edgePoints.RemoveAll(p => p.IsEmpty);
                 edgePoints = edgePoints.Distinct().ToList();
                 var fretboardEdge = AddVisualElement(new FingerboardEdge(edgePoints));
-                fretboardEdge.InterpolateCurve();
+                fretboardEdge.InterpolateSpline();
             }
         }
 
