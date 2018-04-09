@@ -396,8 +396,8 @@ namespace SiGen.StringedInstruments.Layout
             public PointM Position { get; set; }
         }
 
-        private int MinimumFret { get { return Strings.Min(s => s.StartingFret); } }
-        private int MaximumFret { get { return Strings.Max(s => s.NumberOfFrets); } }
+        public int MinimumFret { get { return Strings.Min(s => s.StartingFret); } }
+        public int MaximumFret { get { return Strings.Max(s => s.NumberOfFrets); } }
 
         private List<FretPosition> CalculateFretsForString(SIString str)
         {

@@ -233,6 +233,7 @@
     <Compile Include="Utilities\MeasureParser.cs" />
     <Compile Include="Utilities\ObservableCollectionEx.cs" />
     <Compile Include="Utilities\SerializationHelper.cs" />
+    <Compile Include="Utilities\SortableBindingList.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
       <SubType>Designer</SubType>

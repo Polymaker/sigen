@@ -59,7 +59,7 @@ namespace SiGen.UI
             stringConfigPanel = new LayoutEditorPanel<StringsConfigurationEditor>();
             stringConfigPanel.Show(dockPanel1, DockState.DockBottom);
             stringConfigPanel.Text = "Strings Configuration";
-
+            
             stringSpacingPanel = new LayoutEditorPanel<StringSpacingEditor>();
             stringSpacingPanel.Show(stringConfigPanel.Pane, DockAlignment.Right, 0.65);
             stringSpacingPanel.Text = "String Spacing";
@@ -70,12 +70,12 @@ namespace SiGen.UI
 
             layoutInfoPanel = new LayoutEditorPanel<LayoutProperties>();
             layoutInfoPanel.Show(layoutMarginPanel.Pane, DockAlignment.Bottom, .4);
-            
             layoutInfoPanel.Text = "Layout Properties";
 
             scaleLengthPanel = new LayoutEditorPanel<ScaleLengthEditor>();
             scaleLengthPanel.Show(stringConfigPanel.Pane, DockAlignment.Bottom, 0.6);
             scaleLengthPanel.Text = "Scale Length Configuration";
+
         }
 
         private void dockPanel1_ActiveDocumentChanged(object sender, EventArgs e)
@@ -92,10 +92,11 @@ namespace SiGen.UI
         private DockContent CreateDocumentPanel(LayoutFile layoutFile)
         {
             var documentPanel = new LayoutViewerPanel();
+
             if (string.IsNullOrEmpty(layoutFile.FileName))
                 documentPanel.Text = "New Layout";
-            else if (!string.IsNullOrEmpty(layoutFile.Layout.LayoutName))
-                documentPanel.Text = layoutFile.Layout.LayoutName;
+            //else if (!string.IsNullOrEmpty(layoutFile.Layout.LayoutName))
+            //    documentPanel.Text = layoutFile.Layout.LayoutName;
             else
                 documentPanel.Text = Path.GetFileNameWithoutExtension(layoutFile.FileName);
 
@@ -105,8 +106,7 @@ namespace SiGen.UI
             {
                 if (otherDoc.Text == documentPanel.Text)
                 {
-                    num++;
-                    documentPanel.Text = origName + " " + num;
+                    documentPanel.Text = origName + " " + (++num);
                 }
             }
 
@@ -210,8 +210,8 @@ namespace SiGen.UI
                 }
             }
 
-            if (string.IsNullOrEmpty(file.Layout.LayoutName))
-                file.Layout.LayoutName = Path.GetFileNameWithoutExtension(file.FileName);
+            //if (string.IsNullOrEmpty(file.Layout.LayoutName))
+            //    file.Layout.LayoutName = Path.GetFileNameWithoutExtension(file.FileName);
             file.Layout.Save(file.FileName);
         }
 
@@ -258,6 +258,11 @@ namespace SiGen.UI
                     }
                 }
             }
+        }
+
+        private void tsmiOpenFile_Click(object sender, EventArgs e)
+        {
+            tssbOpen_ButtonClick(sender, e);
         }
 
         private class LayoutFile
@@ -314,5 +319,7 @@ namespace SiGen.UI
             using (var frm = new DetectScreenDPI())
                 frm.ShowDialog();
         }
+
+        
     }
 }

@@ -506,6 +506,14 @@ namespace SiGen.UI
 
         private bool IsHorizontal { get { return DisplayConfig.FretboardOrientation == Orientation.Horizontal; } }
 
+        private bool IsFlipHorizontal
+        {
+            get
+            {
+                return CurrentLayout != null && DisplayConfig.FretboardOrientation == Orientation.Horizontal && CurrentLayout.LeftHanded;
+            }
+        }
+
         private Vector _CachedCenter;
         private Vector ControlCenter
         {
@@ -539,15 +547,26 @@ namespace SiGen.UI
         private Vector LocalToWorld(Vector vec, double zoom, bool fixOrientation)
         {
             var worldPos = (vec / zoom) + cameraPosition;
-            if (fixOrientation && IsHorizontal)
-                worldPos = new Vector(worldPos.Y * -1, worldPos.X);
+            if (fixOrientation)
+            {
+                if(IsFlipHorizontal)
+                    worldPos = new Vector(worldPos.Y, worldPos.X * -1d);
+                else if(IsHorizontal)
+                    worldPos = new Vector(worldPos.Y * -1d, worldPos.X);
+            }
             return worldPos;
         }
 
         private Vector WorldToLocal(Vector vec, double zoom, bool fixOrientation)
         {
-            if (fixOrientation && IsHorizontal)
-                vec = new Vector(vec.Y, vec.X * -1d);
+            if (fixOrientation)
+            {
+                if (IsFlipHorizontal)
+                    vec = new Vector(vec.Y * -1d, vec.X);
+                else if (IsHorizontal)
+                    vec = new Vector(vec.Y, vec.X * -1d);
+            }
+            
             vec -= cameraPosition;
             return vec * zoom;
         }

@@ -18,6 +18,8 @@ namespace SiGen.UI
 
         private static readonly Vector FlipY = new Vector(1, -1);
 
+        
+
         private Vector PointToVector(PointM pos)
         {
             //if (DisplayConfig.FretboardOrientation == Orientation.Horizontal)
@@ -27,7 +29,9 @@ namespace SiGen.UI
 
         private PointF VectorToDisplay(Vector vec)
         {
-            if (IsHorizontal)
+            if(IsFlipHorizontal)
+                vec = new Vector(vec.Y * -1, vec.X);
+            else if (IsHorizontal)
                 vec = new Vector(vec.Y, vec.X * -1);
             return (PointF)(vec * FlipY);
         }

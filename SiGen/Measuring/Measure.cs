@@ -414,7 +414,7 @@ namespace SiGen.Measuring
                 int whole = (int)Math.Floor(value);
                 double remain = value - whole;
 
-                if (remain >= sixtyfourth)
+                if (remain >= sixtyfourth && remain + sixtyfourth < 1d)
                 {
                     int sixtyFourCount = 0;
                     while (remain >= sixtyfourth || Math.Abs(remain - sixtyfourth) < 0.000001)
@@ -437,7 +437,7 @@ namespace SiGen.Measuring
                             return string.Format("{0} {4}{1}/{2}{3}", whole, sixtyFourCount, baseFrac, displayedUnit, remain > 0.002 ? "~" : string.Empty);
                     }
                 }
-                else if (remain > 0.002 && whole > 0 && format.AllowApproximation)
+                else if (remain > 0.002 && remain < sixtyfourth && whole > 0 && format.AllowApproximation)
                     return string.Format("~{0}{1}", whole, displayedUnit);
             }
             else if (usedUnit == UnitOfMeasure.Feets && format.ShowFractions)

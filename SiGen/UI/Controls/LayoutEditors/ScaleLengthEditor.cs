@@ -16,62 +16,26 @@ namespace SiGen.UI.Controls
     public partial class ScaleLengthEditor : LayoutPropertyEditor
     {
         private ScaleLengthType EditMode;
-        private Dictionary<int, double> _FretPositions;
+        private List<double> _FretPositions;
 
         public ScaleLengthEditor()
         {
             InitializeComponent();
-            _FretPositions = new Dictionary<int, double>();
+            _FretPositions = new List<double>();
             dgvScaleLengths.AutoGenerateColumns = false;
         }
 
-        #region RadioButton Glitch Handling
-
-        //For some reasons, when the control is activated, the RadioButton that was last clicked by the user get checked
-        //
-
-        private bool enteringControl;
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            (ParentForm as WeifenLuo.WinFormsUI.Docking.DockContent).DockPanel.ActiveContentChanged += DockPanel_ActiveContentChanged;
-        }
-
-        protected override void OnEnter(EventArgs e)
-        {
-            base.OnEnter(e);
-            if (ParentForm is WeifenLuo.WinFormsUI.Docking.DockContent)
-            {
-                enteringControl = true;
-                rbSingle.AutoCheck = false;
-                rbDual.AutoCheck = false;
-                rbMultiple.AutoCheck = false;
-            }
-        }
-
-        private void DockPanel_ActiveContentChanged(object sender, EventArgs e)
-        {
-            if (enteringControl)
-            {
-                enteringControl = false;
-                rbSingle.AutoCheck = true;
-                rbDual.AutoCheck = true;
-                rbMultiple.AutoCheck = true;
-            }
-        }
-
-        #endregion
-
         private void FetchFretPositions()
         {
-            var fretPos = new List<double>();
             int fretNum = CurrentLayout != null ? CurrentLayout.Strings.Max(s => s.NumberOfFrets) : 24;
-            _FretPositions.Clear();
-            _FretPositions.Add(0, 0);
-            for (int i = 1; i <= fretNum; i++)
-                _FretPositions.Add(i, 1d - SILayout.GetEqualTemperedFretPosition(i));
-            _FretPositions.Add(-1, 1d);
+            if (fretNum + 2 != _FretPositions.Count)
+            {
+                _FretPositions.Clear();
+                _FretPositions.Add(0);
+                for (int i = 1; i <= fretNum; i++)
+                    _FretPositions.Add(1d - SILayout.GetEqualTemperedFretPosition(i));
+                _FretPositions.Add(1d);
+            }
         }
 
         protected override void OnCurrentLayoutChanged()
@@ -84,7 +48,21 @@ namespace SiGen.UI.Controls
         {
             base.OnNumberOfStringsChanged();
             if (CurrentLayout != null)
-                dgvScaleLengths.DataSource = CurrentLayout.Strings;
+            {
+                var currentList = dgvScaleLengths.DataSource as SortableBindingList<SIString>;
+                if (currentList == null)
+                    dgvScaleLengths.DataSource = new SortableBindingList<SIString>(CurrentLayout.Strings);
+                else
+                {
+                    currentList.RemoveAll(s => !CurrentLayout.Strings.Contains(s));
+                    if (dgvScaleLengths.SortedColumn == colStringNumber && dgvScaleLengths.SortOrder == SortOrder.Descending)
+                    {
+                        currentList.InsertRange(0, CurrentLayout.Strings.Where(s => !currentList.Contains(s)).OrderByDescending(s => s.Index));
+                    }
+                    else
+                        currentList.AddRange(CurrentLayout.Strings.Where(s => !currentList.Contains(s)));
+                }
+            }
         }
 
         protected override void ReadLayoutProperties()
@@ -97,7 +75,8 @@ namespace SiGen.UI.Controls
             if (CurrentLayout != null)
             {
                 EditMode = CurrentLayout.ScaleLengthMode;
-                dgvScaleLengths.DataSource = CurrentLayout.Strings;
+                dgvScaleLengths.DataSource = new SortableBindingList<SIString>(CurrentLayout.Strings);
+                dgvScaleLengths.Sort(colStringNumber, ListSortDirection.Descending);
             }
             else
                 EditMode = ScaleLengthType.Single;
@@ -117,8 +96,9 @@ namespace SiGen.UI.Controls
             mtbTrebleLength.Visible = (EditMode != ScaleLengthType.Individual);
             mtbBassLength.Visible = (EditMode == ScaleLengthType.Multiple);
             nubMultiScaleRatio.Visible = (EditMode == ScaleLengthType.Multiple);
+            lblPerpFret.Visible = (EditMode == ScaleLengthType.Multiple);
             dgvScaleLengths.Visible = (EditMode == ScaleLengthType.Individual);
-
+            
             SetSelectedEditMode(EditMode);
 
             if (CurrentLayout != null)
@@ -135,7 +115,6 @@ namespace SiGen.UI.Controls
                             mtbTrebleLength.AllowEmptyValue = false;
                             mtbBassLength.Value = CurrentLayout.MultiScaleConfig.Bass;
                             nubMultiScaleRatio.Value = CurrentLayout.MultiScaleConfig.PerpendicularFretRatio;
-
                         }
                         break;
                     case ScaleLengthType.Individual:
@@ -143,14 +122,9 @@ namespace SiGen.UI.Controls
                         break;
                 }
 
-                int totalHeight = 0;
-                totalHeight = tableLayoutPanel1.Height;
-                //var rowHeights = tableLayoutPanel1.GetRowHeights();
-                //for (int i = 0; i < rowHeights.Length - 1; i++)
-                //    totalHeight += rowHeights[i];
+                int totalHeight = tableLayoutPanel1.Height;
                 if (dgvScaleLengths.Visible)
                     totalHeight += dgvScaleLengths.MinimumSize.Height;
-                //tableLayoutPanel1.MinimumSize = new Size(0, totalHeight);
                 AutoScrollMinSize = new Size(AutoScrollMinSize.Width, totalHeight);
             }
             else
@@ -162,11 +136,13 @@ namespace SiGen.UI.Controls
             }
         }
 
+        #region Scale Length Mode Management
+
         private void rbScaleLengthMode_CheckedChanged(object sender, EventArgs e)
         {
             if (!IsLoading && !FlagManager["SetMode"] && (sender as RadioButton).Checked)
             {
-                if (enteringControl)
+                if (enteringControl)//fallback to prevent windows to force check the last clicked radiobutton
                 {
                     SetSelectedEditMode(EditMode);
                     return;
@@ -175,8 +151,6 @@ namespace SiGen.UI.Controls
                 EditMode = GetSelectedEditMode();
                 if (CurrentLayout != null)
                 {
-                    //if(EditMode == ScaleLengthType.Multiple && !CurrentLayout.Strings.AllEqual(s=>s.MultiScaleRatio))
-
                     CurrentLayout.ScaleLengthMode = EditMode;
                     CurrentLayout.RebuildLayout();
                 }
@@ -215,12 +189,7 @@ namespace SiGen.UI.Controls
             }
         }
 
-        protected override Point ScrollToControl(Control activeControl)
-        {
-            if(activeControl == dgvScaleLengths)
-                return DisplayRectangle.Location;
-            return base.ScrollToControl(activeControl);
-        }
+        #endregion
 
         #region Value Changed Events
 
@@ -252,9 +221,32 @@ namespace SiGen.UI.Controls
                 CurrentLayout.MultiScaleConfig.PerpendicularFretRatio = nubMultiScaleRatio.Value;
                 CurrentLayout.RebuildLayout();
             }
+            DetermineFretAlignment();
         }
 
         #endregion
+
+        private void DetermineFretAlignment()
+        {
+            if (nubMultiScaleRatio.Value == 0)
+            {
+                lblPerpFret.Text = "Perpendicular at Nut";
+            }
+            else if (nubMultiScaleRatio.Value == 1)
+            {
+                lblPerpFret.Text = "Perpendicular at Bridge";
+            }
+            else if (_FretPositions.Any(p => p.EqualOrClose(nubMultiScaleRatio.Value, 0.0005)))
+            {
+                var closest = _FretPositions.First(p => p.EqualOrClose(nubMultiScaleRatio.Value, 0.0005));
+                int fretIndex = _FretPositions.IndexOf(closest);
+                lblPerpFret.Text = string.Format("Perpendicular at {0} fret", fretIndex);
+            }
+            else
+            {
+                lblPerpFret.Text = "Custom alignement";
+            }
+        }
 
         #region Manual Mode
 
@@ -311,6 +303,50 @@ namespace SiGen.UI.Controls
         }
 
         #endregion
-   
+
+        #region RadioButton Glitch Handling
+
+        //For some reasons, when the control is activated, the RadioButton that was last clicked by the user get checked
+        //
+
+        private bool enteringControl;
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            (ParentForm as WeifenLuo.WinFormsUI.Docking.DockContent).DockPanel.ActiveContentChanged += DockPanel_ActiveContentChanged;
+        }
+
+        protected override void OnEnter(EventArgs e)
+        {
+            base.OnEnter(e);
+            if (ParentForm is WeifenLuo.WinFormsUI.Docking.DockContent)
+            {
+                enteringControl = true;
+                rbSingle.AutoCheck = false;
+                rbDual.AutoCheck = false;
+                rbMultiple.AutoCheck = false;
+            }
+        }
+
+        private void DockPanel_ActiveContentChanged(object sender, EventArgs e)
+        {
+            if (enteringControl)
+            {
+                enteringControl = false;
+                rbSingle.AutoCheck = true;
+                rbDual.AutoCheck = true;
+                rbMultiple.AutoCheck = true;
+            }
+        }
+
+        #endregion
+
+        protected override Point ScrollToControl(Control activeControl)
+        {
+            if (activeControl == dgvScaleLengths)
+                return DisplayRectangle.Location;
+            return base.ScrollToControl(activeControl);
+        }
     }
 }

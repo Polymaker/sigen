@@ -31,6 +31,8 @@
             this.nbxNumberOfStrings = new SiGen.UI.Controls.NumericBox();
             this.label1 = new System.Windows.Forms.Label();
             this.chkLeftHanded = new System.Windows.Forms.CheckBox();
+            this.nbxNumberOfFrets = new SiGen.UI.Controls.NumericBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // nbxNumberOfStrings
@@ -65,10 +67,33 @@
             this.chkLeftHanded.UseVisualStyleBackColor = true;
             this.chkLeftHanded.CheckedChanged += new System.EventHandler(this.chkLeftHanded_CheckedChanged);
             // 
+            // nbxNumberOfFrets
+            // 
+            this.nbxNumberOfFrets.AllowDecimals = false;
+            this.nbxNumberOfFrets.Location = new System.Drawing.Point(102, 29);
+            this.nbxNumberOfFrets.MaximumValue = 50D;
+            this.nbxNumberOfFrets.MinimumValue = 1D;
+            this.nbxNumberOfFrets.Name = "nbxNumberOfFrets";
+            this.nbxNumberOfFrets.Size = new System.Drawing.Size(66, 20);
+            this.nbxNumberOfFrets.TabIndex = 3;
+            this.nbxNumberOfFrets.Value = 24D;
+            this.nbxNumberOfFrets.ValueChanged += new System.EventHandler(this.nbxNumberOfFrets_ValueChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 33);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(84, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Number Of Frets";
+            // 
             // StringsConfigurationEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.nbxNumberOfFrets);
             this.Controls.Add(this.chkLeftHanded);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.nbxNumberOfStrings);
@@ -84,5 +109,7 @@
         private NumericBox nbxNumberOfStrings;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox chkLeftHanded;
+        private NumericBox nbxNumberOfFrets;
+        private System.Windows.Forms.Label label2;
     }
 }

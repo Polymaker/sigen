@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lblBass = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -41,6 +44,7 @@
             this.lblTreble = new System.Windows.Forms.Label();
             this.lblMultiScaleRatio = new System.Windows.Forms.Label();
             this.nubMultiScaleRatio = new SiGen.UI.Controls.NumericBox();
+            this.lblPerpFret = new System.Windows.Forms.Label();
             this.dgvScaleLengths = new System.Windows.Forms.DataGridView();
             this.colStringNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colScaleLength = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -54,9 +58,10 @@
             // 
             this.tableLayoutPanel1.AutoSize = true;
             this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.lblBass, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 0);
@@ -65,6 +70,7 @@
             this.tableLayoutPanel1.Controls.Add(this.lblTreble, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.lblMultiScaleRatio, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.nubMultiScaleRatio, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.lblPerpFret, 2, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -100,6 +106,7 @@
             // 
             this.flowLayoutPanel1.AutoSize = true;
             this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel1.SetColumnSpan(this.flowLayoutPanel1, 2);
             this.flowLayoutPanel1.Controls.Add(this.rbSingle);
             this.flowLayoutPanel1.Controls.Add(this.rbDual);
             this.flowLayoutPanel1.Controls.Add(this.rbMultiple);
@@ -192,6 +199,16 @@
             this.nubMultiScaleRatio.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.nubMultiScaleRatio.ValueChanged += new System.EventHandler(this.nubMultiScaleRatio_ValueChanged);
             // 
+            // lblPerpFret
+            // 
+            this.lblPerpFret.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblPerpFret.AutoSize = true;
+            this.lblPerpFret.Location = new System.Drawing.Point(199, 76);
+            this.lblPerpFret.Name = "lblPerpFret";
+            this.lblPerpFret.Size = new System.Drawing.Size(74, 13);
+            this.lblPerpFret.TabIndex = 8;
+            this.lblPerpFret.Text = "Aligned to Nut";
+            // 
             // dgvScaleLengths
             // 
             this.dgvScaleLengths.AllowUserToAddRows = false;
@@ -206,7 +223,6 @@
             this.dgvScaleLengths.Location = new System.Drawing.Point(0, 95);
             this.dgvScaleLengths.MinimumSize = new System.Drawing.Size(0, 100);
             this.dgvScaleLengths.Name = "dgvScaleLengths";
-            this.dgvScaleLengths.RowHeadersVisible = false;
             this.dgvScaleLengths.Size = new System.Drawing.Size(481, 297);
             this.dgvScaleLengths.TabIndex = 8;
             this.dgvScaleLengths.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.dgvScaleLengths_CellParsing);
@@ -217,21 +233,29 @@
             // colStringNumber
             // 
             this.colStringNumber.DataPropertyName = "Index";
-            this.colStringNumber.HeaderText = "String #";
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colStringNumber.DefaultCellStyle = dataGridViewCellStyle1;
+            this.colStringNumber.HeaderText = "#";
             this.colStringNumber.Name = "colStringNumber";
             this.colStringNumber.ReadOnly = true;
             // 
             // colScaleLength
             // 
             this.colScaleLength.DataPropertyName = "ScaleLength";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colScaleLength.DefaultCellStyle = dataGridViewCellStyle2;
             this.colScaleLength.HeaderText = "Scale Length";
             this.colScaleLength.Name = "colScaleLength";
+            this.colScaleLength.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // colMultiScaleRatio
             // 
             this.colMultiScaleRatio.DataPropertyName = "MultiScaleRatio";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colMultiScaleRatio.DefaultCellStyle = dataGridViewCellStyle3;
             this.colMultiScaleRatio.HeaderText = "Alignment Ratio";
             this.colMultiScaleRatio.Name = "colMultiScaleRatio";
+            this.colMultiScaleRatio.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // ScaleLengthEditor
             // 
@@ -271,5 +295,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colStringNumber;
         private System.Windows.Forms.DataGridViewTextBoxColumn colScaleLength;
         private System.Windows.Forms.DataGridViewTextBoxColumn colMultiScaleRatio;
+        private System.Windows.Forms.Label lblPerpFret;
     }
 }

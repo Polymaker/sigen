@@ -193,6 +193,10 @@ namespace SiGen.StringedInstruments.Layout
                     if (value && !Strings.All(s => s.CanCalculateCompensation))
                         return;
                     _CompensateFretPositions = value;
+                    if (value)
+                        FretInterpolation = FretInterpolationMethod.NotchedSpline;
+                    else
+                        FretInterpolation = FretInterpolationMethod.Spline;
                     NotifyLayoutChanged(this, "CompensateFretPositions");
                 }
             }

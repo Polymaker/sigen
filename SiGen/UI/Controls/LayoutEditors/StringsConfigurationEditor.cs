@@ -21,16 +21,19 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             base.ReadLayoutProperties();
             nbxNumberOfStrings.Enabled = (CurrentLayout != null);
+            nbxNumberOfFrets.Enabled = (CurrentLayout != null);
             chkLeftHanded.Enabled = (CurrentLayout != null);
 
             if (CurrentLayout != null)
             {
                 nbxNumberOfStrings.Value = CurrentLayout.NumberOfStrings;
+                nbxNumberOfFrets.Value = CurrentLayout.MaximumFret;
                 chkLeftHanded.Checked = CurrentLayout.LeftHanded;
             }
             else
             {
                 nbxNumberOfStrings.Value = 6;
+                nbxNumberOfFrets.Value = 24;
                 chkLeftHanded.Checked = false;
             }
         }
@@ -40,6 +43,15 @@ namespace SiGen.UI.Controls.LayoutEditors
             if (!IsLoading && CurrentLayout != null)
             {
                 CurrentLayout.NumberOfStrings = (int)nbxNumberOfStrings.Value;
+                CurrentLayout.RebuildLayout();
+            }
+        }
+
+        private void nbxNumberOfFrets_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoading && CurrentLayout != null)
+            {
+                CurrentLayout.Strings.SetAll(s => s.NumberOfFrets, (int)nbxNumberOfFrets.Value);
                 CurrentLayout.RebuildLayout();
             }
         }
