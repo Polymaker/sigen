@@ -102,6 +102,7 @@ namespace SiGen.Export
             {
                 var offsetVec = OriginOffset.ToVector();
                 path.PathData.Add(new SvgMoveToSegment((PointF)(offsetVec + line.Spline.Curves[0].StartPoint * FlipY)));
+
                 for (int i = 0; i < line.Spline.Curves.Length; i ++)
                 {
                     var curve = line.Spline.Curves[i];
@@ -166,31 +167,20 @@ namespace SiGen.Export
             return (PointF)((pos.ToVector() * FlipY) + OriginOffset.ToVector());
         }
 
-        private class SvgPolylineSegment : SvgPathSegment
-        {
-            private List<PointM> _Points;
-
-            public SvgPolylineSegment(IEnumerable<PointM> points)
-            {
-                _Points = points.ToList();
-                Start = (PointF)_Points.First().ToVector();
-                End = (PointF)_Points.Last().ToVector();
-            }
-
-            public override void AddToPath(System.Drawing.Drawing2D.GraphicsPath graphicsPath)
-            {
-                graphicsPath.AddLines(_Points.Select(p => (PointF)p.ToVector()).ToArray());
-            }
-
-            public override string ToString()
-            {
-                return "M " + _Points.Select(p => string.Format("{0},{1}", p.X.NormalizedValue, p.Y.NormalizedValue)).Aggregate((i, j) => i + " " + j);
-            }
-        }
-
         #endregion
 
-        private void Generate()
+        private void GenerateDocument()
+        {
+            GenerateLayoutElements();
+
+            GenerateFingerboardElements();
+
+            GenerateFretElements();
+
+            GenerateStringElements();
+        }
+
+        private void GenerateLayoutElements()
         {
             var guideLinesGroup = CreateLayer("Layout");
 
@@ -242,7 +232,10 @@ namespace SiGen.Export
 
             if (guideLinesGroup.Children.Count > 0)
                 Document.Children.Add(guideLinesGroup);
+        }
 
+        private void GenerateFingerboardElements()
+        {
             //Fingerboard
             var fingerboardGroup = CreateLayer("Fingerboard");
             Document.Children.Add(fingerboardGroup);
@@ -251,76 +244,10 @@ namespace SiGen.Export
                 CreateLine(fingerboardGroup, fingerboardEdge.P1, fingerboardEdge.P2, GetScaledUnit(1, SvgUnitType.Point), Color.Blue);
 
             foreach (var fingerboardEdge in Layout.VisualElements.OfType<FingerboardEdge>())
-            {
-                //var edgePath = new SvgPath() { StrokeWidth = GetScaledUnit(1, SvgUnitType.Point), Stroke = new SvgColourServer(Color.Blue), Fill = SvgPaintServer.None };
-                //var edgePoints = fingerboardEdge.Points.ToList();
-                //edgePath.PathData.Add(new SvgPolylineSegment(edgePoints.Select(pt => new PointM(pt.X, pt.Y * -1) + OriginOffset)));
-                //fingerboardGroup.Children.Add(edgePath);
                 CreatePath(fingerboardGroup, fingerboardEdge, GetScaledUnit(1, SvgUnitType.Point), Color.Blue);
-            }
 
-            //Frets
-
-            var fretsGroup = CreateLayer("Frets");
-            Document.Children.Add(fretsGroup);
-            var fretStroke = GetScaledUnit(1, SvgUnitType.Point);
-            if (!Options.FretLineThickness.IsEmpty)
-                fretStroke = GetScaledUnit(Options.FretLineThickness);
-
-            foreach (var fretLine in Layout.VisualElements.OfType<FretLine>())
+            if (!Options.ExportStrings && Options.ExportFingerboardMargin)//export first & last string to show fingerboard margin
             {
-                if (fretLine.IsStraight)
-                {
-                    var layoutLine = new LayoutLine(fretLine.Points.First(), fretLine.Points.Last());
-                    if (!Options.ExtendFretSlots.IsEmpty && Options.ExtendFretSlots != Measure.Zero)
-                    {
-                        layoutLine.P2 = layoutLine.P2 + (layoutLine.Direction * Options.ExtendFretSlots);
-                        layoutLine.P1 = layoutLine.P1 + (layoutLine.Direction * (Options.ExtendFretSlots * -1));
-                    }
-                    CreateLine(fretsGroup, layoutLine, fretStroke, Color.Red);
-                }
-                else
-                {
-                    fretLine.RebuildSpline();
-                    var fretPath = CreatePath(fretsGroup, fretLine, fretStroke, Color.Red);
-                    fretPath.CustomAttributes.Add("Index", fretLine.FretIndex.ToString());
-
-                    if (!Options.ExtendFretSlots.IsEmpty && Options.ExtendFretSlots != Measure.Zero && fretLine.Points.Count >= 2)
-                    {
-
-                    }
-                    //var fretPath = new SvgPath() { StrokeWidth = fretStroke, Stroke = new SvgColourServer(Color.Red), Fill = SvgPaintServer.None };
-                    //var fretPoints = fretLine.Points.ToList();
-                    //if (!Options.ExtendFretSlots.IsEmpty && Options.ExtendFretSlots != Measure.Zero && fretPoints.Count >= 2)
-                    //{
-                    //    var trebleLine = new LayoutLine(fretLine.Points[1], fretLine.Points[0]);
-                    //    fretPoints[0] = fretPoints[0] + (trebleLine.Direction * Options.ExtendFretSlots);
-                    //    var bassLine = new LayoutLine(fretLine.Points[fretLine.Points.Count - 2], fretLine.Points[fretLine.Points.Count - 1]);
-                    //    fretPoints[fretLine.Points.Count - 1] = fretPoints[fretLine.Points.Count - 1] + (bassLine.Direction * Options.ExtendFretSlots);
-                    //}
-                    //fretPath.PathData.Add(new SvgPolylineSegment(fretPoints.Select(pt => new PointM(pt.X, pt.Y * -1) + OriginOffset)));
-                    //fretsGroup.Children.Add(fretPath);
-                }
-            }
-
-            //Strings
-            if (Options.ExportStrings)
-            {
-                var stringsGroup = CreateLayer("Strings");
-                Document.Children.Add(stringsGroup);
-
-                foreach (var stringLine in Layout.VisualElements.OfType<StringLine>().OrderBy(sl => sl.Index))
-                {
-                    var svgLine = CreateLine(stringsGroup, stringLine,
-                        Options.UseStringGauge && !stringLine.String.Gauge.IsEmpty ?
-                        GetScaledUnit(stringLine.String.Gauge) : GetScaledUnit(1, SvgUnitType.Point),
-                        Color.Black);
-                    svgLine.CustomAttributes.Add("Index", stringLine.Index.ToString());
-                }
-            }
-            else
-            {
-                //export first & last string to show fingerboard margin
                 var firstString = Layout.FirstString.LayoutLine;
                 var lastString = Layout.LastString.LayoutLine;
                 var trebleEdge = Layout.GetStringBoundaryLine(Layout.FirstString, FingerboardSide.Treble);
@@ -332,10 +259,75 @@ namespace SiGen.Export
             }
         }
 
+        private void GenerateFretElements()
+        {
+            var fretsGroup = CreateLayer("Frets");
+            Document.Children.Add(fretsGroup);
+            var fretStroke = GetScaledUnit(1, SvgUnitType.Point);
+            if (!Options.FretLineThickness.IsEmpty)
+                fretStroke = GetScaledUnit(Options.FretLineThickness);
+
+            foreach (var fretLine in Layout.VisualElements.OfType<FretLine>())
+            {
+                if (fretLine.IsStraight)
+                {
+                    var layoutLine = new LayoutLine(fretLine.Points.First(), fretLine.Points.Last());
+                    if (Options.ExtendFretSlots && fretLine.Length > Options.FretSlotsExtensionAmount * 2)
+                    {
+                        layoutLine.P2 = layoutLine.P2 + (layoutLine.Direction * Options.FretSlotsExtensionAmount);
+                        layoutLine.P1 = layoutLine.P1 + (layoutLine.Direction * (Options.FretSlotsExtensionAmount * -1));
+                    }
+                    CreateLine(fretsGroup, layoutLine, fretStroke, Options.FretColor);
+                }
+                else
+                {
+                    fretLine.RebuildSpline();
+                    SvgPath fretPath = null;
+
+                    if (Options.ExtendFretSlots && fretLine.Length > Options.FretSlotsExtensionAmount * 2)
+                    {
+                        var tmpLine = new LayoutPolyLine(fretLine.Points);
+                        var bounds = fretLine.GetFretBoundaries(false);
+                        var offset1 = LayoutLine.Offset(bounds.Item1, Options.FretSlotsExtensionAmount * -1);
+                        var offset2 = LayoutLine.Offset(bounds.Item2, Options.FretSlotsExtensionAmount);
+                        tmpLine.TrimBetween(offset1, offset2, true);
+                        if (fretLine.Spline != null)
+                            tmpLine.InterpolateSpline(0.5);
+                        fretPath = CreatePath(fretsGroup, tmpLine, fretStroke, Options.FretColor);
+                    }
+                    else
+                    {
+                        fretPath = CreatePath(fretsGroup, fretLine, fretStroke, Options.FretColor);
+                    }
+
+                    fretPath.CustomAttributes.Add("Index", fretLine.FretIndex.ToString());
+                }
+            }
+        }
+
+        private void GenerateStringElements()
+        {
+            //Strings
+            if (Options.ExportStrings)
+            {
+                var stringsGroup = CreateLayer("Strings");
+                Document.Children.Add(stringsGroup);
+
+                foreach (var stringLine in Layout.VisualElements.OfType<StringLine>().OrderBy(sl => sl.Index))
+                {
+                    var svgLine = CreateLine(stringsGroup, stringLine,
+                        Options.UseStringGauge && !stringLine.String.Gauge.IsEmpty ?
+                        GetScaledUnit(stringLine.String.Gauge) : GetScaledUnit(1, SvgUnitType.Point),
+                        Options.StringColor);
+                    svgLine.CustomAttributes.Add("Index", stringLine.Index.ToString());
+                }
+            }
+        }
+
         public static void ExportLayout(string filename, SILayout layout, LayoutSvgExportOptions options)
         {
             var exporter = new SvgLayoutExporter(layout, options);
-            exporter.Generate();
+            exporter.GenerateDocument();
             exporter.Document.Write(filename);
         }
     }

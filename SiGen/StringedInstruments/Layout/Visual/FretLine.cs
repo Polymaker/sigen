@@ -186,6 +186,18 @@ namespace SiGen.StringedInstruments.Layout.Visual
             }
         }
 
+        public Tuple<LayoutLine, LayoutLine> GetFretBoundaries(bool trebleToBass = true)
+        {
+            var firstSegment = Segments.First(fs => !fs.IsVirtual);
+            var firstBound = Layout.GetStringBoundaryLine(firstSegment.String, FingerboardSide.Treble);//first segment is toward treble side so edge is at right (Treble)
+
+            var lastSegment = Segments.Last(fs => !fs.IsVirtual);
+            var lastBound = Layout.GetStringBoundaryLine(lastSegment.String, FingerboardSide.Bass);//last segment is toward bass side so edge is at left (Bass)
+            if(!trebleToBass)
+                return new Tuple<LayoutLine, LayoutLine>(lastBound, firstBound);
+            return new Tuple<LayoutLine, LayoutLine>(firstBound, lastBound);
+        }
+
         private void ExtendToBorders()
         {
             var firstSegment = Segments.First(fs => !fs.IsVirtual);
@@ -201,6 +213,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
                 Spline = null;
                 return;
             }
+
             if (Points.Count == 2)
             {
                 Points.Insert(0, GetIntersection((LayoutLine)firstBound));
@@ -209,42 +222,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
                 return;
             }
 
-            int inter1Idx, inter2Idx;
-            var p1 = GetIntersection((LayoutLine)firstBound, out inter1Idx);
-            var p2 = GetIntersection((LayoutLine)lastBound, out inter2Idx);
-
-            var pointsToKeep = new List<PointM>();
-
-            for (int i = inter1Idx; i <= inter2Idx; i++)
-            {
-                if(inter1Idx == i)
-                {
-                    var ptRel = GetLocationRelativeToSegment(Points[i].ToVector(), Points[i + 1].ToVector(), p1.ToVector());
-                    if (ptRel != PointRelation.Before)
-                        continue;
-                }
-                
-                pointsToKeep.Add(Points[i]);
-
-                if (inter2Idx == i)
-                {
-                    var ptRel = GetLocationRelativeToSegment(Points[i].ToVector(), Points[i + 1].ToVector(), p2.ToVector());
-                    if (ptRel == PointRelation.After)
-                        pointsToKeep.Add(Points[i + 1]);
-                }
-            }
-
-            Points.Clear();
-            Points.Add(p1);
-            (Points as ObservableCollectionEx<PointM>).AddRange(pointsToKeep);
-            Points.Add(p2);
-
-            for (int i = 0; i < Points.Count - 1; i++)
-            {
-                if (Points.Count - 1 > 3 && PointM.Distance(Points[i + 1], Points[i]).NormalizedValue < 0.05)
-                    Points.RemoveAt(i--);
-            }
-            
+            TrimBetween((LayoutLine)firstBound, (LayoutLine)lastBound, true);
         }
 
         public void RebuildSpline()
@@ -252,47 +230,6 @@ namespace SiGen.StringedInstruments.Layout.Visual
             if (Spline != null)
             {
                 Spline = new BezierSpline(Points.Select(p => p.ToVector()).ToArray());
-                //var splinePoints = new List<PointM>();
-
-                //bool isReversed = PointM.Distance(Points[0], Segments.First(s => !s.IsVirtual).PointOnString) >
-                //    PointM.Distance(Points.Last(), Segments.First(s => !s.IsVirtual).PointOnString);
-
-                //if(Spline.SplinePoints.Length == Segments.Count)
-                //{
-                //    double step = 1d / (double)Segments.Count;
-                //    for (int i = 0; i < Segments.Count; i++)
-                //    {
-                //        if (!Segments[i].IsVirtual)
-                //        {
-                //            var t = (step * i) + step / 2;
-                //            var avgPt = Spline.GetPoint(t);
-                //            splinePoints.Add(PointM.FromVector(avgPt, Points[0].Unit));
-                //        }
-                //    }
-                //}
-                //else
-                //{
-                //    for (int i = 0; i < StringCount; i++)
-                //    {
-                //        var pointOnFret = GetIntersection(Strings.ElementAt(i).LayoutLine);
-                //        if (pointOnFret.IsEmpty)
-                //            pointOnFret = Segments.Where(s => !s.IsVirtual).ElementAt(i).PointOnString;
-                //        splinePoints.Add(pointOnFret);
-                //    }
-                //}
-
-                //if (isReversed)
-                //{
-                //    splinePoints.Insert(0, Points[Points.Count - 1]);
-                //    splinePoints.Add(Points[0]);
-                //}
-                //else
-                //{
-                //    splinePoints.Insert(0, Points[0]);
-                //    splinePoints.Add(Points[Points.Count - 1]);
-                //}
-
-                //Spline = new BezierSpline(splinePoints.Select(p => p.ToVector()).ToArray());
             }
         }
 

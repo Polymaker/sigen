@@ -25,7 +25,6 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             base.OnLoad(e);
             ScreenDPI = 109;
-            Viewer.DisplayConfig.ShowTheoreticalFrets = true;
         }
 
         private void toolStripStatusLabel1_Click(object sender, EventArgs e)

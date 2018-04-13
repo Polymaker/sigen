@@ -135,7 +135,8 @@ namespace SiGen.UI
                 {
                     g.DrawLines(nutPen, fretLine.Segments.Where(s => !s.IsVirtual).Select(s => PointToDisplay(s.PointOnString)).ToArray());
                 }
-                g.DrawLines(nutPen, fretLine.Points.Select(p => PointToDisplay(p)).ToArray());
+
+                //g.DrawLines(nutPen, fretLine.Points.Select(p => PointToDisplay(p)).ToArray());
             }
 
             nutPen.Dispose();

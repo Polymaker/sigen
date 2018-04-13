@@ -22,6 +22,9 @@ namespace SiGen.StringedInstruments.Layout.Visual
             get { return _Points; }
         }
 
+        /// <summary>
+        /// Total Length
+        /// </summary>
         public Measure Length
         {
             get
@@ -173,13 +176,13 @@ namespace SiGen.StringedInstruments.Layout.Visual
             return false;
         }
 
-        public bool Intersects(Line line, out Vector intersection, bool infiniteLine = true)
+        protected bool Intersects(Line line, out Vector intersection, bool infiniteLine = true)
         {
             int dummy;
             return Intersects(line, out intersection, out dummy, infiniteLine);
         }
 
-        public bool Intersects(Line line, out Vector intersection, out int segmentIndex, bool infiniteLine = true)
+        protected bool Intersects(Line line, out Vector intersection, out int segmentIndex, bool infiniteLine = true)
         {
             intersection = Vector.Empty;
             segmentIndex = -1;
@@ -207,7 +210,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
             return false;
         }
 
-        public PointRelation GetLocationRelativeToSegment(Vector s1, Vector s2, Vector pt)
+        protected PointRelation GetLocationRelativeToSegment(Vector s1, Vector s2, Vector pt)
         {
             var dist = (s2 - s1).Length;
             var dist1 = (pt - s1).Length;
@@ -229,6 +232,128 @@ namespace SiGen.StringedInstruments.Layout.Visual
             Before,
             Inside,
             After
+        }
+
+        #endregion
+
+        public void MergePoints(double tolerence = 0.01)
+        {
+            for (int i = 0; i < Points.Count - 1; i++)
+            {
+                if (Points.Count - 1 > 3 && PointM.Distance(Points[i + 1], Points[i]).NormalizedValue < tolerence)
+                    Points.RemoveAt(i--);
+            }
+        }
+
+        #region Trim & Extend
+
+        public void TrimStart(LayoutLine trimLine, bool extendIfNeeded = false)
+        {
+            int interIdx;
+            PointM interPt = PointM.Empty;
+
+            if (!Intersects(trimLine, out interPt, out interIdx, extendIfNeeded))
+                return;
+
+            var pointsToKeep = new List<PointM>();
+            pointsToKeep.Add(interPt);
+
+            for (int i = interIdx; i < Points.Count; i++)
+            {
+                if (interIdx == i)
+                {
+                    var ptRel = GetLocationRelativeToSegment(Points[i].ToVector(), Points[i + 1].ToVector(), interPt.ToVector());
+                    if (ptRel != PointRelation.Before)
+                        continue;
+                }
+
+                pointsToKeep.Add(Points[i]);
+            }
+
+            Points.Clear();
+            _Points.AddRange(pointsToKeep);
+
+            //remove points that are very close
+            MergePoints(0.05);
+        }
+
+        public void TrimEnd(LayoutLine trimLine, bool extendIfNeeded = false)
+        {
+            int interIdx;
+            PointM interPt = PointM.Empty;
+
+            if (!Intersects(trimLine, out interPt, out interIdx, extendIfNeeded))
+                return;
+
+            var pointsToKeep = new List<PointM>();
+            for (int i = 0; i <= interIdx; i++)
+            {
+                pointsToKeep.Add(Points[i]);
+
+                if (interIdx == i)
+                {
+                    var ptRel = GetLocationRelativeToSegment(Points[i].ToVector(), Points[i + 1].ToVector(), interPt.ToVector());
+                    if (ptRel == PointRelation.After)
+                        pointsToKeep.Add(Points[i + 1]);
+                }
+            }
+
+            pointsToKeep.Add(interPt);
+
+            Points.Clear();
+            _Points.AddRange(pointsToKeep);
+
+            //remove points that are very close
+            MergePoints(0.05);
+        }
+
+        public void TrimBetween(LayoutLine l1, LayoutLine l2, bool extendIfNeeded = false)
+        {
+            int inter1Idx, inter2Idx;
+            PointM p1 = PointM.Empty;
+            PointM p2 = PointM.Empty;
+
+            bool canTrimStart = Intersects(l1, out p1, out inter1Idx, extendIfNeeded);
+            bool canTrimEnd = Intersects(l2, out p2, out inter2Idx, extendIfNeeded);
+
+            if (!canTrimStart || !canTrimEnd)
+            {
+                if (canTrimStart)
+                    TrimStart(l1, extendIfNeeded);
+                else if (canTrimEnd)
+                    TrimEnd(l2, extendIfNeeded);
+                return;
+            }
+
+            var pointsToKeep = new List<PointM>();
+            pointsToKeep.Add(p1);
+
+            for (int i = inter1Idx; i <= inter2Idx; i++)
+            {
+                if (inter1Idx == i)
+                {
+                    var ptRel = GetLocationRelativeToSegment(Points[i].ToVector(), Points[i + 1].ToVector(), p1.ToVector());
+                    if (ptRel != PointRelation.Before)
+                        continue;
+                }
+
+                pointsToKeep.Add(Points[i]);
+
+                if (inter2Idx == i)
+                {
+                    var ptRel = GetLocationRelativeToSegment(Points[i].ToVector(), Points[i + 1].ToVector(), p2.ToVector());
+                    if (ptRel == PointRelation.After)
+                        pointsToKeep.Add(Points[i + 1]);
+                }
+            }
+
+            pointsToKeep.Add(p2);
+
+            Points.Clear();
+            _Points.AddRange(pointsToKeep);
+
+            //remove points that are very close
+            MergePoints(0.05);
         }
 
         #endregion

@@ -32,9 +32,17 @@ namespace SiGen.UI
         {
             get
             {
-                if(dockPanel1.ActiveDocument != null)
+                if (dockPanel1.ActiveDocument != null)
                     return (LayoutFile)(dockPanel1.ActiveDocument as DockContent).Tag;
                 return null;
+            }
+        }
+
+        private IEnumerable<LayoutFile> OpenDocuments
+        {
+            get
+            {
+                return dockPanel1.Documents.OfType<LayoutViewerPanel>().Where(d => (d.Tag as LayoutFile) != null).Select(d => (LayoutFile)d.Tag);
             }
         }
 
@@ -142,6 +150,7 @@ namespace SiGen.UI
         }
 
         #endregion
+        
         /*
         private static SILayout CreateDefaultLayout()
         {
@@ -291,26 +300,9 @@ namespace SiGen.UI
 
         private void exportAsSVGToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var sfd = new SaveFileDialog())
+            using (var exportDialog = new LayoutExportDialog(CurrentFile.Layout))
             {
-                if (!string.IsNullOrEmpty(CurrentFile.Layout.LayoutName))
-                    sfd.FileName = CurrentFile.Layout.LayoutName + ".svg";
-                else
-                    sfd.FileName = "layout.svg";
-
-                sfd.Filter = "Scalable Vector Graphics File (*.svg)|*.svg";
-                sfd.DefaultExt = ".svg";
-
-                if (sfd.ShowDialog() == DialogResult.OK)
-                {
-                    SvgLayoutExporter.ExportLayout(sfd.FileName, CurrentFile.Layout,
-                        new LayoutSvgExportOptions()
-                        {
-                            ExportStrings = true,
-                            ExportStringCenters = false
-                            //,ExtendFretSlots = Measure.Mm(3)
-                        });
-                }
+                exportDialog.ShowDialog();
             }
         }
 

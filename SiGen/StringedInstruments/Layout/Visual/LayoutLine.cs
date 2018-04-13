@@ -133,6 +133,13 @@ namespace SiGen.StringedInstruments.Layout.Visual
             return PointM.FromVector(inter, P1.Unit);
         }
 
+        public static LayoutLine Offset(LayoutLine line, Measure amount)
+        {
+            var p1 = line.GetPerpendicularPoint(line.P1, amount);
+            var p2 = line.GetPerpendicularPoint(line.P2, amount);
+            return new LayoutLine(p1, p2);
+        }
+
         internal override void FlipHandedness()
         {
             base.FlipHandedness();

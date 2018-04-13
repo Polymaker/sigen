@@ -142,7 +142,7 @@ namespace SiGen.UI.Controls
         {
             if (!IsLoading && !FlagManager["SetMode"] && (sender as RadioButton).Checked)
             {
-                if (enteringControl)//fallback to prevent windows to force check the last clicked radiobutton
+                if (enteringControl)//fallback to prevent Windows to force check the last clicked radiobutton
                 {
                     SetSelectedEditMode(EditMode);
                     return;
