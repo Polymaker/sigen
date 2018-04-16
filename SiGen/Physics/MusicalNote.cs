@@ -103,6 +103,34 @@ namespace SiGen.Physics
             return CreateNote((NoteName)(baseSteps % 12), (int)Math.Floor(baseSteps / 12d), newIntonation);
         }
 
+        public static NoteName ParseNoteName(string value)
+        {
+            NoteName note = NoteName.A;
+
+            if (Enum.TryParse<NoteName>(value, out note))
+                return note;
+
+            const string NOTES = "ABCDEFG";
+
+            if (value.Length == 1 && NOTES.Contains(value.ToUpper()))
+                return (NoteName)Enum.Parse(typeof(NoteName), value.ToUpper());
+            else if (NOTES.Contains(char.ToUpper(value[0])))
+            {
+                if (value.Contains("#"))
+                {
+                    int noteIdx = NOTES.IndexOf(char.ToUpper(value[0]));
+                    return (NoteName)Enum.Parse(typeof(NoteName), NOTES[(noteIdx + 1) % NOTES.Length] + "b");
+                }
+                else if (value.ToUpper().IndexOf("B", 1) > 0)
+                {
+                    return (NoteName)Enum.Parse(typeof(NoteName), char.ToUpper(value[0]) + "b");
+                }
+            }
+            
+
+            throw new InvalidCastException("Invalid note name");
+        }
+
         #endregion
     }
 }

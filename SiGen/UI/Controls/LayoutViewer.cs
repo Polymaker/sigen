@@ -200,7 +200,7 @@ namespace SiGen.UI
                 var layoutBounds = CurrentLayout.GetLayoutBounds();
                 if (!layoutBounds.IsEmpty)
                 {
-                    if (DisplayConfig.FretboardOrientation == Orientation.Horizontal)
+                    if (DisplayConfig.FingerboardOrientation == Orientation.Horizontal)
                     {
                         _Zoom = (Width - (PADDING_BORDER * 2f)) / (float)layoutBounds.Height.NormalizedValue;
                     }
@@ -210,7 +210,7 @@ namespace SiGen.UI
                     }
                     var centerY = layoutBounds.Center.Y.NormalizedValue;
                     cameraPosition = Vector.Zero;
-                    if (DisplayConfig.FretboardOrientation == Orientation.Vertical)
+                    if (DisplayConfig.FingerboardOrientation == Orientation.Vertical)
                         cameraPosition.Y += centerY;
                     else
                         cameraPosition.X += centerY;
@@ -504,13 +504,13 @@ namespace SiGen.UI
 
         #region UI <-> 2D coordinates
 
-        private bool IsHorizontal { get { return DisplayConfig.FretboardOrientation == Orientation.Horizontal; } }
+        private bool IsHorizontal { get { return DisplayConfig.FingerboardOrientation == Orientation.Horizontal; } }
 
         private bool IsFlipHorizontal
         {
             get
             {
-                return CurrentLayout != null && DisplayConfig.FretboardOrientation == Orientation.Horizontal && CurrentLayout.LeftHanded;
+                return CurrentLayout != null && DisplayConfig.FingerboardOrientation == Orientation.Horizontal && CurrentLayout.LeftHanded;
             }
         }
 

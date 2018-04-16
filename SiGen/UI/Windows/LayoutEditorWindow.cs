@@ -1,4 +1,5 @@
-﻿using SiGen.Export;
+﻿using SiGen.Common;
+using SiGen.Export;
 using SiGen.Measuring;
 using SiGen.Physics;
 using SiGen.StringedInstruments.Data;
@@ -20,7 +21,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace SiGen.UI
 {
-    public partial class FrmLayoutBuilder : Form
+    public partial class LayoutEditorWindow : Form
     {
         private LayoutEditorPanel<StringSpacingEditor> stringSpacingPanel;
         private LayoutEditorPanel<StringsConfigurationEditor> stringConfigPanel;
@@ -46,7 +47,7 @@ namespace SiGen.UI
             }
         }
 
-        public FrmLayoutBuilder()
+        public LayoutEditorWindow()
         {
             InitializeComponent();
         }
@@ -69,7 +70,7 @@ namespace SiGen.UI
             stringConfigPanel.Text = "Strings Configuration";
             
             stringSpacingPanel = new LayoutEditorPanel<StringSpacingEditor>();
-            stringSpacingPanel.Show(stringConfigPanel.Pane, DockAlignment.Right, 0.65);
+            stringSpacingPanel.Show(stringConfigPanel.Pane, DockAlignment.Right, 0.6);
             stringSpacingPanel.Text = "String Spacing";
 
             layoutMarginPanel = new LayoutEditorPanel<FingerboardMarginEditor>();
@@ -81,20 +82,24 @@ namespace SiGen.UI
             layoutInfoPanel.Text = "Layout Properties";
 
             scaleLengthPanel = new LayoutEditorPanel<ScaleLengthEditor>();
-            scaleLengthPanel.Show(stringConfigPanel.Pane, DockAlignment.Bottom, 0.6);
+            scaleLengthPanel.Show(stringConfigPanel.Pane, null);
             scaleLengthPanel.Text = "Scale Length Configuration";
+            stringConfigPanel.Activate();
 
         }
 
         private void dockPanel1_ActiveDocumentChanged(object sender, EventArgs e)
         {
-            foreach(var panel in dockPanel1.Contents.OfType<ILayoutEditorPanel>())
-            {
-                if (dockPanel1.ActiveDocument == null)
-                    panel.CurrentLayout = null;
-                else
-                    panel.CurrentLayout = (((DockContent)dockPanel1.ActiveDocument).Tag as LayoutFile).Layout;
-            }
+            if (CurrentFile != null)
+                SetEditorsActiveLayout(CurrentFile.Layout);
+            else
+                SetEditorsActiveLayout(null);
+        }
+
+        private void SetEditorsActiveLayout(SILayout layout)
+        {
+            foreach (var editorPanel in dockPanel1.Contents.OfType<ILayoutEditorPanel>())
+                editorPanel.CurrentLayout = layout;
         }
 
         private DockContent CreateDocumentPanel(LayoutFile layoutFile)
@@ -274,44 +279,22 @@ namespace SiGen.UI
             tssbOpen_ButtonClick(sender, e);
         }
 
-        private class LayoutFile
-        {
-            public SILayout Layout { get; set; }
-            public string FileName { get; set; }
-
-            public LayoutFile(SILayout layout)
-            {
-                Layout = layout;
-                FileName = string.Empty;
-            }
-
-            public LayoutFile(string filename)
-            {
-                FileName = filename;
-                Layout = SILayout.Load(filename);
-            }
-        }
-
         private void LoadLayout(LayoutFile layout)
         {
             var documentPanel = CreateDocumentPanel(layout);
             documentPanel.Show(dockPanel1, DockState.Document);
         }
 
-        private void exportAsSVGToolStripMenuItem_Click(object sender, EventArgs e)
+        private void tssbExport_Click(object sender, EventArgs e)
         {
-            using (var exportDialog = new LayoutExportDialog(CurrentFile.Layout))
-            {
+            using (var exportDialog = new ExportLayoutDialog(CurrentFile.Layout))
                 exportDialog.ShowDialog();
-            }
         }
 
-        private void exportAsDXFToolStripMenuItem_Click(object sender, EventArgs e)
+        private void tsbOptions_Click(object sender, EventArgs e)
         {
-            using (var frm = new DetectScreenDPI())
-                frm.ShowDialog();
+            using (var dlg = new AppPreferencesWindow())
+                dlg.ShowDialog();
         }
-
-        
     }
 }

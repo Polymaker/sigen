@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 
 namespace SiGen.StringedInstruments.Data
 {
+    [Serializable]
     public class StringProperties
     {
         /// <summary>
@@ -25,7 +26,7 @@ namespace SiGen.StringedInstruments.Data
         [XmlAttribute("UW")]
         public double UnitWeight { get; set; }
         /// <summary>
-        /// The modulus of elasticity of the string's material (core wire for wound strings).
+        /// The modulus of elasticity of the string's material (core wire for wound strings; if defined).
         /// Used for fret compensation calculations.
         /// </summary>
         [XmlAttribute("MOE")]
@@ -37,7 +38,7 @@ namespace SiGen.StringedInstruments.Data
         [XmlAttribute("Material")]
         public string Material { get; set; }
         /// <summary>
-        /// Gets the area of the string (core wire for wound strings).
+        /// Gets the area of the core wire in inch².
         /// Used for fret compensation calculations.
         /// </summary>
         public double CoreWireArea
@@ -45,14 +46,27 @@ namespace SiGen.StringedInstruments.Data
             get
             {
                 if (CoreWireDiameter.IsEmpty)
-                    return 0;// Measure.Empty;
-                return Math.Pow(CoreWireDiameter[UnitOfMeasure.In] / 2d, 2) * Math.PI;// Measure.FromNormalizedValue(Math.Pow(CoreWireDiameter.NormalizedValue / 2d, 2) * Math.PI, CoreWireDiameter.Unit);
+                    return 0;
+                return Math.Pow(CoreWireDiameter[UnitOfMeasure.In] / 2d, 2) * Math.PI;
+            }
+        }
+        /// <summary>
+        /// Gets the area of the string in inch².
+        /// Used for fret compensation calculations.
+        /// </summary>
+        public double StringArea
+        {
+            get
+            {
+                if (StringDiameter.IsEmpty)
+                    return 0;
+                return Math.Pow(StringDiameter[UnitOfMeasure.In] / 2d, 2) * Math.PI;
             }
         }
 
         public bool CanCalculateCompensation
         {
-            get { return CoreWireArea != 0 && ModulusOfElasticity > 0 && UnitWeight > 0; }
+            get { return (CoreWireArea != 0 || StringArea != 0) && ModulusOfElasticity > 0 && UnitWeight > 0; }
         }
 
         public StringProperties()

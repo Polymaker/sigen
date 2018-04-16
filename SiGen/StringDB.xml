@@ -1,0 +1,191 @@
+<Database>
+	<Strings>
+		<!-- 
+		ID =	String identifier
+		CD =	Core Diameter (in inches)
+		OD =	Outer Diameter (AKA String Gauge, in inches)
+		UW =	Unit Weight (in lbs. per inch)
+		MOE =	Modulus Of Elasticity of the core wire material (in PSI) 
+				Example values: plain steel ~27270000psi, nickel wound ~9282000psi
+				If the core wire diameter is not set, the value is considered as for the whole string.
+		Type =	String type: Nylon, Plain (Steel), Wound
+		-->
+		<!-- Plain Steel -->
+		<StringData ID="PL007"	Brand="DAddario"	CD="0.007"	OD="0.007"	UW="0.00001085"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL008"	Brand="DAddario"	CD="0.008"	OD="0.008"	UW="0.00001418"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL0085"	Brand="DAddario"	CD="0.0085"	OD="0.0085"	UW="0.00001601"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL009"	Brand="DAddario"	CD="0.009"	OD="0.009"	UW="0.00001794"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL0095"	Brand="DAddario"	CD="0.0095"	OD="0.0095"	UW="0.00001999"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL010"	Brand="DAddario"	CD="0.010"	OD="0.010"	UW="0.00002215"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL0105"	Brand="DAddario"	CD="0.0105"	OD="0.0105"	UW="0.00002442"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL011"	Brand="DAddario"	CD="0.011"	OD="0.011"	UW="0.00002680"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL0115"	Brand="DAddario"	CD="0.0115"	OD="0.0115"	UW="0.00002930"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL012"	Brand="DAddario"	CD="0.012"	OD="0.012"	UW="0.00003190"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL013"	Brand="DAddario"	CD="0.013"	OD="0.013"	UW="0.00003744"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL0135"	Brand="DAddario"	CD="0.0135"	OD="0.0135"	UW="0.00004037"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL014"	Brand="DAddario"	CD="0.014"	OD="0.014"	UW="0.00004342"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL015"	Brand="DAddario"	CD="0.015"	OD="0.015"	UW="0.00004984"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL016"	Brand="DAddario"	CD="0.016"	OD="0.016"	UW="0.00005671"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL017"	Brand="DAddario"	CD="0.017"	OD="0.017"	UW="0.00006402"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL018"	Brand="DAddario"	CD="0.018"	OD="0.018"	UW="0.00007177"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL019"	Brand="DAddario"	CD="0.019"	OD="0.019"	UW="0.00007997"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL020"	Brand="DAddario"	CD="0.020"	OD="0.020"	UW="0.00008861"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL022"	Brand="DAddario"	CD="0.022"	OD="0.022"	UW="0.00010722"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL024"	Brand="DAddario"	CD="0.024"	OD="0.024"	UW="0.00012760"	MOE="27270000"	Type="Plain" />
+		<StringData ID="PL026"	Brand="DAddario"	CD="0.026"	OD="0.026"	UW="0.00014975"	MOE="27270000"	Type="Plain" />
+		<!-- Guitar Nickel Wound -->
+		<StringData ID="NW017"	Brand="DAddario"	CD="N/A"	OD="0.017"	UW="0.00005524"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW018"	Brand="DAddario"	CD="N/A"	OD="0.018"	UW="0.00006215"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW019"	Brand="DAddario"	CD="N/A"	OD="0.019"	UW="0.00006947"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW020"	Brand="DAddario"	CD="N/A"	OD="0.020"	UW="0.00007495"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW021"	Brand="DAddario"	CD="N/A"	OD="0.021"	UW="0.00008293"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW022"	Brand="DAddario"	CD="N/A"	OD="0.022"	UW="0.00009184"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW024"	Brand="DAddario"	CD="N/A"	OD="0.024"	UW="0.00010857"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW026"	Brand="DAddario"	CD="N/A"	OD="0.026"	UW="0.00012671"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW028"	Brand="DAddario"	CD="N/A"	OD="0.028"	UW="0.00014666"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW030"	Brand="DAddario"	CD="N/A"	OD="0.030"	UW="0.00017236"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW032"	Brand="DAddario"	CD="N/A"	OD="0.032"	UW="0.00019347"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW034"	Brand="DAddario"	CD="N/A"	OD="0.034"	UW="0.00021590"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW036"	Brand="DAddario"	CD="N/A"	OD="0.036"	UW="0.00023964"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW038"	Brand="DAddario"	CD="N/A"	OD="0.038"	UW="0.00026471"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW039"	Brand="DAddario"	CD="N/A"	OD="0.039"	UW="0.00027932"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW042"	Brand="DAddario"	CD="N/A"	OD="0.042"	UW="0.00032279"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW044"	Brand="DAddario"	CD="N/A"	OD="0.044"	UW="0.00035182"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW046"	Brand="DAddario"	CD="N/A"	OD="0.046"	UW="0.00038216"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW048"	Brand="DAddario"	CD="N/A"	OD="0.048"	UW="0.00041382"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW049"	Brand="DAddario"	CD="N/A"	OD="0.049"	UW="0.00043014"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW052"	Brand="DAddario"	CD="N/A"	OD="0.052"	UW="0.00048109"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW054"	Brand="DAddario"	CD="N/A"	OD="0.054"	UW="0.00053838"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW056"	Brand="DAddario"	CD="N/A"	OD="0.056"	UW="0.00057598"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW059"	Brand="DAddario"	CD="N/A"	OD="0.059"	UW="0.00064191"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW060"	Brand="DAddario"	CD="N/A"	OD="0.060"	UW="0.00066542"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW062"	Brand="DAddario"	CD="N/A"	OD="0.062"	UW="0.00070697"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW064"	Brand="DAddario"	CD="N/A"	OD="0.064"	UW="0.00074984"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW066"	Brand="DAddario"	CD="N/A"	OD="0.066"	UW="0.00079889"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW068"	Brand="DAddario"	CD="N/A"	OD="0.068"	UW="0.00084614"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW070"	Brand="DAddario"	CD="N/A"	OD="0.070"	UW="0.00089304"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW072"	Brand="DAddario"	CD="N/A"	OD="0.072"	UW="0.00094124"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW074"	Brand="DAddario"	CD="N/A"	OD="0.074"	UW="0.00098869"	MOE="9282000"	Type="Wound" />
+		<StringData ID="NW080"	Brand="DAddario"	CD="N/A"	OD="0.080"	UW="0.00115011"	MOE="9282000"	Type="Wound" />
+		<!-- Bass Nickel Wound -->
+		<StringData ID="XLB042"	BRAND="DAddario"	CD="N/A"	OD="0.042"	UW="0.00032252"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB052"	BRAND="DAddario"	CD="N/A"	OD="0.052"	UW="0.00051322"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB032"	BRAND="DAddario"	CD="N/A"	OD="0.032"	UW="0.00019000"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB035"	BRAND="DAddario"	CD="N/A"	OD="0.035"	UW="0.00022362"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB040"	BRAND="DAddario"	CD="N/A"	OD="0.040"	UW="0.00029322"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB045"	BRAND="DAddario"	CD="N/A"	OD="0.045"	UW="0.00037240"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB050"	BRAND="DAddario"	CD="N/A"	OD="0.050"	UW="0.00046463"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB055"	BRAND="DAddario"	CD="N/A"	OD="0.055"	UW="0.00054816"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB060"	BRAND="DAddario"	CD="N/A"	OD="0.060"	UW="0.00066540"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB065"	BRAND="DAddario"	CD="N/A"	OD="0.065"	UW="0.00079569"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB070"	BRAND="DAddario"	CD="N/A"	OD="0.070"	UW="0.00093218"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB075"	BRAND="DAddario"	CD="N/A"	OD="0.075"	UW="0.00104973"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB080"	BRAND="DAddario"	CD="N/A"	OD="0.080"	UW="0.00116023"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB085"	BRAND="DAddario"	CD="N/A"	OD="0.085"	UW="0.00133702"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB090"	BRAND="DAddario"	CD="N/A"	OD="0.090"	UW="0.00150277"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB095"	BRAND="DAddario"	CD="N/A"	OD="0.095"	UW="0.00169349"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB100"	BRAND="DAddario"	CD="N/A"	OD="0.100"	UW="0.00179687"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB105"	BRAND="DAddario"	CD="N/A"	OD="0.105"	UW="0.00198395"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB110"	BRAND="DAddario"	CD="N/A"	OD="0.110"	UW="0.00227440"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB120"	BRAND="DAddario"	CD="N/A"	OD="0.120"	UW="0.00250280"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB125"	BRAND="DAddario"	CD="N/A"	OD="0.125"	UW="0.00274810"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB130"	BRAND="DAddario"	CD="N/A"	OD="0.130"	UW="0.00301941"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB135"	BRAND="DAddario"	CD="N/A"	OD="0.135"	UW="0.00315944"	MOE="9282000"	Type="Wound" />
+		<StringData ID="XLB145"	BRAND="DAddario"	CD="N/A"	OD="0.145"	UW="0.00363204"	MOE="9282000"	Type="Wound" />
+	</Strings>
+	<StringSets>
+		<!-- Guitar Sets -->
+		<StringSet Name="D'Addario - Super Light" StringCount="6" Instrument="Guitar" >
+			<String ID="PL009"	Note="E" />
+			<String ID="PL011"	Note="B" />
+			<String ID="PL016"	Note="G" />
+			<String ID="NW024"	Note="D" />
+			<String ID="NW032"	Note="A" />
+			<String ID="NW042"	Note="E" />
+		</StringSet>
+		<StringSet Name="D'Addario - Super Light" StringCount="7" Instrument="Guitar" >
+			<String ID="PL009"	Note="E" />
+			<String ID="PL011"	Note="B" />
+			<String ID="PL016"	Note="G" />
+			<String ID="NW024"	Note="D" />
+			<String ID="NW032"	Note="A" />
+			<String ID="NW042"	Note="E" />
+			<String ID="NW054"	Note="B" />
+		</StringSet>
+		<StringSet Name="D'Addario - Super Light" StringCount="8" Instrument="Guitar" >
+			<String ID="PL009"	Note="E" />
+			<String ID="PL011"	Note="B" />
+			<String ID="PL016"	Note="G" />
+			<String ID="NW024"	Note="D" />
+			<String ID="NW032"	Note="A" />
+			<String ID="NW042"	Note="E" />
+			<String ID="NW054"	Note="B" />
+			<String ID="NW065"	Note="F#" />
+		</StringSet>
+		<StringSet Name="D'Addario - Regular Light" StringCount="6" Instrument="Guitar" >
+			<String ID="PL010"	Note="E" />
+			<String ID="PL013"	Note="B" />
+			<String ID="PL017"	Note="G" />
+			<String ID="NW026"	Note="D" />
+			<String ID="NW036"	Note="A" />
+			<String ID="NW046"	Note="E" />
+		</StringSet>
+		<StringSet Name="D'Addario - Regular Light" StringCount="7" Instrument="Guitar" >
+			<String ID="PL010"	Note="E" />
+			<String ID="PL013"	Note="B" />
+			<String ID="PL017"	Note="G" />
+			<String ID="NW026"	Note="D" />
+			<String ID="NW036"	Note="A" />
+			<String ID="NW046"	Note="E" />
+			<String ID="NW059"	Note="B" />
+		</StringSet>
+		<!-- Bass Sets -->
+		<StringSet Name="D'Addario - Super Light" StringCount="4" Instrument="Bass" >
+			<String ID="XLB040"	Note="G" />
+			<String ID="XLB060"	Note="D" />
+			<String ID="XLB075"	Note="A" />
+			<String ID="XLB095"	Note="E" />
+		</StringSet>
+		<StringSet Name="D'Addario - Super Light" StringCount="5" Instrument="Bass" >
+			<String ID="XLB040"	Note="G" />
+			<String ID="XLB060"	Note="D" />
+			<String ID="XLB075"	Note="A" />
+			<String ID="XLB095"	Note="E" />
+			<String ID="XLB125"	Note="B" />
+		</StringSet>
+		<StringSet Name="D'Addario - Regular Light" StringCount="4" Instrument="Bass" >
+			<String ID="XLB045"	Note="G" />
+			<String ID="XLB065"	Note="D" />
+			<String ID="XLB080"	Note="A" />
+			<String ID="XLB100"	Note="E" />
+		</StringSet>
+		<StringSet Name="D'Addario - Regular Light" StringCount="5" Instrument="Bass" >
+			<String ID="XLB045"	Note="G" />
+			<String ID="XLB065"	Note="D" />
+			<String ID="XLB080"	Note="A" />
+			<String ID="XLB100"	Note="E" />
+			<String ID="XLB130"	Note="B" />
+		</StringSet>
+		<StringSet Name="D'Addario - Regular Light" StringCount="6" Instrument="Bass" >
+			<String ID="XLB032"	Note="C" />
+			<String ID="XLB045"	Note="G" />
+			<String ID="XLB065"	Note="D" />
+			<String ID="XLB080"	Note="A" />
+			<String ID="XLB100"	Note="E" />
+			<String ID="XLB130"	Note="B" />
+		</StringSet>
+		<StringSet Name="D'Addario - Medium" StringCount="4" Instrument="Bass" >
+			<String ID="XLB050"	Note="G" />
+			<String ID="XLB070"	Note="D" />
+			<String ID="XLB085"	Note="A" />
+			<String ID="XLB105"	Note="E" />
+		</StringSet>
+		<StringSet Name="D'Addario - Medium" StringCount="5" Instrument="Bass" >
+			<String ID="XLB050"	Note="G" />
+			<String ID="XLB070"	Note="D" />
+			<String ID="XLB085"	Note="A" />
+			<String ID="XLB105"	Note="E" />
+			<String ID="XLB135"	Note="B" />
+		</StringSet>
+	</StringSets>
+</Database>

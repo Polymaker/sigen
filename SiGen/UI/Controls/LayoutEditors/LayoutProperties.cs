@@ -43,7 +43,7 @@ namespace SiGen.UI.Controls.LayoutEditors
             {
                 var layoutBounds = CurrentLayout.GetLayoutBounds();
 
-                if (viewer != null && viewer.DisplayConfig.FretboardOrientation == Orientation.Horizontal)
+                if (viewer != null && viewer.DisplayConfig.FingerboardOrientation == Orientation.Horizontal)
                 {
                     mtbLayoutHeight.Value = layoutBounds.Width;
                     mtbLayoutWidth.Value = layoutBounds.Height;

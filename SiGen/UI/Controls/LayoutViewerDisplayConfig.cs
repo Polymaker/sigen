@@ -19,7 +19,7 @@ namespace SiGen.UI
         private bool _RenderRealFrets;
         private UnitOfMeasure _DefaultDisplayUnit;
         private Measure _FretWidth;
-        private Orientation _FretboardOrientation;
+        private Orientation _FingerboardOrientation;
 
         [DefaultValue(true)]
         public bool ShowStrings
@@ -78,15 +78,15 @@ namespace SiGen.UI
         }
 
         [DefaultValue(Orientation.Horizontal)]
-        public Orientation FretboardOrientation
+        public Orientation FingerboardOrientation
         {
-            get { return _FretboardOrientation; }
+            get { return _FingerboardOrientation; }
             set
             {
-                if (value != _FretboardOrientation)
+                if (value != _FingerboardOrientation)
                 {
-                    _FretboardOrientation = value;
-                    OnPropertyChanged("FretboardOrientation");
+                    _FingerboardOrientation = value;
+                    OnPropertyChanged("FingerboardOrientation");
                 }
             }
         }
@@ -156,7 +156,7 @@ namespace SiGen.UI
             _ShowTheoreticalFrets = false;
             _ShowMidlines = true;
             _RenderRealFrets = true;
-            _FretboardOrientation = Orientation.Horizontal;
+            _FingerboardOrientation = Orientation.Horizontal;
             _DefaultDisplayUnit = UnitOfMeasure.Mm;
             _FretWidth = Measure.Mm(2.5);
         }

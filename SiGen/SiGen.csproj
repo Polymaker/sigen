@@ -55,14 +55,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\AppPreferences.cs" />
+    <Compile Include="Common\LayoutFile.cs" />
+    <Compile Include="Common\StringType.cs" />
     <Compile Include="Export\LayoutExportOptions.cs" />
     <Compile Include="Export\SvgLayoutExporter.cs" />
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Maths\Angle.cs" />
     <Compile Include="Maths\AngleUnit.cs" />
     <Compile Include="Maths\BezierCurve.cs" />
@@ -187,11 +184,11 @@
     <Compile Include="UI\Windows\DetectScreenDPI.Designer.cs">
       <DependentUpon>DetectScreenDPI.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Windows\FrmLayoutBuilder.cs">
+    <Compile Include="UI\Windows\LayoutEditorWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Windows\FrmLayoutBuilder.Designer.cs">
-      <DependentUpon>FrmLayoutBuilder.cs</DependentUpon>
+    <Compile Include="UI\Windows\LayoutEditorWindow.Designer.cs">
+      <DependentUpon>LayoutEditorWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\LayoutViewer.cs">
       <SubType>Component</SubType>
@@ -212,17 +209,11 @@
     <Compile Include="UI\Controls\ValueEditors\MeasureTextbox.Designer.cs">
       <DependentUpon>MeasureTextbox.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Windows\LayoutExportDialog.cs">
+    <Compile Include="UI\Windows\ExportLayoutDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Windows\LayoutExportDialog.Designer.cs">
-      <DependentUpon>LayoutExportDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Windows\LayoutViewerDisplayConfigWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Windows\LayoutViewerDisplayConfigWindow.Designer.cs">
-      <DependentUpon>LayoutViewerDisplayConfigWindow.cs</DependentUpon>
+    <Compile Include="UI\Windows\ExportLayoutDialog.Designer.cs">
+      <DependentUpon>ExportLayoutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\ArrayProperty.cs" />
     <Compile Include="Utilities\EnumHelper.cs" />
@@ -236,10 +227,6 @@
     <Compile Include="Utilities\ObservableCollectionEx.cs" />
     <Compile Include="Utilities\SerializationHelper.cs" />
     <Compile Include="Utilities\SortableBindingList.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -276,8 +263,8 @@
     <EmbeddedResource Include="UI\Windows\DetectScreenDPI.resx">
       <DependentUpon>DetectScreenDPI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Windows\FrmLayoutBuilder.resx">
-      <DependentUpon>FrmLayoutBuilder.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Windows\LayoutEditorWindow.resx">
+      <DependentUpon>LayoutEditorWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\ValueEditors\MeasureEdit.resx">
       <DependentUpon>MeasureEdit.cs</DependentUpon>
@@ -285,11 +272,8 @@
     <EmbeddedResource Include="UI\Controls\ValueEditors\MeasureTextbox.resx">
       <DependentUpon>MeasureTextbox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Windows\LayoutExportDialog.resx">
-      <DependentUpon>LayoutExportDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Windows\LayoutViewerDisplayConfigWindow.resx">
-      <DependentUpon>LayoutViewerDisplayConfigWindow.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Windows\ExportLayoutDialog.resx">
+      <DependentUpon>ExportLayoutDialog.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="DefaultLayout.sil">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

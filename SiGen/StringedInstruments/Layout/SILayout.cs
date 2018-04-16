@@ -444,7 +444,7 @@ namespace SiGen.StringedInstruments.Layout
         
         public static SILayout Load(string path)
         {
-            using (var fs = File.Open(path, FileMode.Open))
+            using (var fs = File.Open(path, FileMode.Open, FileAccess.Read))
                 return Load(fs);
         }
 

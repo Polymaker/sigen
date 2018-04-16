@@ -13,18 +13,18 @@ using System.Windows.Forms;
 
 namespace SiGen.UI.Windows
 {
-    public partial class LayoutExportDialog : Form
+    public partial class ExportLayoutDialog : Form
     {
         private LayoutSvgExportOptions SvgExportOptions;
         private bool isLoading;
 
-        public LayoutExportDialog()
+        public ExportLayoutDialog()
         {
             InitializeComponent();
             SvgExportOptions = new LayoutSvgExportOptions();
         }
 
-        public LayoutExportDialog(SILayout layout)
+        public ExportLayoutDialog(SILayout layout)
         {
             InitializeComponent();
             SvgExportOptions = new LayoutSvgExportOptions();

@@ -33,6 +33,9 @@
             this.chkLeftHanded = new System.Windows.Forms.CheckBox();
             this.nbxNumberOfFrets = new SiGen.UI.Controls.NumericBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.dgvStrings = new System.Windows.Forms.DataGridView();
+            this.chkShowAdvanced = new System.Windows.Forms.CheckBox();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvStrings)).BeginInit();
             this.SuspendLayout();
             // 
             // nbxNumberOfStrings
@@ -88,17 +91,51 @@
             this.label2.TabIndex = 4;
             this.label2.Text = "Number Of Frets";
             // 
+            // dgvStrings
+            // 
+            this.dgvStrings.AllowUserToAddRows = false;
+            this.dgvStrings.AllowUserToDeleteRows = false;
+            this.dgvStrings.AllowUserToResizeRows = false;
+            this.dgvStrings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvStrings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvStrings.Location = new System.Drawing.Point(3, 55);
+            this.dgvStrings.Name = "dgvStrings";
+            this.dgvStrings.RowHeadersWidth = 120;
+            this.dgvStrings.Size = new System.Drawing.Size(359, 181);
+            this.dgvStrings.TabIndex = 5;
+            this.dgvStrings.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvStrings_CellPainting);
+            this.dgvStrings.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.dgvStrings_CellParsing);
+            this.dgvStrings.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dgvStrings_CellValidating);
+            this.dgvStrings.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvStrings_CellValueChanged);
+            this.dgvStrings.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgvStrings_EditingControlShowing);
+            // 
+            // chkShowAdvanced
+            // 
+            this.chkShowAdvanced.AutoSize = true;
+            this.chkShowAdvanced.Location = new System.Drawing.Point(174, 29);
+            this.chkShowAdvanced.Name = "chkShowAdvanced";
+            this.chkShowAdvanced.Size = new System.Drawing.Size(141, 17);
+            this.chkShowAdvanced.TabIndex = 6;
+            this.chkShowAdvanced.Text = "Show Advanced Config.";
+            this.chkShowAdvanced.UseVisualStyleBackColor = true;
+            this.chkShowAdvanced.CheckedChanged += new System.EventHandler(this.chkShowAdvanced_CheckedChanged);
+            // 
             // StringsConfigurationEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chkShowAdvanced);
+            this.Controls.Add(this.dgvStrings);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.nbxNumberOfFrets);
             this.Controls.Add(this.chkLeftHanded);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.nbxNumberOfStrings);
             this.Name = "StringsConfigurationEditor";
-            this.Size = new System.Drawing.Size(329, 126);
+            this.Size = new System.Drawing.Size(365, 239);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvStrings)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -111,5 +148,7 @@
         private System.Windows.Forms.CheckBox chkLeftHanded;
         private NumericBox nbxNumberOfFrets;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.DataGridView dgvStrings;
+        private System.Windows.Forms.CheckBox chkShowAdvanced;
     }
 }

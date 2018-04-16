@@ -1,6 +1,6 @@
 ﻿namespace SiGen.UI
 {
-    partial class FrmLayoutBuilder
+    partial class LayoutEditorWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmLayoutBuilder));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LayoutEditorWindow));
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -41,15 +41,14 @@
             this.tsmiSave = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveTemplate = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssbExport = new System.Windows.Forms.ToolStripSplitButton();
-            this.exportAsSVGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportAsDXFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
+            this.tsbOptions = new System.Windows.Forms.ToolStripButton();
+            this.tssbExport = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -78,7 +77,8 @@
             this.tsbNew,
             this.tssbOpen,
             this.tssbSave,
-            this.tssbExport});
+            this.tssbExport,
+            this.tsbOptions});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(872, 25);
@@ -111,20 +111,20 @@
             // tsmiOpenFile
             // 
             this.tsmiOpenFile.Name = "tsmiOpenFile";
-            this.tsmiOpenFile.Size = new System.Drawing.Size(164, 22);
+            this.tsmiOpenFile.Size = new System.Drawing.Size(165, 22);
             this.tsmiOpenFile.Text = "Open File...";
             this.tsmiOpenFile.Click += new System.EventHandler(this.tsmiOpenFile_Click);
             // 
             // tsmiOpenTemplate
             // 
             this.tsmiOpenTemplate.Name = "tsmiOpenTemplate";
-            this.tsmiOpenTemplate.Size = new System.Drawing.Size(164, 22);
+            this.tsmiOpenTemplate.Size = new System.Drawing.Size(165, 22);
             this.tsmiOpenTemplate.Text = "Open Template...";
             // 
             // tsSeparatorOpen
             // 
             this.tsSeparatorOpen.Name = "tsSeparatorOpen";
-            this.tsSeparatorOpen.Size = new System.Drawing.Size(161, 6);
+            this.tsSeparatorOpen.Size = new System.Drawing.Size(162, 6);
             // 
             // tssbSave
             // 
@@ -161,31 +161,6 @@
             this.tsmiSaveTemplate.Name = "tsmiSaveTemplate";
             this.tsmiSaveTemplate.Size = new System.Drawing.Size(186, 22);
             this.tsmiSaveTemplate.Text = "Save As Template";
-            // 
-            // tssbExport
-            // 
-            this.tssbExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.exportAsSVGToolStripMenuItem,
-            this.exportAsDXFToolStripMenuItem});
-            this.tssbExport.Image = ((System.Drawing.Image)(resources.GetObject("tssbExport.Image")));
-            this.tssbExport.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tssbExport.Name = "tssbExport";
-            this.tssbExport.Size = new System.Drawing.Size(72, 22);
-            this.tssbExport.Text = "Export";
-            // 
-            // exportAsSVGToolStripMenuItem
-            // 
-            this.exportAsSVGToolStripMenuItem.Name = "exportAsSVGToolStripMenuItem";
-            this.exportAsSVGToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.exportAsSVGToolStripMenuItem.Text = "Export as SVG...";
-            this.exportAsSVGToolStripMenuItem.Click += new System.EventHandler(this.exportAsSVGToolStripMenuItem_Click);
-            // 
-            // exportAsDXFToolStripMenuItem
-            // 
-            this.exportAsDXFToolStripMenuItem.Name = "exportAsDXFToolStripMenuItem";
-            this.exportAsDXFToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.exportAsDXFToolStripMenuItem.Text = "Export as DXF...";
-            this.exportAsDXFToolStripMenuItem.Click += new System.EventHandler(this.exportAsDXFToolStripMenuItem_Click);
             // 
             // dockPanel1
             // 
@@ -232,6 +207,24 @@
             // 
             this.ContentPanel.Size = new System.Drawing.Size(518, 258);
             // 
+            // tsbOptions
+            // 
+            this.tsbOptions.Image = ((System.Drawing.Image)(resources.GetObject("tsbOptions.Image")));
+            this.tsbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbOptions.Name = "tsbOptions";
+            this.tsbOptions.Size = new System.Drawing.Size(69, 22);
+            this.tsbOptions.Text = "Options";
+            this.tsbOptions.Click += new System.EventHandler(this.tsbOptions_Click);
+            // 
+            // tssbExport
+            // 
+            this.tssbExport.Image = ((System.Drawing.Image)(resources.GetObject("tssbExport.Image")));
+            this.tssbExport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tssbExport.Name = "tssbExport";
+            this.tssbExport.Size = new System.Drawing.Size(60, 22);
+            this.tssbExport.Text = "Export";
+            this.tssbExport.Click += new System.EventHandler(this.tssbExport_Click);
+            // 
             // FrmLayoutBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -256,9 +249,6 @@
         private System.Windows.Forms.ToolStripSplitButton tssbSave;
         private System.Windows.Forms.ToolStripMenuItem tsmiSave;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveAs;
-        private System.Windows.Forms.ToolStripSplitButton tssbExport;
-        private System.Windows.Forms.ToolStripMenuItem exportAsSVGToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exportAsDXFToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveTemplate;
         private System.Windows.Forms.ToolStripButton tsbNew;
         private System.Windows.Forms.ToolStripSplitButton tssbOpen;
@@ -271,5 +261,7 @@
         private System.Windows.Forms.ToolStripPanel RightToolStripPanel;
         private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
         private System.Windows.Forms.ToolStripContentPanel ContentPanel;
+        private System.Windows.Forms.ToolStripButton tsbOptions;
+        private System.Windows.Forms.ToolStripButton tssbExport;
     }
 }

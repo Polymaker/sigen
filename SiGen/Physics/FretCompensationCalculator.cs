@@ -51,7 +51,7 @@ namespace SiGen.Physics
             double L = frettedLengths[0];// stringLength[UnitOfMeasure.Inches];
             double f = openTuning.Frequency;//Frequency, Hz.
             double E = properties.ModulusOfElasticity;//Modulus of Elasticity, core wire, psi
-            double A = properties.CoreWireArea;//Area, core wire, in²
+            double A = properties.CoreWireArea != 0 ? properties.CoreWireArea : properties.StringArea;//Area, core wire, in²
             double mul = properties.UnitWeight;//String mass per unit length, lbs./ inch
             double g = 386.089; //Gravity, 386.089 in./ sec²
 

@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace SiGen.Utilities
 {
+    /// <summary>
+    /// A simple class that enables to make dynamic indexed propterties.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="K"></typeparam>
     public class ArrayProperty<T,K>
     {
         private Func<K, T> getPredicate;
