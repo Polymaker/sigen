@@ -29,11 +29,14 @@ namespace SiGen.StringedInstruments.Layout
         }
 
         public abstract ScaleLengthType Type { get; }
+
         public ScaleLengthManager(SILayout layout) : base(layout)
         {
             _LengthCalculationMethod = LengthFunction.AlongString;
         }
+
         public abstract void SetLength(int index, Measure value);
+
         public abstract Measure GetLength(int index);
 
         public virtual XElement Serialize(string elemName)

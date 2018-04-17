@@ -81,15 +81,20 @@ namespace SiGen.Physics
             return finalFretPositions;
         }
 
-        public static PitchValue GetPitchAtFret(PitchValue openPitch, int fret, Temperament temperament)
+        public static PitchValue GetPitchAtFret(PitchValue openStringPitch, int fret, Temperament temperament)
         {
-            var stringNote = MusicalNote.FromPitch(openPitch);
-            var fretNote = stringNote.AddSteps(fret, temperament == Temperament.Just ? IntonationMethod.Just : IntonationMethod.EqualTempered);
-            var openCents = openPitch.Cents;
-            double fretCents = fretNote.Pitch.Cents + (openPitch.Cents - stringNote.Pitch.Cents);
-            
+            var intonation = temperament == Temperament.Just ? IntonationMethod.Just : IntonationMethod.EqualTempered;
+            var openStringNote = MusicalNote.FromPitch(openStringPitch).AddSteps(0, intonation);
+            var fretNote = openStringNote.AddSteps(fret);
+
+            double fretCents = fretNote.Pitch.Cents;
+
+            ////consider (or not?) the open string pitch offset 
+            //fretCents += openStringPitch.Cents - openStringNote.Pitch.Cents;
+
             if (fret != 0)
             {
+                //Add the chromatic offset
                 if (temperament == Temperament.ThidellFormula)
                     fretCents += NoteConverter.ThidellFormulaChromaticOffsets[(int)fretNote.NoteName];
                 else if (temperament == Temperament.DieWohltemperirte)

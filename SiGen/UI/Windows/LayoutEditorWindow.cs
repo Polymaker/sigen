@@ -63,11 +63,11 @@ namespace SiGen.UI
 
         private void InitializeEditingPanels()
         {
-            dockPanel1.DockBottomPortion = 220d / (double)dockPanel1.Height;
+            dockPanel1.DockBottomPortion = 300d / (double)dockPanel1.Height;
             
             stringConfigPanel = new LayoutEditorPanel<StringsConfigurationEditor>();
             stringConfigPanel.Show(dockPanel1, DockState.DockBottom);
-            stringConfigPanel.Text = "Strings Configuration";
+            stringConfigPanel.Text = "General Configuration";
             
             stringSpacingPanel = new LayoutEditorPanel<StringSpacingEditor>();
             stringSpacingPanel.Show(stringConfigPanel.Pane, DockAlignment.Right, 0.6);
@@ -83,7 +83,7 @@ namespace SiGen.UI
 
             scaleLengthPanel = new LayoutEditorPanel<ScaleLengthEditor>();
             scaleLengthPanel.Show(stringConfigPanel.Pane, null);
-            scaleLengthPanel.Text = "Scale Length Configuration";
+            scaleLengthPanel.Text = "Scale Length";
             stringConfigPanel.Activate();
 
         }

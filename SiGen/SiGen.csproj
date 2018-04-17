@@ -137,6 +137,12 @@
     <Compile Include="UI\Controls\LayoutEditors\LayoutViewerPanel.Designer.cs">
       <DependentUpon>LayoutViewerPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Controls\LayoutEditors\StringPropertiesEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\LayoutEditors\StringPropertiesEditor.Designer.cs">
+      <DependentUpon>StringPropertiesEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Controls\LayoutEditors\StringsConfigurationEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -247,6 +253,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\ScaleLengthEditor.resx">
       <DependentUpon>ScaleLengthEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\StringPropertiesEditor.resx">
+      <DependentUpon>StringPropertiesEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\StringsConfigurationEditor.resx">
       <DependentUpon>StringsConfigurationEditor.cs</DependentUpon>

@@ -101,10 +101,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvStrings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvStrings.Location = new System.Drawing.Point(3, 55);
+            this.dgvStrings.MultiSelect = false;
             this.dgvStrings.Name = "dgvStrings";
             this.dgvStrings.RowHeadersWidth = 120;
             this.dgvStrings.Size = new System.Drawing.Size(359, 181);
             this.dgvStrings.TabIndex = 5;
+            this.dgvStrings.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvStrings_CellClick);
+            this.dgvStrings.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvStrings_CellFormatting);
             this.dgvStrings.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvStrings_CellPainting);
             this.dgvStrings.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.dgvStrings_CellParsing);
             this.dgvStrings.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dgvStrings_CellValidating);
@@ -126,6 +129,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.AutoScrollMinSize = new System.Drawing.Size(300, 200);
             this.Controls.Add(this.chkShowAdvanced);
             this.Controls.Add(this.dgvStrings);
             this.Controls.Add(this.label2);

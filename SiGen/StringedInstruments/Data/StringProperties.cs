@@ -91,5 +91,10 @@ namespace SiGen.StringedInstruments.Data
             UnitWeight = uw;
             ModulusOfElasticity = moe;
         }
+
+        public bool ShouldSerializeMaterial()
+        {
+            return !string.IsNullOrEmpty(Material);
+        }
     }
 }

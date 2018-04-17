@@ -380,7 +380,7 @@ namespace SiGen.StringedInstruments.Layout
                 //edgePoints.RemoveAll(p => p.IsEmpty);
                 edgePoints = edgePoints.Distinct().ToList();
                 var fretboardEdge = AddVisualElement(new FingerboardEdge(edgePoints));
-                fretboardEdge.InterpolateSpline();
+                //fretboardEdge.InterpolateSpline();
             }
         }
 
@@ -494,21 +494,13 @@ namespace SiGen.StringedInstruments.Layout
             return 1d / Math.Pow(2, fret / 12d);
         }
 
-        public static double GetRelativeFretPosition(StringTuning openString, int fret, Temperament temperament)
+        public static double GetRelativeFretPosition(StringTuning tuning, int fret, Temperament temperament)
         {
-            var openCents = openString.FinalPitch.Cents;
-            var fretNote = openString.Note.AddSteps(fret);
-            double fretCents = fretNote.Pitch.Cents + openString.PitchOffset.Cents;
-            
-            if (fret != 0)
-            {
-                if (temperament == Temperament.ThidellFormula)
-                    fretCents += NoteConverter.ThidellFormulaChromaticOffsets[(int)fretNote.NoteName];
-                else if (temperament == Temperament.DieWohltemperirte)
-                    fretCents += NoteConverter.DieWohltemperirteChromaticOffsets[(int)fretNote.NoteName];
-            }
+            if (fret == 0)
+                return 1d;
 
-            var fretRatio = NoteConverter.CentsToIntonationRatio(fretCents - openCents);
+            var pitchAtFret = FretCompensationCalculator.GetPitchAtFret(tuning.FinalPitch, fret, temperament);
+            var fretRatio = NoteConverter.CentsToIntonationRatio(pitchAtFret.Cents - tuning.FinalPitch.Cents);
             return 1d / fretRatio;
         }
 
@@ -545,14 +537,6 @@ namespace SiGen.StringedInstruments.Layout
         {
             var note = FretsTemperament == Temperament.Just ? MusicalNote.JustNote(NoteName.E, 2) : MusicalNote.EqualNote(NoteName.E, 2);
             return new StringTuning(note);
-        }
-
-        private FretSegment GetFretForString(SIString str, int fret)
-        {
-            var fretLine = VisualElements.OfType<FretLine>().FirstOrDefault(fl => fl.FretIndex == 0 && fl.Segments.Any(s => s.String == str));
-            if(fretLine != null)
-                return fretLine.Segments.First(s => s.String == str);
-            return null;
         }
 
         #endregion

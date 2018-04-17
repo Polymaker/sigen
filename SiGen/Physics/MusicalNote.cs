@@ -126,11 +126,20 @@ namespace SiGen.Physics
                     return (NoteName)Enum.Parse(typeof(NoteName), char.ToUpper(value[0]) + "b");
                 }
             }
-            
 
             throw new InvalidCastException("Invalid note name");
         }
 
+        //public static MusicalNote Parse(string value)
+        //{
+        //    return null;
+        //}
+
         #endregion
+
+        public override string ToString()
+        {
+            return string.Format("{0}{1}", NoteName, Octave);
+        }
     }
 }

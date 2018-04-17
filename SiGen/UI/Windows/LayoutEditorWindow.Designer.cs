@@ -41,14 +41,14 @@
             this.tsmiSave = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveTemplate = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssbExport = new System.Windows.Forms.ToolStripButton();
+            this.tsbOptions = new System.Windows.Forms.ToolStripButton();
             this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
-            this.tsbOptions = new System.Windows.Forms.ToolStripButton();
-            this.tssbExport = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,7 +81,7 @@
             this.tsbOptions});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(872, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1008, 25);
             this.toolStrip1.Stretch = true;
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
@@ -162,12 +162,30 @@
             this.tsmiSaveTemplate.Size = new System.Drawing.Size(186, 22);
             this.tsmiSaveTemplate.Text = "Save As Template";
             // 
+            // tssbExport
+            // 
+            this.tssbExport.Image = ((System.Drawing.Image)(resources.GetObject("tssbExport.Image")));
+            this.tssbExport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tssbExport.Name = "tssbExport";
+            this.tssbExport.Size = new System.Drawing.Size(60, 22);
+            this.tssbExport.Text = "Export";
+            this.tssbExport.Click += new System.EventHandler(this.tssbExport_Click);
+            // 
+            // tsbOptions
+            // 
+            this.tsbOptions.Image = ((System.Drawing.Image)(resources.GetObject("tsbOptions.Image")));
+            this.tsbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbOptions.Name = "tsbOptions";
+            this.tsbOptions.Size = new System.Drawing.Size(69, 22);
+            this.tsbOptions.Text = "Options";
+            this.tsbOptions.Click += new System.EventHandler(this.tsbOptions_Click);
+            // 
             // dockPanel1
             // 
             this.dockPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dockPanel1.Location = new System.Drawing.Point(0, 25);
             this.dockPanel1.Name = "dockPanel1";
-            this.dockPanel1.Size = new System.Drawing.Size(872, 490);
+            this.dockPanel1.Size = new System.Drawing.Size(1008, 656);
             this.dockPanel1.TabIndex = 2;
             this.dockPanel1.ActiveDocumentChanged += new System.EventHandler(this.dockPanel1_ActiveDocumentChanged);
             // 
@@ -207,33 +225,15 @@
             // 
             this.ContentPanel.Size = new System.Drawing.Size(518, 258);
             // 
-            // tsbOptions
-            // 
-            this.tsbOptions.Image = ((System.Drawing.Image)(resources.GetObject("tsbOptions.Image")));
-            this.tsbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbOptions.Name = "tsbOptions";
-            this.tsbOptions.Size = new System.Drawing.Size(69, 22);
-            this.tsbOptions.Text = "Options";
-            this.tsbOptions.Click += new System.EventHandler(this.tsbOptions_Click);
-            // 
-            // tssbExport
-            // 
-            this.tssbExport.Image = ((System.Drawing.Image)(resources.GetObject("tssbExport.Image")));
-            this.tssbExport.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tssbExport.Name = "tssbExport";
-            this.tssbExport.Size = new System.Drawing.Size(60, 22);
-            this.tssbExport.Text = "Export";
-            this.tssbExport.Click += new System.EventHandler(this.tssbExport_Click);
-            // 
-            // FrmLayoutBuilder
+            // LayoutEditorWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(872, 515);
+            this.ClientSize = new System.Drawing.Size(1008, 681);
             this.Controls.Add(this.dockPanel1);
             this.Controls.Add(this.toolStrip1);
             this.IsMdiContainer = true;
-            this.Name = "FrmLayoutBuilder";
+            this.Name = "LayoutEditorWindow";
             this.Text = "Stringed Instrument Layout Generator";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();

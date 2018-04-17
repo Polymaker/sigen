@@ -15,9 +15,13 @@ namespace SiGen.UI.Controls.LayoutEditors
 {
     public partial class StringsConfigurationEditor : LayoutPropertyEditor
     {
+        private ListSortDirection GridColumnsSortOrder;
+
         public StringsConfigurationEditor()
         {
             InitializeComponent();
+            GridColumnsSortOrder = ListSortDirection.Ascending;
+            InitializePivotFields();
         }
 
         protected override void ReadLayoutProperties()
@@ -28,6 +32,7 @@ namespace SiGen.UI.Controls.LayoutEditors
             chkLeftHanded.Enabled = (CurrentLayout != null);
             chkShowAdvanced.Enabled = (CurrentLayout != null);
             chkShowAdvanced.Checked = false;
+            GridColumnsSortOrder = ListSortDirection.Ascending;
 
             if (CurrentLayout != null)
             {
@@ -42,7 +47,8 @@ namespace SiGen.UI.Controls.LayoutEditors
                 chkLeftHanded.Checked = false;
             }
 
-            FillPivotGrid();
+            UpdateFieldsVisibility();
+            BuildPivotGridLayout(false);
         }
 
         protected override void OnLayoutUpdated()
@@ -56,19 +62,21 @@ namespace SiGen.UI.Controls.LayoutEditors
         protected override void OnNumberOfStringsChanged()
         {
             base.OnNumberOfStringsChanged();
-            FillPivotGrid();
+            BuildPivotGridLayout();
         }
 
         protected override void CacheCurrentLayoutValues()
         {
             base.CacheCurrentLayoutValues();
             CachedLayoutData[CurrentLayout]["ShowAdvanced"] = chkShowAdvanced.Checked;
+            CachedLayoutData[CurrentLayout]["StringOrder"] = GridColumnsSortOrder;
         }
 
         protected override void RestoreCachedLayoutValues()
         {
             base.RestoreCachedLayoutValues();
             chkShowAdvanced.Checked = (bool)CachedLayoutData[CurrentLayout]["ShowAdvanced"];
+            GridColumnsSortOrder = (ListSortDirection)CachedLayoutData[CurrentLayout]["StringOrder"];
         }
 
         private void nbxNumberOfStrings_ValueChanged(object sender, EventArgs e)
@@ -98,6 +106,15 @@ namespace SiGen.UI.Controls.LayoutEditors
             }
         }
 
+        private void chkShowAdvanced_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!IsLoading)
+            {
+                UpdateFieldsVisibility();
+                ApplyFieldsVisibility();
+            }
+        }
+
         #region Pivot DataGridView
 
         private class PivotField
@@ -106,6 +123,7 @@ namespace SiGen.UI.Controls.LayoutEditors
             public string PropertyName { get; set; }
             public bool Visible { get; set; }
             public bool ReadOnly { get; set; }
+            public Type ValueType { get; set; }
             public PivotField(string propName, string display)
             {
                 PropertyName = propName;
@@ -115,62 +133,15 @@ namespace SiGen.UI.Controls.LayoutEditors
         }
 
         private List<PivotField> PivotFields;
-        private bool LoadingGridValues;
         private PropertyDescriptorCollection StringProperties;
         private PropertyDescriptorCollection PhysicalProperties;
-
-        private void FillPivotGrid()
-        {
-            if (PivotFields == null)
-                InitializePivotFields();
-
-            if(CurrentLayout == null)
-            {
-                //dgvStrings.DataSource = null;
-                dgvStrings.Columns.Clear();
-                dgvStrings.Rows.Clear();
-            }
-            else
-            {
-                var currentCell = dgvStrings.CurrentCellAddress;
-
-                dgvStrings.SuspendLayout();
-                dgvStrings.Columns.Clear();
-                dgvStrings.Rows.Clear();
-
-                for (int i = 0; i < CurrentLayout.NumberOfStrings; i++)
-                {
-                    var stringCol = new DataGridViewTextBoxColumn()
-                    {
-                        HeaderText = (i + 1).ToString(),
-                        SortMode = DataGridViewColumnSortMode.NotSortable,
-                        Tag = i
-                    };
-                    dgvStrings.Columns.Add(stringCol);
-                }
-
-                UpdateFieldsVisibility();
-
-                foreach (var field in PivotFields)
-                {
-                    var fieldRow = new DataGridViewRow()
-                    {
-                        Tag = field,
-                    };
-                    fieldRow.ReadOnly = field.ReadOnly;
-                    fieldRow.Visible = field.Visible;
-                    dgvStrings.Rows.Add(fieldRow);
-                }
-                dgvStrings.ResumeLayout(true);
-                UpdateGridValues();
-                dgvStrings.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-            }
-        }
+        private PropertyDescriptorCollection TuningProperties;
 
         private void InitializePivotFields()
         {
             StringProperties = TypeDescriptor.GetProperties(typeof(SIString));
             PhysicalProperties = TypeDescriptor.GetProperties(typeof(StringedInstruments.Data.StringProperties));
+            TuningProperties = TypeDescriptor.GetProperties(typeof(StringedInstruments.Data.StringTuning));
 
             PivotFields = new List<PivotField>();
             PivotFields.Add(new PivotField("StartingFret", "Starting Fret"));
@@ -178,9 +149,79 @@ namespace SiGen.UI.Controls.LayoutEditors
             PivotFields.Add(new PivotField("ScaleLength", "Scale Length") { Visible = false });
             PivotFields.Add(new PivotField("MultiScaleRatio", "Align. Ratio") { Visible = false });
             PivotFields.Add(new PivotField("Gauge", "Gauge"));
-            PivotFields.Add(new PivotField("PhysicalProperties.CoreWireDiameter", "Core Diam.") { Visible = false });
-            PivotFields.Add(new PivotField("PhysicalProperties.UnitWeight", "Unit Weight") { Visible = false });
-            PivotFields.Add(new PivotField("PhysicalProperties.ModulusOfElasticity", "Elast. Modulus") { Visible = false });
+            PivotFields.Add(new PivotField("PhysicalProperties.CoreWireDiameter", "Core Wire Diameter") { Visible = false });
+            PivotFields.Add(new PivotField("PhysicalProperties.UnitWeight", "Unit Weight (lbs/in)") { Visible = false });
+            PivotFields.Add(new PivotField("PhysicalProperties.ModulusOfElasticity", "Elast. Modulus (psi)") { Visible = false });
+            PivotFields.Add(new PivotField("Tuning.Note", "Note") { Visible = false });
+
+            foreach (var field in PivotFields)
+                field.ValueType = GetValueType(field.PropertyName);
+        }
+
+        private void BuildPivotGridLayout(bool keepSelection = true)
+        {
+            using (FlagManager.UseFlag("CreatePivotGrid"))
+            {
+                if (CurrentLayout == null)
+                {
+                    dgvStrings.Columns.Clear();
+                    dgvStrings.Rows.Clear();
+                }
+                else
+                {
+                    var currentCell = dgvStrings.CurrentCellAddress;
+
+                    dgvStrings.SuspendLayout();
+                    dgvStrings.Columns.Clear();
+                    dgvStrings.Rows.Clear();
+
+                    for (int i = 0; i < CurrentLayout.NumberOfStrings; i++)
+                    {
+                        var stringCol = new DataGridViewTextBoxColumn()
+                        {
+                            HeaderText = (i + 1).ToString(),
+                            SortMode = DataGridViewColumnSortMode.NotSortable,
+                            Tag = i
+                        };
+                        dgvStrings.Columns.Add(stringCol);
+                    }
+
+                    ApplyColumnOrdering();
+
+                    foreach (var field in PivotFields)
+                    {
+                        var fieldRow = new DataGridViewRow()
+                        {
+                            Tag = field,
+                        };
+                        fieldRow.ReadOnly = field.ReadOnly;
+                        fieldRow.Visible = field.Visible;
+                        dgvStrings.Rows.Add(fieldRow);
+                    }
+
+                    dgvStrings.ResumeLayout(true);
+                    UpdateGridValues();
+                    dgvStrings.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+
+                    if (keepSelection)
+                    {
+                        if (currentCell.X == -1 && currentCell.Y == -1)
+                            dgvStrings.CurrentCell = null;
+                        else if (currentCell.X < dgvStrings.ColumnCount && currentCell.Y < dgvStrings.RowCount)
+                            dgvStrings.CurrentCell = dgvStrings[currentCell.X, currentCell.Y];
+                    }
+                    else
+                        dgvStrings.CurrentCell = null;
+                }
+            }
+        }
+        
+        private void ApplyColumnOrdering()
+        {
+            for (int i = 0; i < dgvStrings.ColumnCount; i++)
+            {
+                dgvStrings.Columns[i].DisplayIndex = GridColumnsSortOrder == ListSortDirection.Ascending ? i : (dgvStrings.ColumnCount - (i + 1));
+            }
         }
 
         public void UpdateFieldsVisibility()
@@ -218,108 +259,57 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         private void UpdateGridValues()
         {
-            LoadingGridValues = true;
             if(CurrentLayout != null)
             {
-                foreach(DataGridViewRow row in dgvStrings.Rows)
+                using (FlagManager.UseFlag("FillPivotGrid"))
                 {
-                    var field = (PivotField)row.Tag;
-                    for (int i = 0; i < CurrentLayout.NumberOfStrings; i++)
+                    foreach (DataGridViewRow row in dgvStrings.Rows)
                     {
-                        
-                        row.Cells[i].Value = GetStringValue(i, field.PropertyName);
-                        row.Cells[i].ValueType = GetValueType(field.PropertyName);
+                        var field = (PivotField)row.Tag;
+                        for (int i = 0; i < dgvStrings.ColumnCount; i++)
+                        {
+                            row.Cells[i].Value = GetCellValue(i, row.Index);
+                            row.Cells[i].ValueType = field.ValueType;
+                        }
                     }
                 }
             }
-            LoadingGridValues = false;
         }
 
-        private object GetStringValue(int stringIndex, string propertyName)
-        {
-            if (!propertyName.Contains("."))
-            {
-                return StringProperties[propertyName].GetValue(CurrentLayout.Strings[stringIndex]);
-            }
-            else
-            {
-                string[] names = propertyName.Split('.');
-                var baseObj = StringProperties[names[0]].GetValue(CurrentLayout.Strings[stringIndex]);
-                if(baseObj != null)
-                {
-                    if(names[0] == "PhysicalProperties")
-                        return PhysicalProperties[names[1]].GetValue(baseObj);
-                }
-            }
-            return null;
-        }
-
-        private Type GetValueType(string propertyName)
-        {
-            if (!propertyName.Contains("."))
-            {
-                return StringProperties[propertyName].PropertyType;
-            }
-            else
-            {
-                string[] names = propertyName.Split('.');
-                if (names[0] == "PhysicalProperties")
-                    return PhysicalProperties[names[1]].PropertyType;
-            }
-            return null;
-        }
-
-        private void SetStringValue(int stringIndex, string propertyName, object value)
-        {
-            if (!propertyName.Contains("."))
-            {
-
-                StringProperties[propertyName].SetValue(CurrentLayout.Strings[stringIndex], value);
-            }
-            else
-            {
-                string[] names = propertyName.Split('.');
-                var baseObj = StringProperties[names[0]].GetValue(CurrentLayout.Strings[stringIndex]);
-                if (baseObj != null)
-                {
-                    if (names[0] == "PhysicalProperties")
-                        PhysicalProperties[names[1]].SetValue(baseObj, value);
-                }
-            }
-        }
+        #region Grid Events
 
         private void dgvStrings_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
-            if (e.ColumnIndex < 0 && e.RowIndex >= 0)
+            if (e.ColumnIndex < 0/* && e.RowIndex >= 0*/)
             {
-                var field = (PivotField)dgvStrings.Rows[e.RowIndex].Tag;
                 e.PaintBackground(e.ClipBounds, true);
                 e.Handled = true;
-                using (var sf = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center })
-                {
-                    using (var textBrush = new SolidBrush(e.CellStyle.ForeColor))
-                    {
-                        e.Graphics.DrawString(field.HeaderText, e.CellStyle.Font, textBrush, e.CellBounds, sf);
-                    }
-                }
-            }
-        }
 
-        private void chkShowAdvanced_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!IsLoading)
-            {
-                UpdateFieldsVisibility();
-                ApplyFieldsVisibility();
+                string cellText = string.Empty;
+
+                if (e.RowIndex >= 0)
+                {
+                    cellText = GetRowField(e.RowIndex).HeaderText;
+                }
+                else
+                {
+                    cellText = GridColumnsSortOrder == ListSortDirection.Ascending ? "Treble -> Bass" : "Bass -> Treble";
+                }
+
+                using (var sf = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center })
+                using (var textBrush = new SolidBrush(e.CellStyle.ForeColor))
+                {
+                    var textBound = Rectangle.FromLTRB(e.CellBounds.Left + 6, e.CellBounds.Top, e.CellBounds.Right, e.CellBounds.Bottom);
+                    e.Graphics.DrawString(cellText, e.CellStyle.Font, textBrush, textBound, sf);
+                }
             }
         }
 
         private void dgvStrings_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (!LoadingGridValues && CurrentLayout != null)
+            if (!IsLoading && !FlagManager["FillPivotGrid"] && CurrentLayout != null)
             {
-                var field = (PivotField)dgvStrings.Rows[e.RowIndex].Tag;
-                SetStringValue(e.ColumnIndex, field.PropertyName, dgvStrings[e.ColumnIndex, e.RowIndex].Value);
+                SetCellValue(e.ColumnIndex, e.RowIndex, dgvStrings[e.ColumnIndex, e.RowIndex].Value);
                 CurrentLayout.RebuildLayout();
                 dgvStrings.AutoResizeColumn(e.ColumnIndex, DataGridViewAutoSizeColumnMode.AllCells);
             }
@@ -341,13 +331,21 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         private void dgvStrings_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
-
+            if (e.ColumnIndex >= 0 && e.RowIndex >= 0 && !IsLoading && !FlagManager["CreatePivotGrid"])
+            {
+                var cellInfo = GetCellFieldAndObject(e.ColumnIndex, e.RowIndex);
+                if (cellInfo.Item1.PropertyName == "MultiScaleRatio")
+                {
+                    double ratio = 0;
+                    if (!double.TryParse((string)e.FormattedValue, out ratio) || ratio < 0 || ratio > 1)
+                        e.Cancel = true;
+                }
+            }
         }
 
         private void dgvStrings_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
-            //var currentField = (PivotField)dgvStrings.Rows[dgvStrings.CurrentCell.RowIndex].Tag;
-            if(dgvStrings.CurrentCell.ValueType == typeof(Measure))
+            if (dgvStrings.CurrentCell.ValueType == typeof(Measure))
             {
                 var length = (Measure)dgvStrings.CurrentCell.Value;
                 (e.Control as TextBox).Text = length.ToString(new Measure.MeasureFormat()
@@ -358,8 +356,127 @@ namespace SiGen.UI.Controls.LayoutEditors
             }
         }
 
+        private void dgvStrings_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.ColumnIndex >= 0 && e.RowIndex >= 0 && !IsLoading && !FlagManager["CreatePivotGrid"])
+            {
+                var cellInfo = GetCellFieldAndObject(e.ColumnIndex, e.RowIndex);
+                if (cellInfo.Item1.PropertyName == "Gauge")
+                {
+                    if (e.Value != null && e.Value is Measure)
+                    {
+                        var curValue = (Measure)e.Value;
+                        e.Value = curValue.ToString(new Measure.MeasureFormat()
+                        {
+                            ShowFractions = false,
+                            AllowApproximation = false
+                        });
+                    }
+                }
+            }
+        }
+
+        private void dgvStrings_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if(CurrentLayout != null && e.ColumnIndex == -1 && e.RowIndex == -1)
+            {
+                if (GridColumnsSortOrder == ListSortDirection.Ascending)
+                    GridColumnsSortOrder = ListSortDirection.Descending;
+                else
+                    GridColumnsSortOrder = ListSortDirection.Ascending;
+                ApplyColumnOrdering();
+            }
+        }
+
         #endregion
 
+        #region Row/Column (Field/Object) Accessors
 
+        private int GetColumnStringIndex(int columnIndex)
+        {
+            return (int)dgvStrings.Columns[columnIndex].Tag;
+        }
+
+        private SIString GetColumnObject(int columnIndex)
+        {
+            return CurrentLayout.Strings[(int)dgvStrings.Columns[columnIndex].Tag];
+        }
+
+        private PivotField GetRowField(int rowIndex)
+        {
+            return (PivotField)dgvStrings.Rows[rowIndex].Tag;
+        }
+
+        private Tuple<PivotField, SIString> GetCellFieldAndObject(int columnIndex, int rowIndex)
+        {
+            return new Tuple<PivotField, SIString>(GetRowField(rowIndex), GetColumnObject(columnIndex));
+        }
+
+        private Type GetValueType(string propertyName)
+        {
+            if (!propertyName.Contains("."))
+            {
+                return StringProperties[propertyName].PropertyType;
+            }
+            else
+            {
+                string[] propNames = propertyName.Split('.');
+                if (propNames[0] == "PhysicalProperties")
+                    return PhysicalProperties[propNames[1]].PropertyType;
+                else if (propNames[0] == "Tuning")
+                    return TuningProperties[propNames[1]].PropertyType;
+            }
+            return null;
+        }
+
+        private void SetCellValue(int columnIndex, int rowIndex, object value)
+        {
+            var cellInfo = GetCellFieldAndObject(columnIndex, rowIndex);
+            if (!cellInfo.Item1.PropertyName.Contains("."))
+            {
+                StringProperties[cellInfo.Item1.PropertyName].SetValue(cellInfo.Item2, value);
+            }
+            else
+            {
+                string[] propNames = cellInfo.Item1.PropertyName.Split('.');
+                var baseObj = StringProperties[propNames[0]].GetValue(cellInfo.Item2);
+                if (baseObj != null)
+                {
+                    if (propNames[0] == "PhysicalProperties")
+                        PhysicalProperties[propNames[1]].SetValue(baseObj, value);
+                    else if (propNames[0] == "Tuning")
+                        TuningProperties[propNames[1]].SetValue(baseObj, value);
+                }
+            }
+        }
+
+        private object GetCellValue(int columnIndex, int rowIndex)
+        {
+            var cellInfo = GetCellFieldAndObject(columnIndex, rowIndex);
+            if (!cellInfo.Item1.PropertyName.Contains("."))
+            {
+                return StringProperties[cellInfo.Item1.PropertyName].GetValue(cellInfo.Item2);
+            }
+            else
+            {
+                string[] propNames = cellInfo.Item1.PropertyName.Split('.');
+                var baseObj = StringProperties[propNames[0]].GetValue(cellInfo.Item2);
+                if (baseObj != null)
+                {
+                    if (propNames[0] == "PhysicalProperties")
+                        return PhysicalProperties[propNames[1]].GetValue(baseObj);
+                    else if (propNames[0] == "Tuning")
+                        return TuningProperties[propNames[1]].GetValue(baseObj);
+                }
+            }
+            return null;
+        }
+
+
+        #endregion
+
+        #endregion
+
+        
     }
 }

@@ -219,7 +219,6 @@ namespace SiGen.StringedInstruments.Layout
 
         #endregion
 
-
         #region Events
 
         public event EventHandler LayoutChanged;
@@ -307,46 +306,51 @@ namespace SiGen.StringedInstruments.Layout
             foreach (var str in Strings)
             {
                 if (str.Tuning != null)
-                {
-                    MusicalNote newNote;
-                    switch (FretsTemperament)
-                    {
-                        default:
-                        case Temperament.Equal:
-                            newNote = MusicalNote.EqualNote(str.Tuning.Note.NoteName, str.Tuning.Note.Octave);
-                            break;
-                        case Temperament.Just:
-                            newNote = MusicalNote.JustNote(str.Tuning.Note.NoteName, str.Tuning.Note.Octave);
-                            break;
-                    }
-                    var offset = new PitchValue();
-                    if (FretsTemperament == Temperament.ThidellFormula)
-                    {
-                        if (newNote.NoteName == NoteName.E && newNote.Octave == 2)
-                            offset = PitchValue.FromCents(-2);
-                        else if (newNote.NoteName == NoteName.D && newNote.Octave == 3)
-                            offset = PitchValue.FromCents(2);
-                        else if (newNote.NoteName == NoteName.G && newNote.Octave == 3)
-                            offset = PitchValue.FromCents(4);
-                        else if (newNote.NoteName == NoteName.B && newNote.Octave == 3)
-                            offset = PitchValue.FromCents(-1);
-                        else if (newNote.NoteName == NoteName.E && newNote.Octave == 4)
-                            offset = PitchValue.FromCents(-1);
-                    }
-                    else if (FretsTemperament == Temperament.DieWohltemperirte)
-                    {
-                        if (newNote.NoteName == NoteName.E && newNote.Octave == 2)
-                            offset = PitchValue.FromCents(-2);
-                        else if (newNote.NoteName == NoteName.D && newNote.Octave == 3)
-                            offset = PitchValue.FromCents(2);
-                        else if (newNote.NoteName == NoteName.G && newNote.Octave == 3)
-                            offset = PitchValue.FromCents(3.9);
-                        else if (newNote.NoteName == NoteName.E && newNote.Octave == 4)
-                            offset = PitchValue.FromCents(-2);
-                    }
-                    str.Tuning = new StringTuning(newNote, offset);
-                }
+                    str.Tuning = GetTuningForNote(str.Tuning.Note, FretsTemperament);
             }
+        }
+
+        public static StringTuning GetTuningForNote(MusicalNote note, Temperament temperament)
+        {
+            MusicalNote newNote;
+            switch (temperament)
+            {
+                default:
+                case Temperament.Equal:
+                    newNote = MusicalNote.EqualNote(note.NoteName, note.Octave);
+                    break;
+                case Temperament.Just:
+                    newNote = MusicalNote.JustNote(note.NoteName, note.Octave);
+                    break;
+            }
+            var offset = new PitchValue();
+            if (temperament == Temperament.ThidellFormula)
+            {
+                offset = PitchValue.FromCents(NoteConverter.ThidellFormulaChromaticOffsets[(int)newNote.NoteName]);
+                //if (newNote.NoteName == NoteName.E && newNote.Octave == 2)
+                //    offset = PitchValue.FromCents(-2);
+                //else if (newNote.NoteName == NoteName.D && newNote.Octave == 3)
+                //    offset = PitchValue.FromCents(2);
+                //else if (newNote.NoteName == NoteName.G && newNote.Octave == 3)
+                //    offset = PitchValue.FromCents(4);
+                //else if (newNote.NoteName == NoteName.B && newNote.Octave == 3)
+                //    offset = PitchValue.FromCents(-1);
+                //else if (newNote.NoteName == NoteName.E && newNote.Octave == 4)
+                //    offset = PitchValue.FromCents(-1);
+            }
+            else if (temperament == Temperament.DieWohltemperirte)
+            {
+                offset = PitchValue.FromCents(NoteConverter.DieWohltemperirteChromaticOffsets[(int)newNote.NoteName]);
+                //if (newNote.NoteName == NoteName.E && newNote.Octave == 2)
+                //    offset = PitchValue.FromCents(-2);
+                //else if (newNote.NoteName == NoteName.D && newNote.Octave == 3)
+                //    offset = PitchValue.FromCents(2);
+                //else if (newNote.NoteName == NoteName.G && newNote.Octave == 3)
+                //    offset = PitchValue.FromCents(3.9);
+                //else if (newNote.NoteName == NoteName.E && newNote.Octave == 4)
+                //    offset = PitchValue.FromCents(-2);
+            }
+            return new StringTuning(newNote, offset);
         }
 
         internal void NotifyLayoutChanged(object sender, string propname)

@@ -191,8 +191,9 @@ namespace SiGen.StringedInstruments.Layout
             {
                 if (value != _Tuning)
                 {
+                    //_Tuning = SILayout.GetTuningForNote(value.Note, Layout.FretsTemperament);
                     _Tuning = value;
-                    if (Layout.FretsTemperament != Temperament.Equal)
+                    if (Layout.FretsTemperament != Temperament.Equal || Layout.CompensateFretPositions)
                         Layout.NotifyLayoutChanged(this, "Tuning");
                     //EnsureCanStillCalculateCompentation();
                 }
