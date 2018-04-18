@@ -107,6 +107,7 @@
             this.tssbOpen.Size = new System.Drawing.Size(68, 22);
             this.tssbOpen.Text = "Open";
             this.tssbOpen.ButtonClick += new System.EventHandler(this.tssbOpen_ButtonClick);
+            this.tssbOpen.MouseHover += new System.EventHandler(this.tssbOpen_MouseHover);
             // 
             // tsmiOpenFile
             // 

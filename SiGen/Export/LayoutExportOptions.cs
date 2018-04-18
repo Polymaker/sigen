@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace SiGen.Export
 {
+    [Serializable]
     public class LayoutExportOptions
     {
         public bool ExportStrings { get; set; }
@@ -16,9 +17,9 @@ namespace SiGen.Export
         public bool ExportFrets { get; set; }
         public bool ExportFingerboard { get; set; }
         public bool ExportFingerboardMargin { get; set; }
-        public bool UseStringGauge { get; set; }
-        
+
         public Measure FretSlotsExtensionAmount { get; set; }
+
         public bool ExtendFretSlots { get { return !FretSlotsExtensionAmount.IsEmpty && FretSlotsExtensionAmount > Measure.Zero; } }
 
         public LayoutExportOptions()
@@ -29,6 +30,7 @@ namespace SiGen.Export
         }
     }
 
+    [Serializable]
     public class LayoutSvgExportOptions : LayoutExportOptions
     {
         public bool InkscapeCompatible { get; set; }
@@ -37,6 +39,7 @@ namespace SiGen.Export
         public Color FretColor { get; set; }
         public Color StringColor { get; set; }
         public Color FingerboardColor { get; set; }
+        public bool UseStringGauge { get; set; }
 
         public LayoutSvgExportOptions() : base()
         {

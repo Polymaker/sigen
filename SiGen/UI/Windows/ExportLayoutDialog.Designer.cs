@@ -55,6 +55,7 @@
             this.btnExport = new System.Windows.Forms.Button();
             this.lblExportFormat = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.cboExportConfig = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -111,6 +112,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.cboExportConfig);
             this.groupBox1.Controls.Add(this.chkExportStringCenters);
             this.groupBox1.Controls.Add(this.gbxFretsOptions);
             this.groupBox1.Controls.Add(this.chkExportStrings);
@@ -360,7 +362,15 @@
             this.lblExportFormat.TabIndex = 2;
             this.lblExportFormat.Text = "Export Format";
             // 
-            // LayoutExportDialog
+            // cboExportConfig
+            // 
+            this.cboExportConfig.FormattingEnabled = true;
+            this.cboExportConfig.Location = new System.Drawing.Point(198, 18);
+            this.cboExportConfig.Name = "cboExportConfig";
+            this.cboExportConfig.Size = new System.Drawing.Size(121, 21);
+            this.cboExportConfig.TabIndex = 10;
+            // 
+            // ExportLayoutDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -369,7 +379,7 @@
             this.Controls.Add(this.splitContainer1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "LayoutExportDialog";
+            this.Name = "ExportLayoutDialog";
             this.Text = "Export Instrument Layout";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -416,5 +426,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox chkExportStringCenters;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ComboBox cboExportConfig;
     }
 }

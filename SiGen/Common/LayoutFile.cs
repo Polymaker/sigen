@@ -24,5 +24,21 @@ namespace SiGen.Common
             FileName = filename;
             Layout = SILayout.Load(filename);
         }
+
+
+        public static LayoutFile Open(string filename, bool asTemplate = false)
+        {
+            var layout = SILayout.Load(filename);
+            var file = new LayoutFile(layout);
+            if (!asTemplate)
+                file.FileName = filename;
+            return file;
+        }
+
+        public static LayoutFile OpenTemplate(string filename)
+        {
+            var layout = SILayout.Load(filename);
+            return new LayoutFile(layout) { FileName = string.Empty };
+        }
     }
 }

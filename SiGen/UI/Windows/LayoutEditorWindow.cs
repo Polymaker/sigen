@@ -56,7 +56,9 @@ namespace SiGen.UI
         {
             base.OnLoad(e);
             InitializeEditingPanels();
-            LoadLayout(new LayoutFile(SILayout.Load("DefaultLayout.sil")));
+            OpenLayoutFile("DefaultLayout.sil", true);
+            AppPreferences.ValidateRecentFiles();
+            RebuildRecentFilesMenu();
         }
 
         #region Document Management
@@ -131,7 +133,8 @@ namespace SiGen.UI
             if (layoutFile.Layout.VisualElements.Count == 0 || layoutFile.Layout.IsLayoutDirty)
                 layoutFile.Layout.RebuildLayout();
 
-            documentPanel.Viewer.CurrentLayout = layoutFile.Layout;
+            documentPanel.CurrentFile = layoutFile;
+            //documentPanel.Viewer.CurrentLayout = layoutFile.Layout;
             documentPanel.Viewer.BackColor = Color.White;
             documentPanel.Viewer.Font = new Font(Font.FontFamily, Font.Size * 1.4f);
             documentPanel.Viewer.DisplayConfig.RenderRealStrings = true;
@@ -249,28 +252,15 @@ namespace SiGen.UI
 
         #endregion
 
-        private void tsbNew_Click(object sender, EventArgs e)
-        {
-            LoadLayout(new LayoutFile(SILayout.Load("DefaultLayout.sil")));
-        }
+        #region Open
 
         private void tssbOpen_ButtonClick(object sender, EventArgs e)
         {
             using (var ofd = new OpenFileDialog())
             {
                 ofd.Filter = "SI Layout file (*.sil)|*.sil";
-                if(ofd.ShowDialog() == DialogResult.OK)
-                {
-                    try
-                    {
-                        var layoutToOpen = new LayoutFile(ofd.FileName);
-                        LoadLayout(layoutToOpen);
-                    }
-                    catch(Exception ex)
-                    {
-                        MessageBox.Show("An error occured: " + ex.ToString());
-                    }
-                }
+                if (ofd.ShowDialog() == DialogResult.OK)
+                    OpenLayoutFile(ofd.FileName);
             }
         }
 
@@ -279,10 +269,91 @@ namespace SiGen.UI
             tssbOpen_ButtonClick(sender, e);
         }
 
+        private void OpenLayoutFile(string filename, bool asTemplate = false)
+        {
+            try
+            {
+                bool cancelOpen = false;
+                if (!asTemplate)
+                {
+                    foreach(var doc in dockPanel1.Documents)
+                    {
+                        if((doc as LayoutViewerPanel).CurrentFile.FileName == filename)
+                        {
+                            (doc as LayoutViewerPanel).Activate();
+                            var result = MessageBox.Show("The file is already open. do you want to reaload it?", "", MessageBoxButtons.YesNo);
+                            if (result == DialogResult.Yes)
+                            {
+                                var layout = LayoutFile.Open(filename, false);
+                                layout.Layout.RebuildLayout();
+                                (doc as LayoutViewerPanel).CurrentFile = layout;
+                                SetEditorsActiveLayout(layout.Layout);
+                            }
+                            cancelOpen = true;
+                            break;
+                        }
+                    }
+                }
+
+                if(!cancelOpen)
+                    LoadLayout(LayoutFile.Open(filename, asTemplate));
+
+                if (!asTemplate)
+                {
+                    AppPreferences.AddRecentFile(filename);
+                    RebuildRecentFilesMenu();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occured: " + ex.ToString());
+            }
+        }
+
+        private void tssbOpen_MouseHover(object sender, EventArgs e)
+        {
+            tssbOpen.ShowDropDown();
+        }
+
         private void LoadLayout(LayoutFile layout)
         {
             var documentPanel = CreateDocumentPanel(layout);
             documentPanel.Show(dockPanel1, DockState.Document);
+        }
+
+        private void RebuildRecentFilesMenu()
+        {
+            for (int i = tssbOpen.DropDownItems.Count - 1; i >= 0; i--)
+            {
+                if (tssbOpen.DropDownItems[i].Tag is AppPreferences.RecentFile)
+                {
+                    tssbOpen.DropDownItems[i].Click -= RecentFileMenu_Click;
+                    tssbOpen.DropDownItems.RemoveAt(i);
+                }
+            }
+
+            int counter = 0;
+
+            foreach (var filename in AppPreferences.Current.RecentFiles)
+            {
+                var fileMenu = tssbOpen.DropDownItems.Add(string.Format("{0}: {1}", ++counter, filename.Filename));
+                fileMenu.Tag = filename;
+                fileMenu.Click += RecentFileMenu_Click;
+            }
+
+            tsSeparatorOpen.Visible = AppPreferences.Current.RecentFiles.Count > 0;
+        }
+
+        private void RecentFileMenu_Click(object sender, EventArgs e)
+        {
+            OpenLayoutFile(((sender as ToolStripItem).Tag as AppPreferences.RecentFile).Filename);
+        }
+
+        #endregion
+
+        private void tsbNew_Click(object sender, EventArgs e)
+        {
+            OpenLayoutFile("DefaultLayout.sil", true);
         }
 
         private void tssbExport_Click(object sender, EventArgs e)
@@ -296,5 +367,7 @@ namespace SiGen.UI
             using (var dlg = new AppPreferencesWindow())
                 dlg.ShowDialog();
         }
+
+        
     }
 }

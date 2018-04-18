@@ -18,8 +18,6 @@ namespace SiGen.UI
 
         private static readonly Vector FlipY = new Vector(1, -1);
 
-        
-
         private Vector PointToVector(PointM pos)
         {
             //if (DisplayConfig.FretboardOrientation == Orientation.Horizontal)

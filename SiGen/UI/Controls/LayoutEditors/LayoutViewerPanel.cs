@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SiGen.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,7 +15,22 @@ namespace SiGen.UI.Controls.LayoutEditors
     public partial class LayoutViewerPanel : DockContent
     {
         private double ScreenDPI;
+        private LayoutFile _CurrentFile;
+
         public LayoutViewer Viewer { get { return layoutViewer1; } }
+
+        public LayoutFile CurrentFile
+        {
+            get { return _CurrentFile; }
+            set
+            {
+                if(value != _CurrentFile)
+                {
+                    _CurrentFile = value;
+                    Viewer.CurrentLayout = value != null ? value.Layout : null;
+                }
+            }
+        }
 
         public LayoutViewerPanel()
         {
