@@ -53,7 +53,7 @@
             // tsLblSpacer
             // 
             this.tsLblSpacer.Name = "tsLblSpacer";
-            this.tsLblSpacer.Size = new System.Drawing.Size(427, 19);
+            this.tsLblSpacer.Size = new System.Drawing.Size(396, 19);
             this.tsLblSpacer.Spring = true;
             // 
             // tsLblZoom

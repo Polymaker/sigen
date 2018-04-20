@@ -77,7 +77,7 @@ namespace SiGen.StringedInstruments.Layout
                 {
                     _NumberOfFrets = value;
                     //Layout.OnStringConfigChanged(this, "NumberOfFrets");
-                    Layout.NotifyLayoutChanged(this, "NumberOfFrets");
+                    NotifyLayoutChanged("NumberOfFrets");
                 }
             }
         }
@@ -97,7 +97,7 @@ namespace SiGen.StringedInstruments.Layout
                 {
                     _StartingFret = value;
                     //Layout.OnStringConfigChanged(this, "StartingFret");
-                    Layout.NotifyLayoutChanged(this, "StartingFret");
+                    NotifyLayoutChanged("StartingFret");
                 }
             }
         }
@@ -128,7 +128,7 @@ namespace SiGen.StringedInstruments.Layout
                 if (value != _MultiScaleRatio)
                 {
                     _MultiScaleRatio = value;
-                    Layout.NotifyLayoutChanged(this, "MultiScaleRatio");
+                    NotifyLayoutChanged("MultiScaleRatio");
                 }
             }
         }
@@ -162,7 +162,7 @@ namespace SiGen.StringedInstruments.Layout
                 if (value != _PhysicalProperties)
                 {
                     _PhysicalProperties = value;
-                    Layout.NotifyLayoutChanged(this, "PhysicalProperties");
+                    NotifyLayoutChanged("PhysicalProperties");
                     //EnsureCanStillCalculateCompentation();
                 }
             }
@@ -180,7 +180,12 @@ namespace SiGen.StringedInstruments.Layout
             {
                 if (PhysicalProperties == null)
                     PhysicalProperties = new StringProperties();
-                PhysicalProperties.StringDiameter = value;
+
+                if (PhysicalProperties.StringDiameter != value)
+                {
+                    PhysicalProperties.StringDiameter = value;
+                    NotifyLayoutChanged("PhysicalProperties");
+                }
             }
         }
 
@@ -194,7 +199,7 @@ namespace SiGen.StringedInstruments.Layout
                     //_Tuning = SILayout.GetTuningForNote(value.Note, Layout.FretsTemperament);
                     _Tuning = value;
                     if (Layout.FretsTemperament != Temperament.Equal || Layout.CompensateFretPositions)
-                        Layout.NotifyLayoutChanged(this, "Tuning");
+                        NotifyLayoutChanged("Tuning");
                     //EnsureCanStillCalculateCompentation();
                 }
             }

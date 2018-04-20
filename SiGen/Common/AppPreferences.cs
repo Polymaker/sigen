@@ -137,9 +137,13 @@ namespace SiGen.Common
             [XmlIgnore]
             public List<RecentFile> RecentFiles { get { return FileHistoryConfig.Files; } }
 
+            //[XmlArray("Screens"), XmlArrayItem("Screen")]
+            //public List<ScreenConfig> Screens { get; set; }
+
             public AppConfig()
             {
                 FileHistoryConfig = new FileHistory();
+                //Screens = new List<ScreenConfig>();
             }
         }
 
@@ -157,7 +161,6 @@ namespace SiGen.Common
             }
         }
 
-        [XmlRoot("File"), XmlType("File")]
         public class RecentFile
         {
             [XmlAttribute("Filename")]
@@ -165,6 +168,14 @@ namespace SiGen.Common
             public RecentFile() { Filename = string.Empty; }
             public RecentFile(string filename) { Filename = filename; }
         }
+
+        //public class ScreenConfig
+        //{
+        //    [XmlAttribute]
+        //    public string ID { get; set; }
+        //    [XmlAttribute]
+        //    public int DPI { get; set; }
+        //}
 
         #endregion
     }

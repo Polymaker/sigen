@@ -16,5 +16,11 @@ namespace SiGen.UI.Windows
         {
             InitializeComponent();
         }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            var screens = Configuration.ScreenConfiguration.EnumarateScreens();
+        }
     }
 }

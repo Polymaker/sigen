@@ -33,8 +33,8 @@ namespace SiGen.UI
         {
             get
             {
-                if (dockPanel1.ActiveDocument != null)
-                    return (LayoutFile)(dockPanel1.ActiveDocument as DockContent).Tag;
+                if ((dockPanel1.ActiveDocument as LayoutViewerPanel) != null)
+                    return (dockPanel1.ActiveDocument as LayoutViewerPanel).CurrentFile;
                 return null;
             }
         }
@@ -43,7 +43,7 @@ namespace SiGen.UI
         {
             get
             {
-                return dockPanel1.Documents.OfType<LayoutViewerPanel>().Where(d => (d.Tag as LayoutFile) != null).Select(d => (LayoutFile)d.Tag);
+                return dockPanel1.Documents.OfType<LayoutViewerPanel>().Select(d => d.CurrentFile);
             }
         }
 

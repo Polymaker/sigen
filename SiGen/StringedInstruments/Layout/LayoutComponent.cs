@@ -47,5 +47,16 @@ namespace SiGen.StringedInstruments.Layout
         {
 
         }
+
+        protected void NotifyLayoutChanged(string propertyName)
+        {
+            NotifyLayoutChanged(this, propertyName);
+        }
+
+        protected void NotifyLayoutChanged(object sender, string propertyName)
+        {
+            if (Layout != null)
+                Layout.NotifyLayoutChanged(sender, propertyName);
+        }
     }
 }

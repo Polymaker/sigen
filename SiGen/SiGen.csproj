@@ -58,6 +58,8 @@
     <Compile Include="Common\AppPreferences.cs" />
     <Compile Include="Common\LayoutFile.cs" />
     <Compile Include="Common\StringType.cs" />
+    <Compile Include="Configuration\DisplayPreferences.cs" />
+    <Compile Include="Configuration\ScreenConfiguration.cs" />
     <Compile Include="Export\LayoutExportOptions.cs" />
     <Compile Include="Export\SvgLayoutExporter.cs" />
     <Compile Include="Maths\Angle.cs" />
