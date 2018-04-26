@@ -42,10 +42,10 @@
             this.tsLblSpacer,
             this.tsLblZoom,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 299);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 337);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.Size = new System.Drawing.Size(598, 24);
+            this.statusStrip1.Size = new System.Drawing.Size(577, 24);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
@@ -53,7 +53,7 @@
             // tsLblSpacer
             // 
             this.tsLblSpacer.Name = "tsLblSpacer";
-            this.tsLblSpacer.Size = new System.Drawing.Size(396, 19);
+            this.tsLblSpacer.Size = new System.Drawing.Size(406, 19);
             this.tsLblSpacer.Spring = true;
             // 
             // tsLblZoom
@@ -78,7 +78,7 @@
             this.layoutViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layoutViewer1.Location = new System.Drawing.Point(0, 0);
             this.layoutViewer1.Name = "layoutViewer1";
-            this.layoutViewer1.Size = new System.Drawing.Size(598, 299);
+            this.layoutViewer1.Size = new System.Drawing.Size(577, 337);
             this.layoutViewer1.TabIndex = 1;
             this.layoutViewer1.Text = "layoutViewer1";
             this.layoutViewer1.ZoomChanged += new System.EventHandler(this.layoutViewer1_ZoomChanged);
@@ -87,7 +87,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(598, 323);
+            this.ClientSize = new System.Drawing.Size(577, 361);
             this.Controls.Add(this.layoutViewer1);
             this.Controls.Add(this.statusStrip1);
             this.Name = "LayoutViewerPanel";

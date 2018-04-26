@@ -70,7 +70,7 @@
             // pbxMeasureDPI
             // 
             this.pbxMeasureDPI.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pbxMeasureDPI.Location = new System.Drawing.Point(20, 7);
+            this.pbxMeasureDPI.Location = new System.Drawing.Point(39, 13);
             this.pbxMeasureDPI.Name = "pbxMeasureDPI";
             this.pbxMeasureDPI.Size = new System.Drawing.Size(128, 122);
             this.pbxMeasureDPI.TabIndex = 5;
@@ -143,7 +143,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(168, 160);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(207, 172);
             this.tableLayoutPanel1.TabIndex = 12;
             // 
             // flowLayoutPanel1
@@ -153,7 +153,7 @@
             this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanel1.Controls.Add(this.rbCM);
             this.flowLayoutPanel1.Controls.Add(this.rbIN);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(17, 137);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(37, 149);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(133, 23);
@@ -167,7 +167,7 @@
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.Location = new System.Drawing.Point(283, 7);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(174, 179);
+            this.groupBox1.Size = new System.Drawing.Size(213, 191);
             this.groupBox1.TabIndex = 13;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Preview";
@@ -194,7 +194,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(469, 195);
+            this.ClientSize = new System.Drawing.Size(508, 207);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.numDPI);
             this.Controls.Add(this.cboScreens);

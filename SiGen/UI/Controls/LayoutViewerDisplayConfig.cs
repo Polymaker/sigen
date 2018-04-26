@@ -11,6 +11,7 @@ namespace SiGen.UI
 {
     public class LayoutViewerDisplayConfig : INotifyPropertyChanged
     {
+        private bool _ShowCenterLine;
         private bool _ShowStrings;
         private bool _ShowFrets;
         private bool _ShowMidlines;
@@ -20,6 +21,20 @@ namespace SiGen.UI
         private UnitOfMeasure _DefaultDisplayUnit;
         private Measure _FretWidth;
         private Orientation _FingerboardOrientation;
+
+        [DefaultValue(false)]
+        public bool ShowCenterLine
+        {
+            get { return _ShowCenterLine; }
+            set
+            {
+                if (value != _ShowCenterLine)
+                {
+                    _ShowCenterLine = value;
+                    OnPropertyChanged("ShowCenterLine");
+                }
+            }
+        }
 
         [DefaultValue(true)]
         public bool ShowStrings

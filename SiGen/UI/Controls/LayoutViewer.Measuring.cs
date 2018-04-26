@@ -238,7 +238,6 @@ namespace SiGen.UI
             }
         }
 
-        private bool IsMeasuring;
         private Vector MeasureFirstSelection;
         private Vector MeasureLastSelection;
         private List<MeasureValueBox> MeasureBoxes;
@@ -249,7 +248,7 @@ namespace SiGen.UI
             MeasureFirstSelection = Vector.Empty;
             MeasureLastSelection = Vector.Empty;
             _CurrentMeasure = null;
-            IsMeasuring = true;
+            _IsMeasuring = false;
             InitializeMeasureContextMenu();
         }
 
@@ -316,6 +315,7 @@ namespace SiGen.UI
             if (_CurrentMeasure != null || !MeasureFirstSelection.IsEmpty || MeasureBoxes.Count > 0)
             {
                 _CurrentMeasure = null;
+                _IsMeasuring = false;
                 MeasureBoxes.Clear();
                 MeasureFirstSelection = Vector.Empty;
                 MeasureLastSelection = Vector.Empty;
@@ -354,6 +354,7 @@ namespace SiGen.UI
                 if (!pos.IsEmpty)
                 {
                     MeasureFirstSelection = pos;
+                    _IsMeasuring = true;
                     Invalidate();
                 }
             }

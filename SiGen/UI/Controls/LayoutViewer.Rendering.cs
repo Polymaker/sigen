@@ -77,13 +77,25 @@ namespace SiGen.UI
 
         private void RenderFingerboard(Graphics g)
         {
+            if (DisplayConfig.ShowCenterLine)
+            {
+                var layoutBounds = CurrentLayout.GetLayoutBounds();
+                using (var guidePen = GetPen(Color.Black, 1))
+                {
+                    DrawLine(g, guidePen, new PointM(Measure.Zero, layoutBounds.Top), new PointM(Measure.Zero, layoutBounds.Bottom));
+                }
+            }
+
             if (DisplayConfig.ShowMidlines)
             {
                 using (var guidePen = GetPen(Color.Gainsboro, 1))
                 {
                     guidePen.DashPattern = new float[] { 6, 4, 2, 4 };
                     foreach (var stringCenter in CurrentLayout.VisualElements.OfType<StringCenter>())
-                        DrawLine(g, guidePen, stringCenter.P1, stringCenter.P2);
+                    {
+                        if(!DisplayConfig.ShowCenterLine || !(stringCenter.Equation.IsVertical && stringCenter.Equation.X == 0))
+                            DrawLine(g, guidePen, stringCenter.P1, stringCenter.P2);
+                    }
                 }
             }
 

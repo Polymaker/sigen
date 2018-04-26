@@ -45,6 +45,7 @@ namespace SiGen.UI.Windows
             chkExportFrets.Checked = SvgExportOptions.ExportFrets;
             chkExportStrings.Checked = SvgExportOptions.ExportStrings;
             chkExportStringCenters.Checked = SvgExportOptions.ExportStringCenters;
+            chkExportCenterLine.Checked = SvgExportOptions.ExportCenterLine;
             UpdatePreview();
 
             if (SvgExportOptions.ExtendFretSlots)
@@ -82,6 +83,7 @@ namespace SiGen.UI.Windows
             layoutPreview.DisplayConfig.ShowStrings = SvgExportOptions.ExportStrings;
             layoutPreview.DisplayConfig.ShowFrets = SvgExportOptions.ExportFrets;
             layoutPreview.DisplayConfig.ShowMidlines = SvgExportOptions.ExportStringCenters;
+            layoutPreview.DisplayConfig.ShowCenterLine = SvgExportOptions.ExportCenterLine;
         }
 
         private void btnExport_Click(object sender, EventArgs e)
@@ -174,6 +176,13 @@ namespace SiGen.UI.Windows
             UpdatePreview();
         }
 
+        private void chkExportCenterLine_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!isLoading)
+                SvgExportOptions.ExportCenterLine = chkExportCenterLine.Checked;
+            UpdatePreview();
+        }
+
         private void btnPickFretColor_Click(object sender, EventArgs e)
         {
             using(var dlg = new ColorDialog())
@@ -186,5 +195,7 @@ namespace SiGen.UI.Windows
                 }
             }
         }
+
+        
     }
 }

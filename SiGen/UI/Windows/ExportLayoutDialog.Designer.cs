@@ -33,6 +33,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.layoutPreview = new SiGen.UI.LayoutViewer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cboExportConfig = new System.Windows.Forms.ComboBox();
             this.chkExportStringCenters = new System.Windows.Forms.CheckBox();
             this.gbxFretsOptions = new System.Windows.Forms.GroupBox();
             this.pbxFretColor = new System.Windows.Forms.PictureBox();
@@ -55,7 +56,7 @@
             this.btnExport = new System.Windows.Forms.Button();
             this.lblExportFormat = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.cboExportConfig = new System.Windows.Forms.ComboBox();
+            this.chkExportCenterLine = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -112,6 +113,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chkExportCenterLine);
             this.groupBox1.Controls.Add(this.cboExportConfig);
             this.groupBox1.Controls.Add(this.chkExportStringCenters);
             this.groupBox1.Controls.Add(this.gbxFretsOptions);
@@ -128,6 +130,14 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Export Options";
+            // 
+            // cboExportConfig
+            // 
+            this.cboExportConfig.FormattingEnabled = true;
+            this.cboExportConfig.Location = new System.Drawing.Point(198, 18);
+            this.cboExportConfig.Name = "cboExportConfig";
+            this.cboExportConfig.Size = new System.Drawing.Size(121, 21);
+            this.cboExportConfig.TabIndex = 10;
             // 
             // chkExportStringCenters
             // 
@@ -362,13 +372,17 @@
             this.lblExportFormat.TabIndex = 2;
             this.lblExportFormat.Text = "Export Format";
             // 
-            // cboExportConfig
+            // chkExportCenterLine
             // 
-            this.cboExportConfig.FormattingEnabled = true;
-            this.cboExportConfig.Location = new System.Drawing.Point(198, 18);
-            this.cboExportConfig.Name = "cboExportConfig";
-            this.cboExportConfig.Size = new System.Drawing.Size(121, 21);
-            this.cboExportConfig.TabIndex = 10;
+            this.chkExportCenterLine.AutoSize = true;
+            this.chkExportCenterLine.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkExportCenterLine.Location = new System.Drawing.Point(11, 112);
+            this.chkExportCenterLine.Name = "chkExportCenterLine";
+            this.chkExportCenterLine.Size = new System.Drawing.Size(113, 17);
+            this.chkExportCenterLine.TabIndex = 11;
+            this.chkExportCenterLine.Text = "Export Center Line";
+            this.chkExportCenterLine.UseVisualStyleBackColor = true;
+            this.chkExportCenterLine.CheckedChanged += new System.EventHandler(this.chkExportCenterLine_CheckedChanged);
             // 
             // ExportLayoutDialog
             // 
@@ -427,5 +441,6 @@
         private System.Windows.Forms.CheckBox chkExportStringCenters;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ComboBox cboExportConfig;
+        private System.Windows.Forms.CheckBox chkExportCenterLine;
     }
 }

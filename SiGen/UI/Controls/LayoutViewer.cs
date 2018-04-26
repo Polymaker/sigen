@@ -23,7 +23,9 @@ namespace SiGen.UI
         private bool manualZoom;
         private Vector cameraPosition;//independant of orientation
         private LayoutMeasure _CurrentMeasure;
-        
+        private bool _EnableMeasureTool;
+        private bool _IsMeasuring;
+
         private SILayout _CurrentLayout;
         private const int PADDING_BORDER = 6;
         private List<Vector> LayoutIntersections;
@@ -58,6 +60,27 @@ namespace SiGen.UI
 
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), EditorBrowsable(EditorBrowsableState.Advanced)]
         public double Zoom { get { return _Zoom; } }
+
+        [DefaultValue(false)]
+        public bool EnableMeasureTool
+        {
+            get { return _EnableMeasureTool; }
+            set
+            {
+                if(value != _EnableMeasureTool)
+                {
+                    _EnableMeasureTool = value;
+                    if (!DesignMode && !value)
+                        ClearMeasuring();
+                }
+            }
+        }
+
+        [Browsable(false)]
+        public bool IsMeasuring
+        {
+            get { return _IsMeasuring; }
+        }
 
         #endregion
 
@@ -416,7 +439,7 @@ namespace SiGen.UI
             {
                 if (e.Button == MouseButtons.Left)
                 {
-                    if (IsMeasuring)
+                    if (EnableMeasureTool)
                         CaptureMeasure(e.Location);
                     
                 }

@@ -22,6 +22,12 @@ namespace SiGen.Configuration
         public bool IsPrimary { get; set; }
         [XmlAttribute]
         public int DPI { get; set; }
+        [XmlAttribute]
+        public int ResolutionX { get; set; }
+        [XmlAttribute]
+        public int ResolutionY { get; set; }
+        [XmlIgnore]
+        public bool HasChanged { get; set; }
 
         #region PInvoke
 
@@ -91,7 +97,7 @@ namespace SiGen.Configuration
                         var match = GrabDisplayIndex.Match(d.DeviceName);
                         if (match.Success)
                             displayIndex = int.Parse(match.Groups[1].Value);
-
+                        
                         screenList.Add(new ScreenConfiguration()
                         {
                             ID = d.DeviceID,

@@ -11,7 +11,7 @@ namespace SiGen.Configuration
     {
         private List<ScreenConfiguration> _Screens;
 
-        [XmlArray("ScreenConfigurations"), XmlArrayItem("Screen")]
+        [XmlArray("MonitorsConfiguration"), XmlArrayItem("Screen")]
         public List<ScreenConfiguration> Screens { get { return _Screens; } }
 
         public DisplayPreferences()

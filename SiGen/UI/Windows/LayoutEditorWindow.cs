@@ -39,6 +39,14 @@ namespace SiGen.UI
             }
         }
 
+        private LayoutViewerPanel ActiveDocument
+        {
+            get
+            {
+                return dockPanel1.ActiveDocument as LayoutViewerPanel;
+            }
+        }
+
         private IEnumerable<LayoutFile> OpenDocuments
         {
             get
@@ -71,31 +79,42 @@ namespace SiGen.UI
             stringConfigPanel.Show(dockPanel1, DockState.DockBottom);
             stringConfigPanel.Text = "General Configuration";
             
-            stringSpacingPanel = new LayoutEditorPanel<StringSpacingEditor>();
-            stringSpacingPanel.Show(stringConfigPanel.Pane, DockAlignment.Right, 0.6);
-            stringSpacingPanel.Text = "String Spacing";
+            
 
             layoutMarginPanel = new LayoutEditorPanel<FingerboardMarginEditor>();
-            layoutMarginPanel.Show(stringSpacingPanel.Pane, DockAlignment.Right, .5);
+            layoutMarginPanel.Show(stringConfigPanel.Pane, DockAlignment.Right, .6);
             layoutMarginPanel.Text = "Fingerboard Margins";
 
-            layoutInfoPanel = new LayoutEditorPanel<LayoutProperties>();
-            layoutInfoPanel.Show(layoutMarginPanel.Pane, DockAlignment.Bottom, .4);
-            layoutInfoPanel.Text = "Layout Properties";
+            stringSpacingPanel = new LayoutEditorPanel<StringSpacingEditor>();
+            stringSpacingPanel.Show(layoutMarginPanel.Pane, DockAlignment.Right, 0.5);
+            stringSpacingPanel.Text = "String Spacing";
+            //layoutInfoPanel = new LayoutEditorPanel<LayoutProperties>();
+            //layoutInfoPanel.Show(layoutMarginPanel.Pane, DockAlignment.Bottom, .4);
+            //layoutInfoPanel.Text = "Layout Properties";
 
             scaleLengthPanel = new LayoutEditorPanel<ScaleLengthEditor>();
-            scaleLengthPanel.Show(stringConfigPanel.Pane, null);
+            scaleLengthPanel.Show(layoutMarginPanel.Pane, DockAlignment.Bottom, .4);
+            //scaleLengthPanel.Show(stringConfigPanel.Pane, null);
             scaleLengthPanel.Text = "Scale Length";
-            stringConfigPanel.Activate();
+            //stringConfigPanel.Activate();
 
         }
 
         private void dockPanel1_ActiveDocumentChanged(object sender, EventArgs e)
         {
-            if (CurrentFile != null)
+            if (ActiveDocument != null && ActiveDocument.CurrentFile != null)
+            {
                 SetEditorsActiveLayout(CurrentFile.Layout);
+                tsbMeasureTool.Checked = ActiveDocument.Viewer.EnableMeasureTool;
+                tsbMeasureTool.CheckOnClick = true;
+            }
             else
+            {
                 SetEditorsActiveLayout(null);
+                tsbMeasureTool.Checked = false;
+                tsbMeasureTool.CheckOnClick = false;
+            }
+
         }
 
         private void SetEditorsActiveLayout(SILayout layout)
@@ -207,6 +226,7 @@ namespace SiGen.UI
 
         private void SaveLayout(LayoutFile file, bool selectPath)
         {
+            bool isNew = string.IsNullOrEmpty(file.FileName);
             if (selectPath)
             {
                 using (var sfd = new SaveFileDialog())
@@ -229,7 +249,14 @@ namespace SiGen.UI
 
             //if (string.IsNullOrEmpty(file.Layout.LayoutName))
             //    file.Layout.LayoutName = Path.GetFileNameWithoutExtension(file.FileName);
+
             file.Layout.Save(file.FileName);
+
+            if (isNew)
+            {
+                AppPreferences.AddRecentFile(file.FileName);
+                RebuildRecentFilesMenu();
+            }
         }
 
         private void tssbSave_ButtonClick(object sender, EventArgs e)
@@ -256,6 +283,7 @@ namespace SiGen.UI
 
         private void tssbOpen_ButtonClick(object sender, EventArgs e)
         {
+            tssbOpen.HideDropDown();
             using (var ofd = new OpenFileDialog())
             {
                 ofd.Filter = "SI Layout file (*.sil)|*.sil";
@@ -281,7 +309,7 @@ namespace SiGen.UI
                         if((doc as LayoutViewerPanel).CurrentFile.FileName == filename)
                         {
                             (doc as LayoutViewerPanel).Activate();
-                            var result = MessageBox.Show("The file is already open. do you want to reaload it?", "", MessageBoxButtons.YesNo);
+                            var result = MessageBox.Show(MSG_FileAlreadyOpen, "", MessageBoxButtons.YesNo);
                             if (result == DialogResult.Yes)
                             {
                                 var layout = LayoutFile.Open(filename, false);
@@ -310,10 +338,12 @@ namespace SiGen.UI
             }
         }
 
+ 
         private void tssbOpen_MouseHover(object sender, EventArgs e)
         {
             tssbOpen.ShowDropDown();
         }
+
 
         private void LoadLayout(LayoutFile layout)
         {
@@ -368,6 +398,12 @@ namespace SiGen.UI
                 dlg.ShowDialog();
         }
 
-        
+        private void tsbMeasureTool_Click(object sender, EventArgs e)
+        {
+            if(ActiveDocument != null)
+            {
+                ActiveDocument.Viewer.EnableMeasureTool = tsbMeasureTool.Checked;
+            }
+        }
     }
 }
