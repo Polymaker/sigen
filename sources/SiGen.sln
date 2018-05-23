@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiGen", "SiGen.csproj", "{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiGen", "SiGen\SiGen.csproj", "{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiGen.Library", "..\SiGen.Library\SiGen.Library.csproj", "{3E0D5D79-ACCE-42D8-8076-741AE09EF6E7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiGen.Library", "SiGen.Library\SiGen.Library.csproj", "{3E0D5D79-ACCE-42D8-8076-741AE09EF6E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiGen.Tests", "..\SiGen.Tests\SiGen.Tests.csproj", "{3A62F723-1525-44ED-A448-6428A56E8424}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiGen.Tests", "SiGen.Tests\SiGen.Tests.csproj", "{3A62F723-1525-44ED-A448-6428A56E8424}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -54,7 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SiGen.Library\SiGen.Library.csproj">
+    <ProjectReference Include="..\SiGen.Library\SiGen.Library.csproj">
       <Project>{3e0d5d79-acce-42d8-8076-741ae09ef6e7}</Project>
       <Name>SiGen.Library</Name>
     </ProjectReference>
