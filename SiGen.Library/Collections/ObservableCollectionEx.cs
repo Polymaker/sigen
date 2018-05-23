@@ -53,7 +53,7 @@ namespace System.Collections.Generic
             var raiseEvent = _RaiseListChangedEvents;
             _RaiseListChangedEvents = false;
             int itemCount = Count;
-            for(int i = 0; i < itemCount; i++)
+            for (int i = 0; i < itemCount; i++)
             {
                 var itm = this[0];
                 RemoveAt(0);
@@ -68,9 +68,8 @@ namespace System.Collections.Generic
 
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            if(RaiseListChangedEvents)
+            if (RaiseListChangedEvents)
                 base.OnCollectionChanged(e);
         }
-
     }
 }

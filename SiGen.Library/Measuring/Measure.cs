@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 
 namespace SiGen.Measuring
 {
-    [Serializable, TypeConverter(typeof(Utilities.MeasureConverter))]
+    [Serializable, TypeConverter(typeof(MeasureConverter))]
     public struct Measure : ISerializable, IXmlSerializable, IComparable, IComparable<Measure>
     {
 
@@ -35,10 +35,8 @@ namespace SiGen.Measuring
         /// Gets or sets the default unit of this measure. 
         /// Changing the unit does not affect the measure and the value will be automatically converted to the new unit.
         /// </summary>
-        [XmlIgnore]
         public UnitOfMeasure Unit { get { return _Unit; } set { _Unit = value; } }
 
-        [XmlIgnore]
         public double Value
         {
             get
@@ -59,10 +57,8 @@ namespace SiGen.Measuring
         /// <summary>
         /// The value in centimeters
         /// </summary>
-        [XmlIgnore]
         public double NormalizedValue { get { return normalizedValue; } }
 
-        [XmlIgnore]
         public double this[UnitOfMeasure unit]
         {
             get
@@ -75,13 +71,6 @@ namespace SiGen.Measuring
             }
         }
 
-        //[XmlIgnore, Obsolete("Use IsEmpty")]
-        //public bool IsNaN
-        //{
-        //    get { return double.IsNaN(normalizedValue); }
-        //}
-
-        [XmlIgnore]
         public bool IsEmpty
         {
             get { return double.IsNaN(normalizedValue); }
@@ -150,8 +139,8 @@ namespace SiGen.Measuring
         {
             if (value1.IsEmpty || value2.IsEmpty)
                 return value1.IsEmpty == value2.IsEmpty;
-
-            return NumberHelper.EqualOrClose(value1.NormalizedValue, value2.NormalizedValue, tolerence.NormalizedValue);
+            
+            return NumberExtensions.EqualOrClose(value1.NormalizedValue, value2.NormalizedValue, tolerence.NormalizedValue);
         }
 
         #endregion
@@ -237,12 +226,6 @@ namespace SiGen.Measuring
             return m1.normalizedValue / m2.normalizedValue;
         }
 
-        //public static Measure operator /(double value, Measure m1)
-        //{
-        //    m1.EnsureIsNotNaN();
-        //    return new Measure(m1.Value / value, m1.Unit);
-        //}
-
         public static Measure operator +(Measure m1, Measure m2)
         {
             if (m1.IsEmpty || m2.IsEmpty)
@@ -255,6 +238,18 @@ namespace SiGen.Measuring
             if (m1.IsEmpty || m2.IsEmpty)
                 ThrowNaNOperationException();
             return FromNormalizedValue(m1.normalizedValue - m2.normalizedValue, m1.Unit ?? m2.Unit);
+        }
+
+        public static MeasureSquared operator *(Measure m1, Measure m2)
+        {
+            if (m1.IsEmpty || m2.IsEmpty)
+                ThrowNaNOperationException();
+            return MeasureSquared.FromNormalizedValue(m1.NormalizedValue * m2.NormalizedValue, m1.Unit ?? m2.Unit);
+        }
+
+        public MeasureSquared Squared()
+        {
+            return this * this;
         }
 
         #endregion
@@ -292,27 +287,6 @@ namespace SiGen.Measuring
             return value1 > value2 ? value1 : value2;
         }
 
-        [Obsolete("Is it used somewhere?",false)]
-        public static double SmartConvert(double value, double conv, bool mult)
-        {
-            double res1 = mult ? value * conv : value / conv;
-            double res2 = (double)(mult ? (decimal)value * (decimal)conv : (decimal)value / (decimal)conv);
-            var res1Str = res1.ToString();
-            var res2Str = res2.ToString();
-            if (res1Str.Contains("."))
-                res1Str = res1Str.Substring(res1Str.IndexOf(".") + 1);
-            else
-                res1Str = string.Empty;
-            if (res2Str.Contains("."))
-                res2Str = res2Str.Substring(res2Str.IndexOf(".") + 1);
-            else
-                res2Str = string.Empty;
-            if (res1Str.Length < res2Str.Length)
-                return res1;
-            else
-                return res2;
-        }
-
         public static Measure Round(Measure value)
         {
             return new Measure(Math.Round(value.Value), value.Unit);
@@ -320,7 +294,7 @@ namespace SiGen.Measuring
 
         public static Measure Round(Measure value, double step)
         {
-            return new Measure(value.Value.Round(step), value.Unit);
+            return new Measure(Math.Round(value.Value / step) * step, value.Unit);
         }
 
         #endregion
@@ -337,44 +311,6 @@ namespace SiGen.Measuring
         }
 
         #region ToString
-
-        public class MeasureFormat
-        {
-            public UnitOfMeasure OverrideUnit { get; set; }
-            public int MinimumDecimals { get; set; }
-            public int MaximumDecimals { get; set; }
-
-            public bool ShowFractions { get; set; }
-            public bool AllowApproximation { get; set; }
-            public bool ShowUnitOfMeasure { get; set; }
-
-            public static MeasureFormat DefaultFormat
-            {
-                get { return new MeasureFormat(); }
-            }
-
-            public MeasureFormat()
-            {
-                MinimumDecimals = 0;
-                MaximumDecimals = 3;
-                ShowUnitOfMeasure = true;
-                ShowFractions = true;
-                AllowApproximation = true;
-                OverrideUnit = null;
-            }
-
-            internal MeasureFormat Clone()
-            {
-                return new MeasureFormat()
-                {
-                    AllowApproximation = AllowApproximation,
-                    MaximumDecimals = MaximumDecimals,
-                    MinimumDecimals = MinimumDecimals,
-                    ShowFractions = ShowFractions,
-                    ShowUnitOfMeasure = ShowUnitOfMeasure
-                };
-            }
-        }
 
         public override string ToString()
         {
@@ -430,7 +366,7 @@ namespace SiGen.Measuring
                         sixtyFourCount /= 2;
                     }
 
-                    if((whole > 0 || remain > sixtyfourth / 2) && (format.AllowApproximation || remain < 0.002))
+                    if ((whole > 0 || remain > sixtyfourth / 2) && (format.AllowApproximation || remain < 0.002))
                     {
                         if (whole == 0)
                             return string.Format("{3}{0}/{1}{2}", sixtyFourCount, baseFrac, displayedUnit, remain > 0.002 ? "~" : string.Empty);
@@ -503,29 +439,34 @@ namespace SiGen.Measuring
 
         public System.Xml.Linq.XAttribute SerializeAsAttribute(string name)
         {
-            if(IsEmpty)
+            if (IsEmpty)
                 return new System.Xml.Linq.XAttribute(name, "N/A");
             return new System.Xml.Linq.XAttribute(name, string.Format("{0}{1}", Value, Unit != null ? Unit.Abreviation : string.Empty));
         }
 
+        #endregion
+
+        #region Parsing
+
         public static Measure Parse(string value)
         {
-            return Utilities.MeasureParser.Parse(value);
+            return MeasureParser.Parse(value);
         }
 
         public static bool TryParse(string value, out Measure measure)
         {
-            return Utilities.MeasureParser.TryParse(value, out measure);
+            return MeasureParser.TryParse(value, out measure);
         }
 
         public static Measure TryParse(string value, Measure fallback)
         {
             Measure result;
-            if (Utilities.MeasureParser.TryParse(value, out result))
+            if (MeasureParser.TryParse(value, out result))
                 return result;
             return fallback;
         }
 
         #endregion
+
     }
 }

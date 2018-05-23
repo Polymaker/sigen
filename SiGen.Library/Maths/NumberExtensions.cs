@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SiGen
+namespace System
 {
-    public static class NumberHelper
+    public static class NumberExtensions
     {
         public static bool EqualOrClose(this double n1, double n2)
         {
@@ -21,6 +21,16 @@ namespace SiGen
         public static double Round(this double value, double step)
         {
             return Math.Round(value / step) * step;
+        }
+
+        public static double Floor(this double value, double step)
+        {
+            return Math.Floor(value / step) * step;
+        }
+
+        public static double Ceiling(this double value, double step)
+        {
+            return Math.Ceiling(value / step) * step;
         }
     }
 }
