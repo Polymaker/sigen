@@ -145,12 +145,74 @@ namespace SiGen.UI
                 {
                     g.DrawLines(nutPen, fretLine.Segments.Where(s => !s.IsVirtual).Select(s => PointToDisplay(s.PointOnString)).ToArray());
                 }
-
+                
                 //g.DrawLines(nutPen, fretLine.Points.Select(p => PointToDisplay(p)).ToArray());
             }
-
+           
             nutPen.Dispose();
             fretPen.Dispose();
+        }
+
+        private void RenderFretMarkers(Graphics g)
+        {
+            var bassLine = CurrentLayout.GetStringBoundaryLine(CurrentLayout.LastString, StringedInstruments.Layout.FingerboardSide.Bass);
+            var trebleLine = CurrentLayout.GetStringBoundaryLine(CurrentLayout.FirstString, StringedInstruments.Layout.FingerboardSide.Treble);
+            var bassLineVector = FixOrientation(bassLine.Equation.Vector);
+            var bassOffsetVector = bassLine.Equation.GetPerpendicular(Vector.Zero).Vector * -1d;
+            bassOffsetVector = FixOrientation(bassOffsetVector);
+
+            var trebleOffsetVector = trebleLine.Equation.GetPerpendicular(Vector.Zero).Vector;
+            trebleOffsetVector = FixOrientation(trebleOffsetVector);
+
+            using (var sf = new StringFormat() { LineAlignment = StringAlignment.Near, Alignment = StringAlignment.Center })
+            {
+                for (int i = CurrentLayout.MinimumFret; i <= CurrentLayout.MaximumFret; i++)
+                {
+
+                    var frets = CurrentLayout.VisualElements.OfType<FretLine>().Where(f => f.FretIndex == i).OrderBy(f => f.Strings.Min(s => s.Index));
+                    Vector bassFretPos = Vector.Empty;
+                    Vector trebleFretPos = Vector.Empty;
+
+                    if (frets.Count() >= 1)
+                    {
+                        PointM inter;
+                        if (frets.Last().Intersects(bassLine, out inter))
+                            bassFretPos = WorldToLocal(inter.ToVector(), _Zoom, true);
+                        if (frets.First().Intersects(trebleLine, out inter))
+                            trebleFretPos = WorldToLocal(inter.ToVector(), _Zoom, true);
+                    }
+                    int fretPos = Math.Abs(i);
+
+                    if((fretPos % 12 == 0 && (fretPos != 0 || CurrentLayout.MinimumFret < 0)) || (fretPos % 2 == 1 && fretPos % 12 > 2 && fretPos % 12 < 10))
+                    {
+                        if (!bassFretPos.IsEmpty)
+                        {
+                            if(i % 12 == 0)
+                            {
+                                var pos1 = LocalToDisplay(bassFretPos + (bassOffsetVector * 5) + (bassLineVector * 3));
+                                var pos2 = LocalToDisplay(bassFretPos + (bassOffsetVector * 5) - (bassLineVector * 3));
+                                DrawSideDot(g, pos1);
+                                DrawSideDot(g, pos2);
+                            }
+                            else
+                            {
+                                var pos = LocalToDisplay(bassFretPos + (bassOffsetVector * 5));
+                                DrawSideDot(g, pos);
+                            }
+                        }
+                        if (!trebleFretPos.IsEmpty)
+                        {
+                            var pos = LocalToDisplay(trebleFretPos + (trebleOffsetVector * 5));
+                            g.DrawString(i.ToString(), Font, Brushes.Black, new RectangleF(pos.X - 15, pos.Y, 30, Font.Height + 3), sf);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void DrawSideDot(Graphics g, PointF pos)
+        {
+            g.DrawEllipse(Pens.DarkSlateGray, pos.X - 2f, pos.Y - 2f, 4f, 4f);
         }
 
         private void RenderStrings(Graphics g)

@@ -110,6 +110,7 @@
     <Compile Include="StringedInstruments\Layout\SILayout.cs" />
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingType.cs" />
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingMethod.cs" />
+    <Compile Include="StringedInstruments\Layout\Strings\StringFretInfo.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FingerboardEdge.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FretLine.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FretSegment.cs" />

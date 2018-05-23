@@ -134,29 +134,33 @@ namespace SiGen.UI
         protected override void OnPaint(PaintEventArgs pe)
         {
             base.OnPaint(pe);
-            pe.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-            var zoomf = (float)_Zoom;
-            var center = new PointF(Width / 2f, Height / 2f);
-            pe.Graphics.TranslateTransform(center.X, center.Y);
-            pe.Graphics.ScaleTransform((float)_Zoom, (float)_Zoom);
-            pe.Graphics.TranslateTransform((float)cameraPosition.X * -1, (float)cameraPosition.Y);
-
+           
             if(CurrentLayout != null)
             {
+                pe.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                var zoomf = (float)_Zoom;
+                var center = new PointF(Width / 2f, Height / 2f);
+                pe.Graphics.TranslateTransform(center.X, center.Y);
+                pe.Graphics.ScaleTransform((float)_Zoom, (float)_Zoom);
+                pe.Graphics.TranslateTransform((float)cameraPosition.X * -1, (float)cameraPosition.Y);
+
                 RenderFingerboard(pe.Graphics);
                 RenderGuideLines(pe.Graphics);
-
                 RenderFrets(pe.Graphics);
+
                 if(DisplayConfig.ShowStrings)
                     RenderStrings(pe.Graphics);
+
+                pe.Graphics.ResetTransform();
+
+                //if (DisplayConfig.ShowFrets || DisplayConfig.ShowTheoreticalFrets)
+                //    RenderFretMarkers(pe.Graphics);
+
+                if (!MeasureFirstSelection.IsEmpty)
+                    RenderMeasureTool(pe.Graphics);
             }
-
-            pe.Graphics.ResetTransform();
-
-            if (!MeasureFirstSelection.IsEmpty)
-                RenderMeasureTool(pe.Graphics);
         }
 
         #endregion
@@ -262,15 +266,6 @@ namespace SiGen.UI
         #endregion
 
         #region Mouse Handling
-
-        private enum DragEntity
-        {
-            None,
-            Camera,
-            Measure,
-            Measure2,
-            Measure3
-        }
         
         private HitTestInfo DragTarget;
         private Dictionary<MouseButtons, Vector> MouseDownPos;
@@ -395,7 +390,7 @@ namespace SiGen.UI
                 if (e.Delta > 0)
                     _Zoom *= 1.1;
                 else
-                    _Zoom *= 0.90909090909090909090909090909091;
+                    _Zoom /= 1.1;
 
                 var curWorldPos = DisplayToWorldFast(mousePos, oldZoom);
                 var finalWorldPos = DisplayToWorldFast(mousePos);
@@ -592,6 +587,15 @@ namespace SiGen.UI
             
             vec -= cameraPosition;
             return vec * zoom;
+        }
+
+        private Vector FixOrientation(Vector vec)
+        {
+            if (IsFlipHorizontal)
+                vec = new Vector(vec.Y * -1d, vec.X);
+            else if (IsHorizontal)
+                vec = new Vector(vec.Y, vec.X * -1d);
+            return vec;
         }
 
         #endregion

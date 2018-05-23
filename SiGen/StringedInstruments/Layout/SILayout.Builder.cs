@@ -388,20 +388,12 @@ namespace SiGen.StringedInstruments.Layout
 
         #region Frets
 
-        private class FretPosition
-        {
-            public int FretIndex { get; set; }
-            public int StringIndex { get; set; }
-            public double PositionRatio { get; set; }
-            public PointM Position { get; set; }
-        }
-
         public int MinimumFret { get { return Strings.Min(s => s.StartingFret); } }
         public int MaximumFret { get { return Strings.Max(s => s.NumberOfFrets); } }
 
-        private List<FretPosition> CalculateFretsForString(SIString str)
+        private List<StringFretInfo> CalculateFretsForString(SIString str)
         {
-            var frets = new List<FretPosition>();
+            var frets = new List<StringFretInfo>();
             if (!CompensateFretPositions)
             {
                 for (int i = MinimumFret; i <= MaximumFret; i++)
@@ -417,13 +409,13 @@ namespace SiGen.StringedInstruments.Layout
                 {
                     double fretPosRatio = (str.StringLength - positions[i]).NormalizedValue / str.StringLength.NormalizedValue;
                     var fretPos = str.LayoutLine.P2 + (str.LayoutLine.Direction * -1) * (str.StringLength * fretPosRatio);
-                    frets.Add(new FretPosition() { FretIndex = i - str.StartingFret, Position = fretPos, StringIndex = str.Index, PositionRatio = fretPosRatio });
+                    frets.Add(new StringFretInfo() { FretIndex = i - str.StartingFret, Position = fretPos, StringIndex = str.Index, PositionRatio = fretPosRatio });
                 }
             }
             return frets;
         }
 
-        private FretPosition CalculateFretPosition(SIString str, int fret)
+        private StringFretInfo CalculateFretPosition(SIString str, int fret)
         {
             var stringTuning = str.Tuning ?? GetDefaultTuning();
             double fretPosRatio = GetRelativeFretPosition(stringTuning, fret - str.StartingFret, FretsTemperament);
@@ -433,14 +425,19 @@ namespace SiGen.StringedInstruments.Layout
             if (!str.PlaceFretsRelativeToString)
                 fretPos = str.LayoutLine.SnapToLine(fretPos, true);
 
-            return new FretPosition() { FretIndex = fret, Position = fretPos, StringIndex = str.Index, PositionRatio = fretPosRatio };
+            return new StringFretInfo() { FretIndex = fret, Position = fretPos, StringIndex = str.Index, PositionRatio = fretPosRatio, IsVirtual = !str.HasFret(fret) };
         }
 
         private void PlaceFrets()
         {
-            var stringFrets = new Dictionary<int, List<FretPosition>>();
+            var stringFrets = new Dictionary<int, List<StringFretInfo>>();
+
             foreach (var str in Strings)
-                stringFrets.Add(str.Index, CalculateFretsForString(str));
+            {
+                var fretList = CalculateFretsForString(str);
+                str.SetFrets(fretList);
+                stringFrets.Add(str.Index, fretList);
+            }
 
             var fretSegments = new List<FretSegment>();
             //create fret "segments"; store each fret position for each strings in a list

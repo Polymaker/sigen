@@ -134,7 +134,7 @@ namespace SiGen.UI
             }
         }
 
-        [EditorAttribute(typeof(Designers.MeasureEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Editor(typeof(Designers.MeasureEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Measure FretWidth
         {
             get { return _FretWidth; }
@@ -148,7 +148,7 @@ namespace SiGen.UI
             }
         }
 
-        [EditorAttribute(typeof(Designers.UnitOfMeasureEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Editor(typeof(Designers.UnitOfMeasureEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public UnitOfMeasure DefaultDisplayUnit
         {
             get { return _DefaultDisplayUnit; }

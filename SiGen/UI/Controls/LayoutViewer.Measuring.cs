@@ -674,5 +674,69 @@ namespace SiGen.UI
                 textbox.Focus();
             }
         }
+
+        private class FloatingTextBox2
+        {
+            internal Controls.TextBoxEx textbox;
+            internal DateTime LastClosedTime;
+            private LayoutViewer owner;
+            private ToolStripControlHost controlHost;
+            private ToolStripDropDown dropDown;
+
+            public Font Font { get { return dropDown.Font; } set { dropDown.Font = value; } }
+
+            public FloatingTextBox2(LayoutViewer viewer)
+            {
+                owner = viewer;
+                LastClosedTime = DateTime.Today;
+
+                textbox = new Controls.TextBoxEx()
+                {
+                    ReadOnly = true,
+                    BackColor = SystemColors.Window,
+                    BorderStyle = BorderStyle.None,
+                    TextAlign = HorizontalAlignment.Center
+                };
+                controlHost = new ToolStripControlHost(textbox);
+                controlHost.AutoSize = false;
+                controlHost.Margin = controlHost.Padding = Padding.Empty;
+                textbox.Location = Point.Empty;
+                dropDown = new ToolStripDropDown();
+                dropDown.Items.Add(controlHost);
+                dropDown.AutoSize = false;
+                dropDown.Margin = dropDown.Padding = Padding.Empty;
+
+                textbox.CommandKeyPressed += Textbox_CommandKeyPressed;
+                dropDown.Closing += FloatingTextBox_Deactivate;
+                //Deactivate += FloatingTextBox_Deactivate;
+                //textbox.LostFocus += FloatingTextBox_Deactivate;
+            }
+
+            private void FloatingTextBox_Deactivate(object sender, EventArgs e)
+            {
+                //Hide();
+                LastClosedTime = DateTime.Now;
+            }
+
+            private void Textbox_CommandKeyPressed(object sender, KeyEventArgs e)
+            {
+                if (e.KeyCode == Keys.Escape || e.KeyCode == Keys.Tab)
+                    dropDown.Close();
+            }
+
+            public void ShowAt(Rectangle bounds, string value)
+            {
+                dropDown.Size = bounds.Size;
+                textbox.Text = value;
+                //Location = bounds.Location;
+                //Show();
+                //Size = bounds.Size;
+                textbox.Width = bounds.Width;
+                
+                dropDown.Show(bounds.Location);
+
+                textbox.Focus();
+            }
+        }
     }
 }

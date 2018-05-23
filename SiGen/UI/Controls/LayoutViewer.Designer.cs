@@ -36,7 +36,10 @@
             this.menuItemDisplayMeasureFT = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.menuItemDisplayMeasureShowDecimals = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuMeasure = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmiClearMeasure = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMeasureBox.SuspendLayout();
+            this.menuMeasure.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuMeasureBox
@@ -87,7 +90,21 @@
             this.menuItemDisplayMeasureShowDecimals.Name = "menuItemDisplayMeasureShowDecimals";
             this.menuItemDisplayMeasureShowDecimals.Size = new System.Drawing.Size(192, 22);
             this.menuItemDisplayMeasureShowDecimals.Text = "Show Exact Value";
+            // 
+            // menuMeasure
+            // 
+            this.menuMeasure.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiClearMeasure});
+            this.menuMeasure.Name = "menuMeasure";
+            this.menuMeasure.Size = new System.Drawing.Size(150, 26);
+            // 
+            // tsmiClearMeasure
+            // 
+            this.tsmiClearMeasure.Name = "tsmiClearMeasure";
+            this.tsmiClearMeasure.Size = new System.Drawing.Size(149, 22);
+            this.tsmiClearMeasure.Text = "Clear Measure";
             this.menuMeasureBox.ResumeLayout(false);
+            this.menuMeasure.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -101,5 +118,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuItemDisplayMeasureFT;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem menuItemDisplayMeasureShowDecimals;
+        private System.Windows.Forms.ContextMenuStrip menuMeasure;
+        private System.Windows.Forms.ToolStripMenuItem tsmiClearMeasure;
     }
 }

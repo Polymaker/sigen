@@ -23,7 +23,8 @@ namespace SiGen.StringedInstruments.Layout
         private StringProperties _PhysicalProperties;
         private Measure _ActionAtTwelfthFret;
         private double _MultiScaleRatio;
-        private FretManager _Frets;
+        //private FretManager _Frets;
+        private List<StringFretInfo> _Frets;
 
         #endregion
 
@@ -245,6 +246,11 @@ namespace SiGen.StringedInstruments.Layout
             get { return Layout.VisualElements.OfType<Visual.StringLine>().FirstOrDefault(l => l.String == this); }
         }
 
+        public IList<StringFretInfo> Frets
+        {
+            get { return _Frets.AsReadOnly(); }
+        }
+
         #endregion
 
         public SIString(SILayout layout, int stringIndex) : base(layout)
@@ -254,7 +260,8 @@ namespace SiGen.StringedInstruments.Layout
             _MultiScaleRatio = 0.5;
             _NumberOfFrets = 24;
             RealScaleLength = Measure.Empty;
-            _Frets = new FretManager(this);
+            _Frets = new List<StringFretInfo>();
+            //_Frets = new FretManager(this);
         }
 
         public bool HasFret(int fretNo)
@@ -275,6 +282,13 @@ namespace SiGen.StringedInstruments.Layout
         {
             StringLength = Measure.Empty;
             RealScaleLength = Measure.Empty;
+            _Frets.Clear();
+        }
+
+        internal void SetFrets(IEnumerable<StringFretInfo> frets)
+        {
+            _Frets.Clear();
+            _Frets.AddRange(frets);
         }
 
         #region XML serialization
