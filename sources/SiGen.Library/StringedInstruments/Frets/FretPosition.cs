@@ -10,17 +10,17 @@ namespace SiGen.StringedInstruments.Frets
 {
     public class /*struct*/ FretPosition
     {
-        private readonly int _StringIndex;
+        //private readonly int _StringIndex;
         private readonly int _FretIndex;
         private double _DistanceRatio;
         private PitchValue _PitchOffset;
         private PointM _Position;
         private bool _IsVirtual;
 
-        /// <summary>
-        /// Gets the fret string's index.
-        /// </summary>
-        public int StringIndex { get { return _StringIndex; } }
+        ///// <summary>
+        ///// Gets the fret string's index.
+        ///// </summary>
+        //public int StringIndex { get { return _StringIndex; } }
 
         /// <summary>
         /// Gets the index of the fret.
@@ -47,14 +47,14 @@ namespace SiGen.StringedInstruments.Frets
         /// Gets a value indicating if the string actually possess this fret or not.
         /// Virtual frets are used for computation.
         /// </summary>
-        public bool IsVirtual { get { return _IsVirtual; } }
+        public bool IsVirtual { get { return _IsVirtual; } set { _IsVirtual = value; } }
 
-        public FretPosition(int stringIndex, int fretIndex, double distanceRatio, bool isVirtual)
+        public FretPosition(/*int stringIndex, */int fretIndex, PitchValue pitchOffset)
         {
-            _StringIndex = stringIndex;
+            //_StringIndex = stringIndex;
             _FretIndex = fretIndex;
-            _IsVirtual = isVirtual;
-            _DistanceRatio = distanceRatio;
+            _DistanceRatio = 1d / pitchOffset.Ratio;
+            _PitchOffset = pitchOffset;
         }
     }
 }

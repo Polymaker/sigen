@@ -51,14 +51,14 @@ namespace SiGen.Physics
             };
         }
 
-        public static MusicalNote FromPitch(PitchValue pitch)
+        public static MusicalNote FromPitch(PitchValue pitch, IntonationMethod intonation = IntonationMethod.Computed)
         {
             return new MusicalNote()
             {
                 _NoteName = (NoteName)Math.Round((pitch.Cents % 1200d) / 100d),//guess the note name from equal temperament
                 _Octave = (int)Math.Floor(pitch.Cents / 1200d),
                 _Pitch = pitch,
-                _BaseIntonation = IntonationMethod.Computed
+                _BaseIntonation = intonation
             };
         }
 
