@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace SiGen.Physics
+namespace SiGen.Sound
 {
     public enum NoteName
     {

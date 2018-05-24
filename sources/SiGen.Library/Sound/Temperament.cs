@@ -1,4 +1,4 @@
-﻿namespace SiGen.Physics
+﻿namespace SiGen.Sound
 {
     public enum Temperament
     {

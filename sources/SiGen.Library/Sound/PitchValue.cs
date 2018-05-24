@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SiGen.Physics
+namespace SiGen.Sound
 {
     public struct PitchValue
     {

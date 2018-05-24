@@ -61,6 +61,5 @@ namespace SiGen.StringedInstruments.Strings
         /// </summary>
         public double ModulusOfElasticity { get; set; }
 
-
     }
 }

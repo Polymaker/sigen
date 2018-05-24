@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SiGen.Physics
+namespace SiGen.Sound
 {
     public struct MusicalNote
     {
@@ -51,20 +51,17 @@ namespace SiGen.Physics
             };
         }
 
-        public static MusicalNote FromPitch(PitchValue pitch, IntonationMethod intonation = IntonationMethod.Computed)
+        public static MusicalNote ApproximatePitch(PitchValue pitch, IntonationMethod intonation, bool adjustPitch = true)
         {
-            return new MusicalNote()
-            {
-                _NoteName = (NoteName)Math.Round((pitch.Cents % 1200d) / 100d),//guess the note name from equal temperament
-                _Octave = (int)Math.Floor(pitch.Cents / 1200d),
-                _Pitch = pitch,
-                _BaseIntonation = intonation
-            };
+            var approxNote = CreateNote((NoteName)Math.Round((pitch.Cents % 1200d) / 100d), (int)Math.Floor(pitch.Cents / 1200d), intonation);
+            if (!adjustPitch)
+                approxNote._Pitch = pitch;
+            return approxNote;
         }
 
         public static MusicalNote FromCents(double cents)
         {
-            return FromPitch(PitchValue.FromCents(cents));
+            return ApproximatePitch(PitchValue.FromCents(cents), IntonationMethod.Computed, false);
         }
 
         public static MusicalNote JustNote(NoteName tone, int octave)

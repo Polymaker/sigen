@@ -66,13 +66,18 @@
     <Compile Include="Sound\NoteName.cs" />
     <Compile Include="Sound\PitchValue.cs" />
     <Compile Include="Sound\Temperament.cs" />
+    <Compile Include="StringedInstruments\Fingerboard\FingerboardEnd.cs" />
+    <Compile Include="StringedInstruments\Fingerboard\FingerboardMargins.cs" />
+    <Compile Include="StringedInstruments\Fingerboard\FingerboardSide.cs" />
     <Compile Include="StringedInstruments\Frets\FretCalculator.cs" />
     <Compile Include="StringedInstruments\Frets\FretPosition.cs" />
+    <Compile Include="StringedInstruments\Layout\InstrumentLayout.cs" />
+    <Compile Include="StringedInstruments\Layout\LayoutConfigurationItem.cs" />
+    <Compile Include="StringedInstruments\Layout\LayoutProcessElement.cs" />
+    <Compile Include="StringedInstruments\Strings\StringConfiguration.cs" />
     <Compile Include="StringedInstruments\Strings\StringProperties.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="StringedInstruments\Fingerboard\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

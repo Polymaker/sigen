@@ -1,4 +1,4 @@
-﻿using SiGen.Physics;
+﻿using SiGen.Sound;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,16 +23,17 @@ namespace SiGen.StringedInstruments.Frets
         public static List<FretPosition> CalculateFrets(PitchValue stringTuning, int numberOfFrets, Temperament temperament)
         {
             var pitchOffsets = new List<PitchValue>();
-            var baseNote = MusicalNote.FromPitch(stringTuning, temperament == Temperament.Just ? IntonationMethod.Just : IntonationMethod.EqualTempered);
+            var baseNote = MusicalNote.ApproximatePitch(stringTuning, temperament == Temperament.Just ? IntonationMethod.Just : IntonationMethod.EqualTempered);
 
             for (int i = 0; i <= numberOfFrets; i++)
             {
                 var fretNote = baseNote.AddSteps(i);
                 var pitchOffset = fretNote.Pitch - baseNote.Pitch;
 
-                ////consider (or not?) the open string pitch offset 
+                //// consider (or not?) the open string pitch offset  (e.g. cents offset used by Thidell and Die Wohltemperirte temperaments)
                 //pitchOffset += (stringTuning - baseNote.Pitch);
-
+                //// or
+                //pitchOffset += (baseNote.Pitch - stringTuning);
 
                 if (i > 0 && temperament == Temperament.DieWohltemperirte)
                     pitchOffset += PitchValue.FromCents(DieWohltemperirteChromaticOffsets[(int)fretNote.NoteName]);
