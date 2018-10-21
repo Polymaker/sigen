@@ -15,6 +15,7 @@ namespace SiGen.UI
         private bool _ShowStrings;
         private bool _ShowFrets;
         private bool _ShowMidlines;
+        private bool _ShowMargins;
         private bool _ShowTheoreticalFrets;
         private bool _RenderRealStrings;
         private bool _RenderRealFrets;
@@ -88,6 +89,20 @@ namespace SiGen.UI
                 {
                     _ShowMidlines = value;
                     OnPropertyChanged("ShowMidlines");
+                }
+            }
+        }
+
+        [DefaultValue(true)]
+        public bool ShowMargins
+        {
+            get { return _ShowMargins; }
+            set
+            {
+                if (value != _ShowMargins)
+                {
+                    _ShowMargins = value;
+                    OnPropertyChanged("ShowMargins");
                 }
             }
         }
@@ -170,6 +185,7 @@ namespace SiGen.UI
             _ShowFrets = true;
             _ShowTheoreticalFrets = false;
             _ShowMidlines = true;
+            _ShowMargins = true;
             _RenderRealFrets = true;
             _FingerboardOrientation = Orientation.Horizontal;
             _DefaultDisplayUnit = UnitOfMeasure.Mm;

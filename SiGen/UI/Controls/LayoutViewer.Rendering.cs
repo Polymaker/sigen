@@ -1,5 +1,6 @@
 ﻿using SiGen.Maths;
 using SiGen.Measuring;
+using SiGen.StringedInstruments.Layout;
 using SiGen.StringedInstruments.Layout.Visual;
 using System;
 using System.Collections.Generic;
@@ -96,6 +97,20 @@ namespace SiGen.UI
                         if(!DisplayConfig.ShowCenterLine || !(stringCenter.Equation.IsVertical && stringCenter.Equation.X == 0))
                             DrawLine(g, guidePen, stringCenter.P1, stringCenter.P2);
                     }
+                }
+            }
+
+            if (!DisplayConfig.ShowStrings && DisplayConfig.ShowMargins)
+            {
+                var firstString = CurrentLayout.FirstString.LayoutLine;
+                var lastString = CurrentLayout.LastString.LayoutLine;
+                var trebleEdge = CurrentLayout.GetStringBoundaryLine(CurrentLayout.FirstString, FingerboardSide.Treble);
+                var bassEdge = CurrentLayout.GetStringBoundaryLine(CurrentLayout.LastString, FingerboardSide.Bass);
+                using (var guidePen = GetPen(Color.Gray, 1))
+                {
+                    DrawLine(g, guidePen, firstString.P1, firstString.SnapToLine(trebleEdge.P2, true));
+                    if(firstString != lastString)
+                        DrawLine(g, guidePen, lastString.P1, lastString.SnapToLine(bassEdge.P2, true));
                 }
             }
 

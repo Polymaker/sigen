@@ -16,25 +16,65 @@ namespace SiGen.UI.Controls
     public partial class ScaleLengthEditor : LayoutPropertyEditor
     {
         private ScaleLengthType EditMode;
-        private List<double> _FretPositions;
+        private List<FretPosition> FretPositions;
+
+        class FretPosition
+        {
+            public int FretNumber { get; set; }
+            public double PositionRatio { get; set; }
+            public string Name { get; set; }
+        }
 
         public ScaleLengthEditor()
         {
             InitializeComponent();
-            _FretPositions = new List<double>();
+            FretPositions = new List<FretPosition>();
             dgvScaleLengths.AutoGenerateColumns = false;
         }
 
         private void FetchFretPositions()
         {
             int fretNum = CurrentLayout != null ? CurrentLayout.Strings.Max(s => s.NumberOfFrets) : 24;
-            if (fretNum + 2 != _FretPositions.Count)
+
+            if (fretNum + 2 != FretPositions.Count)
             {
-                _FretPositions.Clear();
-                _FretPositions.Add(0);
+                cboParallelFret.DataSource = null;
+                FretPositions.Clear();
+                FretPositions.Add(new FretPosition()
+                {
+                    FretNumber = 0,
+                    Name = "Nut",
+                    PositionRatio = 0
+                });
+                
                 for (int i = 1; i <= fretNum; i++)
-                    _FretPositions.Add(1d - SILayout.GetEqualTemperedFretPosition(i));
-                _FretPositions.Add(1d);
+                {
+                    var ratio = 1d - SILayout.GetEqualTemperedFretPosition(i);
+                    FretPositions.Add(new FretPosition()
+                    {
+                        FretNumber = i,
+                        Name = $"{i}{i.GetSuffix()} Fret",
+                        PositionRatio = ratio
+                    });
+                }
+
+                FretPositions.Add(new FretPosition()
+                {
+                    FretNumber = FretPositions.Count,
+                    Name = "Bridge",
+                    PositionRatio = 1
+                });
+
+                //FretPositions.Add(new FretPosition()
+                //{
+                //    FretNumber = -1,
+                //    Name = "Custom",
+                //    PositionRatio = -1
+                //});
+
+                cboParallelFret.DisplayMember = "Name";
+                cboParallelFret.ValueMember = "FretNumber";
+                cboParallelFret.DataSource = FretPositions;
             }
         }
 
@@ -90,13 +130,10 @@ namespace SiGen.UI.Controls
             mtbTrebleLength.Enabled = (CurrentLayout != null);
             mtbBassLength.Enabled = (CurrentLayout != null);
 
-            lblTreble.Visible = (EditMode == ScaleLengthType.Multiple);
-            lblBass.Visible = (EditMode == ScaleLengthType.Multiple);
-            lblMultiScaleRatio.Visible = (EditMode == ScaleLengthType.Multiple);
+            SetControlsVisibility(EditMode == ScaleLengthType.Multiple, lblBass, lblMultiScaleRatio, lblParallelFret, mtbBassLength, nubMultiScaleRatio, cboParallelFret);
+
+            lblTreble.Visible = (EditMode != ScaleLengthType.Individual);
             mtbTrebleLength.Visible = (EditMode != ScaleLengthType.Individual);
-            mtbBassLength.Visible = (EditMode == ScaleLengthType.Multiple);
-            nubMultiScaleRatio.Visible = (EditMode == ScaleLengthType.Multiple);
-            lblPerpFret.Visible = (EditMode == ScaleLengthType.Multiple);
             dgvScaleLengths.Visible = (EditMode == ScaleLengthType.Individual);
             
             SetSelectedEditMode(EditMode);
@@ -108,6 +145,7 @@ namespace SiGen.UI.Controls
                     case ScaleLengthType.Single:
                         mtbTrebleLength.Value = CurrentLayout.SingleScaleConfig.Length;
                         mtbTrebleLength.AllowEmptyValue = false;
+                        lblTreble.Text = "Length";
                         break;
                     case ScaleLengthType.Multiple:
                         {
@@ -115,6 +153,8 @@ namespace SiGen.UI.Controls
                             mtbTrebleLength.AllowEmptyValue = false;
                             mtbBassLength.Value = CurrentLayout.MultiScaleConfig.Bass;
                             nubMultiScaleRatio.Value = CurrentLayout.MultiScaleConfig.PerpendicularFretRatio;
+                            SelectClosestFretPosition(CurrentLayout.MultiScaleConfig.PerpendicularFretRatio);
+                            lblTreble.Text = "Treble";
                         }
                         break;
                     case ScaleLengthType.Individual:
@@ -122,7 +162,7 @@ namespace SiGen.UI.Controls
                         break;
                 }
 
-                int totalHeight = tableLayoutPanel1.Height;
+                int totalHeight = tlpLayout.Height;
                 if (dgvScaleLengths.Visible)
                     totalHeight += dgvScaleLengths.MinimumSize.Height;
                 AutoScrollMinSize = new Size(AutoScrollMinSize.Width, totalHeight);
@@ -131,7 +171,7 @@ namespace SiGen.UI.Controls
             {
                 mtbTrebleLength.AllowEmptyValue = true;
                 mtbTrebleLength.Value = Measure.Empty;
-                tableLayoutPanel1.MinimumSize = Size.Empty;
+                tlpLayout.MinimumSize = Size.Empty;
                 AutoScrollMinSize = Size.Empty;
             }
         }
@@ -216,36 +256,47 @@ namespace SiGen.UI.Controls
 
         private void nubMultiScaleRatio_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsLoading && CurrentLayout != null && EditMode == ScaleLengthType.Multiple)
+            if (!IsLoading && CurrentLayout != null && EditMode == ScaleLengthType.Multiple && !FlagManager["AdjustPositionRatio"])
             {
+                var closestFret = SelectClosestFretPosition(nubMultiScaleRatio.Value);
+
+                if(closestFret != null)
+                {
+                    using (FlagManager.UseFlag("DetermineFretAlignment"))
+                        nubMultiScaleRatio.Value = closestFret.PositionRatio;// Math.Round(closestFret.PositionRatio, 4);
+                }
+
                 CurrentLayout.MultiScaleConfig.PerpendicularFretRatio = nubMultiScaleRatio.Value;
                 CurrentLayout.RebuildLayout();
             }
-            DetermineFretAlignment();
+        }
+
+        private void cboParallelFret_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoading && CurrentLayout != null && EditMode == ScaleLengthType.Multiple && !FlagManager["DetermineFretAlignment"])
+            {
+                if(cboParallelFret.SelectedItem != null)
+                {
+                    var selectedPosition = (FretPosition)cboParallelFret.SelectedItem;
+                    nubMultiScaleRatio.Value = selectedPosition.PositionRatio;// Math.Round(selectedPosition.PositionRatio, 4);
+                }
+            }
         }
 
         #endregion
 
-        private void DetermineFretAlignment()
+
+        private FretPosition SelectClosestFretPosition(double fretRation, double tolerance = 0.0005)
         {
-            if (nubMultiScaleRatio.Value == 0)
+            var closestFretPos = FretPositions.FirstOrDefault(p => p.PositionRatio.EqualOrClose(nubMultiScaleRatio.Value, tolerance));
+            using (FlagManager.UseFlag("DetermineFretAlignment"))
             {
-                lblPerpFret.Text = "Perpendicular at Nut";
+                if (closestFretPos != null)
+                    cboParallelFret.SelectedValue = closestFretPos.FretNumber;
+                else
+                    cboParallelFret.SelectedItem = null;
             }
-            else if (nubMultiScaleRatio.Value == 1)
-            {
-                lblPerpFret.Text = "Perpendicular at Bridge";
-            }
-            else if (_FretPositions.Any(p => p.EqualOrClose(nubMultiScaleRatio.Value, 0.0005)))
-            {
-                var closest = _FretPositions.First(p => p.EqualOrClose(nubMultiScaleRatio.Value, 0.0005));
-                int fretIndex = _FretPositions.IndexOf(closest);
-                lblPerpFret.Text = string.Format("Perpendicular at {0} fret", fretIndex);
-            }
-            else
-            {
-                lblPerpFret.Text = "Custom alignement";
-            }
+            return closestFretPos;
         }
 
         #region Manual Mode
@@ -347,6 +398,26 @@ namespace SiGen.UI.Controls
             if (activeControl == dgvScaleLengths)
                 return DisplayRectangle.Location;
             return base.ScrollToControl(activeControl);
+        }
+
+        private void cboParallelFret_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            e.DrawBackground();
+
+            using (var textBrush = new SolidBrush(e.ForeColor))
+            using(var sf = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center })
+            {
+                if (e.Index >= 0)
+                {
+                    var fretPos = FretPositions[e.Index];
+                    var text = fretPos.Name;
+                    e.Graphics.DrawString(text, e.Font, new SolidBrush(e.ForeColor), e.Bounds, sf);
+                }
+                else
+                {
+                    e.Graphics.DrawString("Custom", e.Font, new SolidBrush(e.ForeColor), e.Bounds, sf);
+                }
+            }
         }
     }
 }

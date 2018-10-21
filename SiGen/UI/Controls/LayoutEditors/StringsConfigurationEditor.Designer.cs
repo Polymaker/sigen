@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.nbxNumberOfStrings = new SiGen.UI.Controls.NumericBox();
             this.label1 = new System.Windows.Forms.Label();
             this.chkLeftHanded = new System.Windows.Forms.CheckBox();
@@ -35,7 +36,16 @@
             this.label2 = new System.Windows.Forms.Label();
             this.dgvStrings = new System.Windows.Forms.DataGridView();
             this.chkShowAdvanced = new System.Windows.Forms.CheckBox();
+            this.cmsMesureCellMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmiClearValue = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.convertToToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiConvertToMM = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiConvertToCM = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiConvertToIN = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiConvertToFT = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStrings)).BeginInit();
+            this.cmsMesureCellMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // nbxNumberOfStrings
@@ -108,6 +118,7 @@
             this.dgvStrings.TabIndex = 5;
             this.dgvStrings.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvStrings_CellClick);
             this.dgvStrings.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvStrings_CellFormatting);
+            this.dgvStrings.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvStrings_CellMouseClick);
             this.dgvStrings.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvStrings_CellPainting);
             this.dgvStrings.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.dgvStrings_CellParsing);
             this.dgvStrings.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dgvStrings_CellValidating);
@@ -125,6 +136,65 @@
             this.chkShowAdvanced.UseVisualStyleBackColor = true;
             this.chkShowAdvanced.CheckedChanged += new System.EventHandler(this.chkShowAdvanced_CheckedChanged);
             // 
+            // cmsMesureCellMenu
+            // 
+            this.cmsMesureCellMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiClearValue,
+            this.toolStripSeparator1,
+            this.convertToToolStripMenuItem,
+            this.tsmiConvertToMM,
+            this.tsmiConvertToCM,
+            this.tsmiConvertToIN,
+            this.tsmiConvertToFT});
+            this.cmsMesureCellMenu.Name = "cmsConvert";
+            this.cmsMesureCellMenu.Size = new System.Drawing.Size(181, 164);
+            this.cmsMesureCellMenu.Opening += new System.ComponentModel.CancelEventHandler(this.cmsMesureCellMenu_Opening);
+            // 
+            // tsmiClearValue
+            // 
+            this.tsmiClearValue.Name = "tsmiClearValue";
+            this.tsmiClearValue.Size = new System.Drawing.Size(180, 22);
+            this.tsmiClearValue.Text = "Clear Value";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // convertToToolStripMenuItem
+            // 
+            this.convertToToolStripMenuItem.Name = "convertToToolStripMenuItem";
+            this.convertToToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.convertToToolStripMenuItem.Text = "Convert to:";
+            // 
+            // tsmiConvertToMM
+            // 
+            this.tsmiConvertToMM.Name = "tsmiConvertToMM";
+            this.tsmiConvertToMM.Size = new System.Drawing.Size(180, 22);
+            this.tsmiConvertToMM.Text = "Millimeters";
+            this.tsmiConvertToMM.Click += new System.EventHandler(this.tsmiConvertToMM_Click);
+            // 
+            // tsmiConvertToCM
+            // 
+            this.tsmiConvertToCM.Name = "tsmiConvertToCM";
+            this.tsmiConvertToCM.Size = new System.Drawing.Size(180, 22);
+            this.tsmiConvertToCM.Text = "Centimeters";
+            this.tsmiConvertToCM.Click += new System.EventHandler(this.tsmiConvertToCM_Click);
+            // 
+            // tsmiConvertToIN
+            // 
+            this.tsmiConvertToIN.Name = "tsmiConvertToIN";
+            this.tsmiConvertToIN.Size = new System.Drawing.Size(180, 22);
+            this.tsmiConvertToIN.Text = "Inches";
+            this.tsmiConvertToIN.Click += new System.EventHandler(this.tsmiConvertToIN_Click);
+            // 
+            // tsmiConvertToFT
+            // 
+            this.tsmiConvertToFT.Name = "tsmiConvertToFT";
+            this.tsmiConvertToFT.Size = new System.Drawing.Size(180, 22);
+            this.tsmiConvertToFT.Text = "Feets";
+            this.tsmiConvertToFT.Click += new System.EventHandler(this.tsmiConvertToFT_Click);
+            // 
             // StringsConfigurationEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -141,6 +211,7 @@
             this.Name = "StringsConfigurationEditor";
             this.Size = new System.Drawing.Size(365, 239);
             ((System.ComponentModel.ISupportInitialize)(this.dgvStrings)).EndInit();
+            this.cmsMesureCellMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -155,5 +226,13 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView dgvStrings;
         private System.Windows.Forms.CheckBox chkShowAdvanced;
+        private System.Windows.Forms.ContextMenuStrip cmsMesureCellMenu;
+        private System.Windows.Forms.ToolStripMenuItem tsmiClearValue;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem convertToToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiConvertToMM;
+        private System.Windows.Forms.ToolStripMenuItem tsmiConvertToCM;
+        private System.Windows.Forms.ToolStripMenuItem tsmiConvertToIN;
+        private System.Windows.Forms.ToolStripMenuItem tsmiConvertToFT;
     }
 }

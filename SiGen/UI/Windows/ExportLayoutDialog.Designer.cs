@@ -33,6 +33,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.layoutPreview = new SiGen.UI.LayoutViewer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkExportCenterLine = new System.Windows.Forms.CheckBox();
             this.cboExportConfig = new System.Windows.Forms.ComboBox();
             this.chkExportStringCenters = new System.Windows.Forms.CheckBox();
             this.gbxFretsOptions = new System.Windows.Forms.GroupBox();
@@ -56,7 +57,7 @@
             this.btnExport = new System.Windows.Forms.Button();
             this.lblExportFormat = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.chkExportCenterLine = new System.Windows.Forms.CheckBox();
+            this.chkExportMargins = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -113,6 +114,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chkExportMargins);
             this.groupBox1.Controls.Add(this.chkExportCenterLine);
             this.groupBox1.Controls.Add(this.cboExportConfig);
             this.groupBox1.Controls.Add(this.chkExportStringCenters);
@@ -130,6 +132,18 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Export Options";
+            // 
+            // chkExportCenterLine
+            // 
+            this.chkExportCenterLine.AutoSize = true;
+            this.chkExportCenterLine.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkExportCenterLine.Location = new System.Drawing.Point(11, 112);
+            this.chkExportCenterLine.Name = "chkExportCenterLine";
+            this.chkExportCenterLine.Size = new System.Drawing.Size(113, 17);
+            this.chkExportCenterLine.TabIndex = 11;
+            this.chkExportCenterLine.Text = "Export Center Line";
+            this.chkExportCenterLine.UseVisualStyleBackColor = true;
+            this.chkExportCenterLine.CheckedChanged += new System.EventHandler(this.chkExportCenterLine_CheckedChanged);
             // 
             // cboExportConfig
             // 
@@ -272,6 +286,7 @@
             this.rbExtendInward.TabStop = true;
             this.rbExtendInward.Text = "Inward";
             this.rbExtendInward.UseVisualStyleBackColor = true;
+            this.rbExtendInward.CheckedChanged += new System.EventHandler(this.rbExtendInward_CheckedChanged);
             // 
             // rbExtendOutward
             // 
@@ -372,17 +387,17 @@
             this.lblExportFormat.TabIndex = 2;
             this.lblExportFormat.Text = "Export Format";
             // 
-            // chkExportCenterLine
+            // chkExportMargins
             // 
-            this.chkExportCenterLine.AutoSize = true;
-            this.chkExportCenterLine.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkExportCenterLine.Location = new System.Drawing.Point(11, 112);
-            this.chkExportCenterLine.Name = "chkExportCenterLine";
-            this.chkExportCenterLine.Size = new System.Drawing.Size(113, 17);
-            this.chkExportCenterLine.TabIndex = 11;
-            this.chkExportCenterLine.Text = "Export Center Line";
-            this.chkExportCenterLine.UseVisualStyleBackColor = true;
-            this.chkExportCenterLine.CheckedChanged += new System.EventHandler(this.chkExportCenterLine_CheckedChanged);
+            this.chkExportMargins.AutoSize = true;
+            this.chkExportMargins.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkExportMargins.Location = new System.Drawing.Point(11, 135);
+            this.chkExportMargins.Name = "chkExportMargins";
+            this.chkExportMargins.Size = new System.Drawing.Size(155, 17);
+            this.chkExportMargins.TabIndex = 12;
+            this.chkExportMargins.Text = "Export Fingerboard Margins";
+            this.chkExportMargins.UseVisualStyleBackColor = true;
+            this.chkExportMargins.CheckedChanged += new System.EventHandler(this.chkExportMargins_CheckedChanged);
             // 
             // ExportLayoutDialog
             // 
@@ -442,5 +457,6 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ComboBox cboExportConfig;
         private System.Windows.Forms.CheckBox chkExportCenterLine;
+        private System.Windows.Forms.CheckBox chkExportMargins;
     }
 }

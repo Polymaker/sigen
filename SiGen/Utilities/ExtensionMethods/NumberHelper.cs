@@ -23,5 +23,26 @@ namespace SiGen
             return Math.Round(value / step) * step;
         }
 
+        public static string GetSuffix(this int value)
+        {
+            if (value <= 0)
+                return string.Empty;
+
+            string number = value.ToString();
+            if(number.Length >= 2 && number[number.Length - 2] == '1' && value % 10 <= 3 && value % 10 > 0)
+                return "th";
+
+            switch (number.Last())
+            {
+                case '1':
+                    return "st";
+                case '2':
+                    return "nd";
+                case '3':
+                    return "rd";
+                default:
+                    return "th";
+            }
+        }
     }
 }

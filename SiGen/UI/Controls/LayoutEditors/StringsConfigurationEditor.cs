@@ -296,7 +296,7 @@ namespace SiGen.UI.Controls.LayoutEditors
                     cellText = GridColumnsSortOrder == ListSortDirection.Ascending ? "Treble -> Bass" : "Bass -> Treble";
                 }
 
-                using (var sf = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center })
+                using (var sf = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center, FormatFlags = StringFormatFlags.NoWrap, Trimming = StringTrimming.EllipsisCharacter })
                 using (var textBrush = new SolidBrush(e.CellStyle.ForeColor))
                 {
                     var textBound = Rectangle.FromLTRB(e.CellBounds.Left + 6, e.CellBounds.Top, e.CellBounds.Right, e.CellBounds.Bottom);
@@ -473,10 +473,67 @@ namespace SiGen.UI.Controls.LayoutEditors
         }
 
 
-        #endregion
 
         #endregion
 
-        
+        #endregion
+
+        private void dgvStrings_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Right)
+            {
+                if(dgvStrings[e.ColumnIndex,e.RowIndex].ValueType == typeof(Measure))
+                {
+                    //cmsMesureCellMenu.Tag = dgvStrings[e.ColumnIndex, e.RowIndex];
+
+                    if (dgvStrings.CurrentCell != dgvStrings[e.ColumnIndex, e.RowIndex])
+                        dgvStrings.CurrentCell = dgvStrings[e.ColumnIndex, e.RowIndex];
+
+                    var localMousePos = dgvStrings.PointToClient(Cursor.Position);
+                    cmsMesureCellMenu.Show(dgvStrings, localMousePos);
+                }
+            }
+        }
+
+        private void tsmiConvertToMM_Click(object sender, EventArgs e)
+        {
+            var currentMeasure = (Measure)dgvStrings.CurrentCell.Value;
+            currentMeasure.Unit = UnitOfMeasure.Mm;
+            dgvStrings.CurrentCell.Value = currentMeasure;
+            dgvStrings.UpdateCellValue(dgvStrings.CurrentCell.ColumnIndex, dgvStrings.CurrentCell.RowIndex);
+        }
+
+        private void tsmiConvertToCM_Click(object sender, EventArgs e)
+        {
+            var currentMeasure = (Measure)dgvStrings.CurrentCell.Value;
+            currentMeasure.Unit = UnitOfMeasure.Cm;
+            dgvStrings.CurrentCell.Value = currentMeasure;
+            dgvStrings.UpdateCellValue(dgvStrings.CurrentCell.ColumnIndex, dgvStrings.CurrentCell.RowIndex);
+        }
+
+        private void tsmiConvertToIN_Click(object sender, EventArgs e)
+        {
+            var currentMeasure = (Measure)dgvStrings.CurrentCell.Value;
+            currentMeasure.Unit = UnitOfMeasure.In;
+            dgvStrings.CurrentCell.Value = currentMeasure;
+            dgvStrings.UpdateCellValue(dgvStrings.CurrentCell.ColumnIndex, dgvStrings.CurrentCell.RowIndex);
+        }
+
+        private void tsmiConvertToFT_Click(object sender, EventArgs e)
+        {
+            var currentMeasure = (Measure)dgvStrings.CurrentCell.Value;
+            currentMeasure.Unit = UnitOfMeasure.Ft;
+            dgvStrings.CurrentCell.Value = currentMeasure;
+            dgvStrings.UpdateCellValue(dgvStrings.CurrentCell.ColumnIndex, dgvStrings.CurrentCell.RowIndex);
+        }
+
+        private void cmsMesureCellMenu_Opening(object sender, CancelEventArgs e)
+        {
+            var currentMeasure = (Measure)dgvStrings.CurrentCell.Value;
+            tsmiConvertToMM.Visible = currentMeasure.Unit != UnitOfMeasure.Mm;
+            tsmiConvertToCM.Visible = currentMeasure.Unit != UnitOfMeasure.Cm;
+            tsmiConvertToIN.Visible = currentMeasure.Unit != UnitOfMeasure.In;
+            tsmiConvertToFT.Visible = currentMeasure.Unit != UnitOfMeasure.Ft;
+        }
     }
 }

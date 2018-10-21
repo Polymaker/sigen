@@ -47,11 +47,11 @@ namespace SiGen.UI
             }
         }
 
-        private IEnumerable<LayoutFile> OpenDocuments
+        private IEnumerable<LayoutViewerPanel> OpenDocuments
         {
             get
             {
-                return dockPanel1.Documents.OfType<LayoutViewerPanel>().Select(d => d.CurrentFile);
+                return dockPanel1.Documents.OfType<LayoutViewerPanel>();
             }
         }
 
@@ -78,8 +78,6 @@ namespace SiGen.UI
             stringConfigPanel = new LayoutEditorPanel<StringsConfigurationEditor>();
             stringConfigPanel.Show(dockPanel1, DockState.DockBottom);
             stringConfigPanel.Text = "General Configuration";
-            
-            
 
             layoutMarginPanel = new LayoutEditorPanel<FingerboardMarginEditor>();
             layoutMarginPanel.Show(stringConfigPanel.Pane, DockAlignment.Right, .6);
@@ -88,12 +86,13 @@ namespace SiGen.UI
             stringSpacingPanel = new LayoutEditorPanel<StringSpacingEditor>();
             stringSpacingPanel.Show(layoutMarginPanel.Pane, DockAlignment.Right, 0.5);
             stringSpacingPanel.Text = "String Spacing";
+
             //layoutInfoPanel = new LayoutEditorPanel<LayoutProperties>();
             //layoutInfoPanel.Show(layoutMarginPanel.Pane, DockAlignment.Bottom, .4);
             //layoutInfoPanel.Text = "Layout Properties";
 
             scaleLengthPanel = new LayoutEditorPanel<ScaleLengthEditor>();
-            scaleLengthPanel.Show(layoutMarginPanel.Pane, DockAlignment.Bottom, .4);
+            scaleLengthPanel.Show(layoutMarginPanel.Pane, DockAlignment.Bottom, .5);
             //scaleLengthPanel.Show(stringConfigPanel.Pane, null);
             scaleLengthPanel.Text = "Scale Length";
             //stringConfigPanel.Activate();
@@ -232,9 +231,13 @@ namespace SiGen.UI
                 using (var sfd = new SaveFileDialog())
                 {
                     if(!string.IsNullOrEmpty(file.FileName))
-                        sfd.FileName = file.FileName;
+                    {
+                        sfd.InitialDirectory = Path.GetDirectoryName(file.FileName);
+                        sfd.FileName = Path.GetFileName(file.FileName);
+                    }
                     else
                         sfd.FileName = "test.sil";
+
                     sfd.Filter = "SI Layout file (*.sil)|*.sil";
                     sfd.DefaultExt = ".sil";
 
@@ -251,6 +254,9 @@ namespace SiGen.UI
             //    file.Layout.LayoutName = Path.GetFileNameWithoutExtension(file.FileName);
 
             file.Layout.Save(file.FileName);
+            var documentTab = OpenDocuments.FirstOrDefault(d => d.CurrentFile == file);
+            if (documentTab != null)
+                documentTab.TabText = Path.GetFileNameWithoutExtension(file.FileName);
 
             if (isNew)
             {

@@ -83,6 +83,7 @@ namespace SiGen.UI.Windows
             layoutPreview.DisplayConfig.ShowStrings = SvgExportOptions.ExportStrings;
             layoutPreview.DisplayConfig.ShowFrets = SvgExportOptions.ExportFrets;
             layoutPreview.DisplayConfig.ShowMidlines = SvgExportOptions.ExportStringCenters;
+            layoutPreview.DisplayConfig.ShowMargins = SvgExportOptions.ExportFingerboardMargin;
             layoutPreview.DisplayConfig.ShowCenterLine = SvgExportOptions.ExportCenterLine;
         }
 
@@ -103,6 +104,12 @@ namespace SiGen.UI.Windows
                     SvgLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, SvgExportOptions);
                 }
             }
+        }
+
+        private void rbExtendInward_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!isLoading)
+                mtbFretExtendAmount_ValueChanged(mtbFretExtendAmount, EventArgs.Empty);
         }
 
         private void chkExtendFretSlots_CheckedChanged(object sender, EventArgs e)
@@ -183,6 +190,13 @@ namespace SiGen.UI.Windows
             UpdatePreview();
         }
 
+        private void chkExportMargins_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!isLoading)
+                SvgExportOptions.ExportFingerboardMargin = chkExportMargins.Checked;
+            UpdatePreview();
+        }
+
         private void btnPickFretColor_Click(object sender, EventArgs e)
         {
             using(var dlg = new ColorDialog())
@@ -196,6 +210,6 @@ namespace SiGen.UI.Windows
             }
         }
 
-        
+       
     }
 }

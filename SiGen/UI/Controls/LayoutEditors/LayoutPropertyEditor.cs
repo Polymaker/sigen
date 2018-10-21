@@ -142,5 +142,11 @@ namespace SiGen.UI.Controls
             }
             return null;
         }
+
+        protected void SetControlsVisibility(bool condition, params Control[] controls)
+        {
+            foreach (var ctrl in controls)
+                ctrl.Visible = condition;
+        }
     }
 }

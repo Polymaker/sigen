@@ -33,6 +33,7 @@ namespace SiGen.UI.Controls
         private double _MaximumValue;
         private bool updatingText;
         private bool _IsEditing;
+        private int _MaxDisplayedDecimalPlaces;
 
         #endregion
 
@@ -104,6 +105,21 @@ namespace SiGen.UI.Controls
             }
         }
 
+        [DefaultValue(5)]
+        public int MaxDisplayedDecimalPlaces
+        {
+            get { return _MaxDisplayedDecimalPlaces; }
+            set
+            {
+                if (value != _MaxDisplayedDecimalPlaces)
+                {
+                    _MaxDisplayedDecimalPlaces = Math.Max(0, value);
+                    UpdateTextboxValue();
+                }
+            }
+        }
+
+
         #endregion
 
         #region Events
@@ -119,6 +135,7 @@ namespace SiGen.UI.Controls
             InitializeComponent();
             _MaximumValue = 100;
             _AllowDecimals = true;
+            _MaxDisplayedDecimalPlaces = 5;
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -130,7 +147,8 @@ namespace SiGen.UI.Controls
         private void UpdateTextboxValue()
         {
             updatingText = true;
-            base.Text = Value.ToString();
+            string formatString = string.Empty.PadRight(MaxDisplayedDecimalPlaces, '#');
+            base.Text = Value.ToString("0." + formatString);
             updatingText = false;
         }
 
