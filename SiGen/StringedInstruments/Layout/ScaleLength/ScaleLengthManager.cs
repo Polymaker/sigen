@@ -23,7 +23,7 @@ namespace SiGen.StringedInstruments.Layout
                 if (value != _LengthCalculationMethod)
                 {
                     _LengthCalculationMethod = value;
-                    Layout.NotifyLayoutChanged(this, "LengthCalculationMethod");
+                    NotifyLayoutChanged("LengthCalculationMethod");
                 }
             }
         }
@@ -62,7 +62,7 @@ namespace SiGen.StringedInstruments.Layout
                     {
                         _Length = value;
                         if (Layout.CurrentScaleLength == this)
-                            Layout.NotifyLayoutChanged(this, "ScaleLength");
+                            NotifyLayoutChanged("ScaleLength");
                     }
                 }
             }
@@ -117,7 +117,7 @@ namespace SiGen.StringedInstruments.Layout
                     {
                         _Treble = value;
                         if (Layout.CurrentScaleLength == this)
-                            Layout.NotifyLayoutChanged(this, "ScaleLength");
+                            NotifyLayoutChanged("ScaleLength");
                     }
                 }
             }
@@ -131,7 +131,7 @@ namespace SiGen.StringedInstruments.Layout
                     {
                         _Bass = value;
                         if(Layout.CurrentScaleLength == this)
-                            Layout.NotifyLayoutChanged(this, "ScaleLength");
+                            NotifyLayoutChanged("ScaleLength");
                     }
                 }
             }
@@ -279,7 +279,7 @@ namespace SiGen.StringedInstruments.Layout
             {
                 _Lengths[index] = value;
                 if (Layout.CurrentScaleLength == this)
-                    Layout.NotifyLayoutChanged(this, "ScaleLength");
+                    NotifyLayoutChanged("ScaleLength");
             }
 
             public void SetLengths(params Measure[] lengths)
@@ -288,7 +288,7 @@ namespace SiGen.StringedInstruments.Layout
                     throw new InvalidOperationException();
                 _Lengths = lengths;
                 if (Layout.CurrentScaleLength == this)
-                    Layout.NotifyLayoutChanged(this, "ScaleLength");
+                    NotifyLayoutChanged("ScaleLength");
             }
 
             public override XElement Serialize(string elemName)

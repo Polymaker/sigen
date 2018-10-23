@@ -9,22 +9,21 @@ namespace SiGen.Common
 {
     public class LayoutFile
     {
-        
-        public SILayout Layout { get; set; }
+        public bool HasChanged { get; set; }
+        public SILayout Layout { get; private set; }
         public string FileName { get; set; }
 
         public LayoutFile(SILayout layout)
         {
             Layout = layout;
             FileName = string.Empty;
+            Layout.LayoutChanged += Layout_LayoutChanged;
         }
 
-        public LayoutFile(string filename)
+        private void Layout_LayoutChanged(object sender, EventArgs e)
         {
-            FileName = filename;
-            Layout = SILayout.Load(filename);
+            HasChanged = true;
         }
-
 
         public static LayoutFile Open(string filename, bool asTemplate = false)
         {

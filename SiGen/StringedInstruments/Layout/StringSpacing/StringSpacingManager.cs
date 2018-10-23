@@ -17,28 +17,14 @@ namespace SiGen.StringedInstruments.Layout
 
         public StringSpacingAlignment BridgeAlignment
         {
-            get { return _BridgeAlignment; }
-            set
-            {
-                if(value != _BridgeAlignment)
-                {
-                    _BridgeAlignment = value;
-                    Layout.NotifyLayoutChanged(this, "BridgeAlignment");
-                }
-            }
+            get => _BridgeAlignment;
+            set => SetPropertyValue(ref _BridgeAlignment, value);
         }
 
         public StringSpacingAlignment NutAlignment
         {
-            get { return _NutAlignment; }
-            set
-            {
-                if (value != _NutAlignment)
-                {
-                    _NutAlignment = value;
-                    Layout.NotifyLayoutChanged(this, "NutAlignment");
-                }
-            }
+            get => _NutAlignment;
+            set => SetPropertyValue(ref _NutAlignment, value);
         }
 
         public virtual Measure StringSpreadAtBridge

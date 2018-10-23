@@ -101,6 +101,7 @@
     <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardMargin.cs" />
     <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardSide.cs" />
     <Compile Include="StringedInstruments\Layout\Fingerboard\FretInterpolationMethod.cs" />
+    <Compile Include="StringedInstruments\Layout\PropertyChange.cs" />
     <Compile Include="StringedInstruments\Layout\Strings\FretManager.cs" />
     <Compile Include="StringedInstruments\Layout\ILayoutComponent.cs" />
     <Compile Include="StringedInstruments\Layout\LayoutComponent.cs" />

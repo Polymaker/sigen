@@ -56,6 +56,8 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.localizableStringList1 = new SiGen.Localization.LocalizableStringList(this.components);
             this.MSG_FileAlreadyOpen = new SiGen.Localization.LocalizableString(this.components);
+            this.MSG_SaveBeforeClose = new SiGen.Localization.LocalizableString(this.components);
+            this.LBL_Warning = new SiGen.Localization.LocalizableString(this.components);
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -230,7 +232,7 @@
             this.dockPanel1.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.dockPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dockPanel1.Location = new System.Drawing.Point(0, 69);
-            this.dockPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dockPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.dockPanel1.Name = "dockPanel1";
             this.dockPanel1.Size = new System.Drawing.Size(1344, 747);
             this.dockPanel1.TabIndex = 2;
@@ -284,10 +286,20 @@
             // localizableStringList1
             // 
             this.localizableStringList1.Items.Add(this.MSG_FileAlreadyOpen);
+            this.localizableStringList1.Items.Add(this.MSG_SaveBeforeClose);
+            this.localizableStringList1.Items.Add(this.LBL_Warning);
             // 
             // MSG_FileAlreadyOpen
             // 
             this.MSG_FileAlreadyOpen.Text = "The file is already open. do you want to reaload it?";
+            // 
+            // MSG_SaveBeforeClose
+            // 
+            this.MSG_SaveBeforeClose.Text = "Do you want to save the changes made to the layout before closing?";
+            // 
+            // LBL_Warning
+            // 
+            this.LBL_Warning.Text = "Warning";
             // 
             // LayoutEditorWindow
             // 
@@ -299,7 +311,7 @@
             this.Controls.Add(this.statusStrip1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.IsMdiContainer = true;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "LayoutEditorWindow";
             this.Text = "Stringed Instrument Layout Generator";
             this.toolStrip1.ResumeLayout(false);
@@ -336,5 +348,7 @@
         private System.Windows.Forms.ToolStripButton tsbLayoutProperties;
         private System.Windows.Forms.ToolStripButton tsbMeasureTool;
         private System.Windows.Forms.StatusStrip statusStrip1;
+        private Localization.LocalizableString MSG_SaveBeforeClose;
+        private Localization.LocalizableString LBL_Warning;
     }
 }

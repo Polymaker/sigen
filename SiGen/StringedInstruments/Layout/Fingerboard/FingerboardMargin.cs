@@ -36,7 +36,7 @@ namespace SiGen.StringedInstruments.Layout
                 if (_NutTrebleMargin != value || _BridgeTrebleMargin != value)
                 {
                     _NutTrebleMargin = _BridgeTrebleMargin = value;
-                    Layout.NotifyLayoutChanged(this, "FingerboardMargin");
+                    NotifyLayoutChanged("FingerboardMargin");
                 }
             }
         }
@@ -49,7 +49,7 @@ namespace SiGen.StringedInstruments.Layout
                 if (_NutBassMargin != value || _BridgeBassMargin != value)
                 {
                     _NutBassMargin = _BridgeBassMargin = value;
-                    Layout.NotifyLayoutChanged(this, "FingerboardMargin");
+                    NotifyLayoutChanged("FingerboardMargin");
                 }
             }
         }
@@ -62,7 +62,7 @@ namespace SiGen.StringedInstruments.Layout
                 if (_NutBassMargin != value || _NutTrebleMargin != value)
                 {
                     _NutBassMargin = _NutTrebleMargin = value;
-                    Layout.NotifyLayoutChanged(this, "FingerboardMargin");
+                    NotifyLayoutChanged("FingerboardMargin");
                 }
             }
         }
@@ -75,7 +75,7 @@ namespace SiGen.StringedInstruments.Layout
                 if (_BridgeBassMargin != value || _BridgeTrebleMargin != value)
                 {
                     _BridgeBassMargin = _BridgeTrebleMargin = value;
-                    Layout.NotifyLayoutChanged(this, "FingerboardMargin");
+                    NotifyLayoutChanged("FingerboardMargin");
                 }
             }
         }
@@ -119,7 +119,7 @@ namespace SiGen.StringedInstruments.Layout
                 if (value != _LastFret)
                 {
                     _LastFret = value;
-                    Layout.NotifyLayoutChanged(this, "LastFret");
+                    NotifyLayoutChanged("LastFret");
                 }
             }
         }
@@ -132,7 +132,7 @@ namespace SiGen.StringedInstruments.Layout
                 if (_CompensateStringGauge != value)
                 {
                     _CompensateStringGauge = value;
-                    Layout.NotifyLayoutChanged(this, "CompensateStringGauge");
+                    NotifyLayoutChanged("CompensateStringGauge");
                 }
             }
         }
@@ -145,7 +145,7 @@ namespace SiGen.StringedInstruments.Layout
                 (s,m) => {
                     if (s == FingerboardSide.Treble) _NutTrebleMargin = m;
                     else _NutBassMargin = m;
-                    Layout.NotifyLayoutChanged(this, "FingerboardMargin");
+                    NotifyLayoutChanged("FingerboardMargin");
                 }
             );
             _BridgeMargins = new ArrayProperty<Measure, FingerboardSide>(
@@ -153,7 +153,7 @@ namespace SiGen.StringedInstruments.Layout
                 (s, m) => {
                     if (s == FingerboardSide.Treble) _BridgeTrebleMargin = m;
                     else _BridgeBassMargin = m;
-                    Layout.NotifyLayoutChanged(this, "FingerboardMargin");
+                    NotifyLayoutChanged("FingerboardMargin");
                 }
             );
             _TrebleMargins = new ArrayProperty<Measure, FingerboardEnd>(
@@ -161,7 +161,7 @@ namespace SiGen.StringedInstruments.Layout
                 (s, m) => {
                     if (s == FingerboardEnd.Nut) _NutTrebleMargin = m;
                     else _BridgeTrebleMargin = m;
-                    Layout.NotifyLayoutChanged(this, "FingerboardMargin");
+                    NotifyLayoutChanged("FingerboardMargin");
                 }
             );
             _BassMargins = new ArrayProperty<Measure, FingerboardEnd>(
@@ -169,7 +169,7 @@ namespace SiGen.StringedInstruments.Layout
                 (s, m) => {
                     if (s == FingerboardEnd.Nut) _NutBassMargin = m;
                     else _BridgeBassMargin = m;
-                    Layout.NotifyLayoutChanged(this, "FingerboardMargin");
+                    NotifyLayoutChanged("FingerboardMargin");
                 }
             );
         }

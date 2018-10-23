@@ -124,7 +124,7 @@ namespace SiGen.UI
 
         private DockContent CreateDocumentPanel(LayoutFile layoutFile)
         {
-            var documentPanel = new LayoutViewerPanel();
+            var documentPanel = new LayoutViewerPanel(this);
 
             if (string.IsNullOrEmpty(layoutFile.FileName))
                 documentPanel.Text = "New Layout";
@@ -165,14 +165,30 @@ namespace SiGen.UI
 
         private void DocumentPanel_FormClosed(object sender, FormClosedEventArgs e)
         {
-            var documentFile = (LayoutFile)((DockContent)dockPanel1.ActiveDocument).Tag;
+            var documentFile = ((LayoutViewerPanel)sender).CurrentFile;
             foreach (var panel in dockPanel1.Contents.OfType<ILayoutEditorPanel>())
                 panel.Editor.ClearLayoutCache(documentFile.Layout);
         }
 
         private void DocumentPanel_FormClosing(object sender, FormClosingEventArgs e)
         {
-            
+            var panel = (LayoutViewerPanel)sender;
+            var documentFile = panel.CurrentFile;
+            if (documentFile.HasChanged)
+            {
+                panel.Activate();
+                var result = MessageBox.Show(MSG_SaveBeforeClose, LBL_Warning, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3);
+                switch (result)
+                {
+                    case DialogResult.Yes:
+                        if(!SaveLayout(documentFile))
+                            e.Cancel = true;
+                        break;
+                    case DialogResult.Cancel:
+                        e.Cancel = true;
+                        break;
+                }
+            }
         }
 
         #endregion
@@ -223,10 +239,10 @@ namespace SiGen.UI
         
         #region Save
 
-        private void SaveLayout(LayoutFile file, bool selectPath)
+        public bool SaveLayout(LayoutFile file, bool selectPath = false)
         {
             bool isNew = string.IsNullOrEmpty(file.FileName);
-            if (selectPath)
+            if (selectPath || isNew)
             {
                 using (var sfd = new SaveFileDialog())
                 {
@@ -236,17 +252,18 @@ namespace SiGen.UI
                         sfd.FileName = Path.GetFileName(file.FileName);
                     }
                     else
-                        sfd.FileName = "test.sil";
+                        sfd.FileName = GenerateDefaultFileName(file);
 
-                    sfd.Filter = "SI Layout file (*.sil)|*.sil";
+                    sfd.Filter = "SI Layout Files|*.sil|All Files|*.*";
                     sfd.DefaultExt = ".sil";
 
                     if (sfd.ShowDialog() == DialogResult.OK)
                     {
                         file.FileName = sfd.FileName;
+                        file.HasChanged = false;
                     }
                     else
-                        return;
+                        return false;
                 }
             }
 
@@ -256,13 +273,29 @@ namespace SiGen.UI
             file.Layout.Save(file.FileName);
             var documentTab = OpenDocuments.FirstOrDefault(d => d.CurrentFile == file);
             if (documentTab != null)
-                documentTab.TabText = Path.GetFileNameWithoutExtension(file.FileName);
+            {
+                documentTab.TabText = string.IsNullOrEmpty(file.Layout.LayoutName ) ? Path.GetFileNameWithoutExtension(file.FileName) : file.Layout.LayoutName;
+                documentTab.ToolTipText = file.FileName;
+            }
 
             if (isNew)
             {
                 AppPreferences.AddRecentFile(file.FileName);
                 RebuildRecentFilesMenu();
             }
+
+            return true;
+        }
+
+        private string GenerateDefaultFileName(LayoutFile file)
+        {
+            var keywords = new List<string>();
+            keywords.Add($"{file.Layout.NumberOfStrings} Strings");
+            if (file.Layout.ScaleLengthMode == ScaleLengthType.Multiple)
+                keywords.Add("Multiscale");
+            keywords.Add("Fingerboard");
+            keywords.Add("Layout");
+            return string.Join(" ", keywords) + ".sil";
         }
 
         private void tssbSave_ButtonClick(object sender, EventArgs e)
@@ -305,6 +338,12 @@ namespace SiGen.UI
 
         private void OpenLayoutFile(string filename, bool asTemplate = false)
         {
+            if (!File.Exists(filename))
+            {
+                MessageBox.Show("Error", "The file does not exist.");
+                return;
+            }
+
             try
             {
                 bool cancelOpen = false;
@@ -330,7 +369,10 @@ namespace SiGen.UI
                 }
 
                 if(!cancelOpen)
-                    LoadLayout(LayoutFile.Open(filename, asTemplate));
+                {
+                    var loadedLayout = LayoutFile.Open(filename, asTemplate);
+                    LoadLayout(loadedLayout);
+                }
 
                 if (!asTemplate)
                 {
@@ -340,7 +382,7 @@ namespace SiGen.UI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occured: " + ex.ToString());
+                MessageBox.Show("There was an error while opening the file: " + ex.ToString(), "Error");
             }
         }
 
@@ -349,7 +391,6 @@ namespace SiGen.UI
         {
             tssbOpen.ShowDropDown();
         }
-
 
         private void LoadLayout(LayoutFile layout)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -11,7 +12,9 @@ namespace SiGen.StringedInstruments.Layout
     {
         private /*readonly*/ SILayout _Layout;
         private bool isDisposed;
+
         public SILayout Layout { get { return _Layout; } }
+
         public int NumberOfStrings { get { return Layout.NumberOfStrings; } }
 
         SILayout ILayoutComponent.Layout
@@ -50,13 +53,17 @@ namespace SiGen.StringedInstruments.Layout
 
         protected void NotifyLayoutChanged(string propertyName)
         {
-            NotifyLayoutChanged(this, propertyName);
+            Layout?.NotifyLayoutChanged(this, propertyName);
         }
 
-        protected void NotifyLayoutChanged(object sender, string propertyName)
+        protected void SetPropertyValue<T>(ref T property, T value, [CallerMemberName] string propertyName = null)
         {
-            if (Layout != null)
-                Layout.NotifyLayoutChanged(sender, propertyName);
+            var comparer = EqualityComparer<T>.Default;
+            if (!comparer.Equals(property, value))
+            {
+                property = value;
+                NotifyLayoutChanged(propertyName);
+            }
         }
     }
 }

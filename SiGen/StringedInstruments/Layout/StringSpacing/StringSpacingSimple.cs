@@ -25,28 +25,14 @@ namespace SiGen.StringedInstruments.Layout
 
         public Measure StringSpacingAtNut
         {
-            get { return _StringSpacingAtNut; }
-            set
-            {
-                if (value != _StringSpacingAtNut)
-                {
-                    _StringSpacingAtNut = value;
-                    Layout.NotifyLayoutChanged(this, "StringSpacingAtNut");
-                }
-            }
+            get => _StringSpacingAtNut;
+            set => SetPropertyValue(ref _StringSpacingAtNut, value);
         }
 
         public Measure StringSpacingAtBridge
         {
-            get { return _StringSpacingAtBridge; }
-            set
-            {
-                if (value != _StringSpacingAtNut)
-                {
-                    _StringSpacingAtBridge = value;
-                    Layout.NotifyLayoutChanged(this, "StringSpacingAtBridge");
-                }
-            }
+            get => _StringSpacingAtBridge;
+            set => SetPropertyValue(ref _StringSpacingAtBridge, value);
         }
 
         public override Measure StringSpreadAtNut
@@ -75,28 +61,14 @@ namespace SiGen.StringedInstruments.Layout
 
         public StringSpacingMethod NutSpacingMode
         {
-            get { return _NutSpacingMode; }
-            set
-            {
-                if(value != _NutSpacingMode)
-                {
-                    _NutSpacingMode = value;
-                    Layout.NotifyLayoutChanged(this, "NutSpacingMode");
-                }
-            }
+            get => _NutSpacingMode;
+            set => SetPropertyValue(ref _NutSpacingMode, value);
         }
 
         public StringSpacingMethod BridgeSpacingMode
         {
-            get { return _BridgeSpacingMode; }
-            set
-            {
-                if (value != _BridgeSpacingMode)
-                {
-                    _BridgeSpacingMode = value;
-                    Layout.NotifyLayoutChanged(this, "BridgeSpacingMode");
-                }
-            }
+            get => _BridgeSpacingMode;
+            set => SetPropertyValue(ref _BridgeSpacingMode, value);
         }
 
         public StringSpacingSimple(SILayout layout) : base(layout)
