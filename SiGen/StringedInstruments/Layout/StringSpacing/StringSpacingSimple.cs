@@ -118,12 +118,12 @@ namespace SiGen.StringedInstruments.Layout
 
                 if (NutSpacingMode == StringSpacingMethod.BetweenStrings)
                 {
-                    StringSpacingAtNut = Measure.Parse(elem.Attribute("StringSpacingAtNut").Value);
+                    StringSpacingAtNut = Measure.ParseInvariant(elem.Attribute("StringSpacingAtNut").Value);
                     AdjustedNutSpacings = new Measure[elem.Elements("Spacing").Count()];
                     foreach (var spacingElem in elem.Elements("Spacing"))
                     {
                         int spacingIndex = spacingElem.GetIntAttribute("Index");
-                        AdjustedNutSpacings[spacingIndex] = Measure.Parse(spacingElem.Attribute("Nut").Value);
+                        AdjustedNutSpacings[spacingIndex] = Measure.ParseInvariant(spacingElem.Attribute("Nut").Value);
                     }
                 }
             }
@@ -133,12 +133,12 @@ namespace SiGen.StringedInstruments.Layout
 
                 if (BridgeSpacingMode == StringSpacingMethod.BetweenStrings)
                 {
-                    StringSpacingAtBridge = Measure.Parse(elem.Attribute("StringSpacingAtBridge").Value);
+                    StringSpacingAtBridge = Measure.ParseInvariant(elem.Attribute("StringSpacingAtBridge").Value);
                     AdjustedBridgeSpacings = new Measure[elem.Elements("Spacing").Count()];
                     foreach (var spacingElem in elem.Elements("Spacing"))
                     {
                         int spacingIndex = spacingElem.GetIntAttribute("Index");
-                        AdjustedBridgeSpacings[spacingIndex] = Measure.Parse(spacingElem.Attribute("Nut").Value);
+                        AdjustedBridgeSpacings[spacingIndex] = Measure.ParseInvariant(spacingElem.Attribute("Nut").Value);
                     }
                 }
             }

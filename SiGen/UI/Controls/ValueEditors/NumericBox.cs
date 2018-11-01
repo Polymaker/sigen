@@ -199,18 +199,17 @@ namespace SiGen.UI.Controls
                 _IsEditing = false;
                 OnEndEdit();
 
-                double value;
-                if (double.TryParse(base.Text, out value))
-                {
-                    if(AllowDecimals || value % 1d == 0d)
-                        Value = ConstraintValue(value);
-                    //success
-                }
-                else
-                {
-                    //fail
-                }
-                UpdateTextboxValue();
+				if (NumberHelper.SmartTryParse(base.Text, out double value))
+				{
+					if (AllowDecimals || value % 1d == 0d)
+						Value = ConstraintValue(value);
+					//success
+				}
+				else
+				{
+					//fail
+				}
+				UpdateTextboxValue();
             }
         }
 
@@ -255,21 +254,20 @@ namespace SiGen.UI.Controls
             {
                 if (!updatingText && _IsEditing)
                 {
-                    double value;
-                    if (double.TryParse(base.Text, out value))
-                    {
-                        if(!AllowDecimals && value % 1d != 0)
-                        {
-                            System.Media.SystemSounds.Exclamation.Play();
-                            e.Cancel = true;
-                        }
-                    }
-                    else
-                    {
-                        System.Media.SystemSounds.Exclamation.Play();
-                        e.Cancel = true;
-                    }
-                }
+					if (NumberHelper.SmartTryParse(base.Text, out double value))
+					{
+						if (!AllowDecimals && value % 1d != 0)
+						{
+							System.Media.SystemSounds.Exclamation.Play();
+							e.Cancel = true;
+						}
+					}
+					else
+					{
+						System.Media.SystemSounds.Exclamation.Play();
+						e.Cancel = true;
+					}
+				}
             }
         }
 

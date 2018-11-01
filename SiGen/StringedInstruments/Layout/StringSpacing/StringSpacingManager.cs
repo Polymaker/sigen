@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SiGen.Measuring;
 using System.Xml.Linq;
+using System.Globalization;
 
 namespace SiGen.StringedInstruments.Layout
 {
@@ -135,8 +136,8 @@ namespace SiGen.StringedInstruments.Layout
             BridgeAlignment = (StringSpacingAlignment)Enum.Parse(typeof(StringSpacingAlignment), elem.Attribute("BridgeAlignment").Value);
             foreach(var spacingElem in elem.Elements("Spacing"))
             {
-                SetSpacing(FingerboardEnd.Nut, spacingElem.GetIntAttribute("Index"), Measure.TryParse(spacingElem.Attribute("Nut").Value, Measure.Zero));
-                SetSpacing(FingerboardEnd.Bridge, spacingElem.GetIntAttribute("Index"), Measure.TryParse(spacingElem.Attribute("Bridge").Value, Measure.Zero));
+                SetSpacing(FingerboardEnd.Nut, spacingElem.GetIntAttribute("Index"), Measure.TryParse(spacingElem.Attribute("Nut").Value, NumberFormatInfo.InvariantInfo, Measure.Zero));
+                SetSpacing(FingerboardEnd.Bridge, spacingElem.GetIntAttribute("Index"), Measure.TryParse(spacingElem.Attribute("Bridge").Value, NumberFormatInfo.InvariantInfo, Measure.Zero));
             }
         }
     }

@@ -98,7 +98,7 @@ namespace SiGen.StringedInstruments.Layout
             internal override void Deserialize(XElement elem)
             {
                 base.Deserialize(elem);
-                Length = Measure.Parse(elem.Attribute("Value").Value);
+                Length = Measure.ParseInvariant(elem.Attribute("Value").Value);
             }
         }
 
@@ -195,8 +195,8 @@ namespace SiGen.StringedInstruments.Layout
             internal override void Deserialize(XElement elem)
             {
                 base.Deserialize(elem);
-                Treble = Measure.Parse(elem.Attribute("Treble").Value);
-                Bass = Measure.Parse(elem.Attribute("Bass").Value);
+                Treble = Measure.ParseInvariant(elem.Attribute("Treble").Value);
+                Bass = Measure.ParseInvariant(elem.Attribute("Bass").Value);
                 if (elem.ContainsAttribute("MultiScaleRatio"))
                     PerpendicularFretRatio = double.Parse(elem.Attribute("MultiScaleRatio").Value);
                 else

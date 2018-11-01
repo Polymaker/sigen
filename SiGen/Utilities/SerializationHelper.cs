@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -71,7 +72,7 @@ namespace SiGen.Utilities
                 var measure = (Measuring.Measure)value;
                 if (measure.IsEmpty)
                     return "N/A";
-                return string.Format("{0}{1}", measure.Value, measure.Unit != null ? measure.Unit.Abreviation : string.Empty);
+                return string.Format(NumberFormatInfo.InvariantInfo,"{0}{1}", measure.Value, measure.Unit != null ? measure.Unit.Abreviation : string.Empty);
             }
             if (value == null)
                 return string.Empty;
@@ -83,7 +84,7 @@ namespace SiGen.Utilities
         {
             var converter = TypeDescriptor.GetConverter(type);
             if (converter != null && converter.CanConvertFrom(typeof(string)))
-                return converter.ConvertFrom(value);
+                return converter.ConvertFrom(null, CultureInfo.InvariantCulture, value);
             return value.ToString();
         }
 

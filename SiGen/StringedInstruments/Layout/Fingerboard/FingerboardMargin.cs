@@ -208,37 +208,37 @@ namespace SiGen.StringedInstruments.Layout
         public void Deserialize(XElement elem)
         {
             if(elem.ContainsAttribute("LastFret"))
-                _LastFret = Measure.Parse(elem.Attribute("LastFret").Value);
+                _LastFret = Measure.ParseInvariant(elem.Attribute("LastFret").Value);
             if (elem.ContainsAttribute("Edges"))
             {
-                _NutTrebleMargin = _NutBassMargin = _BridgeTrebleMargin = _BridgeBassMargin = Measure.Parse(elem.Attribute("Edges").Value);
+                _NutTrebleMargin = _NutBassMargin = _BridgeTrebleMargin = _BridgeBassMargin = Measure.ParseInvariant(elem.Attribute("Edges").Value);
             }
             else if (elem.ContainsAttribute("Treble") && elem.ContainsAttribute("Bass"))
             {
-                _NutTrebleMargin = _BridgeTrebleMargin = Measure.Parse(elem.Attribute("Treble").Value);
-                _NutBassMargin = _BridgeBassMargin = Measure.Parse(elem.Attribute("Bass").Value);
+                _NutTrebleMargin = _BridgeTrebleMargin = Measure.ParseInvariant(elem.Attribute("Treble").Value);
+                _NutBassMargin = _BridgeBassMargin = Measure.ParseInvariant(elem.Attribute("Bass").Value);
             }
             else if (elem.ContainsAttribute("Nut") && elem.ContainsAttribute("Bridge"))
             {
-                _NutTrebleMargin = _NutBassMargin = Measure.Parse(elem.Attribute("Nut").Value);
-                _BridgeTrebleMargin = _BridgeBassMargin = Measure.Parse(elem.Attribute("Bridge").Value);
+                _NutTrebleMargin = _NutBassMargin = Measure.ParseInvariant(elem.Attribute("Nut").Value);
+                _BridgeTrebleMargin = _BridgeBassMargin = Measure.ParseInvariant(elem.Attribute("Bridge").Value);
             }
             else
             {
                 if (elem.ContainsAttribute("NutTreble"))
-                    _NutTrebleMargin = Measure.Parse(elem.Attribute("NutTreble").Value);
+                    _NutTrebleMargin = Measure.ParseInvariant(elem.Attribute("NutTreble").Value);
                 else
                     _NutTrebleMargin = Measure.Zero;
                 if (elem.ContainsAttribute("NutBass"))
-                    _NutBassMargin = Measure.Parse(elem.Attribute("NutBass").Value);
+                    _NutBassMargin = Measure.ParseInvariant(elem.Attribute("NutBass").Value);
                 else
                     _NutBassMargin = Measure.Zero;
                 if (elem.ContainsAttribute("BridgeTreble"))
-                    _BridgeTrebleMargin = Measure.Parse(elem.Attribute("BridgeTreble").Value);
+                    _BridgeTrebleMargin = Measure.ParseInvariant(elem.Attribute("BridgeTreble").Value);
                 else
                     _BridgeTrebleMargin = Measure.Zero;
                 if (elem.ContainsAttribute("BridgeBass"))
-                    _BridgeBassMargin = Measure.Parse(elem.Attribute("BridgeBass").Value);
+                    _BridgeBassMargin = Measure.ParseInvariant(elem.Attribute("BridgeBass").Value);
                 else
                     _BridgeBassMargin = Measure.Zero;
             }

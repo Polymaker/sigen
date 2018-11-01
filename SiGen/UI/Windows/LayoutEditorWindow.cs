@@ -113,7 +113,6 @@ namespace SiGen.UI
                 tsbMeasureTool.Checked = false;
                 tsbMeasureTool.CheckOnClick = false;
             }
-
         }
 
         private void SetEditorsActiveLayout(SILayout layout)

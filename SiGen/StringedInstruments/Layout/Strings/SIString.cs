@@ -319,10 +319,10 @@ namespace SiGen.StringedInstruments.Layout
             _NumberOfFrets = fretElem.GetIntAttribute("NumberOfFrets");
 
             if (elem.ContainsAttribute("ScaleLength"))
-                ScaleLength = Measure.Parse(elem.Attribute("ScaleLength").Value);
+                ScaleLength = Measure.ParseInvariant(elem.Attribute("ScaleLength").Value);
 
             if(elem.ContainsAttribute("MultiScaleRatio"))
-                _MultiScaleRatio = double.Parse(elem.Attribute("MultiScaleRatio").Value);
+                _MultiScaleRatio = double.Parse(elem.Attribute("MultiScaleRatio").Value, System.Globalization.NumberFormatInfo.InvariantInfo);
             //else
             //    _MultiScaleRatio = 0.5d;
 
@@ -332,7 +332,7 @@ namespace SiGen.StringedInstruments.Layout
             if (elem.ContainsElement("Action"))
             {
                 var actionElem = elem.Element("Action");
-                _ActionAtTwelfthFret = Measure.Parse(actionElem.Attribute("AtTwelfthFret").Value);
+                _ActionAtTwelfthFret = Measure.ParseInvariant(actionElem.Attribute("AtTwelfthFret").Value);
             }
 
             if (elem.ContainsElement("Properties"))

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
@@ -504,7 +505,7 @@ namespace SiGen.Measuring
         {
             if(IsEmpty)
                 return new System.Xml.Linq.XAttribute(name, "N/A");
-            return new System.Xml.Linq.XAttribute(name, string.Format("{0}{1}", Value, Unit != null ? Unit.Abreviation : string.Empty));
+            return new System.Xml.Linq.XAttribute(name, string.Format(NumberFormatInfo.InvariantInfo, "{0}{1}", Value, Unit != null ? Unit.Abreviation : string.Empty));
         }
 
         public static Measure Parse(string value)
@@ -512,19 +513,40 @@ namespace SiGen.Measuring
             return Utilities.MeasureParser.Parse(value);
         }
 
-        public static bool TryParse(string value, out Measure measure)
+		public static Measure ParseInvariant(string value)
+		{
+			return Parse(value, NumberFormatInfo.InvariantInfo);
+		}
+
+		public static Measure Parse(string value, IFormatProvider provider)
+		{
+			return Utilities.MeasureParser.Parse(value, provider);
+		}
+
+		public static bool TryParse(string value, out Measure measure)
         {
             return Utilities.MeasureParser.TryParse(value, out measure);
         }
 
-        public static Measure TryParse(string value, Measure fallback)
+		public static bool TryParse(string value, IFormatProvider provider, out Measure measure)
+		{
+			return Utilities.MeasureParser.TryParse(value, out measure);
+		}
+
+		public static Measure TryParse(string value, Measure fallback)
         {
-            Measure result;
-            if (Utilities.MeasureParser.TryParse(value, out result))
-                return result;
-            return fallback;
+			if (Utilities.MeasureParser.TryParse(value, out Measure result))
+				return result;
+			return fallback;
         }
 
-        #endregion
-    }
+		public static Measure TryParse(string value, IFormatProvider provider, Measure fallback)
+		{
+			if (Utilities.MeasureParser.TryParse(value, provider, out Measure result))
+				return result;
+			return fallback;
+		}
+
+		#endregion
+	}
 }
