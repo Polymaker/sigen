@@ -33,11 +33,10 @@ namespace SiGen.StringedInstruments.Layout
             get { return _NutTrebleMargin != _BridgeTrebleMargin ? Measure.Empty : _NutTrebleMargin; }
             set
             {
-                if (_NutTrebleMargin != value || _BridgeTrebleMargin != value)
-                {
-                    _NutTrebleMargin = _BridgeTrebleMargin = value;
-                    NotifyLayoutChanged("FingerboardMargin");
-                }
+				Layout.StartBatchChanges();
+				SetFieldValue(ref _NutTrebleMargin, value, nameof(_NutTrebleMargin));
+				SetFieldValue(ref _BridgeTrebleMargin, value, nameof(_BridgeTrebleMargin));
+				Layout.FinishBatchChanges();
             }
         }
 
@@ -46,11 +45,10 @@ namespace SiGen.StringedInstruments.Layout
             get { return _NutBassMargin != _BridgeBassMargin ? Measure.Empty : _NutBassMargin; }
             set
             {
-                if (_NutBassMargin != value || _BridgeBassMargin != value)
-                {
-                    _NutBassMargin = _BridgeBassMargin = value;
-                    NotifyLayoutChanged("FingerboardMargin");
-                }
+				Layout.StartBatchChanges();
+				SetFieldValue(ref _NutBassMargin, value, nameof(_NutBassMargin));
+				SetFieldValue(ref _BridgeBassMargin, value, nameof(_BridgeBassMargin));
+				Layout.FinishBatchChanges();
             }
         }
 
@@ -59,11 +57,10 @@ namespace SiGen.StringedInstruments.Layout
             get { return _NutBassMargin != _NutTrebleMargin ? Measure.Empty : _NutBassMargin; }
             set
             {
-                if (_NutBassMargin != value || _NutTrebleMargin != value)
-                {
-                    _NutBassMargin = _NutTrebleMargin = value;
-                    NotifyLayoutChanged("FingerboardMargin");
-                }
+				Layout.StartBatchChanges();
+				SetFieldValue(ref _NutBassMargin, value, nameof(_NutBassMargin));
+				SetFieldValue(ref _NutTrebleMargin, value, nameof(_NutTrebleMargin));
+				Layout.FinishBatchChanges();
             }
         }
 
@@ -72,11 +69,10 @@ namespace SiGen.StringedInstruments.Layout
             get { return _BridgeBassMargin != _BridgeTrebleMargin ? Measure.Empty : _BridgeBassMargin; }
             set
             {
-                if (_BridgeBassMargin != value || _BridgeTrebleMargin != value)
-                {
-                    _BridgeBassMargin = _BridgeTrebleMargin = value;
-                    NotifyLayoutChanged("FingerboardMargin");
-                }
+				Layout.StartBatchChanges();
+				SetFieldValue(ref _BridgeBassMargin, value, nameof(_BridgeBassMargin));
+				SetFieldValue(ref _BridgeTrebleMargin, value, nameof(_BridgeTrebleMargin));
+				Layout.FinishBatchChanges();
             }
         }
 
@@ -116,12 +112,8 @@ namespace SiGen.StringedInstruments.Layout
             get { return _LastFret; }
             set
             {
-                if (value != _LastFret)
-                {
-                    _LastFret = value;
-                    NotifyLayoutChanged("LastFret");
-                }
-            }
+				SetPropertyValue(ref _LastFret, value);
+			}
         }
 
         public bool CompensateStringGauge
@@ -129,12 +121,8 @@ namespace SiGen.StringedInstruments.Layout
             get { return _CompensateStringGauge; }
             set
             {
-                if (_CompensateStringGauge != value)
-                {
-                    _CompensateStringGauge = value;
-                    NotifyLayoutChanged("CompensateStringGauge");
-                }
-            }
+				SetPropertyValue(ref _CompensateStringGauge, value);
+			}
         }
 
         public FingerboardMargin(SILayout layout) : base(layout)
@@ -143,33 +131,37 @@ namespace SiGen.StringedInstruments.Layout
             _NutMargins = new ArrayProperty<Measure, FingerboardSide>(
                 (s) => s == FingerboardSide.Treble ? _NutTrebleMargin : _NutBassMargin,
                 (s,m) => {
-                    if (s == FingerboardSide.Treble) _NutTrebleMargin = m;
-                    else _NutBassMargin = m;
-                    NotifyLayoutChanged("FingerboardMargin");
-                }
+					if (s == FingerboardSide.Treble)
+						SetFieldValue(ref _NutTrebleMargin, m, nameof(_NutTrebleMargin));
+					else
+						SetFieldValue(ref _NutBassMargin, m, nameof(_NutBassMargin));
+				}
             );
             _BridgeMargins = new ArrayProperty<Measure, FingerboardSide>(
                 (s) => s == FingerboardSide.Treble ? _BridgeTrebleMargin : _BridgeBassMargin,
                 (s, m) => {
-                    if (s == FingerboardSide.Treble) _BridgeTrebleMargin = m;
-                    else _BridgeBassMargin = m;
-                    NotifyLayoutChanged("FingerboardMargin");
+					if (s == FingerboardSide.Treble)
+						SetFieldValue(ref _BridgeTrebleMargin, m, nameof(_BridgeTrebleMargin));
+					else
+						SetFieldValue(ref _BridgeBassMargin, m, nameof(_BridgeBassMargin));
                 }
             );
             _TrebleMargins = new ArrayProperty<Measure, FingerboardEnd>(
                 (s) => s == FingerboardEnd.Nut ? _NutTrebleMargin : _BridgeTrebleMargin,
                 (s, m) => {
-                    if (s == FingerboardEnd.Nut) _NutTrebleMargin = m;
-                    else _BridgeTrebleMargin = m;
-                    NotifyLayoutChanged("FingerboardMargin");
-                }
+					if (s == FingerboardEnd.Nut)
+						SetFieldValue(ref _NutTrebleMargin, m, nameof(_NutTrebleMargin));
+					else
+						SetFieldValue(ref _BridgeTrebleMargin, m, nameof(_BridgeTrebleMargin));
+				}
             );
             _BassMargins = new ArrayProperty<Measure, FingerboardEnd>(
                 (s) => s == FingerboardEnd.Nut ? _NutBassMargin : _BridgeBassMargin,
                 (s, m) => {
-                    if (s == FingerboardEnd.Nut) _NutBassMargin = m;
-                    else _BridgeBassMargin = m;
-                    NotifyLayoutChanged("FingerboardMargin");
+					if (s == FingerboardEnd.Nut)
+						SetFieldValue(ref _NutBassMargin, m, nameof(_NutBassMargin));
+					else
+						SetFieldValue(ref _BridgeBassMargin, m, nameof(_BridgeBassMargin));
                 }
             );
         }

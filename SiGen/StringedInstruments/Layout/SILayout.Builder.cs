@@ -13,19 +13,21 @@ namespace SiGen.StringedInstruments.Layout
 {
     public partial class SILayout
     {
-        public bool IsLayoutDirty { get { return isLayoutDirty; } }
-        private List<string> ChangedProperties;
+		public bool IsLayoutDirty => LayoutChanges.Any() || isLayoutDirty;
 
         public void RebuildLayout()
         {
-            if(ChangedProperties.Count == 1 && ChangedProperties.Contains("LeftHanded") && VisualElements.Count > 0)
-            {
-                VisualElements.ForEach(e => e.FlipHandedness());
-                isLayoutDirty = false;
-                ChangedProperties.Clear();
-                OnLayoutUpdated();
-                return;
-            }
+			if(LayoutChanges.Count == 1 && LayoutChanges[0] is PropertyChange pc && pc.Property == nameof(LeftHanded))
+			{
+				if(VisualElements.Count > 0)
+				{
+					VisualElements.ForEach(e => e.FlipHandedness());
+					isLayoutDirty = false;
+					LayoutChanges.Clear();
+					OnLayoutUpdated();
+					return;
+				}
+			}
 
             VisualElements.Clear();
             for (int i = 0; i < NumberOfStrings; i++)
@@ -49,9 +51,8 @@ namespace SiGen.StringedInstruments.Layout
             if (LeftHanded)
                 VisualElements.ForEach(e => e.FlipHandedness());
 
-            isLayoutDirty = false;
-
-            ChangedProperties.Clear();
+			isLayoutDirty = false;
+			LayoutChanges.Clear();
             OnLayoutUpdated();
         }
 

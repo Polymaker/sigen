@@ -29,7 +29,7 @@ namespace SiGen.UI
         private LayoutEditorPanel<ScaleLengthEditor> scaleLengthPanel;
         private LayoutEditorPanel<LayoutProperties> layoutInfoPanel;
 
-        private LayoutFile CurrentFile
+        private LayoutDocument CurrentFile
         {
             get
             {
@@ -106,7 +106,9 @@ namespace SiGen.UI
                 SetEditorsActiveLayout(CurrentFile.Layout);
                 tsbMeasureTool.Checked = ActiveDocument.Viewer.EnableMeasureTool;
                 tsbMeasureTool.CheckOnClick = true;
-            }
+				tsbUndo.Enabled = ActiveDocument.CurrentFile.CanUndo();
+				tsbRedo.Enabled = ActiveDocument.CurrentFile.CanRedo();
+			}
             else
             {
                 SetEditorsActiveLayout(null);
@@ -121,7 +123,16 @@ namespace SiGen.UI
                 editorPanel.CurrentLayout = layout;
         }
 
-        private DockContent CreateDocumentPanel(LayoutFile layoutFile)
+		private void RefreshCurrentLayoutEditors()
+		{
+			if(ActiveDocument != null)
+			{
+				foreach (var editorPanel in dockPanel1.Contents.OfType<ILayoutEditorPanel>())
+					editorPanel.Editor.ReloadPropertyValues();
+			}
+		}
+
+        private DockContent CreateDocumentPanel(LayoutDocument layoutFile)
         {
             var documentPanel = new LayoutViewerPanel(this);
 
@@ -238,7 +249,7 @@ namespace SiGen.UI
         
         #region Save
 
-        public bool SaveLayout(LayoutFile file, bool selectPath = false)
+        public bool SaveLayout(LayoutDocument file, bool selectPath = false)
         {
             bool isNew = string.IsNullOrEmpty(file.FileName);
             if (selectPath || isNew)
@@ -286,7 +297,7 @@ namespace SiGen.UI
             return true;
         }
 
-        private string GenerateDefaultFileName(LayoutFile file)
+        private string GenerateDefaultFileName(LayoutDocument file)
         {
             var keywords = new List<string>();
             keywords.Add($"{file.Layout.NumberOfStrings} Strings");
@@ -356,7 +367,7 @@ namespace SiGen.UI
                             var result = MessageBox.Show(MSG_FileAlreadyOpen, "", MessageBoxButtons.YesNo);
                             if (result == DialogResult.Yes)
                             {
-                                var layout = LayoutFile.Open(filename, false);
+                                var layout = LayoutDocument.Open(filename, false);
                                 layout.Layout.RebuildLayout();
                                 (doc as LayoutViewerPanel).CurrentFile = layout;
                                 SetEditorsActiveLayout(layout.Layout);
@@ -369,7 +380,7 @@ namespace SiGen.UI
 
                 if(!cancelOpen)
                 {
-                    var loadedLayout = LayoutFile.Open(filename, asTemplate);
+                    var loadedLayout = LayoutDocument.Open(filename, asTemplate);
                     LoadLayout(loadedLayout);
                 }
 
@@ -391,7 +402,7 @@ namespace SiGen.UI
             tssbOpen.ShowDropDown();
         }
 
-        private void LoadLayout(LayoutFile layout)
+        private void LoadLayout(LayoutDocument layout)
         {
             var documentPanel = CreateDocumentPanel(layout);
             documentPanel.Show(dockPanel1, DockState.Document);
@@ -451,5 +462,27 @@ namespace SiGen.UI
                 ActiveDocument.Viewer.EnableMeasureTool = tsbMeasureTool.Checked;
             }
         }
-    }
+
+		private void tsbUndo_Click(object sender, EventArgs e)
+		{
+			if(ActiveDocument != null && ActiveDocument.CurrentFile.Undo())
+			{
+				RefreshCurrentLayoutEditors();
+				if (ActiveDocument.CurrentFile.Layout.IsLayoutDirty)
+					ActiveDocument.CurrentFile.Layout.RebuildLayout();
+				tsbUndo.Enabled = ActiveDocument.CurrentFile.CanUndo();
+			}
+		}
+
+		private void tsbRedo_Click(object sender, EventArgs e)
+		{
+			if (ActiveDocument != null && ActiveDocument.CurrentFile.Redo())
+			{
+				RefreshCurrentLayoutEditors();
+				if (ActiveDocument.CurrentFile.Layout.IsLayoutDirty)
+					ActiveDocument.CurrentFile.Layout.RebuildLayout();
+				tsbRedo.Enabled = ActiveDocument.CurrentFile.CanRedo();
+			}
+		}
+	}
 }

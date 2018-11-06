@@ -142,10 +142,5 @@ namespace SiGen.Utilities
 
 			return !value.IsEmpty;
 		}
-
-		private static bool TryParseNumber(string s, out double result)
-        {
-            return double.TryParse(s, NumberStyles.Number, System.Threading.Thread.CurrentThread.CurrentCulture, out result);
-        }
     }
 }

@@ -8,8 +8,8 @@ using System.Xml.Linq;
 
 namespace SiGen.StringedInstruments.Layout
 {
-    public abstract class ScaleLengthManager : LayoutComponent
-    {
+    public abstract class ScaleLengthManager : ActivableLayoutComponent
+	{
         protected LengthFunction _LengthCalculationMethod;
         /// <summary>
         /// Determine if the scale length is applied along each strings (taking into account the neck taper) or straight along the fingerboard.
@@ -20,17 +20,15 @@ namespace SiGen.StringedInstruments.Layout
             get { return _LengthCalculationMethod; }
             set
             {
-                if (value != _LengthCalculationMethod)
-                {
-                    _LengthCalculationMethod = value;
-                    NotifyLayoutChanged("LengthCalculationMethod");
-                }
+				SetPropertyValue(ref _LengthCalculationMethod, value);
             }
         }
 
         public abstract ScaleLengthType Type { get; }
 
-        public ScaleLengthManager(SILayout layout) : base(layout)
+		public override bool IsActive => Layout.CurrentScaleLength == this;
+
+		public ScaleLengthManager(SILayout layout) : base(layout)
         {
             _LengthCalculationMethod = LengthFunction.AlongString;
         }
@@ -58,12 +56,7 @@ namespace SiGen.StringedInstruments.Layout
                 get { return _Length; }
                 set
                 {
-                    if (value != _Length)
-                    {
-                        _Length = value;
-                        if (Layout.CurrentScaleLength == this)
-                            NotifyLayoutChanged("ScaleLength");
-                    }
+					SetPropertyValue(ref _Length, value);
                 }
             }
 
@@ -113,12 +106,7 @@ namespace SiGen.StringedInstruments.Layout
                 get { return _Treble; }
                 set
                 {
-                    if (value != _Treble)
-                    {
-                        _Treble = value;
-                        if (Layout.CurrentScaleLength == this)
-                            NotifyLayoutChanged("ScaleLength");
-                    }
+					SetPropertyValue(ref _Treble, value);
                 }
             }
 
@@ -127,28 +115,16 @@ namespace SiGen.StringedInstruments.Layout
                 get { return _Bass; }
                 set
                 {
-                    if (value != _Bass)
-                    {
-                        _Bass = value;
-                        if(Layout.CurrentScaleLength == this)
-                            NotifyLayoutChanged("ScaleLength");
-                    }
+					SetPropertyValue(ref _Bass, value);
                 }
             }
 
             public double PerpendicularFretRatio
             {
-                get
-                {
-                    //if (!Layout.Strings.AllEqual(s => s.MultiScaleRatio))
-                    //    return -1;
-                    return _PerpendicularFretRatio;
-                }
+				get { return _PerpendicularFretRatio; }
                 set
                 {
-                    _PerpendicularFretRatio = value;
-                    //if (Layout.CurrentScaleLength == this)
-                    //    Layout.Strings.SetAll(s => s.MultiScaleRatio, value);
+					SetPropertyValue(ref _PerpendicularFretRatio, value);
                 }
             }
 
@@ -261,7 +237,9 @@ namespace SiGen.StringedInstruments.Layout
                         else
                             _Lengths[i] = oldLengths[oldLengths.Length - 1];
                     }
-                }
+
+					NotifyLayoutChanged(new PropertyChange(this, "_Lengths", oldLengths, _Lengths, true));
+				}
                 //else
                 //{
                 //    _Lengths = new Measure[Layout.NumberOfStrings];
@@ -277,19 +255,16 @@ namespace SiGen.StringedInstruments.Layout
 
             public override void SetLength(int index, Measure value)
             {
-                _Lengths[index] = value;
-                if (Layout.CurrentScaleLength == this)
-                    NotifyLayoutChanged("ScaleLength");
-            }
+				SetFieldValue(ref _Lengths, index, value, nameof(_Lengths));
+			}
 
             public void SetLengths(params Measure[] lengths)
             {
                 if (lengths.Length != NumberOfStrings)
                     throw new InvalidOperationException();
-                _Lengths = lengths;
-                if (Layout.CurrentScaleLength == this)
-                    NotifyLayoutChanged("ScaleLength");
-            }
+
+				SetFieldValue(ref _Lengths, lengths, nameof(_Lengths));
+			}
 
             public override XElement Serialize(string elemName)
             {

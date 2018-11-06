@@ -14,10 +14,9 @@ namespace SiGen.StringedInstruments.Layout
 {
     public class SIString : LayoutComponent
     {
-        #region Fields
 
-        private readonly int _Index;
-        private int _NumberOfFrets;
+		#region Fields
+		private int _NumberOfFrets;
         private int _StartingFret;
         private StringTuning _Tuning;
         private StringProperties _PhysicalProperties;
@@ -25,14 +24,14 @@ namespace SiGen.StringedInstruments.Layout
         private double _MultiScaleRatio;
         private FretManager _Frets;
 
-        #endregion
+		#endregion
 
-        #region Properties
+		#region Properties
 
-        [XmlAttribute("Index")]
-        public int Index { get { return _Index; } }
+		[XmlAttribute("Index")]
+		public int Index { get; }
 
-        public Measure ScaleLength
+		public Measure ScaleLength
         {
             get { return Layout.CurrentScaleLength.GetLength(Index)/*_ScaleLength*/; }
             set
@@ -73,13 +72,8 @@ namespace SiGen.StringedInstruments.Layout
             get { return _NumberOfFrets; }
             set
             {
-                if(value != _NumberOfFrets)
-                {
-                    _NumberOfFrets = value;
-                    //Layout.OnStringConfigChanged(this, "NumberOfFrets");
-                    NotifyLayoutChanged("NumberOfFrets");
-                }
-            }
+				SetPropertyValue(ref _NumberOfFrets, value);
+			}
         }
 
         /// <summary>
@@ -93,13 +87,8 @@ namespace SiGen.StringedInstruments.Layout
             get { return _StartingFret; }
             set
             {
-                if (value != _StartingFret)
-                {
-                    _StartingFret = value;
-                    //Layout.OnStringConfigChanged(this, "StartingFret");
-                    NotifyLayoutChanged("StartingFret");
-                }
-            }
+				SetPropertyValue(ref _StartingFret, value);
+			}
         }
 
         /// <summary>
@@ -125,12 +114,8 @@ namespace SiGen.StringedInstruments.Layout
             get { return _MultiScaleRatio; }
             set
             {
-                if (value != _MultiScaleRatio)
-                {
-                    _MultiScaleRatio = value;
-                    NotifyLayoutChanged("MultiScaleRatio");
-                }
-            }
+				SetPropertyValue(ref _MultiScaleRatio, value);
+			}
         }
 
         /// <summary>
@@ -159,13 +144,8 @@ namespace SiGen.StringedInstruments.Layout
             get { return _PhysicalProperties; }
             set
             {
-                if (value != _PhysicalProperties)
-                {
-                    _PhysicalProperties = value;
-                    NotifyLayoutChanged("PhysicalProperties");
-                    //EnsureCanStillCalculateCompentation();
-                }
-            }
+				SetPropertyValue(ref _PhysicalProperties, value);
+			}
         }
 
         public Measure Gauge
@@ -179,13 +159,14 @@ namespace SiGen.StringedInstruments.Layout
             set
             {
                 if (PhysicalProperties == null)
-                    PhysicalProperties = new StringProperties();
-
-                if (PhysicalProperties.StringDiameter != value)
+                    PhysicalProperties = new StringProperties() { StringDiameter = value };
+                else if (PhysicalProperties.StringDiameter != value)
                 {
-                    PhysicalProperties.StringDiameter = value;
-                    NotifyLayoutChanged("PhysicalProperties");
-                }
+					var oldValue = PhysicalProperties.StringDiameter;
+					//SetSubPropertyValue(PhysicalProperties, p => p.StringDiameter, value);
+					PhysicalProperties.StringDiameter = value;
+                    NotifyLayoutChanged(new PropertyChange(this, "PhysicalProperties.StringDiameter", oldValue, value));
+				}
             }
         }
 
@@ -197,9 +178,8 @@ namespace SiGen.StringedInstruments.Layout
                 if (value != _Tuning)
                 {
                     //_Tuning = SILayout.GetTuningForNote(value.Note, Layout.FretsTemperament);
-                    _Tuning = value;
-                    if (Layout.FretsTemperament != Temperament.Equal || Layout.CompensateFretPositions)
-                        NotifyLayoutChanged("Tuning");
+					if (Layout.FretsTemperament != Temperament.Equal || Layout.CompensateFretPositions)
+						SetPropertyValue(ref _Tuning, value);
                     //EnsureCanStillCalculateCompentation();
                 }
             }
@@ -249,7 +229,7 @@ namespace SiGen.StringedInstruments.Layout
 
         public SIString(SILayout layout, int stringIndex) : base(layout)
         {
-            _Index = stringIndex;
+            Index = stringIndex;
             _ActionAtTwelfthFret = Measure.Empty;
             _MultiScaleRatio = 0.5;
             _NumberOfFrets = 24;

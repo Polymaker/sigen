@@ -58,7 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AppPreferences.cs" />
-    <Compile Include="Common\LayoutFile.cs" />
+    <Compile Include="Common\LayoutDocument.cs" />
     <Compile Include="Common\StringType.cs" />
     <Compile Include="Configuration\DisplayPreferences.cs" />
     <Compile Include="Configuration\ScreenConfiguration.cs" />
@@ -97,13 +97,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringedInstruments\Data\StringProperties.cs" />
     <Compile Include="StringedInstruments\Data\StringTuning.cs" />
+    <Compile Include="StringedInstruments\Layout\Edit\BatchChange.cs" />
     <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardEnd.cs" />
     <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardMargin.cs" />
     <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardSide.cs" />
     <Compile Include="StringedInstruments\Layout\Fingerboard\FretInterpolationMethod.cs" />
-    <Compile Include="StringedInstruments\Layout\PropertyChange.cs" />
-    <Compile Include="StringedInstruments\Layout\Strings\FretManager.cs" />
+    <Compile Include="StringedInstruments\Layout\Frets\FretPosition.cs" />
+    <Compile Include="StringedInstruments\Layout\Frets\FretPositionCollection.cs" />
+    <Compile Include="StringedInstruments\Layout\Edit\PropertyChange.cs" />
+    <Compile Include="StringedInstruments\Layout\Frets\FretManager.cs" />
+    <Compile Include="StringedInstruments\Layout\Edit\ILayoutChange.cs" />
     <Compile Include="StringedInstruments\Layout\ILayoutComponent.cs" />
+    <Compile Include="StringedInstruments\Layout\Edit\LayoutChangedEventArgs.cs" />
     <Compile Include="StringedInstruments\Layout\LayoutComponent.cs" />
     <Compile Include="StringedInstruments\Layout\ScaleLength\ScaleLengthManager.cs" />
     <Compile Include="StringedInstruments\Layout\ScaleLength\ScaleLengthType.cs" />
@@ -262,6 +267,7 @@
     <Compile Include="Utilities\ObservableCollectionEx.cs" />
     <Compile Include="Utilities\SerializationHelper.cs" />
     <Compile Include="Utilities\SortableBindingList.cs" />
+    <Compile Include="Utilities\TemporaryObject.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

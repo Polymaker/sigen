@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SiGen.StringedInstruments.Layout
 {
-    public class PropertyChange
-    {
-
-    }
+	public interface ILayoutChange
+	{
+		PropertyChange[] GetChanges();
+	}
 }

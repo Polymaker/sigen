@@ -9,8 +9,8 @@ using System.Globalization;
 
 namespace SiGen.StringedInstruments.Layout
 {
-    public abstract class StringSpacingManager : LayoutComponent//, IStringsSpacing
-    {
+    public abstract class StringSpacingManager : ActivableLayoutComponent//, IStringsSpacing
+	{
         private StringSpacingAlignment _BridgeAlignment;
         private StringSpacingAlignment _NutAlignment;
 
@@ -40,7 +40,9 @@ namespace SiGen.StringedInstruments.Layout
             set { throw new NotSupportedException(); }
         }
 
-        public StringSpacingManager(SILayout layout) : base(layout)
+		public override bool IsActive => Layout.StringSpacing == this;
+
+		public StringSpacingManager(SILayout layout) : base(layout)
         {
         }
 

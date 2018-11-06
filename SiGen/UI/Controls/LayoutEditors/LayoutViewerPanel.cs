@@ -18,11 +18,11 @@ namespace SiGen.UI.Controls.LayoutEditors
     public partial class LayoutViewerPanel : DockContent
     {
         private double ScreenDPI;
-        private LayoutFile _CurrentFile;
+        private LayoutDocument _CurrentFile;
 
         public LayoutViewer Viewer { get { return layoutViewer1; } }
 
-        public LayoutFile CurrentFile
+        public LayoutDocument CurrentFile
         {
             get { return _CurrentFile; }
             set

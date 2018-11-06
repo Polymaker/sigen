@@ -4,9 +4,12 @@ using SiGen.StringedInstruments.Data;
 using SiGen.StringedInstruments.Layout.Visual;
 using SiGen.Utilities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -22,21 +25,17 @@ namespace SiGen.StringedInstruments.Layout
         private FretInterpolationMethod _FretInterpolation;
         private bool _LeftHanded;
         private int _NumberOfStrings;
-        private SIString[] _Strings;
-        private bool _CompensateFretPositions;
-        
-        private FingerboardMargin _Margins;
-        private StringSpacingType _StringSpacingMode;
-        private StringSpacingSimple _SimpleStringSpacing;
-        private StringSpacingManual _ManualStringSpacing;
-        private ScaleLengthType _ScaleLengthMode;
-        private ScaleLengthManager.SingleScale _SingleScaleMgr;
-        private ScaleLengthManager.MultiScale _MultiScaleMgr;
-        private ScaleLengthManager.Individual _ManualScaleMgr;
-        private List<VisualElement> _VisualElements;
+		private bool _CompensateFretPositions;
+		private StringSpacingType _StringSpacingMode;
+		private ScaleLengthType _ScaleLengthMode;
+		private List<VisualElement> _VisualElements;
         private RectangleM _CachedBounds;
         private bool isLayoutDirty;
-        private bool isLoading;
+
+		/// <summary>
+		/// Layout changes since last rebuilt
+		/// </summary>
+		private List<ILayoutChange> LayoutChanges;
 
         #endregion
 
@@ -52,12 +51,12 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
-        /// <summary>
-        /// Strings are ordered from Treble to Bass!!!
-        /// </summary>
-        public SIString[] Strings { get { return _Strings; } }
+		/// <summary>
+		/// Strings are ordered from Treble to Bass!!!
+		/// </summary>
+		public SIString[] Strings { get; private set; }
 
-        public string LayoutName { get; set; }
+		public string LayoutName { get; set; }
 
         #region Scale Length Management
 
@@ -71,9 +70,9 @@ namespace SiGen.StringedInstruments.Layout
                     if (NumberOfStrings == 1)
                         return;
                     if (value == ScaleLengthType.Individual)
-                        _ManualScaleMgr.InitializeIfNeeded();
-                    _ScaleLengthMode = value;
-                    NotifyLayoutChanged(this, "ScaleLengthMode");
+                        ManualScaleConfig.InitializeIfNeeded();
+
+					SetPropertyValue(ref _ScaleLengthMode, value);
                 }
             }
         }
@@ -86,44 +85,31 @@ namespace SiGen.StringedInstruments.Layout
                 {
                     default:
                     case ScaleLengthType.Single:
-                        return _SingleScaleMgr;
+                        return SingleScaleConfig;
                     case ScaleLengthType.Multiple:
-                        return _MultiScaleMgr;
+                        return MultiScaleConfig;
                     case ScaleLengthType.Individual:
-                        return _ManualScaleMgr;
+                        return ManualScaleConfig;
                 }
             }
         }
 
-        public ScaleLengthManager.SingleScale SingleScaleConfig
-        {
-            get { return _SingleScaleMgr; }
-        }
+		public ScaleLengthManager.SingleScale SingleScaleConfig { get; }
 
-        public ScaleLengthManager.MultiScale MultiScaleConfig
-        {
-            get { return _MultiScaleMgr; }
-        }
+		public ScaleLengthManager.MultiScale MultiScaleConfig { get; }
 
-        public ScaleLengthManager.Individual ManualScaleConfig
-        {
-            get { return _ManualScaleMgr; }
-        }
+		public ScaleLengthManager.Individual ManualScaleConfig { get; }
 
-        #endregion
+		#endregion
 
-        #region String Spacing Management
+		#region String Spacing Management
 
-        public StringSpacingType StringSpacingMode
+		public StringSpacingType StringSpacingMode
         {
             get { return _StringSpacingMode; }
             set
             {
-                if (value != _StringSpacingMode)
-                {
-                    _StringSpacingMode = value;
-                    NotifyLayoutChanged(this, "StringSpacingMode");
-                }
+				SetPropertyValue(ref _StringSpacingMode, value);
             }
         }
 
@@ -135,39 +121,31 @@ namespace SiGen.StringedInstruments.Layout
                 {
                     default:
                     case StringSpacingType.Simple:
-                        return _SimpleStringSpacing;
+                        return SimpleStringSpacing;
                     case StringSpacingType.Manual:
-                        return _ManualStringSpacing;
+                        return ManualStringSpacing;
                 }
             }
         }
 
-        public StringSpacingSimple SimpleStringSpacing
-        {
-            get { return _SimpleStringSpacing; }
-        }
+		public StringSpacingSimple SimpleStringSpacing { get; }
 
-        public StringSpacingManual ManualStringSpacing
-        {
-            get { return _ManualStringSpacing; }
-        }
+		public StringSpacingManual ManualStringSpacing { get; }
 
-        #endregion
+		#endregion
 
-        public FingerboardMargin Margins { get { return _Margins; } }
+		public FingerboardMargin Margins { get; }
 
-        public Temperament FretsTemperament
+		public Temperament FretsTemperament
         {
             get { return _FretsTemperament; }
             set
             {
-                if (value != _FretsTemperament)
-                {
-                    _FretsTemperament = value;
-                    AdjustStringsTuning();
-                    NotifyLayoutChanged(this, "FretsTemperament");
-                }
-            }
+				StartBatchChanges();
+                if (SetPropertyValue(ref _FretsTemperament, value))
+					AdjustStringsTuning();
+				FinishBatchChanges();
+			}
         }
 
         public FretInterpolationMethod FretInterpolation
@@ -175,11 +153,7 @@ namespace SiGen.StringedInstruments.Layout
             get { return _FretInterpolation; }
             set
             {
-                if (value != _FretInterpolation)
-                {
-                    _FretInterpolation = value;
-                    NotifyLayoutChanged(this, "FretInterpolation");
-                }
+				SetPropertyValue(ref _FretInterpolation, value);
             }
         }
 
@@ -192,12 +166,18 @@ namespace SiGen.StringedInstruments.Layout
                 {
                     if (value && !Strings.All(s => s.CanCalculateCompensation))
                         return;
+
                     _CompensateFretPositions = value;
+
+					StartBatchChanges();
                     if (value)
                         FretInterpolation = FretInterpolationMethod.NotchedSpline;
                     else
                         FretInterpolation = FretInterpolationMethod.Spline;
-                    NotifyLayoutChanged(this, "CompensateFretPositions");
+
+					NotifyLayoutChanged(new PropertyChange(null, "CompensateFretPositions", !value, value));
+
+					FinishBatchChanges();
                 }
             }
         }
@@ -207,22 +187,23 @@ namespace SiGen.StringedInstruments.Layout
             get { return _LeftHanded; }
             set
             {
-                if (value != _LeftHanded)
-                {
-                    _LeftHanded = value;
-                    NotifyLayoutChanged(this, "LeftHanded");
-                }
+				SetPropertyValue(ref _LeftHanded, value);
             }
         }
 
         public List<VisualElement> VisualElements { get { return _VisualElements; } }
 
-        #endregion
+		public bool IsLoading { get; private set; }
 
-        #region Events
+		internal bool IsAssigningProperties { get; private set; }
 
-        public event EventHandler LayoutChanged;
-        public event EventHandler LayoutUpdated;
+		#endregion
+
+		#region Events
+		
+		public event EventHandler<LayoutChangedEventArgs> LayoutChanged;
+
+		public event EventHandler LayoutUpdated;
         public event EventHandler NumberOfStringsChanged;
 
         #endregion
@@ -230,47 +211,55 @@ namespace SiGen.StringedInstruments.Layout
         public SILayout()
         {
             _Components = new List<LayoutComponent>();
-            _Margins = new FingerboardMargin(this);
+            Margins = new FingerboardMargin(this);
             _StringSpacingMode = StringSpacingType.Simple;
-            _SimpleStringSpacing = new StringSpacingSimple(this);
-            _ManualStringSpacing = new StringSpacingManual(this);
-            _SingleScaleMgr = new ScaleLengthManager.SingleScale(this);
-            _MultiScaleMgr = new ScaleLengthManager.MultiScale(this);
-            _ManualScaleMgr = new ScaleLengthManager.Individual(this);
+            SimpleStringSpacing = new StringSpacingSimple(this);
+            ManualStringSpacing = new StringSpacingManual(this);
+            SingleScaleConfig = new ScaleLengthManager.SingleScale(this);
+            MultiScaleConfig = new ScaleLengthManager.MultiScale(this);
+            ManualScaleConfig = new ScaleLengthManager.Individual(this);
             _VisualElements = new List<VisualElement>();
             _ScaleLengthMode = ScaleLengthType.Single;
             _FretsTemperament = Temperament.Equal;
             _FretInterpolation = FretInterpolationMethod.Spline;
             _CachedBounds = RectangleM.Empty;
             LayoutName = string.Empty;
-            ChangedProperties = new List<string>();
-        }
+			LayoutChanges = new List<ILayoutChange>();
+		}
 
         private void InitializeStrings(int oldValue, int newValue)
         {
             if (newValue < 0)
                 return;
-            if (newValue == 1)
-                _ScaleLengthMode = ScaleLengthType.Single;
 
-            _NumberOfStrings = newValue;
-            var oldStrings = _Strings;
-            _Strings = new SIString[NumberOfStrings];
+			StartBatchChanges();
+
+            if (newValue == 1)
+				SetPropertyValue(ref _ScaleLengthMode, ScaleLengthType.Single, nameof(ScaleLengthMode));
+
+			NotifyLayoutChanged(new PropertyChange(null, nameof(NumberOfStrings), _NumberOfStrings, newValue));
+			//NotifyLayoutChanged(new PropertyChange(null, nameof(_NumberOfStrings), null, _NumberOfStrings, newValue, true));
+
+			_NumberOfStrings = newValue;
+
+			var oldStrings = Strings;
+            Strings = new SIString[NumberOfStrings];
+
             for(int i = 0; i < _NumberOfStrings; i++)
             {
                 if (oldStrings != null && i < oldStrings.Length)
-                    _Strings[i] = oldStrings[i];
+                    Strings[i] = oldStrings[i];
                 else
                 {
-                    _Strings[i] = new SIString(this, i);
-                    if (i >= 2 && !_Strings[i - 2].Gauge.IsEmpty && !_Strings[i - 1].Gauge.IsEmpty)
+                    Strings[i] = new SIString(this, i);
+                    if (i >= 2 && !Strings[i - 2].Gauge.IsEmpty && !Strings[i - 1].Gauge.IsEmpty)
                     {
-                        var gaugeDiff = _Strings[i - 1].Gauge - _Strings[i - 2].Gauge;
-                        var estGauge = _Strings[i - 1].Gauge * 1.3;
-                        _Strings[i].Gauge = Measure.Avg(_Strings[i - 1].Gauge + gaugeDiff, estGauge);
+                        var gaugeDiff = Strings[i - 1].Gauge - Strings[i - 2].Gauge;
+                        var estGauge = Strings[i - 1].Gauge * 1.3;
+                        Strings[i].Gauge = Measure.Avg(Strings[i - 1].Gauge + gaugeDiff, estGauge);
                     }
-                    if (i >= 1 && !_Strings[i - 1].Gauge.IsEmpty)
-                        _Strings[i].Gauge = _Strings[i - 1].Gauge * 1.3;
+                    if (i >= 1 && !Strings[i - 1].Gauge.IsEmpty)
+                        Strings[i].Gauge = Strings[i - 1].Gauge * 1.3;
                 }
             }
 
@@ -278,13 +267,19 @@ namespace SiGen.StringedInstruments.Layout
                 (comp as ILayoutComponent).OnStringConfigurationChanged();
 
             if (CompensateFretPositions && !Strings.All(s => s.CanCalculateCompensation))
-                CompensateFretPositions = false;
+				SetPropertyValue(ref _CompensateFretPositions, false, nameof(CompensateFretPositions));
 
-            NotifyLayoutChanged(this, "Strings");
+			//if (CurrentBatchChanges != null)
+			//{
+			//	CurrentBatchChanges.Insert(1, new PropertyChange(null, nameof(Strings), oldStrings, Strings));
+			//	CurrentBatchChanges.RemoveAll(c => c.Component is SIString);
+			//}
 
-            if (oldStrings != null)
-                OnNumberOfStringsChanged();
-        }
+			FinishBatchChanges();
+
+			if (oldStrings != null)
+				OnNumberOfStringsChanged();
+		}
 
         protected void OnNumberOfStringsChanged()
         {
@@ -353,23 +348,132 @@ namespace SiGen.StringedInstruments.Layout
             return new StringTuning(newNote, offset);
         }
 
-        internal void NotifyLayoutChanged(object sender, string propname)
-        {
-            if (!isLoading)
-            {
-                isLayoutDirty = true;
-                if (!ChangedProperties.Contains(propname))
-                    ChangedProperties.Add(propname);
-                OnLayoutChanged();
-            }
-        }
+		#region Layout Change Tracking & Notification
 
-        protected void OnLayoutChanged()
-        {
-            LayoutChanged?.Invoke(this, EventArgs.Empty);
-        }
+		private List<PropertyChange> CurrentBatchChanges;
+		private int NestedBatches;
 
-        public RectangleM GetLayoutBounds()
+		internal void NotifyLayoutChanged(ILayoutChange change)
+		{
+			if (!(IsLoading || IsAssigningProperties))
+			{
+				if(change is PropertyChange propChange && CurrentBatchChanges != null)
+					CurrentBatchChanges.Add(propChange);
+				else
+					OnLayoutChanged(new LayoutChangedEventArgs(change));
+			}
+		}
+		
+		protected void OnLayoutChanged(LayoutChangedEventArgs args)
+		{
+			LayoutChanges.Add(args.Change);
+			LayoutChanged?.Invoke(this, args);
+		}
+
+		internal void StartBatchChanges()
+		{
+			if (!(IsLoading || IsAssigningProperties))
+			{
+				if(CurrentBatchChanges == null)
+					CurrentBatchChanges = new List<PropertyChange>();
+				NestedBatches++;
+			}
+				
+		}
+
+		internal void FinishBatchChanges()
+		{
+			if(!(IsLoading || IsAssigningProperties) && CurrentBatchChanges != null)
+			{
+				if(--NestedBatches == 0)
+				{
+					if (CurrentBatchChanges.Count == 1)
+						OnLayoutChanged(new LayoutChangedEventArgs(CurrentBatchChanges[0]));
+					else
+						OnLayoutChanged(new LayoutChangedEventArgs(new BatchChange(CurrentBatchChanges)));
+					CurrentBatchChanges = null;
+				}
+			}
+		}
+
+		protected bool SetPropertyValue<T>(ref T property, T value, [CallerMemberName] string propertyName = null)
+		{
+			if (!EqualityComparer<T>.Default.Equals(property, value))
+			{
+				var propChange = new PropertyChange(null, propertyName, property, value);
+				property = value;
+				NotifyLayoutChanged(propChange);
+				return true;
+			}
+			return false;
+		}
+
+		public void UndoChange(ILayoutChange change)
+		{
+			ApplyLayoutChange(change, false);
+		}
+
+		public void RedoChange(ILayoutChange change)
+		{
+			ApplyLayoutChange(change, true);
+		}
+
+		private void ApplyLayoutChange(ILayoutChange change, bool setNewValue)
+		{
+			//IsAssigningProperties = true;
+			try
+			{
+				var allChanges = change.GetChanges().ToList();
+				if (!setNewValue)
+					allChanges.Reverse();
+
+				foreach (var changedProp in allChanges)
+				{
+					if (changedProp.IsField)
+					{
+						FieldInfo fi = null;
+						if (changedProp.Component == null)
+							fi = GetType().GetField(changedProp.Property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+						else
+							fi = changedProp.Component.GetType().GetField(changedProp.Property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+						if (changedProp.Index.HasValue)
+						{
+							var arrayValue = (IList)fi.GetValue((object)changedProp.Component ?? this);
+							arrayValue[changedProp.Index.Value] = setNewValue ? changedProp.NewValue : changedProp.OldValue;
+						}
+						else
+							fi.SetValue((object)changedProp.Component ?? this, setNewValue ? changedProp.NewValue : changedProp.OldValue);
+					}
+					else
+					{
+						PropertyInfo pi = null;
+						object ownerObject = (object)changedProp.Component ?? this;
+
+						if (changedProp.Property.Contains("."))
+						{
+							string[] propNames = changedProp.Property.Split('.');
+							pi = ownerObject.GetType().GetProperty(propNames[0]);
+							ownerObject = pi.GetValue(ownerObject);
+							pi = ownerObject.GetType().GetProperty(propNames[1]);
+						}
+						else
+							pi = ownerObject.GetType().GetProperty(changedProp.Property);
+
+						pi.SetValue(ownerObject, setNewValue ? changedProp.NewValue : changedProp.OldValue);
+					}
+
+				}
+			}
+			finally
+			{
+				//IsAssigningProperties = false;
+			}
+		}
+
+		#endregion
+
+		public RectangleM GetLayoutBounds()
         {
             if (VisualElements.Count == 0)
                 return RectangleM.Empty;
@@ -464,7 +568,7 @@ namespace SiGen.StringedInstruments.Layout
         {
             var root = document.Root;
 
-            var layout = new SILayout() { isLoading = true };
+            var layout = new SILayout() { IsLoading = true };
             layout.NumberOfStrings = root.Element("Strings").GetIntAttribute("Count");
             layout.ScaleLengthMode = DeserializeProperty<ScaleLengthType>(root.Element("ScaleLength").Attribute("Type"));
             layout.CurrentScaleLength.Deserialize(root.Element("ScaleLength"));
@@ -496,7 +600,7 @@ namespace SiGen.StringedInstruments.Layout
             }
             
             layout.FillDefaultValues();
-            layout.isLoading = false;
+            layout.IsLoading = false;
             layout.isLayoutDirty = true;
 
             return layout;

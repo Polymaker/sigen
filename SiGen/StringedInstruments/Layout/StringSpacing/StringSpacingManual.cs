@@ -61,10 +61,10 @@ namespace SiGen.StringedInstruments.Layout
 
         public override void SetSpacing(FingerboardEnd end, int index, Measure value)
         {
-            if (end == FingerboardEnd.Nut)
-                _NutSpacing[index] = value;
-            else
-                _BridgeSpacing[index] = value;
+			if (end == FingerboardEnd.Nut)
+				SetFieldValue(ref _NutSpacing, index, value, nameof(_NutSpacing));
+			else
+				SetFieldValue(ref _BridgeSpacing, index, value, nameof(_BridgeSpacing));
         }
     }
 }

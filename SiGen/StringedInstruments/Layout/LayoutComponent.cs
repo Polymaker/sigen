@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,25 +11,35 @@ namespace SiGen.StringedInstruments.Layout
 {
     public abstract class LayoutComponent : IDisposable, ILayoutComponent
     {
-        private /*readonly*/ SILayout _Layout;
-        private bool isDisposed;
+		private bool isDisposed;
 
-        public SILayout Layout { get { return _Layout; } }
+		public SILayout Layout { get; private set; }
 
-        public int NumberOfStrings { get { return Layout.NumberOfStrings; } }
+		public int NumberOfStrings { get { return Layout.NumberOfStrings; } }
 
-        SILayout ILayoutComponent.Layout
+		SILayout ILayoutComponent.Layout
         {
             get { return Layout; }
         }
 
         public LayoutComponent(SILayout layout)
         {
-            _Layout = layout;
-            _Layout._Components.Add(this);
+			if (!isDisposed)
+			{
+				Layout = layout;
+				if (layout != null)
+					Layout._Components.Add(this);
+			}
         }
 
-        ~LayoutComponent()
+		internal void SetLayout(SILayout layout)
+		{
+			Layout = layout;
+			if (!layout._Components.Contains(this))
+				Layout._Components.Add(this);
+		}
+
+		~LayoutComponent()
         {
             if (!isDisposed)
                 Dispose();
@@ -37,8 +48,11 @@ namespace SiGen.StringedInstruments.Layout
         public void Dispose()
         {
             isDisposed = true;
-            _Layout._Components.Remove(this);
-            _Layout = null;
+			if(Layout != null)
+			{
+				Layout._Components.Remove(this);
+				Layout = null;
+			}
         }
 
         void ILayoutComponent.OnStringConfigurationChanged()
@@ -51,19 +65,66 @@ namespace SiGen.StringedInstruments.Layout
 
         }
 
-        protected void NotifyLayoutChanged(string propertyName)
+		protected virtual void NotifyLayoutChanged(PropertyChange change)
+		{
+			Layout?.NotifyLayoutChanged(change);
+		}
+
+		protected bool SetPropertyValue<T>(ref T property, T value, [CallerMemberName] string propertyName = null)
         {
-            Layout?.NotifyLayoutChanged(this, propertyName);
+            if (!EqualityComparer<T>.Default.Equals(property, value))
+            {
+				var propChange = new PropertyChange(this, propertyName, property, value);
+				property = value;
+				NotifyLayoutChanged(propChange);
+				return true;
+            }
+			return false;
         }
 
-        protected void SetPropertyValue<T>(ref T property, T value, [CallerMemberName] string propertyName = null)
-        {
-            var comparer = EqualityComparer<T>.Default;
-            if (!comparer.Equals(property, value))
-            {
-                property = value;
-                NotifyLayoutChanged(propertyName);
-            }
-        }
-    }
+		protected bool SetFieldValue<T>(ref T field, T value, string fieldName)
+		{
+			if (!EqualityComparer<T>.Default.Equals(field, value))
+			{
+				var propChange = new PropertyChange(this, fieldName, field, value, true);
+				field = value;
+				NotifyLayoutChanged(propChange);
+				return true;
+			}
+			return false;
+		}
+
+		protected bool SetFieldValue<T>(ref T[] field, int index, T value, string fieldName)
+		{
+			if (!EqualityComparer<T>.Default.Equals(field[index], value))
+			{
+				var propChange = new PropertyChange(this, fieldName, index, field[index], value, true);
+				field[index] = value;
+				NotifyLayoutChanged(propChange);
+				return true;
+			}
+			return false;
+		}
+
+		protected bool SetSubPropertyValue<V,P>(P prop, Expression<Func<P,V>> subProp, V value)
+		{
+			
+			return false;
+		}
+	}
+
+	public abstract class ActivableLayoutComponent : LayoutComponent
+	{
+		public abstract bool IsActive { get; }
+
+		public ActivableLayoutComponent(SILayout layout) : base(layout)
+		{
+		}
+
+		protected override void NotifyLayoutChanged(PropertyChange change)
+		{
+			if (IsActive)
+				base.NotifyLayoutChanged(change);
+		}
+	}
 }
