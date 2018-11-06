@@ -17,6 +17,8 @@ namespace SiGen.Common
 		public int CurrentActionIndex { get; private set; }
 		private bool IsUndoing { get; set; }
 
+        public event EventHandler LayoutChanged;
+
         public LayoutDocument(SILayout layout)
         {
             Layout = layout;
@@ -38,7 +40,9 @@ namespace SiGen.Common
 				CurrentActionIndex++;
 				ModificationList.Add(e.Change);
 			}
-		}
+
+            LayoutChanged?.Invoke(this, EventArgs.Empty);
+        }
 
 		public bool Undo()
 		{

@@ -349,6 +349,7 @@ namespace SiGen.UI
                     if (measureEditor != null && (DateTime.Now - measureEditor.LastClosedTime).TotalMilliseconds < 200)
                         return;
                     ClearMeasuring();
+                    return;
                 }
                 var pos = GrabMeasureLocation(position);
                 if (!pos.IsEmpty)

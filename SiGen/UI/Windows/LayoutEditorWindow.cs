@@ -28,6 +28,7 @@ namespace SiGen.UI
         private LayoutEditorPanel<FingerboardMarginEditor> layoutMarginPanel;
         private LayoutEditorPanel<ScaleLengthEditor> scaleLengthPanel;
         private LayoutEditorPanel<LayoutProperties> layoutInfoPanel;
+        private LayoutViewerPanel PreviousDocument;
 
         private LayoutDocument CurrentFile
         {
@@ -101,6 +102,9 @@ namespace SiGen.UI
 
         private void dockPanel1_ActiveDocumentChanged(object sender, EventArgs e)
         {
+            if(PreviousDocument != null)
+                PreviousDocument.CurrentFile.LayoutChanged -= CurrentFile_LayoutChanged;
+
             if (ActiveDocument != null && ActiveDocument.CurrentFile != null)
             {
                 SetEditorsActiveLayout(CurrentFile.Layout);
@@ -108,12 +112,26 @@ namespace SiGen.UI
                 tsbMeasureTool.CheckOnClick = true;
 				tsbUndo.Enabled = ActiveDocument.CurrentFile.CanUndo();
 				tsbRedo.Enabled = ActiveDocument.CurrentFile.CanRedo();
-			}
+                CurrentFile.LayoutChanged += CurrentFile_LayoutChanged;
+            }
             else
             {
                 SetEditorsActiveLayout(null);
                 tsbMeasureTool.Checked = false;
                 tsbMeasureTool.CheckOnClick = false;
+                tsbUndo.Enabled = false;
+                tsbRedo.Enabled = false;
+            }
+
+            PreviousDocument = ActiveDocument;
+        }
+
+        private void CurrentFile_LayoutChanged(object sender, EventArgs e)
+        {
+            if(CurrentFile != null)
+            {
+                tsbUndo.Enabled = CurrentFile.CanUndo();
+                tsbRedo.Enabled = CurrentFile.CanRedo();
             }
         }
 

@@ -461,6 +461,9 @@ namespace SiGen.StringedInstruments.Layout
 							pi = ownerObject.GetType().GetProperty(changedProp.Property);
 
 						pi.SetValue(ownerObject, setNewValue ? changedProp.NewValue : changedProp.OldValue);
+
+                        if (changedProp.Property.Contains("."))
+                            NotifyLayoutChanged(new PropertyChange(changedProp.Component, changedProp.Property, changedProp.Index, changedProp.NewValue, changedProp.OldValue, changedProp.IsField));
 					}
 
 				}

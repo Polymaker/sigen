@@ -92,7 +92,9 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             if (!IsLoading && CurrentLayout != null)
             {
+                CurrentLayout.StartBatchChanges();
                 CurrentLayout.Strings.SetAll(s => s.NumberOfFrets, (int)nbxNumberOfFrets.Value);
+                CurrentLayout.FinishBatchChanges();
                 CurrentLayout.RebuildLayout();
             }
         }
