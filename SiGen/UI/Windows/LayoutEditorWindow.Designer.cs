@@ -44,6 +44,9 @@
 			this.tsmiSaveTemplate = new System.Windows.Forms.ToolStripMenuItem();
 			this.tssbExport = new System.Windows.Forms.ToolStripButton();
 			this.tsbOptions = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.tssbUndo = new System.Windows.Forms.ToolStripSplitButton();
+			this.tssbRedo = new System.Windows.Forms.ToolStripSplitButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.tsbMeasureTool = new System.Windows.Forms.ToolStripButton();
 			this.tsbLayoutProperties = new System.Windows.Forms.ToolStripButton();
@@ -54,13 +57,10 @@
 			this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
 			this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-			this.tsbUndo = new System.Windows.Forms.ToolStripButton();
 			this.localizableStringList1 = new SiGen.Localization.LocalizableStringList(this.components);
 			this.MSG_FileAlreadyOpen = new SiGen.Localization.LocalizableString(this.components);
 			this.MSG_SaveBeforeClose = new SiGen.Localization.LocalizableString(this.components);
 			this.LBL_Warning = new SiGen.Localization.LocalizableString(this.components);
-			this.tsbRedo = new System.Windows.Forms.ToolStripButton();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -95,8 +95,8 @@
             this.tssbExport,
             this.tsbOptions,
             this.toolStripSeparator2,
-            this.tsbUndo,
-            this.tsbRedo,
+            this.tssbUndo,
+            this.tssbRedo,
             this.toolStripSeparator1,
             this.tsbMeasureTool,
             this.tsbLayoutProperties});
@@ -208,6 +208,33 @@
 			this.tsbOptions.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.tsbOptions.Click += new System.EventHandler(this.tsbOptions_Click);
 			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 69);
+			// 
+			// tssbUndo
+			// 
+			this.tssbUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.tssbUndo.Image = ((System.Drawing.Image)(resources.GetObject("tssbUndo.Image")));
+			this.tssbUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.tssbUndo.Name = "tssbUndo";
+			this.tssbUndo.Size = new System.Drawing.Size(52, 66);
+			this.tssbUndo.Text = "Undo";
+			this.tssbUndo.ButtonClick += new System.EventHandler(this.tssbUndo_ButtonClick);
+			this.tssbUndo.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tssbUndo_DropDownItemClicked);
+			// 
+			// tssbRedo
+			// 
+			this.tssbRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.tssbRedo.Image = ((System.Drawing.Image)(resources.GetObject("tssbRedo.Image")));
+			this.tssbRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.tssbRedo.Name = "tssbRedo";
+			this.tssbRedo.Size = new System.Drawing.Size(50, 66);
+			this.tssbRedo.Text = "Redo";
+			this.tssbRedo.ButtonClick += new System.EventHandler(this.tssbRedo_ButtonClick);
+			this.tssbRedo.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tssbRedo_DropDownItemClicked);
+			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -289,21 +316,6 @@
 			this.statusStrip1.TabIndex = 5;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
-			// toolStripSeparator2
-			// 
-			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 69);
-			// 
-			// tsbUndo
-			// 
-			this.tsbUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.tsbUndo.Image = ((System.Drawing.Image)(resources.GetObject("tsbUndo.Image")));
-			this.tsbUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.tsbUndo.Name = "tsbUndo";
-			this.tsbUndo.Size = new System.Drawing.Size(40, 66);
-			this.tsbUndo.Text = "Undo";
-			this.tsbUndo.Click += new System.EventHandler(this.tsbUndo_Click);
-			// 
 			// localizableStringList1
 			// 
 			this.localizableStringList1.Items.Add(this.MSG_FileAlreadyOpen);
@@ -321,16 +333,6 @@
 			// LBL_Warning
 			// 
 			this.LBL_Warning.Text = "Warning";
-			// 
-			// tsbRedo
-			// 
-			this.tsbRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.tsbRedo.Image = ((System.Drawing.Image)(resources.GetObject("tsbRedo.Image")));
-			this.tsbRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.tsbRedo.Name = "tsbRedo";
-			this.tsbRedo.Size = new System.Drawing.Size(38, 66);
-			this.tsbRedo.Text = "Redo";
-			this.tsbRedo.Click += new System.EventHandler(this.tsbRedo_Click);
 			// 
 			// LayoutEditorWindow
 			// 
@@ -382,7 +384,7 @@
         private Localization.LocalizableString MSG_SaveBeforeClose;
         private Localization.LocalizableString LBL_Warning;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-		private System.Windows.Forms.ToolStripButton tsbUndo;
-		private System.Windows.Forms.ToolStripButton tsbRedo;
+		private System.Windows.Forms.ToolStripSplitButton tssbUndo;
+		private System.Windows.Forms.ToolStripSplitButton tssbRedo;
 	}
 }

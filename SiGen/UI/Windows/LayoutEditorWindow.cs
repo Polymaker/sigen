@@ -27,10 +27,10 @@ namespace SiGen.UI
         private LayoutEditorPanel<StringsConfigurationEditor> stringConfigPanel;
         private LayoutEditorPanel<FingerboardMarginEditor> layoutMarginPanel;
         private LayoutEditorPanel<ScaleLengthEditor> scaleLengthPanel;
-        private LayoutEditorPanel<LayoutProperties> layoutInfoPanel;
+        //private LayoutEditorPanel<LayoutProperties> layoutInfoPanel;
         private LayoutViewerPanel PreviousDocument;
 
-        private LayoutDocument CurrentFile
+        private LayoutDocument CurrentLayoutDocument
         {
             get
             {
@@ -40,7 +40,7 @@ namespace SiGen.UI
             }
         }
 
-        private LayoutViewerPanel ActiveDocument
+        private LayoutViewerPanel ActiveLayoutPanel
         {
             get
             {
@@ -105,34 +105,30 @@ namespace SiGen.UI
             if(PreviousDocument != null)
                 PreviousDocument.CurrentFile.LayoutChanged -= CurrentFile_LayoutChanged;
 
-            if (ActiveDocument != null && ActiveDocument.CurrentFile != null)
+            if (ActiveLayoutPanel != null && ActiveLayoutPanel.CurrentFile != null)
             {
-                SetEditorsActiveLayout(CurrentFile.Layout);
-                tsbMeasureTool.Checked = ActiveDocument.Viewer.EnableMeasureTool;
+                SetEditorsActiveLayout(CurrentLayoutDocument.Layout);
+                tsbMeasureTool.Checked = ActiveLayoutPanel.Viewer.EnableMeasureTool;
                 tsbMeasureTool.CheckOnClick = true;
-				tsbUndo.Enabled = ActiveDocument.CurrentFile.CanUndo();
-				tsbRedo.Enabled = ActiveDocument.CurrentFile.CanRedo();
-                CurrentFile.LayoutChanged += CurrentFile_LayoutChanged;
+                CurrentLayoutDocument.LayoutChanged += CurrentFile_LayoutChanged;
             }
             else
             {
                 SetEditorsActiveLayout(null);
                 tsbMeasureTool.Checked = false;
                 tsbMeasureTool.CheckOnClick = false;
-                tsbUndo.Enabled = false;
-                tsbRedo.Enabled = false;
             }
+			RebuildUndoRedoMenus();
 
-            PreviousDocument = ActiveDocument;
+			PreviousDocument = ActiveLayoutPanel;
         }
 
         private void CurrentFile_LayoutChanged(object sender, EventArgs e)
         {
-            if(CurrentFile != null)
+            if(CurrentLayoutDocument != null)
             {
-                tsbUndo.Enabled = CurrentFile.CanUndo();
-                tsbRedo.Enabled = CurrentFile.CanRedo();
-            }
+				RebuildUndoRedoMenus();
+			}
         }
 
         private void SetEditorsActiveLayout(SILayout layout)
@@ -143,11 +139,21 @@ namespace SiGen.UI
 
 		private void RefreshCurrentLayoutEditors()
 		{
-			if(ActiveDocument != null)
+			if(ActiveLayoutPanel != null)
 			{
 				foreach (var editorPanel in dockPanel1.Contents.OfType<ILayoutEditorPanel>())
 					editorPanel.Editor.ReloadPropertyValues();
 			}
+		}
+
+		private T GetLayoutEditor<T>() where T : LayoutPropertyEditor
+		{
+			foreach (var editorPanel in dockPanel1.Contents.OfType<ILayoutEditorPanel>())
+			{
+				if (editorPanel.Editor.GetType() == typeof(T))
+					return (T)editorPanel.Editor;
+			}
+			return default(T);
 		}
 
         private DockContent CreateDocumentPanel(LayoutDocument layoutFile)
@@ -328,20 +334,20 @@ namespace SiGen.UI
 
         private void tssbSave_ButtonClick(object sender, EventArgs e)
         {
-            if (CurrentFile != null)
-                SaveLayout(CurrentFile, string.IsNullOrEmpty(CurrentFile.FileName));
+            if (CurrentLayoutDocument != null)
+                SaveLayout(CurrentLayoutDocument, string.IsNullOrEmpty(CurrentLayoutDocument.FileName));
         }
 
         private void tsmiSave_Click(object sender, EventArgs e)
         {
-            if (CurrentFile != null)
-                SaveLayout(CurrentFile, string.IsNullOrEmpty(CurrentFile.FileName));
+            if (CurrentLayoutDocument != null)
+                SaveLayout(CurrentLayoutDocument, string.IsNullOrEmpty(CurrentLayoutDocument.FileName));
         }
 
         private void tsmiSaveAs_Click(object sender, EventArgs e)
         {
-            if (CurrentFile != null)
-                SaveLayout(CurrentFile, true);
+            if (CurrentLayoutDocument != null)
+                SaveLayout(CurrentLayoutDocument, true);
         }
 
         #endregion
@@ -463,7 +469,7 @@ namespace SiGen.UI
 
         private void tssbExport_Click(object sender, EventArgs e)
         {
-            using (var exportDialog = new ExportLayoutDialog(CurrentFile.Layout))
+            using (var exportDialog = new ExportLayoutDialog(CurrentLayoutDocument.Layout))
                 exportDialog.ShowDialog();
         }
 
@@ -475,32 +481,12 @@ namespace SiGen.UI
 
         private void tsbMeasureTool_Click(object sender, EventArgs e)
         {
-            if(ActiveDocument != null)
+            if(ActiveLayoutPanel != null)
             {
-                ActiveDocument.Viewer.EnableMeasureTool = tsbMeasureTool.Checked;
+                ActiveLayoutPanel.Viewer.EnableMeasureTool = tsbMeasureTool.Checked;
             }
         }
 
-		private void tsbUndo_Click(object sender, EventArgs e)
-		{
-			if(ActiveDocument != null && ActiveDocument.CurrentFile.Undo())
-			{
-				RefreshCurrentLayoutEditors();
-				if (ActiveDocument.CurrentFile.Layout.IsLayoutDirty)
-					ActiveDocument.CurrentFile.Layout.RebuildLayout();
-				tsbUndo.Enabled = ActiveDocument.CurrentFile.CanUndo();
-			}
-		}
-
-		private void tsbRedo_Click(object sender, EventArgs e)
-		{
-			if (ActiveDocument != null && ActiveDocument.CurrentFile.Redo())
-			{
-				RefreshCurrentLayoutEditors();
-				if (ActiveDocument.CurrentFile.Layout.IsLayoutDirty)
-					ActiveDocument.CurrentFile.Layout.RebuildLayout();
-				tsbRedo.Enabled = ActiveDocument.CurrentFile.CanRedo();
-			}
-		}
+		
 	}
 }

@@ -78,7 +78,21 @@ namespace SiGen.Common
 			return ModificationList.Count > 0 && CurrentActionIndex < ModificationList.Count - 1;
 		}
 
-        public static LayoutDocument Open(string filename, bool asTemplate = false)
+		public IEnumerable<ILayoutChange> GetUndoList()
+		{
+			if (CurrentActionIndex >= 0 && ModificationList.Count > 0)
+				return ModificationList.Take(CurrentActionIndex + 1).Reverse();
+			return new ILayoutChange[0];
+		}
+
+		public IEnumerable<ILayoutChange> GetRedoList()
+		{
+			if (ModificationList.Count > 0)
+				return ModificationList.Skip(CurrentActionIndex + 1);
+			return new ILayoutChange[0];
+		}
+
+		public static LayoutDocument Open(string filename, bool asTemplate = false)
         {
             var layout = SILayout.Load(filename);
             var file = new LayoutDocument(layout);

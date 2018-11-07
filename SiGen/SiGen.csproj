@@ -255,6 +255,9 @@
     <Compile Include="UI\Windows\ExportLayoutDialog.Designer.cs">
       <DependentUpon>ExportLayoutDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Windows\LayoutEditorWindow.Menus.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Utilities\ArrayProperty.cs" />
     <Compile Include="Utilities\EnumHelper.cs" />
     <Compile Include="Utilities\ExtensionMethods\CollectionHelper.cs" />

@@ -286,7 +286,7 @@ namespace SiGen.UI.Controls
         #endregion
 
 
-        private FretPosition SelectClosestFretPosition(double fretRation, double tolerance = 0.0005)
+        private FretPosition SelectClosestFretPosition(double fretRatio, double tolerance = 0.0005)
         {
             var closestFretPos = FretPositions.FirstOrDefault(p => p.PositionRatio.EqualOrClose(nubMultiScaleRatio.Value, tolerance));
             using (FlagManager.UseFlag("DetermineFretAlignment"))
@@ -299,9 +299,25 @@ namespace SiGen.UI.Controls
             return closestFretPos;
         }
 
-        #region Manual Mode
+		public string GetPerpendicularFretName()
+		{
+			if(EditMode == ScaleLengthType.Multiple)
+			{
+				var current = cboParallelFret.SelectedItem as FretPosition;
+				return current?.Name ?? "Custom";
+			}
+			return string.Empty;
+		}
 
-        private void dgvScaleLengths_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+		public string GetPerpendicularFretName(double fretRatio, double tolerance = 0.0005)
+		{
+			var closestFretPos = FretPositions.FirstOrDefault(p => p.PositionRatio.EqualOrClose(fretRatio, tolerance));
+			return closestFretPos?.Name ?? "Custom";
+		}
+
+		#region Manual Mode
+
+		private void dgvScaleLengths_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (!IsLoading && CurrentLayout != null && e.RowIndex >= 0)
             {
