@@ -77,8 +77,8 @@ namespace SiGen.StringedInstruments.Layout
 
             if (str.LengthCalculationMethod == LengthFunction.AlongString && opp > Measure.Zero)
             {
-                var theta = Math.Asin(opp.NormalizedValue / str.ScaleLength.NormalizedValue);
-                adj = Math.Cos(theta) * str.ScaleLength;
+                var theta = MathP.Asin(opp.NormalizedValue / str.ScaleLength.NormalizedValue);
+                adj = MathP.Cos(theta) * str.ScaleLength;
             }
 
             var p1 = new PointM(nutPos, (adj / 2d));
@@ -393,7 +393,7 @@ namespace SiGen.StringedInstruments.Layout
         {
             public int FretIndex { get; set; }
             public int StringIndex { get; set; }
-            public double PositionRatio { get; set; }
+            public PreciseDouble PositionRatio { get; set; }
             public PointM Position { get; set; }
         }
 
@@ -416,7 +416,7 @@ namespace SiGen.StringedInstruments.Layout
                     Measure.Mm(0.5), str.ActionAtTwelfthFret, Measure.Mm(1.2), str.TotalNumberOfFrets);
                 for (int i = 0; i < positions.Length; i++)
                 {
-                    double fretPosRatio = (str.StringLength - positions[i]).NormalizedValue / str.StringLength.NormalizedValue;
+                    PreciseDouble fretPosRatio = (str.StringLength - positions[i]).NormalizedValue / str.StringLength.NormalizedValue;
                     var fretPos = str.LayoutLine.P2 + (str.LayoutLine.Direction * -1) * (str.StringLength * fretPosRatio);
                     frets.Add(new FretPosition() { FretIndex = i - str.StartingFret, Position = fretPos, StringIndex = str.Index, PositionRatio = fretPosRatio });
                 }

@@ -8,19 +8,19 @@ namespace SiGen.Maths
         #region Static Consts
 
         public static readonly Angle Zero = new Angle();
-        public static readonly Angle Empty = new Angle() { _Degrees = double.NaN };
+        public static readonly Angle Empty = new Angle() { _Degrees = PreciseDouble.NaN };
 
         #endregion
 
         #region Fields
 
-        private double _Degrees;
+        private PreciseDouble _Degrees;
 
         #endregion
 
         #region Properties
 
-        public double Degrees
+        public PreciseDouble Degrees
         {
             get { return _Degrees; }
             set
@@ -29,7 +29,7 @@ namespace SiGen.Maths
             }
         }
 
-        public double Radians
+        public PreciseDouble Radians
         {
             get { return ToRadians(Degrees); }
             set
@@ -38,7 +38,7 @@ namespace SiGen.Maths
             }
         }
 
-        public double this[AngleUnit unit]
+        public PreciseDouble this[AngleUnit unit]
         {
             get { return unit == AngleUnit.Degrees ? Degrees : Radians; }
         }
@@ -48,7 +48,7 @@ namespace SiGen.Maths
         {
             get
             {
-                return double.IsNaN(_Degrees);
+                return PreciseDouble.IsNaN(_Degrees);
             }
         }
 
@@ -56,12 +56,12 @@ namespace SiGen.Maths
 
         #region Static Ctors
 
-        public static Angle FromDegrees(double degrees)
+        public static Angle FromDegrees(PreciseDouble degrees)
         {
             return new Angle { Degrees = degrees };
         }
 
-        public static Angle FromRadians(double radians)
+        public static Angle FromRadians(PreciseDouble radians)
         {
             return new Angle { Radians = radians };
         }
@@ -69,20 +69,20 @@ namespace SiGen.Maths
         public static Angle FromPoints(Vector v1, Vector v2)
         {
             var dirVec = (v2 - v1).Normalized;
-            return FromRadians(Math.Atan2(dirVec.Y, dirVec.X));
+            return FromRadians(MathP.Atan2(dirVec.Y, dirVec.X));
         }
 
         public static Angle FromPoints(Vector center, Vector v1, Vector v2)
         {
             var ab = v1 - center;
             var bc = v2 - center;
-            return FromRadians(Math.Acos(Vector.Dot(ab, bc) / (ab.Length * bc.Length)));
+            return FromRadians(MathP.Acos(Vector.Dot(ab, bc) / (ab.Length * bc.Length)));
         }
 
         public static Angle FromDirectionVector(Vector vec)
         {
             var dirVec = vec.Length == 1 ? vec : vec.Normalized;
-            return FromRadians(Math.Atan2(dirVec.Y, dirVec.X));
+            return FromRadians(MathP.Atan2(dirVec.Y, dirVec.X));
         }
 
         #endregion
@@ -120,7 +120,7 @@ namespace SiGen.Maths
 
         public static bool operator ==(Angle a1, Angle a2)
         {
-            return Math.Abs(a1.Degrees - a2.Degrees) <= double.Epsilon;
+            return MathP.Abs(a1.Degrees - a2.Degrees) <= double.Epsilon;
         }
 
         public static bool operator !=(Angle a1, Angle a2)
@@ -169,17 +169,17 @@ namespace SiGen.Maths
 
         #region Convertion
 
-        public static double ToDegrees(double radians)
+        public static PreciseDouble ToDegrees(PreciseDouble radians)
         {
-            if (double.IsNaN(radians))
-                return double.NaN;
+            if (PreciseDouble.IsNaN(radians))
+                return PreciseDouble.NaN;
             return (radians * 180.0d) / Math.PI;
         }
 
-        public static double ToRadians(double degrees)
+        public static PreciseDouble ToRadians(PreciseDouble degrees)
         {
-            if (double.IsNaN(degrees))
-                return double.NaN;
+            if (PreciseDouble.IsNaN(degrees))
+                return PreciseDouble.NaN;
             return Math.PI * degrees / 180.0d;
         }
 
@@ -200,7 +200,7 @@ namespace SiGen.Maths
             return FromDegrees(NormalizeDegrees(_Degrees));
         }
 
-        public static double NormalizeDegrees(double degrees)
+        public static PreciseDouble NormalizeDegrees(PreciseDouble degrees)
         {
             degrees = degrees % 360d;
             if (degrees < 0d)

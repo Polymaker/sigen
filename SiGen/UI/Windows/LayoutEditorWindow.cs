@@ -294,7 +294,7 @@ namespace SiGen.UI
                     if (sfd.ShowDialog() == DialogResult.OK)
                     {
                         file.FileName = sfd.FileName;
-                        file.HasChanged = false;
+                        //file.HasChanged = false;
                     }
                     else
                         return false;
@@ -305,7 +305,8 @@ namespace SiGen.UI
             //    file.Layout.LayoutName = Path.GetFileNameWithoutExtension(file.FileName);
 
             file.Layout.Save(file.FileName);
-            var documentTab = OpenDocuments.FirstOrDefault(d => d.CurrentFile == file);
+			file.HasChanged = false;
+			var documentTab = OpenDocuments.FirstOrDefault(d => d.CurrentFile == file);
             if (documentTab != null)
             {
                 documentTab.TabText = string.IsNullOrEmpty(file.Layout.LayoutName ) ? Path.GetFileNameWithoutExtension(file.FileName) : file.Layout.LayoutName;

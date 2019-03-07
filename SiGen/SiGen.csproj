@@ -81,6 +81,7 @@
     <Compile Include="Maths\BezierCurve.cs" />
     <Compile Include="Maths\BezierSpline.cs" />
     <Compile Include="Maths\Line.cs" />
+    <Compile Include="Maths\MathP.cs" />
     <Compile Include="Maths\Vector.cs" />
     <Compile Include="Measuring\Measure.cs" />
     <Compile Include="Measuring\PointM.cs" />
@@ -268,6 +269,7 @@
     <Compile Include="Utilities\ExtensionMethods\XmlLinqExtensions.cs" />
     <Compile Include="Utilities\MeasureParser.cs" />
     <Compile Include="Utilities\ObservableCollectionEx.cs" />
+    <Compile Include="Maths\PreciseDouble.cs" />
     <Compile Include="Utilities\SerializationHelper.cs" />
     <Compile Include="Utilities\SortableBindingList.cs" />
     <Compile Include="Utilities\TemporaryObject.cs" />

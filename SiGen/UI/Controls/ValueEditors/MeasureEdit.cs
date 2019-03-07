@@ -111,7 +111,7 @@ namespace SiGen.UI
                 _SelectedUnit = value.Unit;
                 cboUnitType.SelectedItem = value.Unit;
             }
-            nudValue.Value = (decimal)value.Value;
+            nudValue.Value = value.Value.DecimalValue;
             internalChange = false;
             OnValueChanged();
         }

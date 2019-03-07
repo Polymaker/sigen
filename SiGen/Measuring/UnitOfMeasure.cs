@@ -9,7 +9,7 @@ namespace SiGen.Measuring
     [System.ComponentModel.TypeConverter(typeof(UnitOfMeasureConverter))]
     public class UnitOfMeasure
     {
-        public const double CmToInch = 1d / 2.54d;
+        public static readonly PreciseDouble CmToInch = 1d / 2.54d;
         //0.3937007874015748d
         //0.3937007874015748031496062992126d
 
@@ -18,7 +18,7 @@ namespace SiGen.Measuring
         private string _Name;
         private string _Abreviation;
         private string _Symbol;
-        private double _ConversionFactor;
+        private PreciseDouble _ConversionFactor;
 
         #endregion
 
@@ -30,11 +30,11 @@ namespace SiGen.Measuring
 
         public string Symbol { get { return _Symbol; } }
 
-        public double ConversionFactor { get { return _ConversionFactor; } }
+        public PreciseDouble ConversionFactor { get { return _ConversionFactor; } }
 
         #endregion
 
-        private UnitOfMeasure(string name, string symbol, string abv, double norm)
+        private UnitOfMeasure(string name, string symbol, string abv, PreciseDouble norm)
         {
             _Name = name;
             _Abreviation = abv;
@@ -53,7 +53,7 @@ namespace SiGen.Measuring
         public static UnitOfMeasure In { get { return Inches; } }
         public static UnitOfMeasure Ft { get { return Feets; } }
 
-        public static double ConvertTo(double value, UnitOfMeasure from, UnitOfMeasure to)
+        public static PreciseDouble ConvertTo(PreciseDouble value, UnitOfMeasure from, UnitOfMeasure to)
         {
             if (from == to)
                 return value;

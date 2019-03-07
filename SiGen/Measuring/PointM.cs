@@ -72,7 +72,7 @@ namespace SiGen.Measuring
             this.y = y;
         }
 
-        public PointM(double x, double y, UnitOfMeasure unit)
+        public PointM(PreciseDouble x, PreciseDouble y, UnitOfMeasure unit)
         {
             this.x = new Measure(x, unit);
             this.y = new Measure(y, unit);
@@ -127,17 +127,17 @@ namespace SiGen.Measuring
             return new PointM(pt1.X - pt2.X, pt1.Y - pt2.Y);
         }
 
-        public static PointM operator /(PointM pt, double value)
+        public static PointM operator /(PointM pt, PreciseDouble value)
         {
             return new PointM(pt.X / value, pt.Y / value);
         }
 
-        public static PointM operator *(double value, PointM pt)
+        public static PointM operator *(PreciseDouble value, PointM pt)
         {
             return new PointM(value * pt.X, value * pt.Y);
         }
 
-        public static PointM operator *(PointM pt, double value)
+        public static PointM operator *(PointM pt, PreciseDouble value)
         {
             return new PointM(pt.X * value, pt.Y * value);
         }

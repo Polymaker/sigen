@@ -5,19 +5,19 @@
         #region Fields
 
         private bool _IsVertical;
-        private double _A;
-        private double _B;
-        private double _X;
+        private PreciseDouble _A;
+        private PreciseDouble _B;
+        private PreciseDouble _X;
 
         #endregion
 
         #region Properties
 
-        public double A { get { return _A; } }
+        public PreciseDouble A { get { return _A; } }
 
-        public double B { get { return _B; } }
+        public PreciseDouble B { get { return _B; } }
 
-        public double X { get { return _X; } }
+        public PreciseDouble X { get { return _X; } }
 
         public bool IsVertical { get { return _IsVertical; } }
 
@@ -37,7 +37,7 @@
 
         #region Ctors
 
-        public Line(double x)
+        public Line(PreciseDouble x)
         {
             _IsVertical = true;
             _X = x;
@@ -45,7 +45,7 @@
             _B = 0;
         }
 
-        public Line(double a, double b)
+        public Line(PreciseDouble a, PreciseDouble b)
         {
             _IsVertical = false;
             _X = 0;
@@ -69,7 +69,7 @@
 
             var slope = dy / dx;
 
-            if (double.IsInfinity(slope))
+            if (PreciseDouble.IsInfinity(slope))
                 return new Line(p1.X);//vertical line
 
             var b = left.Y + ((left.X * -1) * slope);
@@ -116,14 +116,14 @@
 
         #region Functions
 
-        public Vector GetPointForX(double x)
+        public Vector GetPointForX(PreciseDouble x)
         {
             if (IsVertical)
                 return Vector.Empty;
             return new Vector(x, B + (x * A));
         }
 
-        public Vector GetPointForY(double y)
+        public Vector GetPointForY(PreciseDouble y)
         {
             if (IsVertical)
                 return new Vector(X, y);
