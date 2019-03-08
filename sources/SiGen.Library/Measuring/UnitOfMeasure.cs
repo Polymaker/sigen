@@ -60,7 +60,17 @@ namespace SiGen.Measuring
             return (value * from.ConversionFactor) / to.ConversionFactor;
         }
 
-        public static UnitOfMeasure GetUnitByName(string unitName)
+		public double ConvertValue(double value)
+		{
+			return (double)((decimal)value / (decimal)ConversionFactor);
+		}
+
+		public double NormalizeValue(double value)
+		{
+			return (double)((decimal)value * (decimal)ConversionFactor);
+		}
+
+		public static UnitOfMeasure GetUnitByName(string unitName)
         {
             switch (unitName.ToLower())
             {

@@ -58,5 +58,7 @@ namespace SiGen.StringedInstruments.Layout
             if (Layout != null)
                 Layout.NotifyLayoutChanged(sender, propertyName);
         }
+
+
     }
 }

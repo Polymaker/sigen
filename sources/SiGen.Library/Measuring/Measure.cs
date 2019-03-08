@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
@@ -35,22 +36,30 @@ namespace SiGen.Measuring
         /// Gets or sets the default unit of this measure. 
         /// Changing the unit does not affect the measure and the value will be automatically converted to the new unit.
         /// </summary>
-        public UnitOfMeasure Unit { get { return _Unit; } set { _Unit = value; } }
+        public UnitOfMeasure Unit
+		{
+			get => _Unit;
+			set
+			{
+				EnsureIsNotNaN();
+				_Unit = value;
+			}
+		}
 
         public double Value
         {
             get
             {
-                if (Unit != null)
-                    return normalizedValue / Unit.ConversionFactor;
-                return normalizedValue;
-            }
+				if (IsEmpty)
+					return normalizedValue;
+				
+				return Unit?.ConvertValue(normalizedValue) ?? normalizedValue;
+
+			}
             set
             {
-                if (Unit != null)
-                    normalizedValue = value * Unit.ConversionFactor;
-                else
-                    normalizedValue = value;
+				EnsureIsNotNaN();
+				normalizedValue = Unit?.NormalizeValue(value) ?? value;
             }
         }
 
@@ -63,11 +72,22 @@ namespace SiGen.Measuring
         {
             get
             {
-                return normalizedValue / unit.ConversionFactor;
+				if (IsEmpty)
+					return normalizedValue;
+
+				if (unit == null)
+					throw new ArgumentNullException(nameof(unit));
+
+				return unit.ConvertValue(normalizedValue);
             }
             set
             {
-                normalizedValue = value * unit.ConversionFactor;
+				EnsureIsNotNaN();
+
+				if (unit == null)
+					throw new ArgumentNullException(nameof(unit));
+				
+                normalizedValue = unit.NormalizeValue(value);
             }
         }
 
@@ -82,8 +102,8 @@ namespace SiGen.Measuring
 
         public Measure(double value, UnitOfMeasure unit)
         {
-            if (unit != null)
-                normalizedValue = value * unit.ConversionFactor;
+            if (unit != null && !double.IsNaN(value))
+                normalizedValue = unit.NormalizeValue(value);
             else
                 normalizedValue = value;
             _Unit = unit;
@@ -416,7 +436,7 @@ namespace SiGen.Measuring
         public void ReadXml(XmlReader reader)
         {
             reader.MoveToContent();
-            var value = double.Parse(reader.GetAttribute("Value"));
+            var value = double.Parse(reader.GetAttribute("Value"), NumberFormatInfo.InvariantInfo);
             _Unit = UnitOfMeasure.GetUnitByName(reader.GetAttribute("Unit"));
             if (_Unit == null)
                 normalizedValue = value;
@@ -441,7 +461,7 @@ namespace SiGen.Measuring
         {
             if (IsEmpty)
                 return new System.Xml.Linq.XAttribute(name, "N/A");
-            return new System.Xml.Linq.XAttribute(name, string.Format("{0}{1}", Value, Unit != null ? Unit.Abreviation : string.Empty));
+            return new System.Xml.Linq.XAttribute(name, string.Format(NumberFormatInfo.InvariantInfo, "{0}{1}", Value, Unit != null ? Unit.Abreviation : string.Empty));
         }
 
         #endregion
