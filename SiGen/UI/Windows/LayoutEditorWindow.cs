@@ -292,10 +292,7 @@ namespace SiGen.UI
                     sfd.DefaultExt = ".sil";
 
                     if (sfd.ShowDialog() == DialogResult.OK)
-                    {
                         file.FileName = sfd.FileName;
-                        file.HasChanged = false;
-                    }
                     else
                         return false;
                 }
@@ -305,6 +302,7 @@ namespace SiGen.UI
             //    file.Layout.LayoutName = Path.GetFileNameWithoutExtension(file.FileName);
 
             file.Layout.Save(file.FileName);
+            file.HasChanged = false;
             var documentTab = OpenDocuments.FirstOrDefault(d => d.CurrentFile == file);
             if (documentTab != null)
             {

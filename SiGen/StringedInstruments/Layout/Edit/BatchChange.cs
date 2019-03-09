@@ -10,16 +10,29 @@ namespace SiGen.StringedInstruments.Layout
 	{
 		private List<PropertyChange> _ChangedProperties;
 
+        public string Name { get; }
+
 		public IList<PropertyChange> ChangedProperties => _ChangedProperties.AsReadOnly();
 
 		public IEnumerable<LayoutComponent> ChangedComponents => _ChangedProperties.Select(p => p.Component).Distinct();
 
-		public BatchChange(List<PropertyChange> changedProperties)
-		{
-			_ChangedProperties = changedProperties;
-		}
+        public LayoutComponent Component { get; }
 
-		public PropertyChange[] GetChanges()
+        public BatchChange(List<PropertyChange> changedProperties)
+		{
+            Name = string.Empty;
+            _ChangedProperties = changedProperties;
+            Component = ChangedComponents.Count() == 1 ? ChangedComponents.First() : null;
+        }
+
+        public BatchChange(string name, List<PropertyChange> ChangedProperties)
+        {
+            Name = name;
+            _ChangedProperties = ChangedProperties;
+            Component = ChangedComponents.Count() == 1 ? ChangedComponents.First() : null;
+        }
+
+        public PropertyChange[] GetChanges()
 		{
 			return _ChangedProperties.ToArray();
 		}

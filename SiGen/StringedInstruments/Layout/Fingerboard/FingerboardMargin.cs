@@ -33,7 +33,7 @@ namespace SiGen.StringedInstruments.Layout
             get { return _NutTrebleMargin != _BridgeTrebleMargin ? Measure.Empty : _NutTrebleMargin; }
             set
             {
-				Layout.StartBatchChanges();
+				Layout.StartBatchChanges(nameof(Treble));
 				SetFieldValue(ref _NutTrebleMargin, value, nameof(_NutTrebleMargin));
 				SetFieldValue(ref _BridgeTrebleMargin, value, nameof(_BridgeTrebleMargin));
 				Layout.FinishBatchChanges();
@@ -45,7 +45,7 @@ namespace SiGen.StringedInstruments.Layout
             get { return _NutBassMargin != _BridgeBassMargin ? Measure.Empty : _NutBassMargin; }
             set
             {
-				Layout.StartBatchChanges();
+				Layout.StartBatchChanges(nameof(Bass));
 				SetFieldValue(ref _NutBassMargin, value, nameof(_NutBassMargin));
 				SetFieldValue(ref _BridgeBassMargin, value, nameof(_BridgeBassMargin));
 				Layout.FinishBatchChanges();
@@ -57,7 +57,7 @@ namespace SiGen.StringedInstruments.Layout
             get { return _NutBassMargin != _NutTrebleMargin ? Measure.Empty : _NutBassMargin; }
             set
             {
-				Layout.StartBatchChanges();
+				Layout.StartBatchChanges(nameof(MarginAtNut));
 				SetFieldValue(ref _NutBassMargin, value, nameof(_NutBassMargin));
 				SetFieldValue(ref _NutTrebleMargin, value, nameof(_NutTrebleMargin));
 				Layout.FinishBatchChanges();
@@ -69,8 +69,8 @@ namespace SiGen.StringedInstruments.Layout
             get { return _BridgeBassMargin != _BridgeTrebleMargin ? Measure.Empty : _BridgeBassMargin; }
             set
             {
-				Layout.StartBatchChanges();
-				SetFieldValue(ref _BridgeBassMargin, value, nameof(_BridgeBassMargin));
+				Layout.StartBatchChanges(nameof(MarginAtBridge));
+                SetFieldValue(ref _BridgeBassMargin, value, nameof(_BridgeBassMargin));
 				SetFieldValue(ref _BridgeTrebleMargin, value, nameof(_BridgeTrebleMargin));
 				Layout.FinishBatchChanges();
             }
@@ -101,7 +101,9 @@ namespace SiGen.StringedInstruments.Layout
             get { return Treble != Bass ? Measure.Empty : Treble; }
             set
             {
+                Layout.StartBatchChanges(nameof(Edges));
                 Treble = Bass = value;
+                Layout.FinishBatchChanges();
             }
         }
 

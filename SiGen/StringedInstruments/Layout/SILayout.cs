@@ -351,6 +351,7 @@ namespace SiGen.StringedInstruments.Layout
 		#region Layout Change Tracking & Notification
 
 		private List<PropertyChange> CurrentBatchChanges;
+        private string CurrentBatchName;
 		private int NestedBatches;
 
 		internal void NotifyLayoutChanged(ILayoutChange change)
@@ -370,12 +371,15 @@ namespace SiGen.StringedInstruments.Layout
 			LayoutChanged?.Invoke(this, args);
 		}
 
-		internal void StartBatchChanges()
+		internal void StartBatchChanges(string name = null)
 		{
 			if (!(IsLoading || IsAssigningProperties))
 			{
 				if(CurrentBatchChanges == null)
-					CurrentBatchChanges = new List<PropertyChange>();
+                {
+                    CurrentBatchChanges = new List<PropertyChange>();
+                    CurrentBatchName = name ?? string.Empty;
+                }
 				NestedBatches++;
 			}
 				
@@ -389,8 +393,8 @@ namespace SiGen.StringedInstruments.Layout
 				{
 					if (CurrentBatchChanges.Count == 1)
 						OnLayoutChanged(new LayoutChangedEventArgs(CurrentBatchChanges[0]));
-					else
-						OnLayoutChanged(new LayoutChangedEventArgs(new BatchChange(CurrentBatchChanges)));
+					else if (CurrentBatchChanges.Count > 1)
+                        OnLayoutChanged(new LayoutChangedEventArgs(new BatchChange(CurrentBatchName, CurrentBatchChanges)));
 					CurrentBatchChanges = null;
 				}
 			}
@@ -444,6 +448,11 @@ namespace SiGen.StringedInstruments.Layout
 						}
 						else
 							fi.SetValue((object)changedProp.Component ?? this, setNewValue ? changedProp.NewValue : changedProp.OldValue);
+
+                        NotifyLayoutChanged(new PropertyChange(changedProp.Component, changedProp.Property,
+                            setNewValue ? changedProp.OldValue : changedProp.NewValue,
+                            setNewValue ? changedProp.NewValue : changedProp.OldValue, 
+                            true));
 					}
 					else
 					{

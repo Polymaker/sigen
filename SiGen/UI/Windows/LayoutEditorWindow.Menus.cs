@@ -35,9 +35,35 @@ namespace SiGen.UI
 
 		private string GetActionName(ILayoutChange action)
 		{
-			if(action is BatchChange bc && bc.ChangedProperties.Any(p=>p.Property == nameof(SILayout.NumberOfStrings)))
+			if(action is BatchChange bc)
 			{
-				action = bc.ChangedProperties.First(p => p.Property == nameof(SILayout.NumberOfStrings));
+                if(bc.ChangedProperties.Any(p => p.Property == nameof(SILayout.NumberOfStrings)))
+                {
+                    action = bc.ChangedProperties.First(p => p.Property == nameof(SILayout.NumberOfStrings));
+                }
+				if(bc.Component != null)
+                {
+                    switch (bc.Component)
+                    {
+                        case FingerboardMargin fm:
+                            switch (bc.Name)
+                            {
+                                case nameof(FingerboardMargin.Bass):
+                                    return $"Bass margin: {bc.ChangedProperties.First().NewValue}";
+                                case nameof(FingerboardMargin.Treble):
+                                    return $"Treble margin: {bc.ChangedProperties.First().NewValue}";
+                                case nameof(FingerboardMargin.MarginAtNut):
+                                    return $"Margin at nut: {bc.ChangedProperties.First().NewValue}";
+                                case nameof(FingerboardMargin.MarginAtBridge):
+                                    return $"Margin at bridge: {bc.ChangedProperties.First().NewValue}";
+                                case nameof(FingerboardMargin.Edges):
+                                    return $"Edges margin: {bc.ChangedProperties.First().NewValue}";
+
+                            }
+                            break;
+                    }
+                }
+
 			}
 
 			if(action is PropertyChange pc)
