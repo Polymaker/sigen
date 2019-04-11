@@ -35,6 +35,12 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>SiGen.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\SigenIcon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Svg, Version=2.2.1.39233, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
       <HintPath>packages\Svg.2.3.0\lib\net35\Svg.dll</HintPath>
@@ -356,6 +362,7 @@
     <Content Include="Resources\NewLayoutIcon_32.png" />
     <Content Include="Resources\OpenLayoutIcon_32.png" />
     <Content Include="Resources\OptionsIcon_32.png" />
+    <Content Include="Resources\SigenIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

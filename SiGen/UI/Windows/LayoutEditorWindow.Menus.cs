@@ -124,22 +124,22 @@ namespace SiGen.UI
 
 		private void tssbUndo_ButtonClick(object sender, EventArgs e)
 		{
-			if (ActiveLayoutPanel != null && ActiveLayoutPanel.CurrentFile.Undo())
+			if (ActiveLayoutPanel != null && ActiveLayoutPanel.CurrentDocument.Undo())
 			{
 				RefreshCurrentLayoutEditors();
-				if (ActiveLayoutPanel.CurrentFile.Layout.IsLayoutDirty)
-					ActiveLayoutPanel.CurrentFile.Layout.RebuildLayout();
+				if (ActiveLayoutPanel.CurrentDocument.Layout.IsLayoutDirty)
+					ActiveLayoutPanel.CurrentDocument.Layout.RebuildLayout();
 				RebuildUndoRedoMenus();
 			}
 		}
 
 		private void tssbRedo_ButtonClick(object sender, EventArgs e)
 		{
-			if (ActiveLayoutPanel != null && ActiveLayoutPanel.CurrentFile.Redo())
+			if (ActiveLayoutPanel != null && ActiveLayoutPanel.CurrentDocument.Redo())
 			{
 				RefreshCurrentLayoutEditors();
-				if (ActiveLayoutPanel.CurrentFile.Layout.IsLayoutDirty)
-					ActiveLayoutPanel.CurrentFile.Layout.RebuildLayout();
+				if (ActiveLayoutPanel.CurrentDocument.Layout.IsLayoutDirty)
+					ActiveLayoutPanel.CurrentDocument.Layout.RebuildLayout();
 				RebuildUndoRedoMenus();
 			}
 		}
@@ -149,10 +149,10 @@ namespace SiGen.UI
 			if (e.ClickedItem.Tag is int actionIndex && ActiveLayoutPanel != null)
 			{
 				for (int i = 0; i <= actionIndex; i++)
-					ActiveLayoutPanel.CurrentFile.Undo();
+					ActiveLayoutPanel.CurrentDocument.Undo();
 				RefreshCurrentLayoutEditors();
-				if (ActiveLayoutPanel.CurrentFile.Layout.IsLayoutDirty)
-					ActiveLayoutPanel.CurrentFile.Layout.RebuildLayout();
+				if (ActiveLayoutPanel.CurrentDocument.Layout.IsLayoutDirty)
+					ActiveLayoutPanel.CurrentDocument.Layout.RebuildLayout();
 				RebuildUndoRedoMenus();
 			}
 		}
@@ -162,10 +162,10 @@ namespace SiGen.UI
 			if (e.ClickedItem.Tag is int actionIndex && ActiveLayoutPanel != null)
 			{
 				for (int i = 0; i <= actionIndex; i++)
-					ActiveLayoutPanel.CurrentFile.Redo();
+					ActiveLayoutPanel.CurrentDocument.Redo();
 				RefreshCurrentLayoutEditors();
-				if (ActiveLayoutPanel.CurrentFile.Layout.IsLayoutDirty)
-					ActiveLayoutPanel.CurrentFile.Layout.RebuildLayout();
+				if (ActiveLayoutPanel.CurrentDocument.Layout.IsLayoutDirty)
+					ActiveLayoutPanel.CurrentDocument.Layout.RebuildLayout();
 				RebuildUndoRedoMenus();
 			}
 		}

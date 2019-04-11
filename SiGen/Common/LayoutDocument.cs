@@ -13,6 +13,8 @@ namespace SiGen.Common
         public SILayout Layout { get; private set; }
         public string FileName { get; set; }
 
+        public bool IsNew => string.IsNullOrEmpty(FileName);
+
 		public List<ILayoutChange> ModificationList { get; } = new List<ILayoutChange>();
 		public int CurrentActionIndex { get; private set; }
 		private bool IsUndoing { get; set; }
@@ -105,6 +107,17 @@ namespace SiGen.Common
         {
             var layout = SILayout.Load(filename);
             return new LayoutDocument(layout) { FileName = string.Empty };
+        }
+
+        public static string GenerateLayoutName(SILayout layout)
+        {
+            var keywords = new List<string>();
+            keywords.Add($"{layout.NumberOfStrings} Strings");
+            if (layout.ScaleLengthMode == ScaleLengthType.Multiple)
+                keywords.Add("Multiscale");
+            keywords.Add("Fingerboard");
+            keywords.Add("Layout");
+            return string.Join(" ", keywords);
         }
     }
 }

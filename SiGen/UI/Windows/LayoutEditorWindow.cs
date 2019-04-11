@@ -35,7 +35,7 @@ namespace SiGen.UI
             get
             {
                 if ((dockPanel1.ActiveDocument as LayoutViewerPanel) != null)
-                    return (dockPanel1.ActiveDocument as LayoutViewerPanel).CurrentFile;
+                    return (dockPanel1.ActiveDocument as LayoutViewerPanel).CurrentDocument;
                 return null;
             }
         }
@@ -59,6 +59,7 @@ namespace SiGen.UI
         public LayoutEditorWindow()
         {
             InitializeComponent();
+            Icon = Properties.Resources.SigenIcon;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -103,9 +104,9 @@ namespace SiGen.UI
         private void dockPanel1_ActiveDocumentChanged(object sender, EventArgs e)
         {
             if(PreviousDocument != null)
-                PreviousDocument.CurrentFile.LayoutChanged -= CurrentFile_LayoutChanged;
+                PreviousDocument.CurrentDocument.LayoutChanged -= CurrentFile_LayoutChanged;
 
-            if (ActiveLayoutPanel != null && ActiveLayoutPanel.CurrentFile != null)
+            if (ActiveLayoutPanel != null && ActiveLayoutPanel.CurrentDocument != null)
             {
                 SetEditorsActiveLayout(CurrentLayoutDocument.Layout);
                 tsbMeasureTool.Checked = ActiveLayoutPanel.Viewer.EnableMeasureTool;
@@ -161,9 +162,11 @@ namespace SiGen.UI
             var documentPanel = new LayoutViewerPanel(this);
 
             if (string.IsNullOrEmpty(layoutFile.FileName))
-                documentPanel.Text = "New Layout";
-            //else if (!string.IsNullOrEmpty(layoutFile.Layout.LayoutName))
-            //    documentPanel.Text = layoutFile.Layout.LayoutName;
+            {
+                documentPanel.Text = $"New {layoutFile.Layout.NumberOfStrings} Strings Layout";
+            }
+            else if (!string.IsNullOrEmpty(layoutFile.Layout.LayoutName))
+                documentPanel.Text = layoutFile.Layout.LayoutName;
             else
                 documentPanel.Text = Path.GetFileNameWithoutExtension(layoutFile.FileName);
 
@@ -185,7 +188,7 @@ namespace SiGen.UI
             if (layoutFile.Layout.VisualElements.Count == 0 || layoutFile.Layout.IsLayoutDirty)
                 layoutFile.Layout.RebuildLayout();
 
-            documentPanel.CurrentFile = layoutFile;
+            documentPanel.CurrentDocument = layoutFile;
             //documentPanel.Viewer.CurrentLayout = layoutFile.Layout;
             documentPanel.Viewer.BackColor = Color.White;
             documentPanel.Viewer.Font = new Font(Font.FontFamily, Font.Size * 1.4f);
@@ -199,7 +202,7 @@ namespace SiGen.UI
 
         private void DocumentPanel_FormClosed(object sender, FormClosedEventArgs e)
         {
-            var documentFile = ((LayoutViewerPanel)sender).CurrentFile;
+            var documentFile = ((LayoutViewerPanel)sender).CurrentDocument;
             foreach (var panel in dockPanel1.Contents.OfType<ILayoutEditorPanel>())
                 panel.Editor.ClearLayoutCache(documentFile.Layout);
         }
@@ -207,7 +210,7 @@ namespace SiGen.UI
         private void DocumentPanel_FormClosing(object sender, FormClosingEventArgs e)
         {
             var panel = (LayoutViewerPanel)sender;
-            var documentFile = panel.CurrentFile;
+            var documentFile = panel.CurrentDocument;
             if (documentFile.HasChanged)
             {
                 panel.Activate();
@@ -276,6 +279,12 @@ namespace SiGen.UI
         public bool SaveLayout(LayoutDocument file, bool selectPath = false)
         {
             bool isNew = string.IsNullOrEmpty(file.FileName);
+
+            if (string.IsNullOrEmpty(file.Layout.LayoutName))
+            {
+                file.Layout.LayoutName = LayoutDocument.GenerateLayoutName(file.Layout);
+            }
+
             if (selectPath || isNew)
             {
                 using (var sfd = new SaveFileDialog())
@@ -286,7 +295,7 @@ namespace SiGen.UI
                         sfd.FileName = Path.GetFileName(file.FileName);
                     }
                     else
-                        sfd.FileName = GenerateDefaultFileName(file);
+                        sfd.FileName = LayoutDocument.GenerateLayoutName(file.Layout) + ".sil";
 
                     sfd.Filter = "SI Layout Files|*.sil|All Files|*.*";
                     sfd.DefaultExt = ".sil";
@@ -297,13 +306,13 @@ namespace SiGen.UI
                         return false;
                 }
             }
-
+            
             //if (string.IsNullOrEmpty(file.Layout.LayoutName))
             //    file.Layout.LayoutName = Path.GetFileNameWithoutExtension(file.FileName);
 
             file.Layout.Save(file.FileName);
             file.HasChanged = false;
-            var documentTab = OpenDocuments.FirstOrDefault(d => d.CurrentFile == file);
+            var documentTab = OpenDocuments.FirstOrDefault(d => d.CurrentDocument == file);
             if (documentTab != null)
             {
                 documentTab.TabText = string.IsNullOrEmpty(file.Layout.LayoutName ) ? Path.GetFileNameWithoutExtension(file.FileName) : file.Layout.LayoutName;
@@ -383,7 +392,7 @@ namespace SiGen.UI
                 {
                     foreach(var doc in dockPanel1.Documents)
                     {
-                        if((doc as LayoutViewerPanel).CurrentFile.FileName == filename)
+                        if((doc as LayoutViewerPanel).CurrentDocument.FileName == filename)
                         {
                             (doc as LayoutViewerPanel).Activate();
                             var result = MessageBox.Show(MSG_FileAlreadyOpen, "", MessageBoxButtons.YesNo);
@@ -391,7 +400,7 @@ namespace SiGen.UI
                             {
                                 var layout = LayoutDocument.Open(filename, false);
                                 layout.Layout.RebuildLayout();
-                                (doc as LayoutViewerPanel).CurrentFile = layout;
+                                (doc as LayoutViewerPanel).CurrentDocument = layout;
                                 SetEditorsActiveLayout(layout.Layout);
                             }
                             cancelOpen = true;
