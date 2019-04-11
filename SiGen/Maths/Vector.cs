@@ -9,14 +9,14 @@ namespace SiGen.Maths
 
         public static readonly Vector Zero;
         public static readonly Vector One = new Vector(1, 1);
-        public static readonly Vector Empty = new Vector(double.NaN, double.NaN);
+        public static readonly Vector Empty = new Vector(PreciseDouble.NaN, PreciseDouble.NaN);
 
         #endregion
 
         #region Fields
 
-        private double x;
-        private double y;
+        private PreciseDouble x;
+        private PreciseDouble y;
 
         #endregion
 
@@ -27,31 +27,31 @@ namespace SiGen.Maths
         {
             get
             {
-                return double.IsNaN(x) && double.IsNaN(y);
+                return PreciseDouble.IsNaN(x) && PreciseDouble.IsNaN(y);
             }
         }
 
-        public double X
+        public PreciseDouble X
         {
             get { return x; }
             set { x = value; }
         }
 
-        public double Y
+        public PreciseDouble Y
         {
             get { return y; }
             set { y = value; }
         }
 
-        public double Length
+        public PreciseDouble Length
         {
             get
             {
                 if (IsEmpty)
-                    return double.NaN;
+                    return PreciseDouble.NaN;
                 if (this == Zero)
                     return 0;
-                return Math.Abs(Math.Sqrt((X * X) + (Y * Y)));
+                return MathP.Abs(MathP.Sqrt((X * X) + (Y * Y)));
             }
         }
 
@@ -65,11 +65,17 @@ namespace SiGen.Maths
             }
         }
 
-        #endregion
+		#endregion
 
-        #region Ctors
+		#region Ctors
 
-        public Vector(double x, double y)
+		public Vector(PreciseDouble x, PreciseDouble y)
+		{
+			this.x = x;
+			this.y = y;
+		}
+
+		public Vector(double x, double y)
         {
             this.x = x;
             this.y = y;
@@ -79,6 +85,11 @@ namespace SiGen.Maths
         {
             this.x = x;
             this.y = y;
+        }
+
+        public static Vector FromAngle(Angle angle)
+        {
+            return new Vector(MathP.Cos(angle.Radians), MathP.Sin(angle.Radians));
         }
 
         #endregion
@@ -117,7 +128,7 @@ namespace SiGen.Maths
             return EqualOrClose(this, vec);
         }
 
-        public bool EqualOrClose(Vector vec, double tolerence)
+        public bool EqualOrClose(Vector vec, PreciseDouble tolerence)
         {
             return EqualOrClose(this, vec, tolerence);
         }
@@ -129,7 +140,7 @@ namespace SiGen.Maths
             return v1.X.EqualOrClose(v2.X) && v1.Y.EqualOrClose(v2.Y);
         }
 
-        public static bool EqualOrClose(Vector v1, Vector v2, double tolerence)
+        public static bool EqualOrClose(Vector v1, Vector v2, PreciseDouble tolerence)
         {
             if (v1.IsEmpty || v2.IsEmpty)
                 return v1.IsEmpty == v2.IsEmpty;
@@ -150,7 +161,7 @@ namespace SiGen.Maths
             return new Vector(pt1.X - pt2.X, pt1.Y - pt2.Y);
         }
 
-        public static Vector operator /(Vector pt, double value)
+        public static Vector operator /(Vector pt, PreciseDouble value)
         {
             return new Vector(pt.X / value, pt.Y / value);
         }
@@ -160,12 +171,12 @@ namespace SiGen.Maths
             return new Vector(pt1.X / pt2.X, pt1.Y / pt2.Y);
         }
 
-        public static Vector operator *(Vector pt, double value)
+        public static Vector operator *(Vector pt, PreciseDouble value)
         {
             return new Vector(pt.X * value, pt.Y * value);
         }
 
-        public static Vector operator *(double value, Vector pt)
+        public static Vector operator *(PreciseDouble value, Vector pt)
         {
             return new Vector(pt.X * value, pt.Y * value);
         }
@@ -185,12 +196,27 @@ namespace SiGen.Maths
             return new Vector(pt.X, pt.Y);
         }
 
-        public static double Dot(Vector left, Vector right)
+        public static explicit operator Vector(System.Drawing.Point point)
+        {
+            return new Vector(point.X, point.Y);
+        }
+
+        #endregion
+
+        public static PreciseDouble Dot(Vector left, Vector right)
         {
             return left.X * right.X + left.Y * right.Y;
         }
 
-        #endregion
+        public static Vector Min(Vector v1, Vector v2)
+        {
+            return new Vector(PreciseDouble.Min(v1.X, v2.X), PreciseDouble.Min(v1.Y, v2.Y));
+        }
+
+        public static Vector Max(Vector v1, Vector v2)
+        {
+            return new Vector(PreciseDouble.Max(v1.X, v2.X), PreciseDouble.Max(v1.Y, v2.Y));
+        }
 
         public override string ToString()
         {

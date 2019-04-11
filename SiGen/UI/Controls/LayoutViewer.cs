@@ -155,8 +155,39 @@ namespace SiGen.UI
 
             pe.Graphics.ResetTransform();
 
-            if (!MeasureFirstSelection.IsEmpty)
+            if (EnableMeasureTool)
                 RenderMeasureTool(pe.Graphics);
+        }
+
+        private void InvalidateWorldRegion(int bleedSize, params Vector[] points)
+        {
+            Vector minPos = Vector.Empty;
+            Vector maxPos = Vector.Empty;
+
+            for (int i = 0; i < points.Length; i++)
+            {
+                if (!points[i].IsEmpty)
+                {
+                    if (minPos.IsEmpty)
+                    {
+                        minPos = points[i];
+                        maxPos = points[i];
+                    }
+                    else
+                    {
+                        minPos = Vector.Min(minPos, points[i]);
+                        maxPos = Vector.Max(maxPos, points[i]);
+                    }
+                }
+            }
+
+            if(!minPos.IsEmpty)
+            {
+                var minPt = WorldToDisplay(minPos, _Zoom, true);
+                var maxPt = WorldToDisplay(maxPos, _Zoom, true);
+                var updateBounds = Rectangle.FromLTRB((int)minPt.X - bleedSize, (int)minPt.Y - bleedSize, (int)maxPt.X + bleedSize, (int)maxPt.Y + bleedSize);
+                Invalidate(updateBounds);
+            }
         }
 
         #endregion
@@ -319,6 +350,9 @@ namespace SiGen.UI
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
+
+            if (EnableMeasureTool && MeasureLastSelection.IsEmpty)
+                UpdateMeasureSnapPosition(e.Location);
 
             if (CanDrag || IsDragging)
             {
@@ -521,11 +555,50 @@ namespace SiGen.UI
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
             base.OnKeyPress(e);
+            
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            if (EnableMeasureTool && MeasureLastSelection.IsEmpty && (e.KeyCode == Keys.Alt || e.KeyCode == Keys.Menu))
+                UpdateMeasureSnapPosition();
+        }
+
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+            if (EnableMeasureTool && MeasureLastSelection.IsEmpty && (e.KeyCode == Keys.Alt || e.KeyCode == Keys.Menu))
+                UpdateMeasureSnapPosition();
+        }
+
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            if (keyData.HasFlag(Keys.Alt) || keyData.HasFlag(Keys.Menu))
+                return true;
+            return base.ProcessDialogKey(keyData);
+        }
+
+        protected bool IsAltPressed()
+        {
+            return ModifierKeys.HasFlag(Keys.Alt) || ModifierKeys.HasFlag(Keys.Menu);
+        }
+
+        protected bool IsControlPressed()
+        {
+            return ModifierKeys.HasFlag(Keys.Control) || ModifierKeys.HasFlag(Keys.ControlKey);
         }
 
         #endregion
 
         #region UI <-> 2D coordinates
+
+        public enum CoordSpace
+        {
+            World,
+            Local,
+            Display
+        }
 
         private bool IsHorizontal { get { return DisplayConfig.FingerboardOrientation == Orientation.Horizontal; } }
 

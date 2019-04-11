@@ -7,6 +7,7 @@ using Svg.Pathing;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,7 +55,7 @@ namespace SiGen.Export
             {
                 Document.CustomAttributes.Add("xmlns:inkscape", "http://www.inkscape.org/namespaces/inkscape");
                 //The Svg library serializes the viewbox with comma and space, but this combination is not handled by the Inkscape DXF exporter
-                Document.CustomAttributes.Add("viewBox", string.Format("0,0,{0},{1}", LayoutBounds.Width.NormalizedValue, LayoutBounds.Height.NormalizedValue));
+                Document.CustomAttributes.Add("viewBox", string.Format(NumberFormatInfo.InvariantInfo, "0,0,{0},{1}", LayoutBounds.Width.NormalizedValue, LayoutBounds.Height.NormalizedValue));
             }
             else
                 Document.ViewBox = new SvgViewBox(0, 0, (float)LayoutBounds.Width.NormalizedValue, (float)LayoutBounds.Height.NormalizedValue);
@@ -154,6 +155,7 @@ namespace SiGen.Export
                 return new SvgUnit((float)(value / CmToPixel));
             else if (type == SvgUnitType.Point)
                 return new SvgUnit((float)(value / (CmToPixel / 1.25d)));
+
             return new SvgUnit(type, (float)value);
         }
 
@@ -253,9 +255,9 @@ namespace SiGen.Export
                 var trebleEdge = Layout.GetStringBoundaryLine(Layout.FirstString, FingerboardSide.Treble);
                 var bassEdge = Layout.GetStringBoundaryLine(Layout.LastString, FingerboardSide.Bass);
 
-                CreateLine(fingerboardGroup, firstString.P1, firstString.SnapToLine(trebleEdge.P2, true), GetScaledUnit(1, SvgUnitType.Point), Color.Gray);
+                CreateLine(fingerboardGroup, firstString.P1, firstString.SnapToLine(trebleEdge.P2, LineSnapDirection.Horizontal), GetScaledUnit(1, SvgUnitType.Point), Color.Gray);
                 if (firstString != lastString)
-                    CreateLine(fingerboardGroup, lastString.P1, lastString.SnapToLine(bassEdge.P2, true), GetScaledUnit(1, SvgUnitType.Point), Color.Gray);
+                    CreateLine(fingerboardGroup, lastString.P1, lastString.SnapToLine(bassEdge.P2, LineSnapDirection.Horizontal), GetScaledUnit(1, SvgUnitType.Point), Color.Gray);
             }
         }
 
@@ -277,8 +279,13 @@ namespace SiGen.Export
                         layoutLine.P2 = layoutLine.P2 + (layoutLine.Direction * Options.FretSlotsExtensionAmount);
                         layoutLine.P1 = layoutLine.P1 + (layoutLine.Direction * (Options.FretSlotsExtensionAmount * -1));
                     }
-                    CreateLine(fretsGroup, layoutLine, fretStroke, Options.FretColor);
-                }
+                    var svgLine = CreateLine(fretsGroup, layoutLine, fretStroke, Options.FretColor);
+					if (fretLine.IsNut)
+						svgLine.CustomAttributes.Add("Fret", "Nut");
+					else
+						svgLine.CustomAttributes.Add("Fret", fretLine.FretIndex.ToString());
+
+				}
                 else
                 {
                     fretLine.RebuildSpline();

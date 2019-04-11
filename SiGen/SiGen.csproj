@@ -87,6 +87,7 @@
     <Compile Include="Maths\BezierCurve.cs" />
     <Compile Include="Maths\BezierSpline.cs" />
     <Compile Include="Maths\Line.cs" />
+    <Compile Include="Maths\MathP.cs" />
     <Compile Include="Maths\Vector.cs" />
     <Compile Include="Measuring\Measure.cs" />
     <Compile Include="Measuring\PointM.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="StringedInstruments\Layout\Visual\FretSegment.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\IStringBoundary.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\LayoutPolyLine.cs" />
+    <Compile Include="StringedInstruments\Layout\Visual\LineSnapDirection.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\StringCenter.cs" />
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingAlignment.cs" />
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingManager.cs" />
@@ -274,6 +276,7 @@
     <Compile Include="Utilities\ExtensionMethods\XmlLinqExtensions.cs" />
     <Compile Include="Utilities\MeasureParser.cs" />
     <Compile Include="Utilities\ObservableCollectionEx.cs" />
+    <Compile Include="Maths\PreciseDouble.cs" />
     <Compile Include="Utilities\SerializationHelper.cs" />
     <Compile Include="Utilities\SortableBindingList.cs" />
     <Compile Include="Utilities\TemporaryObject.cs" />

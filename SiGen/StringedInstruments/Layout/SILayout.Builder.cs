@@ -77,8 +77,8 @@ namespace SiGen.StringedInstruments.Layout
 
             if (str.LengthCalculationMethod == LengthFunction.AlongString && opp > Measure.Zero)
             {
-                var theta = Math.Asin(opp.NormalizedValue / str.ScaleLength.NormalizedValue);
-                adj = Math.Cos(theta) * str.ScaleLength;
+                var theta = MathP.Asin(opp.NormalizedValue / str.ScaleLength.NormalizedValue);
+                adj = MathP.Cos(theta) * str.ScaleLength;
             }
 
             var p1 = new PointM(nutPos, (adj / 2d));
@@ -151,7 +151,7 @@ namespace SiGen.StringedInstruments.Layout
                     var startingFretPos = str.LayoutLine.P2 + (stringVector * str.CalculatedLength * startingFretPosRatio);
 
                     if (!str.PlaceFretsRelativeToString)
-                        startingFretPos = str.LayoutLine.SnapToLine(startingFretPos, true);
+                        startingFretPos = str.LayoutLine.SnapToLine(startingFretPos, LineSnapDirection.Horizontal);
 
                     str.LayoutLine.P1 = startingFretPos;
                     str.RecalculateLengths();
@@ -276,10 +276,10 @@ namespace SiGen.StringedInstruments.Layout
             //}
             else
             {
-                trebleFretboardEdge.P1 = trebleFretboardEdge.SnapToLine(trebleLine.P1, true);
-                trebleFretboardEdge.P2 = trebleFretboardEdge.SnapToLine(trebleLine.P2, true);
-                bassFretboardEdge.P1 = bassFretboardEdge.SnapToLine(bassLine.P1, true);
-                bassFretboardEdge.P2 = bassFretboardEdge.SnapToLine(bassLine.P2, true);
+                trebleFretboardEdge.P1 = trebleFretboardEdge.SnapToLine(trebleLine.P1, LineSnapDirection.Horizontal);
+                trebleFretboardEdge.P2 = trebleFretboardEdge.SnapToLine(trebleLine.P2, LineSnapDirection.Horizontal);
+                bassFretboardEdge.P1 = bassFretboardEdge.SnapToLine(bassLine.P1, LineSnapDirection.Horizontal);
+                bassFretboardEdge.P2 = bassFretboardEdge.SnapToLine(bassLine.P2, LineSnapDirection.Horizontal);
             }
         }
 
@@ -393,7 +393,7 @@ namespace SiGen.StringedInstruments.Layout
         {
             public int FretIndex { get; set; }
             public int StringIndex { get; set; }
-            public double PositionRatio { get; set; }
+            public PreciseDouble PositionRatio { get; set; }
             public PointM Position { get; set; }
         }
 
@@ -416,7 +416,7 @@ namespace SiGen.StringedInstruments.Layout
                     Measure.Mm(0.5), str.ActionAtTwelfthFret, Measure.Mm(1.2), str.TotalNumberOfFrets);
                 for (int i = 0; i < positions.Length; i++)
                 {
-                    double fretPosRatio = (str.StringLength - positions[i]).NormalizedValue / str.StringLength.NormalizedValue;
+                    PreciseDouble fretPosRatio = (str.StringLength - positions[i]).NormalizedValue / str.StringLength.NormalizedValue;
                     var fretPos = str.LayoutLine.P2 + (str.LayoutLine.Direction * -1) * (str.StringLength * fretPosRatio);
                     frets.Add(new FretPosition() { FretIndex = i - str.StartingFret, Position = fretPos, StringIndex = str.Index, PositionRatio = fretPosRatio });
                 }
@@ -427,12 +427,12 @@ namespace SiGen.StringedInstruments.Layout
         private FretPosition CalculateFretPosition(SIString str, int fret)
         {
             var stringTuning = str.Tuning ?? GetDefaultTuning();
-            double fretPosRatio = GetRelativeFretPosition(stringTuning, fret - str.StartingFret, FretsTemperament);
+            var fretPosRatio = GetRelativeFretPosition(stringTuning, fret - str.StartingFret, FretsTemperament);
             var dir = str.PlaceFretsRelativeToString ? str.LayoutLine.Direction * -1 : new Vector(0, 1);
 
             var fretPos = str.LayoutLine.P2 + (dir * str.CalculatedLength * fretPosRatio);
             if (!str.PlaceFretsRelativeToString)
-                fretPos = str.LayoutLine.SnapToLine(fretPos, true);
+                fretPos = str.LayoutLine.SnapToLine(fretPos, LineSnapDirection.Horizontal);
 
             return new FretPosition() { FretIndex = fret, Position = fretPos, StringIndex = str.Index, PositionRatio = fretPosRatio };
         }
@@ -490,19 +490,19 @@ namespace SiGen.StringedInstruments.Layout
         /// </summary>
         /// <param name="fret"></param>
         /// <returns></returns>
-        public static double GetEqualTemperedFretPosition(int fret)
+        public static PreciseDouble GetEqualTemperedFretPosition(int fret)
         {
-            return 1d / Math.Pow(2, fret / 12d);
+            return (PreciseDouble)1d / MathP.Pow(2, fret / 12d);
         }
 
-        public static double GetRelativeFretPosition(StringTuning tuning, int fret, Temperament temperament)
+        public static PreciseDouble GetRelativeFretPosition(StringTuning tuning, int fret, Temperament temperament)
         {
             if (fret == 0)
                 return 1d;
 
             var pitchAtFret = FretCompensationCalculator.GetPitchAtFret(tuning.FinalPitch, fret, temperament);
-            var fretRatio = NoteConverter.CentsToIntonationRatio(pitchAtFret.Cents - tuning.FinalPitch.Cents);
-            return 1d / fretRatio;
+			PreciseDouble fretRatio = NoteConverter.CentsToIntonationRatio(pitchAtFret.Cents - tuning.FinalPitch.Cents);
+            return (PreciseDouble)1d / fretRatio;
         }
 
         public bool ShouldHaveStraightFrets()

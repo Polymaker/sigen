@@ -78,7 +78,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
                 var curAngle = Angle.FromPoints(points[i].ToVector(), points[i + 1].ToVector()).Normalized();
                 if (!prevAngle.IsEmpty)
                 {
-                    if(Math.Abs(curAngle.Degrees - prevAngle.Degrees) > 25)
+                    if(MathP.Abs(curAngle.Degrees - prevAngle.Degrees) > 25)
                     {
                         //hard break
                         SplitFret(i - 1);
@@ -108,7 +108,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
             {
                 var curAngle = Angle.FromPoints(points.First().ToVector(), points.ElementAt(i).ToVector());
                 curAngle.Normalize();
-                var angleDiff = Math.Abs(curAngle.Degrees - avgAngle.Degrees);
+                var angleDiff = MathP.Abs(curAngle.Degrees - avgAngle.Degrees);
                 if (angleDiff > tolerance)
                     return false;
                 //if (angleDiff > maxDiff)

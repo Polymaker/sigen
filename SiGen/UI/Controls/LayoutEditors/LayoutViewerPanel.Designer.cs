@@ -29,60 +29,38 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.tsLblSpacer = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsLblZoom = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LayoutViewerPanel));
             this.cmsDocumentTab = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiCloseLayout = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiCloseRight = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiCloseOthers = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiCloseRight = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiSave = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveAS = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRename = new System.Windows.Forms.ToolStripMenuItem();
-            this.layoutViewer1 = new SiGen.UI.LayoutViewer();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiOpenFileDirectory = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStrip1.SuspendLayout();
+            this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
+            this.ToolStripDisplayOptions = new System.Windows.Forms.ToolStrip();
+            this.DisplayOptionsDropDown = new System.Windows.Forms.ToolStripDropDownButton();
+            this.DisplayStringsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DisplayStringCentersMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DisplayFretsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DisplayMarginsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DisplayFingerboardMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DisplayCenterLineMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.ResetCameraButton = new System.Windows.Forms.ToolStripButton();
+            this.ZoomToolstripLabel = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.layoutViewer1 = new SiGen.UI.LayoutViewer();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.cmsDocumentTab.SuspendLayout();
+            this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
+            this.toolStripContainer1.ContentPanel.SuspendLayout();
+            this.toolStripContainer1.SuspendLayout();
+            this.ToolStripDisplayOptions.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsLblSpacer,
-            this.tsLblZoom,
-            this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 337);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.Size = new System.Drawing.Size(577, 24);
-            this.statusStrip1.SizingGrip = false;
-            this.statusStrip1.TabIndex = 0;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // tsLblSpacer
-            // 
-            this.tsLblSpacer.Name = "tsLblSpacer";
-            this.tsLblSpacer.Size = new System.Drawing.Size(406, 19);
-            this.tsLblSpacer.Spring = true;
-            // 
-            // tsLblZoom
-            // 
-            this.tsLblZoom.Name = "tsLblZoom";
-            this.tsLblZoom.Size = new System.Drawing.Size(73, 19);
-            this.tsLblZoom.Text = "Zoom: 100%";
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(83, 19);
-            this.toolStripStatusLabel1.Text = "Reset Camera";
-            this.toolStripStatusLabel1.Click += new System.EventHandler(this.toolStripStatusLabel1_Click);
             // 
             // cmsDocumentTab
             // 
@@ -97,7 +75,7 @@
             this.toolStripSeparator2,
             this.tsmiOpenFileDirectory});
             this.cmsDocumentTab.Name = "cmsDocumentTab";
-            this.cmsDocumentTab.Size = new System.Drawing.Size(207, 192);
+            this.cmsDocumentTab.Size = new System.Drawing.Size(207, 170);
             this.cmsDocumentTab.Opening += new System.ComponentModel.CancelEventHandler(this.cmsDocumentTab_Opening);
             // 
             // tsmiCloseLayout
@@ -107,19 +85,19 @@
             this.tsmiCloseLayout.Text = "Close layout";
             this.tsmiCloseLayout.Click += new System.EventHandler(this.tsmiCloseLayout_Click);
             // 
-            // tsmiCloseRight
-            // 
-            this.tsmiCloseRight.Name = "tsmiCloseRight";
-            this.tsmiCloseRight.Size = new System.Drawing.Size(206, 22);
-            this.tsmiCloseRight.Text = "Close layouts to the right";
-            this.tsmiCloseRight.Click += new System.EventHandler(this.tsmiCloseRight_Click);
-            // 
             // tsmiCloseOthers
             // 
             this.tsmiCloseOthers.Name = "tsmiCloseOthers";
             this.tsmiCloseOthers.Size = new System.Drawing.Size(206, 22);
             this.tsmiCloseOthers.Text = "Close other layouts";
             this.tsmiCloseOthers.Click += new System.EventHandler(this.tsmiCloseOthers_Click);
+            // 
+            // tsmiCloseRight
+            // 
+            this.tsmiCloseRight.Name = "tsmiCloseRight";
+            this.tsmiCloseRight.Size = new System.Drawing.Size(206, 22);
+            this.tsmiCloseRight.Text = "Close layouts to the right";
+            this.tsmiCloseRight.Click += new System.EventHandler(this.tsmiCloseRight_Click);
             // 
             // toolStripSeparator1
             // 
@@ -146,17 +124,6 @@
             this.tsmiRename.Size = new System.Drawing.Size(206, 22);
             this.tsmiRename.Text = "Rename";
             // 
-            // layoutViewer1
-            // 
-            this.layoutViewer1.BackColor = System.Drawing.SystemColors.Window;
-            this.layoutViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layoutViewer1.Location = new System.Drawing.Point(0, 0);
-            this.layoutViewer1.Name = "layoutViewer1";
-            this.layoutViewer1.Size = new System.Drawing.Size(577, 337);
-            this.layoutViewer1.TabIndex = 1;
-            this.layoutViewer1.Text = "layoutViewer1";
-            this.layoutViewer1.ZoomChanged += new System.EventHandler(this.layoutViewer1_ZoomChanged);
-            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -169,31 +136,194 @@
             this.tsmiOpenFileDirectory.Text = "Open file location";
             this.tsmiOpenFileDirectory.Click += new System.EventHandler(this.tsmiOpenFileDirectory_Click);
             // 
+            // toolStripContainer1
+            // 
+            // 
+            // toolStripContainer1.BottomToolStripPanel
+            // 
+            this.toolStripContainer1.BottomToolStripPanel.Controls.Add(this.ToolStripDisplayOptions);
+            // 
+            // toolStripContainer1.ContentPanel
+            // 
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.layoutViewer1);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(577, 336);
+            this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
+            this.toolStripContainer1.Name = "toolStripContainer1";
+            this.toolStripContainer1.Size = new System.Drawing.Size(577, 361);
+            this.toolStripContainer1.TabIndex = 2;
+            this.toolStripContainer1.Text = "toolStripContainer1";
+            // 
+            // ToolStripDisplayOptions
+            // 
+            this.ToolStripDisplayOptions.Dock = System.Windows.Forms.DockStyle.None;
+            this.ToolStripDisplayOptions.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.ToolStripDisplayOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.DisplayOptionsDropDown,
+            this.ResetCameraButton,
+            this.ZoomToolstripLabel,
+            this.toolStripButton1,
+            this.toolStripSeparator3,
+            this.toolStripButton2});
+            this.ToolStripDisplayOptions.Location = new System.Drawing.Point(0, 0);
+            this.ToolStripDisplayOptions.Name = "ToolStripDisplayOptions";
+            this.ToolStripDisplayOptions.Size = new System.Drawing.Size(577, 25);
+            this.ToolStripDisplayOptions.Stretch = true;
+            this.ToolStripDisplayOptions.TabIndex = 0;
+            // 
+            // DisplayOptionsDropDown
+            // 
+            this.DisplayOptionsDropDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.DisplayOptionsDropDown.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.DisplayStringsMenuItem,
+            this.DisplayStringCentersMenuItem,
+            this.DisplayFretsMenuItem,
+            this.DisplayMarginsMenuItem,
+            this.DisplayFingerboardMenuItem,
+            this.DisplayCenterLineMenuItem});
+            this.DisplayOptionsDropDown.Image = ((System.Drawing.Image)(resources.GetObject("DisplayOptionsDropDown.Image")));
+            this.DisplayOptionsDropDown.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.DisplayOptionsDropDown.Name = "DisplayOptionsDropDown";
+            this.DisplayOptionsDropDown.Size = new System.Drawing.Size(58, 22);
+            this.DisplayOptionsDropDown.Text = "Display";
+            // 
+            // DisplayStringsMenuItem
+            // 
+            this.DisplayStringsMenuItem.Checked = true;
+            this.DisplayStringsMenuItem.CheckOnClick = true;
+            this.DisplayStringsMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.DisplayStringsMenuItem.Name = "DisplayStringsMenuItem";
+            this.DisplayStringsMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.DisplayStringsMenuItem.Text = "Strings";
+            this.DisplayStringsMenuItem.CheckedChanged += new System.EventHandler(this.DisplayOptionsMenuItem_CheckedChanged);
+            // 
+            // DisplayStringCentersMenuItem
+            // 
+            this.DisplayStringCentersMenuItem.Checked = true;
+            this.DisplayStringCentersMenuItem.CheckOnClick = true;
+            this.DisplayStringCentersMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.DisplayStringCentersMenuItem.Name = "DisplayStringCentersMenuItem";
+            this.DisplayStringCentersMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.DisplayStringCentersMenuItem.Text = "String centers";
+            this.DisplayStringCentersMenuItem.CheckedChanged += new System.EventHandler(this.DisplayOptionsMenuItem_CheckedChanged);
+            // 
+            // DisplayFretsMenuItem
+            // 
+            this.DisplayFretsMenuItem.Checked = true;
+            this.DisplayFretsMenuItem.CheckOnClick = true;
+            this.DisplayFretsMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.DisplayFretsMenuItem.Name = "DisplayFretsMenuItem";
+            this.DisplayFretsMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.DisplayFretsMenuItem.Text = "Frets";
+            this.DisplayFretsMenuItem.CheckedChanged += new System.EventHandler(this.DisplayOptionsMenuItem_CheckedChanged);
+            // 
+            // DisplayMarginsMenuItem
+            // 
+            this.DisplayMarginsMenuItem.Checked = true;
+            this.DisplayMarginsMenuItem.CheckOnClick = true;
+            this.DisplayMarginsMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.DisplayMarginsMenuItem.Name = "DisplayMarginsMenuItem";
+            this.DisplayMarginsMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.DisplayMarginsMenuItem.Text = "Fingerboard margins";
+            this.DisplayMarginsMenuItem.CheckedChanged += new System.EventHandler(this.DisplayOptionsMenuItem_CheckedChanged);
+            // 
+            // DisplayFingerboardMenuItem
+            // 
+            this.DisplayFingerboardMenuItem.Checked = true;
+            this.DisplayFingerboardMenuItem.CheckOnClick = true;
+            this.DisplayFingerboardMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.DisplayFingerboardMenuItem.Name = "DisplayFingerboardMenuItem";
+            this.DisplayFingerboardMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.DisplayFingerboardMenuItem.Text = "Fingerboard";
+            this.DisplayFingerboardMenuItem.CheckedChanged += new System.EventHandler(this.DisplayOptionsMenuItem_CheckedChanged);
+            // 
+            // DisplayCenterLineMenuItem
+            // 
+            this.DisplayCenterLineMenuItem.CheckOnClick = true;
+            this.DisplayCenterLineMenuItem.Name = "DisplayCenterLineMenuItem";
+            this.DisplayCenterLineMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.DisplayCenterLineMenuItem.Text = "Center line";
+            this.DisplayCenterLineMenuItem.CheckedChanged += new System.EventHandler(this.DisplayOptionsMenuItem_CheckedChanged);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // ResetCameraButton
+            // 
+            this.ResetCameraButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.ResetCameraButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ResetCameraButton.Image = ((System.Drawing.Image)(resources.GetObject("ResetCameraButton.Image")));
+            this.ResetCameraButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ResetCameraButton.Name = "ResetCameraButton";
+            this.ResetCameraButton.Size = new System.Drawing.Size(83, 22);
+            this.ResetCameraButton.Text = "Reset Camera";
+            this.ResetCameraButton.Click += new System.EventHandler(this.ResetCameraButton_Click);
+            // 
+            // ZoomToolstripLabel
+            // 
+            this.ZoomToolstripLabel.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.ZoomToolstripLabel.Name = "ZoomToolstripLabel";
+            this.ZoomToolstripLabel.Size = new System.Drawing.Size(73, 22);
+            this.ZoomToolstripLabel.Text = "Zoom: 100%";
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = global::SiGen.Properties.Resources.OptionsIcon_32;
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "toolStripButton1";
+            // 
+            // layoutViewer1
+            // 
+            this.layoutViewer1.BackColor = System.Drawing.SystemColors.Window;
+            this.layoutViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layoutViewer1.Location = new System.Drawing.Point(0, 0);
+            this.layoutViewer1.Name = "layoutViewer1";
+            this.layoutViewer1.Size = new System.Drawing.Size(577, 336);
+            this.layoutViewer1.TabIndex = 1;
+            this.layoutViewer1.Text = "layoutViewer1";
+            this.layoutViewer1.ZoomChanged += new System.EventHandler(this.layoutViewer1_ZoomChanged);
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.Checked = true;
+            this.toolStripButton2.CheckOnClick = true;
+            this.toolStripButton2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton2.Image = global::SiGen.Properties.Resources.MeasureIcon_32;
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton2.Text = "toolStripButton2";
+            // 
             // LayoutViewerPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(577, 361);
-            this.Controls.Add(this.layoutViewer1);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.toolStripContainer1);
             this.Name = "LayoutViewerPanel";
             this.TabPageContextMenuStrip = this.cmsDocumentTab;
             this.Text = "LayoutViewerPanel";
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             this.cmsDocumentTab.ResumeLayout(false);
+            this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);
+            this.toolStripContainer1.BottomToolStripPanel.PerformLayout();
+            this.toolStripContainer1.ContentPanel.ResumeLayout(false);
+            this.toolStripContainer1.ResumeLayout(false);
+            this.toolStripContainer1.PerformLayout();
+            this.ToolStripDisplayOptions.ResumeLayout(false);
+            this.ToolStripDisplayOptions.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.StatusStrip statusStrip1;
         private LayoutViewer layoutViewer1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripStatusLabel tsLblSpacer;
-        private System.Windows.Forms.ToolStripStatusLabel tsLblZoom;
         private System.Windows.Forms.ContextMenuStrip cmsDocumentTab;
         private System.Windows.Forms.ToolStripMenuItem tsmiCloseLayout;
         private System.Windows.Forms.ToolStripMenuItem tsmiCloseRight;
@@ -204,5 +334,19 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiRename;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenFileDirectory;
+        private System.Windows.Forms.ToolStripContainer toolStripContainer1;
+        private System.Windows.Forms.ToolStrip ToolStripDisplayOptions;
+        private System.Windows.Forms.ToolStripDropDownButton DisplayOptionsDropDown;
+        private System.Windows.Forms.ToolStripMenuItem DisplayStringsMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripLabel ZoomToolstripLabel;
+        private System.Windows.Forms.ToolStripButton ResetCameraButton;
+        private System.Windows.Forms.ToolStripMenuItem DisplayStringCentersMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem DisplayFretsMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem DisplayMarginsMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem DisplayFingerboardMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem DisplayCenterLineMenuItem;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton toolStripButton2;
     }
 }

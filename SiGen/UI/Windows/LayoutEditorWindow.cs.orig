@@ -302,6 +302,11 @@ namespace SiGen.UI
 
                     if (sfd.ShowDialog() == DialogResult.OK)
                         file.FileName = sfd.FileName;
+<<<<<<< HEAD
+=======
+                        //file.HasChanged = false;
+                    }
+>>>>>>> precise-double
                     else
                         return false;
                 }
@@ -311,8 +316,13 @@ namespace SiGen.UI
             //    file.Layout.LayoutName = Path.GetFileNameWithoutExtension(file.FileName);
 
             file.Layout.Save(file.FileName);
+<<<<<<< HEAD
             file.HasChanged = false;
             var documentTab = OpenDocuments.FirstOrDefault(d => d.CurrentDocument == file);
+=======
+			file.HasChanged = false;
+			var documentTab = OpenDocuments.FirstOrDefault(d => d.CurrentFile == file);
+>>>>>>> precise-double
             if (documentTab != null)
             {
                 documentTab.TabText = string.IsNullOrEmpty(file.Layout.LayoutName ) ? Path.GetFileNameWithoutExtension(file.FileName) : file.Layout.LayoutName;
@@ -430,7 +440,7 @@ namespace SiGen.UI
  
         private void tssbOpen_MouseHover(object sender, EventArgs e)
         {
-            //tssbOpen.ShowDropDown();
+            tssbOpen.ShowDropDown();
         }
 
         private void LoadLayout(LayoutDocument layout)

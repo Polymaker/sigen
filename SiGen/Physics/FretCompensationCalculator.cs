@@ -26,13 +26,13 @@ namespace SiGen.Physics
         public static Measure[] CalculateFretsCompensatedPositions(StringProperties properties, Measure stringLength, PitchValue openTuning, Temperament temperament,
             Measure actionAtFirstFret, Measure actionAtTwelfthFret, Measure fretHeight, int numberOfFrets)
         {
-            var fretPositions = new double[numberOfFrets + 1];//+1 to include nut and improve readability (e.g. fretPositions[1] = fret #1 instead of fretPositions[0])
-            var frettedLengths = new double[numberOfFrets + 1];//+1 to include nut and improve readability (e.g. frettedLengths[1] = fret #1 instead of frettedLengths[0])
-            var frettedTensions = new double[numberOfFrets + 1];//+1 to include nut and improve readability (e.g. frettedTensions[1] = fret #1 instead of frettedTensions[0])
+            var fretPositions = new PreciseDouble[numberOfFrets + 1];//+1 to include nut and improve readability (e.g. fretPositions[1] = fret #1 instead of fretPositions[0])
+            var frettedLengths = new PreciseDouble[numberOfFrets + 1];//+1 to include nut and improve readability (e.g. frettedLengths[1] = fret #1 instead of frettedLengths[0])
+            var frettedTensions = new PreciseDouble[numberOfFrets + 1];//+1 to include nut and improve readability (e.g. frettedTensions[1] = fret #1 instead of frettedTensions[0])
             var finalFretPositions = new Measure[numberOfFrets + 1];
 
             //Calculate the fret positions
-            double flatLength = stringLength[UnitOfMeasure.Inches];
+            PreciseDouble flatLength = stringLength[UnitOfMeasure.Inches];
             for (int i = 1; i <= numberOfFrets; i++)//i=1 to skip the nut
             {
                 var fretRatio = Math.Pow(2, i / 12d);
@@ -48,12 +48,12 @@ namespace SiGen.Physics
             frettedLengths[0] = (nutPos - saddlePos).Length;//actual string length
             finalFretPositions[0] = Measure.Zero;
 
-            double L = frettedLengths[0];// stringLength[UnitOfMeasure.Inches];
-            double f = openTuning.Frequency;//Frequency, Hz.
-            double E = properties.ModulusOfElasticity;//Modulus of Elasticity, core wire, psi
-            double A = properties.CoreWireArea != 0 ? properties.CoreWireArea : properties.StringArea;//Area, core wire, in²
-            double mul = properties.UnitWeight;//String mass per unit length, lbs./ inch
-            double g = 386.089; //Gravity, 386.089 in./ sec²
+            PreciseDouble L = frettedLengths[0];// stringLength[UnitOfMeasure.Inches];
+            PreciseDouble f = openTuning.Frequency;//Frequency, Hz.
+            PreciseDouble E = properties.ModulusOfElasticity;//Modulus of Elasticity, core wire, psi
+            PreciseDouble A = properties.CoreWireArea != 0 ? properties.CoreWireArea : properties.StringArea;//Area, core wire, in²
+            PreciseDouble mul = properties.UnitWeight;//String mass per unit length, lbs./ inch
+			PreciseDouble g = 386.089; //Gravity, 386.089 in./ sec²
 
             //Calculate the open string tension: T = (mul * (2* L* f )^2) / g
             double T = (mul * Math.Pow((2 * L * f), 2)) / g;
@@ -73,7 +73,7 @@ namespace SiGen.Physics
                 //Calculate the fretted string tension : Ts(n) = ((Lsn - Lor) / Lor) * E * A
                 var Tsn = frettedTensions[i] = ((Lsn - Lor) / Lor) * E * A;
                 //Calculate fret compensated position: Lfret(n) = SQRT((g * Tsn )/ mul ) / (2 * fn )
-                var Lfretn = Math.Sqrt((g * Tsn) / mul) / (2 * GetPitchAtFret(openTuning, i, temperament).Frequency);
+                var Lfretn = MathP.Sqrt((g * Tsn) / mul) / (2 * GetPitchAtFret(openTuning, i, temperament).Frequency);
                 var pos2D = saddlePos + (saddleToNutDir * Lfretn);
                 finalFretPositions[i] = Measure.Inches(pos2D.X);
             }

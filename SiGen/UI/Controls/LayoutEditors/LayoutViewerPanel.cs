@@ -39,6 +39,15 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             InitializeComponent();
             Window = window;
+            DisplayOptionsDropDown.DropDown.Closing += DropDown_Closing;
+        }
+
+        private void DropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        {
+            if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
+            {
+                e.Cancel = true;
+            }
         }
 
         protected override void OnLoad(EventArgs e)
@@ -87,7 +96,7 @@ namespace SiGen.UI.Controls.LayoutEditors
             var currentZoom = Viewer.Zoom;
             var dpi = ScreenDPI == 0 ? 96 : ScreenDPI;
             
-            tsLblZoom.Text = string.Format("Zoom: {0:0.##}%", (currentZoom / (dpi / 2.54)) * 100);
+            ZoomToolstripLabel.Text = string.Format("Zoom: {0:0.##}%", (currentZoom / (dpi / 2.54)) * 100);
         }
 
         private void cmsDocumentTab_Opening(object sender, CancelEventArgs e)
@@ -137,6 +146,41 @@ namespace SiGen.UI.Controls.LayoutEditors
         private void tsmiOpenFileDirectory_Click(object sender, EventArgs e)
         {
             Process.Start("explorer.exe", $"/select, \"{CurrentDocument.FileName}\"");
+        }
+
+       
+
+        private void ResetCameraButton_Click(object sender, EventArgs e)
+        {
+            Viewer.ResetCamera();
+        }
+
+        private void DisplayOptionsMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            if (sender == DisplayStringsMenuItem)
+            {
+                Viewer.DisplayConfig.ShowStrings = DisplayStringsMenuItem.Checked;
+            }
+            else if (sender == DisplayStringCentersMenuItem)
+            {
+                Viewer.DisplayConfig.ShowMidlines = DisplayStringCentersMenuItem.Checked;
+            }
+            else if (sender == DisplayFretsMenuItem)
+            {
+                Viewer.DisplayConfig.ShowFrets = DisplayFretsMenuItem.Checked;
+            }
+            else if (sender == DisplayMarginsMenuItem)
+            {
+                Viewer.DisplayConfig.ShowMargins = DisplayMarginsMenuItem.Checked;
+            }
+            else if (sender == DisplayFingerboardMenuItem)
+            {
+                Viewer.DisplayConfig.ShowFingerboard = DisplayFingerboardMenuItem.Checked;
+            }
+            else if (sender == DisplayCenterLineMenuItem)
+            {
+                Viewer.DisplayConfig.ShowCenterLine = DisplayCenterLineMenuItem.Checked;
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using SiGen.Measuring;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -164,7 +165,7 @@ namespace SiGen.StringedInstruments.Layout
                 elem.Add(Treble.SerializeAsAttribute("Treble"));
                 elem.Add(Bass.SerializeAsAttribute("Bass"));
                 //if (Layout.Strings.AllEqual(s => s.MultiScaleRatio))
-                    elem.Add(new XAttribute("MultiScaleRatio", PerpendicularFretRatio));
+                    elem.Add(new XAttribute("MultiScaleRatio", PerpendicularFretRatio.ToString(NumberFormatInfo.InvariantInfo)));
                 return elem;
             }
 
@@ -174,7 +175,7 @@ namespace SiGen.StringedInstruments.Layout
                 Treble = Measure.ParseInvariant(elem.Attribute("Treble").Value);
                 Bass = Measure.ParseInvariant(elem.Attribute("Bass").Value);
                 if (elem.ContainsAttribute("MultiScaleRatio"))
-                    PerpendicularFretRatio = double.Parse(elem.Attribute("MultiScaleRatio").Value);
+                    PerpendicularFretRatio = double.Parse(elem.Attribute("MultiScaleRatio").Value, NumberFormatInfo.InvariantInfo);
                 else
                     PerpendicularFretRatio = 0.5;
                 //else if (Layout.Strings.AllEqual(s => s.MultiScaleRatio))

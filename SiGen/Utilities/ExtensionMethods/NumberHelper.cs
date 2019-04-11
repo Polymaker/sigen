@@ -9,7 +9,17 @@ namespace SiGen
 {
     public static class NumberHelper
     {
-        public static bool EqualOrClose(this double n1, double n2)
+		public static bool EqualOrClose(this PreciseDouble n1, PreciseDouble n2)
+		{
+			return EqualOrClose(n1, n2, double.Epsilon);
+		}
+
+		public static bool EqualOrClose(this PreciseDouble n1, PreciseDouble n2, PreciseDouble tolerence)
+		{
+			return MathP.Abs(n1 - n2) <= tolerence;
+		}
+
+		public static bool EqualOrClose(this double n1, double n2)
         {
             return EqualOrClose(n1, n2, double.Epsilon);
         }
