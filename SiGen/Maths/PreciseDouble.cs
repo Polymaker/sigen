@@ -367,7 +367,34 @@ namespace SiGen
 			return double.IsNaN(d.doubleValue);
 		}
 
-		public static bool IsInfinity(PreciseDouble d)
+        public static PreciseDouble Min(PreciseDouble v1, PreciseDouble v2)
+        {
+            return v1 < v2 ? v1 : v2;
+        }
+
+        public static PreciseDouble Min(PreciseDouble v1, PreciseDouble[] vals)
+        {
+            PreciseDouble min = v1;
+            for (int i = 0; i < vals.Length; i++)
+                min = Min(min, vals[i]);
+            return min;
+        }
+
+
+        public static PreciseDouble Max(PreciseDouble v1, PreciseDouble v2)
+        {
+            return v1 > v2 ? v1 : v2;
+        }
+
+        public static PreciseDouble Max(PreciseDouble v1, PreciseDouble[] vals)
+        {
+            PreciseDouble max = v1;
+            for (int i = 0; i < vals.Length; i++)
+                max = Max(max, vals[i]);
+            return max;
+        }
+
+        public static bool IsInfinity(PreciseDouble d)
 		{
 			return double.IsInfinity(d.doubleValue);
 		}

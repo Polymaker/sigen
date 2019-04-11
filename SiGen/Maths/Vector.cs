@@ -87,6 +87,11 @@ namespace SiGen.Maths
             this.y = y;
         }
 
+        public static Vector FromAngle(Angle angle)
+        {
+            return new Vector(MathP.Cos(angle.Radians), MathP.Sin(angle.Radians));
+        }
+
         #endregion
 
         #region Equality operators
@@ -191,12 +196,27 @@ namespace SiGen.Maths
             return new Vector(pt.X, pt.Y);
         }
 
+        public static explicit operator Vector(System.Drawing.Point point)
+        {
+            return new Vector(point.X, point.Y);
+        }
+
+        #endregion
+
         public static PreciseDouble Dot(Vector left, Vector right)
         {
             return left.X * right.X + left.Y * right.Y;
         }
 
-        #endregion
+        public static Vector Min(Vector v1, Vector v2)
+        {
+            return new Vector(PreciseDouble.Min(v1.X, v2.X), PreciseDouble.Min(v1.Y, v2.Y));
+        }
+
+        public static Vector Max(Vector v1, Vector v2)
+        {
+            return new Vector(PreciseDouble.Max(v1.X, v2.X), PreciseDouble.Max(v1.Y, v2.Y));
+        }
 
         public override string ToString()
         {

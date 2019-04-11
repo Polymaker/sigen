@@ -389,7 +389,7 @@ namespace SiGen.StringedInstruments.Layout
 				{
 					if (CurrentBatchChanges.Count == 1)
 						OnLayoutChanged(new LayoutChangedEventArgs(CurrentBatchChanges[0]));
-					else
+					else if (CurrentBatchChanges.Count > 1)
 						OnLayoutChanged(new LayoutChangedEventArgs(new BatchChange(CurrentBatchChanges)));
 					CurrentBatchChanges = null;
 				}

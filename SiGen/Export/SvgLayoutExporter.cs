@@ -254,9 +254,9 @@ namespace SiGen.Export
                 var trebleEdge = Layout.GetStringBoundaryLine(Layout.FirstString, FingerboardSide.Treble);
                 var bassEdge = Layout.GetStringBoundaryLine(Layout.LastString, FingerboardSide.Bass);
 
-                CreateLine(fingerboardGroup, firstString.P1, firstString.SnapToLine(trebleEdge.P2, true), GetScaledUnit(1, SvgUnitType.Point), Color.Gray);
+                CreateLine(fingerboardGroup, firstString.P1, firstString.SnapToLine(trebleEdge.P2, LineSnapDirection.Horizontal), GetScaledUnit(1, SvgUnitType.Point), Color.Gray);
                 if (firstString != lastString)
-                    CreateLine(fingerboardGroup, lastString.P1, lastString.SnapToLine(bassEdge.P2, true), GetScaledUnit(1, SvgUnitType.Point), Color.Gray);
+                    CreateLine(fingerboardGroup, lastString.P1, lastString.SnapToLine(bassEdge.P2, LineSnapDirection.Horizontal), GetScaledUnit(1, SvgUnitType.Point), Color.Gray);
             }
         }
 

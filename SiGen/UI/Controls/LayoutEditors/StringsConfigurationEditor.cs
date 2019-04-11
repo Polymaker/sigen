@@ -482,9 +482,9 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         private void dgvStrings_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Right)
+            if(e.Button == MouseButtons.Right && e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                if(dgvStrings[e.ColumnIndex,e.RowIndex].ValueType == typeof(Measure))
+                if(dgvStrings[e.ColumnIndex, e.RowIndex].ValueType == typeof(Measure))
                 {
                     //cmsMesureCellMenu.Tag = dgvStrings[e.ColumnIndex, e.RowIndex];
 

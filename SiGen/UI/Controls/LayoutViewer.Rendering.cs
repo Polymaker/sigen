@@ -106,11 +106,12 @@ namespace SiGen.UI
                 var lastString = CurrentLayout.LastString.LayoutLine;
                 var trebleEdge = CurrentLayout.GetStringBoundaryLine(CurrentLayout.FirstString, FingerboardSide.Treble);
                 var bassEdge = CurrentLayout.GetStringBoundaryLine(CurrentLayout.LastString, FingerboardSide.Bass);
+
                 using (var guidePen = GetPen(Color.Gray, 1))
                 {
-                    DrawLine(g, guidePen, firstString.P1, firstString.SnapToLine(trebleEdge.P2, true));
+                    DrawLine(g, guidePen, firstString.P1, firstString.SnapToLine(trebleEdge.P2, LineSnapDirection.Horizontal));
                     if(firstString != lastString)
-                        DrawLine(g, guidePen, lastString.P1, lastString.SnapToLine(bassEdge.P2, true));
+                        DrawLine(g, guidePen, lastString.P1, lastString.SnapToLine(bassEdge.P2, LineSnapDirection.Horizontal));
                 }
             }
 
@@ -204,17 +205,27 @@ namespace SiGen.UI
 
         private void RenderMeasureTool(Graphics g)
         {
+            if (!MeasureSnapPosition.IsEmpty && MeasureLastSelection.IsEmpty)
+            {
+                var snapPt = WorldToDisplay(MeasureSnapPosition, _Zoom, true);
+                using (var brush = new SolidBrush(Color.FromArgb(140, 50, 50, 200)))
+                    g.FillEllipse(brush, snapPt.X - 6, snapPt.Y - 6, 12, 12);
+            }
+
             if (MeasureLastSelection.IsEmpty)
             {
                 using (var pen = new Pen(Color.Black, 2))
-                    g.DrawLine(pen, WorldToDisplay(MeasureFirstSelection, _Zoom, true), PointToClient(Cursor.Position));
+                {
+                    //g.DrawLine(pen, WorldToDisplay(MeasureFirstSelection, _Zoom, true), PointToClient(Cursor.Position));
+                    g.DrawLine(pen, WorldToDisplay(MeasureFirstSelection, _Zoom, true), WorldToDisplay(MeasureSnapPosition, _Zoom, true));
+                }
             }
-            else
+            else if (!MeasureFirstSelection.IsEmpty)
             {
                 if(CurrentMeasure != null)
                 {
                     var lengthMeasureBoxes = MeasureBoxes.OfType<LengthValueBox>();
-                    bool showLengthOnly = lengthMeasureBoxes.Any(b=>b.Type != LengthType.Length && !b.IsMeasureVisible());
+                    bool showLengthOnly = lengthMeasureBoxes.Any(b => b.Type != LengthType.Length && !b.IsMeasureVisible());
 
                     //Draw Measures Lines
                     foreach (var lengthBox in lengthMeasureBoxes)

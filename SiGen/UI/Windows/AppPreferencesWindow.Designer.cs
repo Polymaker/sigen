@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Export");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Viewer");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Interface");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Display", new System.Windows.Forms.TreeNode[] {
-            treeNode2,
-            treeNode3});
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Export");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Viewer");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Interface");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Display", new System.Windows.Forms.TreeNode[] {
+            treeNode6,
+            treeNode7});
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeView1 = new System.Windows.Forms.TreeView();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -58,17 +58,17 @@
             // 
             this.treeView1.Location = new System.Drawing.Point(7, 22);
             this.treeView1.Name = "treeView1";
-            treeNode1.Name = "Node0";
-            treeNode1.Text = "Export";
-            treeNode2.Name = "Node2";
-            treeNode2.Text = "Viewer";
-            treeNode3.Name = "Node3";
-            treeNode3.Text = "Interface";
-            treeNode4.Name = "Node1";
-            treeNode4.Text = "Display";
+            treeNode5.Name = "Node0";
+            treeNode5.Text = "Export";
+            treeNode6.Name = "Node2";
+            treeNode6.Text = "Viewer";
+            treeNode7.Name = "Node3";
+            treeNode7.Text = "Interface";
+            treeNode8.Name = "Node1";
+            treeNode8.Text = "Display";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode4});
+            treeNode5,
+            treeNode8});
             this.treeView1.Size = new System.Drawing.Size(219, 351);
             this.treeView1.TabIndex = 0;
             // 

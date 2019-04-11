@@ -103,15 +103,50 @@ namespace SiGen.StringedInstruments.Layout.Visual
             isDirty = false;
         }
 
-        public PointM SnapToLine(PointM pos, bool horizontally = false)
+        public Vector SnapToLine(Vector pos, LineSnapDirection snapMode = LineSnapDirection.Perpendicular, bool infiniteLine = true)
         {
-            if (horizontally)
-                return PointM.FromVector(Equation.GetPointForY(pos.Y.NormalizedValue), P1.Unit ?? P2.Unit);
+            Vector result = Vector.Empty;
 
-            var perp = Line.GetPerpendicular(Equation, (Vector)pos);
-            Vector inter;
-            if (Equation.Intersect(perp, out inter))
-                return new PointM(inter.X, inter.Y, P1.Unit ?? P2.Unit);
+            if (snapMode == LineSnapDirection.Horizontal)
+            {
+                result = Equation.GetPointForY(pos.Y);
+            }
+            else if (snapMode == LineSnapDirection.Vertical)
+            {
+                result = Equation.GetPointForX(pos.X);
+            }
+            else
+            {
+                var perp = Line.GetPerpendicular(Equation, pos);
+                Equation.Intersect(perp, out result);
+            }
+            
+            if (!result.IsEmpty && !infiniteLine)
+            {
+                var v1 = result - P1.ToVector();
+                var v2 = result - P2.ToVector();
+
+                if (!v1.Normalized.EqualOrClose(Direction, 0.0001))
+                    return snapMode == LineSnapDirection.Perpendicular ? P1.ToVector() : Vector.Empty;
+                else if (v1.Length > Length.NormalizedValue)
+                    return snapMode == LineSnapDirection.Perpendicular ? P2.ToVector() : Vector.Empty;
+
+                if (!v2.Normalized.EqualOrClose(Direction * -1, 0.0001))
+                    return snapMode == LineSnapDirection.Perpendicular ? P2.ToVector() : Vector.Empty;
+                else if (v2.Length > Length.NormalizedValue)
+                    return snapMode == LineSnapDirection.Perpendicular ? P1.ToVector() : Vector.Empty;
+
+                
+            }
+
+            return result;
+        }
+
+        public PointM SnapToLine(PointM pos, LineSnapDirection snapMode = LineSnapDirection.Perpendicular, bool infiniteLine = true)
+        {
+            var result = SnapToLine(pos.ToVector(), snapMode, infiniteLine);
+            if (!result.IsEmpty)
+                return PointM.FromVector(result, pos.Unit ?? P1.Unit ?? P2.Unit);
             return PointM.Empty;
         }
 
@@ -127,10 +162,9 @@ namespace SiGen.StringedInstruments.Layout.Visual
             return PointM.FromVector(inter, P1.Unit);
         }
 
-        public PointM GetIntersection(Line line)
+        public Vector GetIntersection(Line line)
         {
-            var inter = Equation.GetIntersection(line);
-            return PointM.FromVector(inter, P1.Unit);
+            return Equation.GetIntersection(line);
         }
 
         public static LayoutLine Offset(LayoutLine line, Measure amount)

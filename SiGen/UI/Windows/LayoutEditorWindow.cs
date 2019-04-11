@@ -487,7 +487,5 @@ namespace SiGen.UI
                 ActiveLayoutPanel.Viewer.EnableMeasureTool = tsbMeasureTool.Checked;
             }
         }
-
-		
-	}
+    }
 }

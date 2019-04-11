@@ -240,6 +240,8 @@ namespace SiGen.UI
 
         private Vector MeasureFirstSelection;
         private Vector MeasureLastSelection;
+        private Vector MeasureSnapPosition;
+
         private List<MeasureValueBox> MeasureBoxes;
 
         private void InitializeMeasureTool()
@@ -247,6 +249,7 @@ namespace SiGen.UI
             MeasureBoxes = new List<MeasureValueBox>();
             MeasureFirstSelection = Vector.Empty;
             MeasureLastSelection = Vector.Empty;
+            MeasureSnapPosition = Vector.Empty;
             _CurrentMeasure = null;
             _IsMeasuring = false;
             InitializeMeasureContextMenu();
@@ -351,7 +354,7 @@ namespace SiGen.UI
                     ClearMeasuring();
                     return;
                 }
-                var pos = GrabMeasureLocation(position);
+                var pos = MeasureSnapPosition;// GrabMeasureLocation(position);
                 if (!pos.IsEmpty)
                 {
                     MeasureFirstSelection = pos;
@@ -361,7 +364,7 @@ namespace SiGen.UI
             }
             else if (MeasureLastSelection.IsEmpty)
             {
-                var pos = GrabMeasureLocation(position);
+                var pos = MeasureSnapPosition;// GrabMeasureLocation(position);
                 if (!pos.IsEmpty)
                 {
                     MeasureLastSelection = pos;
@@ -371,6 +374,51 @@ namespace SiGen.UI
                         CompleteMeasure();
                 }
             }
+        }
+
+        private void UpdateMeasureSnapPosition()
+        {
+            UpdateMeasureSnapPosition(PointToClient(MousePosition));
+        }
+
+        private void UpdateMeasureSnapPosition(Point mousePos)
+        {
+            var previousSnapPos = MeasureSnapPosition;
+            var mouseWorldPos = DisplayToWorld(mousePos);
+
+            if (!MeasureFirstSelection.IsEmpty && IsControlPressed())
+            {
+                var measureAngle = Angle.FromDirectionVector(mouseWorldPos - MeasureFirstSelection);
+                var measureDist = (mouseWorldPos - MeasureFirstSelection).Length;
+                double snapAngle = 11.25;
+                measureAngle = Angle.FromDegrees(Math.Round(measureAngle.Degrees / snapAngle) * snapAngle);
+                mouseWorldPos = MeasureFirstSelection + (Vector.FromAngle(measureAngle) * measureDist);
+
+                if (IsAltPressed())
+                {
+                    MeasureSnapPosition = mouseWorldPos;
+                }
+                else
+                {
+                    bool isSnapped = SnapToClosestLine(MeasureFirstSelection, mouseWorldPos, 0.5, out MeasureSnapPosition, out _);
+
+                    if (!isSnapped)
+                        isSnapped = SnapToClosestLine(mouseWorldPos, 0.5, out MeasureSnapPosition, out _);
+
+                    if (!isSnapped)
+                        MeasureSnapPosition = previousSnapPos;
+                }
+            }
+            else if(IsAltPressed())
+            {
+                MeasureSnapPosition = mouseWorldPos;
+            }
+            else
+            {
+                MeasureSnapPosition = SnapToNearest(mouseWorldPos, 1, 0.5);
+            }
+
+            InvalidateWorldRegion(20, mouseWorldPos, previousSnapPos, MeasureSnapPosition, MeasureFirstSelection);
         }
 
         private Vector GrabMeasureLocation(Point position, double snapRange = 2)
@@ -567,6 +615,92 @@ namespace SiGen.UI
                 vec = pointsNear.OrderBy(p => (p - worldPos).Length).First();
 
             return !vec.IsEmpty;
+        }
+
+        private bool SnapToClosestIntersection(Vector mouseWorldPos, double snapRange, out Vector snapPos, out double snapDist)
+        {
+            snapPos = Vector.Empty;
+            snapDist = -1;
+
+            var pointsNear = LayoutIntersections.Where(i => (i - mouseWorldPos).Length <= snapRange);
+
+            if (pointsNear.Any())
+            {
+                snapPos = pointsNear.OrderBy(p => (p - mouseWorldPos).Length).First();
+                snapDist = (double)(mouseWorldPos - snapPos).Length;
+            }
+
+            return !snapPos.IsEmpty;
+        }
+
+        private bool SnapToClosestLine(Vector mouseWorldPos, double snapRange, out Vector snapPos, out double snapDist)
+        {
+            snapPos = Vector.Empty;
+            snapDist = -1;
+
+            foreach (var line in CurrentLayout.VisualElements.OfType<LayoutLine>())
+            {
+                var linePt = line.SnapToLine(mouseWorldPos, LineSnapDirection.Perpendicular, false);
+                if (linePt.IsEmpty)
+                    continue;
+
+                var ptDist = (linePt - mouseWorldPos).Length;
+
+                if (ptDist <= snapRange && (snapPos.IsEmpty || ptDist < snapDist))
+                {
+                    snapDist = (double)ptDist;
+                    snapPos = linePt;
+                }
+            }
+
+            return !snapPos.IsEmpty;
+        }
+
+        private bool SnapToClosestLine(Vector measureStart, Vector measureEnd, double snapRange, out Vector snapPos, out double snapDist)
+        {
+            snapPos = Vector.Empty;
+            snapDist = -1;
+            var measureLine = Line.FromPoints(measureStart, measureEnd);
+
+            foreach (var line in CurrentLayout.VisualElements.OfType<LayoutLine>())
+            {
+                var linePt = line.GetIntersection(measureLine);
+                if (linePt.IsEmpty)
+                    continue;
+                
+                var ptDist = (linePt - measureEnd).Length;
+
+                if (ptDist <= snapRange && (snapPos.IsEmpty || ptDist < snapDist))
+                {
+                    snapDist = (double)ptDist;
+                    snapPos = linePt;
+                }
+            }
+
+            return !snapPos.IsEmpty;
+        }
+
+        public Vector SnapToNearest(Vector worldPos, double intersectionRange, double lineRange)
+        {
+            var pointsNear = LayoutIntersections.Where(i => (i - worldPos).Length <= intersectionRange);
+            
+            SnapToClosestIntersection(worldPos, intersectionRange, out Vector closestInter, out double interDist);
+
+            SnapToClosestLine(worldPos, lineRange, out Vector closestLine, out double lineDist);
+
+            if (!closestInter.IsEmpty && !closestLine.IsEmpty)
+            {
+                var interRatio = interDist / intersectionRange;
+                return interRatio < 0.75 ? closestInter : closestLine;
+                //var lineRatio = lineDist / lineRange;
+                //return interRatio < lineRatio ? closestInter : closestLine;
+            }
+            else if (!closestInter.IsEmpty)
+                return closestInter;
+            else if (!closestLine.IsEmpty)
+                return closestLine;
+
+            return Vector.Empty;
         }
 
         private void CalculateIntersections()

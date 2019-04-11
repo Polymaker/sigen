@@ -74,6 +74,15 @@ namespace SiGen.Utilities
                     return "N/A";
                 return string.Format(NumberFormatInfo.InvariantInfo,"{0}{1}", measure.Value, measure.Unit != null ? measure.Unit.Abreviation : string.Empty);
             }
+            else if(value is double dblvalue)
+            {
+                return dblvalue.ToString(NumberFormatInfo.InvariantInfo);
+            }
+            else if (value is decimal decValue)
+            {
+                return decValue.ToString(NumberFormatInfo.InvariantInfo);
+            }
+
             if (value == null)
                 return string.Empty;
 
