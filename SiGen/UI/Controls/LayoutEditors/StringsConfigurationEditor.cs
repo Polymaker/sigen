@@ -31,7 +31,9 @@ namespace SiGen.UI.Controls.LayoutEditors
             nbxNumberOfFrets.Enabled = (CurrentLayout != null);
             chkLeftHanded.Enabled = (CurrentLayout != null);
             chkShowAdvanced.Enabled = (CurrentLayout != null);
-            chkShowAdvanced.Checked = false;
+
+            if(IsLayoutFirstLoad)
+                chkShowAdvanced.Checked = false;
             GridColumnsSortOrder = ListSortDirection.Ascending;
 
             if (CurrentLayout != null)
@@ -57,6 +59,13 @@ namespace SiGen.UI.Controls.LayoutEditors
             UpdateFieldsVisibility();
             ApplyFieldsVisibility();
             UpdateGridValues();
+        }
+
+        protected override void OnCurrentLayoutChanged()
+        {
+            base.OnCurrentLayoutChanged();
+            //if (!CachedLayoutData.ContainsKey(CurrentLayout))
+            //    chkShowAdvanced.Checked = false;
         }
 
         protected override void OnNumberOfStringsChanged()
@@ -110,7 +119,7 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         private void chkShowAdvanced_CheckedChanged(object sender, EventArgs e)
         {
-            if (!IsLoading)
+            if (!IsLoading && CurrentLayout != null)
             {
                 UpdateFieldsVisibility();
                 ApplyFieldsVisibility();
@@ -183,7 +192,8 @@ namespace SiGen.UI.Controls.LayoutEditors
                         {
                             HeaderText = (i + 1).ToString(),
                             SortMode = DataGridViewColumnSortMode.NotSortable,
-                            Tag = i
+                            Tag = i,
+                            MinimumWidth = 50
                         };
                         dgvStrings.Columns.Add(stringCol);
                     }

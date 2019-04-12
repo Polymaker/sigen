@@ -34,6 +34,8 @@ namespace SiGen.UI.Controls
 
         protected bool IsLoading { get { return _IsLoading; /* FlagManager["ReloadPropertyValues"] */} }
 
+        protected bool IsLayoutFirstLoad => CurrentLayout != null && !CachedLayoutData.ContainsKey(CurrentLayout);
+
         public LayoutPropertyEditor()
         {
             InitializeComponent();
@@ -69,6 +71,12 @@ namespace SiGen.UI.Controls
                 else if (CachedLayoutData.ContainsKey(layout))
                     RestoreCachedLayoutValues();
             }
+        }
+
+        internal void LayoutClosed(SILayout layout)
+        {
+            if (CachedLayoutData.ContainsKey(layout))
+                CachedLayoutData.Remove(layout);
         }
 
         private void CurrentLayout_NumberOfStringsChanged(object sender, EventArgs e)

@@ -117,26 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="OpenLayoutIcon_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\openlayouticon_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SigenIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sigenicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="MeasureIcon_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\measureicon_64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="MeasureIcon_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\measureicon_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="OptionsIcon_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\optionsicon_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="NewLayoutIcon_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\newlayouticon_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SigenIcon_x64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SigenIcon_x64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
 </root>

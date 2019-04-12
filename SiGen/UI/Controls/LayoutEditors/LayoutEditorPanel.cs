@@ -38,11 +38,18 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             Padding = new System.Windows.Forms.Padding(3);
             _Editor = Activator.CreateInstance<T>();
-            Controls.Add(_Editor);
-            _Editor.Dock = System.Windows.Forms.DockStyle.Fill;
+           
+            //_Editor.Dock = System.Windows.Forms.DockStyle.Fill;
             CloseButtonVisible = false;
             DockAreas ^= DockAreas.Document;
             MaximizeBox = true;
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            Controls.Add(_Editor);
+            _Editor.Dock = System.Windows.Forms.DockStyle.Fill;
         }
 
         protected override void OnDockStateChanged(EventArgs e)
@@ -54,6 +61,16 @@ namespace SiGen.UI.Controls.LayoutEditors
                 Text = Text.Replace(" & ", " && ");
         }
 
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // LayoutEditorPanel
+            // 
+            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Name = "LayoutEditorPanel";
+            this.ResumeLayout(false);
 
+        }
     }
 }

@@ -23,17 +23,8 @@ namespace SiGen.UI.Controls.LayoutEditors
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            InitializeComboboxes();
-            OptimizeLayout();
-        }
-
-        private void InitializeComboboxes()
-        {
-
             UpdateComboboxes();
-
-            
-
+            OptimizeLayout();
         }
 
         private void UpdateComboboxes(bool preserveValues = false)
@@ -189,7 +180,7 @@ namespace SiGen.UI.Controls.LayoutEditors
                 CurrentLayout.SimpleStringSpacing.NutSpacingMode = (StringSpacingMethod)cboNutSpacingMethod.SelectedValue;
                 CurrentLayout.RebuildLayout();
             }
-            if (cboNutSpacingMethod.SelectedItem != null)
+            if (cboNutSpacingMethod.SelectedItem != null && !FlagManager["UpdateComboboxes"])
             {
                 if ((StringSpacingMethod)cboNutSpacingMethod.SelectedValue == StringSpacingMethod.BetweenStrings)
                     lblNutStringSpacing.Text = "Avg. Spacing";

@@ -33,6 +33,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.layoutPreview = new SiGen.UI.LayoutViewer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkExportMargins = new System.Windows.Forms.CheckBox();
             this.chkExportCenterLine = new System.Windows.Forms.CheckBox();
             this.cboExportConfig = new System.Windows.Forms.ComboBox();
             this.chkExportStringCenters = new System.Windows.Forms.CheckBox();
@@ -57,7 +58,6 @@
             this.btnExport = new System.Windows.Forms.Button();
             this.lblExportFormat = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.chkExportMargins = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -132,6 +132,18 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Export Options";
+            // 
+            // chkExportMargins
+            // 
+            this.chkExportMargins.AutoSize = true;
+            this.chkExportMargins.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkExportMargins.Location = new System.Drawing.Point(11, 135);
+            this.chkExportMargins.Name = "chkExportMargins";
+            this.chkExportMargins.Size = new System.Drawing.Size(155, 17);
+            this.chkExportMargins.TabIndex = 12;
+            this.chkExportMargins.Text = "Export Fingerboard Margins";
+            this.chkExportMargins.UseVisualStyleBackColor = true;
+            this.chkExportMargins.CheckedChanged += new System.EventHandler(this.chkExportMargins_CheckedChanged);
             // 
             // chkExportCenterLine
             // 
@@ -366,6 +378,7 @@
             this.chkExportFingerboard.TabIndex = 6;
             this.chkExportFingerboard.Text = "Export Fingerboard";
             this.chkExportFingerboard.UseVisualStyleBackColor = true;
+            this.chkExportFingerboard.CheckedChanged += new System.EventHandler(this.chkExportFingerboard_CheckedChanged);
             // 
             // btnExport
             // 
@@ -386,18 +399,6 @@
             this.lblExportFormat.Size = new System.Drawing.Size(72, 13);
             this.lblExportFormat.TabIndex = 2;
             this.lblExportFormat.Text = "Export Format";
-            // 
-            // chkExportMargins
-            // 
-            this.chkExportMargins.AutoSize = true;
-            this.chkExportMargins.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkExportMargins.Location = new System.Drawing.Point(11, 135);
-            this.chkExportMargins.Name = "chkExportMargins";
-            this.chkExportMargins.Size = new System.Drawing.Size(155, 17);
-            this.chkExportMargins.TabIndex = 12;
-            this.chkExportMargins.Text = "Export Fingerboard Margins";
-            this.chkExportMargins.UseVisualStyleBackColor = true;
-            this.chkExportMargins.CheckedChanged += new System.EventHandler(this.chkExportMargins_CheckedChanged);
             // 
             // ExportLayoutDialog
             // 

@@ -30,23 +30,15 @@ namespace SiGen.UI
         //private LayoutEditorPanel<LayoutProperties> layoutInfoPanel;
         private LayoutViewerPanel PreviousDocument;
 
-        private LayoutDocument CurrentLayoutDocument
-        {
-            get
-            {
-                if ((dockPanel1.ActiveDocument as LayoutViewerPanel) != null)
-                    return (dockPanel1.ActiveDocument as LayoutViewerPanel).CurrentDocument;
-                return null;
-            }
-        }
-
-        private LayoutViewerPanel ActiveLayoutPanel
+        public LayoutViewerPanel ActiveDocument
         {
             get
             {
                 return dockPanel1.ActiveDocument as LayoutViewerPanel;
             }
         }
+
+        public LayoutDocument CurrentLayoutDocument => ActiveDocument?.CurrentDocument;
 
         private IEnumerable<LayoutViewerPanel> OpenDocuments
         {
@@ -75,7 +67,7 @@ namespace SiGen.UI
 
         private void InitializeEditingPanels()
         {
-            dockPanel1.DockBottomPortion = 300d / (double)dockPanel1.Height;
+            dockPanel1.DockBottomPortion = 350d / (double)dockPanel1.Height;
             
             stringConfigPanel = new LayoutEditorPanel<StringsConfigurationEditor>();
             stringConfigPanel.Show(dockPanel1, DockState.DockBottom);
@@ -106,10 +98,10 @@ namespace SiGen.UI
             if(PreviousDocument != null)
                 PreviousDocument.CurrentDocument.LayoutChanged -= CurrentFile_LayoutChanged;
 
-            if (ActiveLayoutPanel != null && ActiveLayoutPanel.CurrentDocument != null)
+            if (CurrentLayoutDocument != null)
             {
                 SetEditorsActiveLayout(CurrentLayoutDocument.Layout);
-                tsbMeasureTool.Checked = ActiveLayoutPanel.Viewer.EnableMeasureTool;
+                tsbMeasureTool.Checked = ActiveDocument.Viewer.EnableMeasureTool;
                 tsbMeasureTool.CheckOnClick = true;
                 CurrentLayoutDocument.LayoutChanged += CurrentFile_LayoutChanged;
             }
@@ -119,9 +111,14 @@ namespace SiGen.UI
                 tsbMeasureTool.Checked = false;
                 tsbMeasureTool.CheckOnClick = false;
             }
-			RebuildUndoRedoMenus();
 
-			PreviousDocument = ActiveLayoutPanel;
+            tsbClose.Enabled = CurrentLayoutDocument != null;
+            tsbExport.Enabled = CurrentLayoutDocument != null;
+
+
+            RebuildUndoRedoMenus();
+
+			PreviousDocument = ActiveDocument;
         }
 
         private void CurrentFile_LayoutChanged(object sender, EventArgs e)
@@ -138,9 +135,15 @@ namespace SiGen.UI
                 editorPanel.CurrentLayout = layout;
         }
 
-		private void RefreshCurrentLayoutEditors()
+        private void CleanupEditorsLayoutCache(SILayout removedLayout)
+        {
+            foreach (var editorPanel in dockPanel1.Contents.OfType<ILayoutEditorPanel>())
+                editorPanel.Editor.LayoutClosed(removedLayout);
+        }
+
+        private void RefreshCurrentLayoutEditors()
 		{
-			if(ActiveLayoutPanel != null)
+			if(ActiveDocument != null)
 			{
 				foreach (var editorPanel in dockPanel1.Contents.OfType<ILayoutEditorPanel>())
 					editorPanel.Editor.ReloadPropertyValues();
@@ -226,53 +229,12 @@ namespace SiGen.UI
                         break;
                 }
             }
+
+            if (!e.Cancel)
+                CleanupEditorsLayoutCache(documentFile.Layout);
         }
 
         #endregion
-        
-        /*
-        private static SILayout CreateDefaultLayout()
-        {
-            var layout = new SILayout();
-            layout.NumberOfStrings = 6;
-            layout.SingleScaleConfig.Length = Measure.Inches(25.5);
-            layout.MultiScaleConfig.Treble = Measure.Inches(25.5);
-            layout.MultiScaleConfig.Bass = Measure.Inches(27);
-            
-            layout.SetStringsTuning(
-                MusicalNote.EqualNote(NoteName.E, 4),
-                MusicalNote.EqualNote(NoteName.B, 3),
-                MusicalNote.EqualNote(NoteName.G, 3),
-                MusicalNote.EqualNote(NoteName.D, 3),
-                MusicalNote.EqualNote(NoteName.A, 2),
-                MusicalNote.EqualNote(NoteName.E, 2)
-                );
-            layout.Strings.MassAssign(s => s.PhysicalProperties,
-                new StringProperties(Measure.Inches(0.010), Measure.Inches(0.010), 0.00002215, 29442660.75919),
-                new StringProperties(Measure.Inches(0.013), Measure.Inches(0.013), 0.00003744, 29442660.75919),
-                new StringProperties(Measure.Inches(0.017), Measure.Inches(0.017), 0.00006402, 29442660.75919),
-                new StringProperties(Measure.Inches(0.014), Measure.Inches(0.026), 0.00012671, 29442660.75919),
-                new StringProperties(Measure.Inches(0.014), Measure.Inches(0.036), 0.00023964, 29442660.75919),
-                new StringProperties(Measure.Inches(0.016), Measure.Inches(0.046), 0.00038216, 29442660.75919)
-                );
-            layout.Strings.MassAssign(s => s.ActionAtTwelfthFret,
-                Measure.Inches(0.063),
-                Measure.Inches(0.069),
-                Measure.Inches(0.075),
-                Measure.Inches(0.082),
-                Measure.Inches(0.088),
-                Measure.Inches(0.094)
-                );
-
-            layout.SimpleStringSpacing.StringSpacingAtNut = Measure.Mm(7.3);
-            layout.SimpleStringSpacing.StringSpacingAtBridge = Measure.Mm(10.5);
-            layout.SimpleStringSpacing.NutSpacingMode = StringSpacingMethod.BetweenStrings;
-            //layout.ScaleLengthMode = ScaleLengthType.Individual;
-            layout.Margins.Edges = Measure.Mm(3.25);
-            layout.Margins.LastFret = Measure.Mm(10);
-            layout.RebuildLayout();
-            return layout;
-        }*/
         
         #region Save
 
@@ -469,29 +431,6 @@ namespace SiGen.UI
 
         #endregion
 
-        private void tsbNew_Click(object sender, EventArgs e)
-        {
-            OpenLayoutFile("DefaultLayout.sil", true);
-        }
-
-        private void tssbExport_Click(object sender, EventArgs e)
-        {
-            using (var exportDialog = new ExportLayoutDialog(CurrentLayoutDocument.Layout))
-                exportDialog.ShowDialog();
-        }
-
-        private void tsbOptions_Click(object sender, EventArgs e)
-        {
-            using (var dlg = new AppPreferencesWindow())
-                dlg.ShowDialog();
-        }
-
-        private void tsbMeasureTool_Click(object sender, EventArgs e)
-        {
-            if(ActiveLayoutPanel != null)
-            {
-                ActiveLayoutPanel.Viewer.EnableMeasureTool = tsbMeasureTool.Checked;
-            }
-        }
+        
     }
 }

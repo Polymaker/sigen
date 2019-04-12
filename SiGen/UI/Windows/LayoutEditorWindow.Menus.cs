@@ -1,5 +1,6 @@
 ﻿using SiGen.StringedInstruments.Layout;
 using SiGen.UI.Controls;
+using SiGen.UI.Windows;
 using System;
 using System.Linq;
 using System.Windows.Forms;
@@ -124,52 +125,86 @@ namespace SiGen.UI
 
 		private void tssbUndo_ButtonClick(object sender, EventArgs e)
 		{
-			if (ActiveLayoutPanel != null && ActiveLayoutPanel.CurrentDocument.Undo())
+			if (ActiveDocument != null && ActiveDocument.CurrentDocument.Undo())
 			{
 				RefreshCurrentLayoutEditors();
-				if (ActiveLayoutPanel.CurrentDocument.Layout.IsLayoutDirty)
-					ActiveLayoutPanel.CurrentDocument.Layout.RebuildLayout();
+				if (ActiveDocument.CurrentDocument.Layout.IsLayoutDirty)
+					ActiveDocument.CurrentDocument.Layout.RebuildLayout();
 				RebuildUndoRedoMenus();
 			}
 		}
 
 		private void tssbRedo_ButtonClick(object sender, EventArgs e)
 		{
-			if (ActiveLayoutPanel != null && ActiveLayoutPanel.CurrentDocument.Redo())
+			if (ActiveDocument != null && ActiveDocument.CurrentDocument.Redo())
 			{
 				RefreshCurrentLayoutEditors();
-				if (ActiveLayoutPanel.CurrentDocument.Layout.IsLayoutDirty)
-					ActiveLayoutPanel.CurrentDocument.Layout.RebuildLayout();
+				if (ActiveDocument.CurrentDocument.Layout.IsLayoutDirty)
+					ActiveDocument.CurrentDocument.Layout.RebuildLayout();
 				RebuildUndoRedoMenus();
 			}
 		}
 
 		private void tssbUndo_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
-			if (e.ClickedItem.Tag is int actionIndex && ActiveLayoutPanel != null)
+			if (e.ClickedItem.Tag is int actionIndex && ActiveDocument != null)
 			{
 				for (int i = 0; i <= actionIndex; i++)
-					ActiveLayoutPanel.CurrentDocument.Undo();
+					ActiveDocument.CurrentDocument.Undo();
 				RefreshCurrentLayoutEditors();
-				if (ActiveLayoutPanel.CurrentDocument.Layout.IsLayoutDirty)
-					ActiveLayoutPanel.CurrentDocument.Layout.RebuildLayout();
+				if (ActiveDocument.CurrentDocument.Layout.IsLayoutDirty)
+					ActiveDocument.CurrentDocument.Layout.RebuildLayout();
 				RebuildUndoRedoMenus();
 			}
 		}
 
 		private void tssbRedo_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
-			if (e.ClickedItem.Tag is int actionIndex && ActiveLayoutPanel != null)
+			if (e.ClickedItem.Tag is int actionIndex && ActiveDocument != null)
 			{
 				for (int i = 0; i <= actionIndex; i++)
-					ActiveLayoutPanel.CurrentDocument.Redo();
+					ActiveDocument.CurrentDocument.Redo();
 				RefreshCurrentLayoutEditors();
-				if (ActiveLayoutPanel.CurrentDocument.Layout.IsLayoutDirty)
-					ActiveLayoutPanel.CurrentDocument.Layout.RebuildLayout();
+				if (ActiveDocument.CurrentDocument.Layout.IsLayoutDirty)
+					ActiveDocument.CurrentDocument.Layout.RebuildLayout();
 				RebuildUndoRedoMenus();
 			}
 		}
 
-		#endregion
-	}
+        #endregion
+
+
+        private void tsbNew_Click(object sender, EventArgs e)
+        {
+            OpenLayoutFile("DefaultLayout.sil", true);
+        }
+
+        private void tsbExport_Click(object sender, EventArgs e)
+        {
+            using (var exportDialog = new ExportLayoutDialog(CurrentLayoutDocument.Layout))
+                exportDialog.ShowDialog();
+        }
+
+        private void tsbOptions_Click(object sender, EventArgs e)
+        {
+            using (var dlg = new AppPreferencesWindow())
+                dlg.ShowDialog();
+        }
+
+        private void tsbMeasureTool_Click(object sender, EventArgs e)
+        {
+            if (ActiveDocument != null)
+            {
+                ActiveDocument.Viewer.EnableMeasureTool = tsbMeasureTool.Checked;
+            }
+        }
+
+        private void tsbClose_Click(object sender, EventArgs e)
+        {
+            if (ActiveDocument != null)
+            {
+                ActiveDocument.Close();
+            }
+        }
+    }
 }

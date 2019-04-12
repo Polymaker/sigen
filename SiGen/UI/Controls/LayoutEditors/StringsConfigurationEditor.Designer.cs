@@ -147,51 +147,51 @@
             this.tsmiConvertToIN,
             this.tsmiConvertToFT});
             this.cmsMesureCellMenu.Name = "cmsConvert";
-            this.cmsMesureCellMenu.Size = new System.Drawing.Size(181, 164);
+            this.cmsMesureCellMenu.Size = new System.Drawing.Size(139, 142);
             this.cmsMesureCellMenu.Opening += new System.ComponentModel.CancelEventHandler(this.cmsMesureCellMenu_Opening);
             // 
             // tsmiClearValue
             // 
             this.tsmiClearValue.Name = "tsmiClearValue";
-            this.tsmiClearValue.Size = new System.Drawing.Size(180, 22);
+            this.tsmiClearValue.Size = new System.Drawing.Size(138, 22);
             this.tsmiClearValue.Text = "Clear Value";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(135, 6);
             // 
             // convertToToolStripMenuItem
             // 
             this.convertToToolStripMenuItem.Name = "convertToToolStripMenuItem";
-            this.convertToToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.convertToToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.convertToToolStripMenuItem.Text = "Convert to:";
             // 
             // tsmiConvertToMM
             // 
             this.tsmiConvertToMM.Name = "tsmiConvertToMM";
-            this.tsmiConvertToMM.Size = new System.Drawing.Size(180, 22);
+            this.tsmiConvertToMM.Size = new System.Drawing.Size(138, 22);
             this.tsmiConvertToMM.Text = "Millimeters";
             this.tsmiConvertToMM.Click += new System.EventHandler(this.tsmiConvertToMM_Click);
             // 
             // tsmiConvertToCM
             // 
             this.tsmiConvertToCM.Name = "tsmiConvertToCM";
-            this.tsmiConvertToCM.Size = new System.Drawing.Size(180, 22);
+            this.tsmiConvertToCM.Size = new System.Drawing.Size(138, 22);
             this.tsmiConvertToCM.Text = "Centimeters";
             this.tsmiConvertToCM.Click += new System.EventHandler(this.tsmiConvertToCM_Click);
             // 
             // tsmiConvertToIN
             // 
             this.tsmiConvertToIN.Name = "tsmiConvertToIN";
-            this.tsmiConvertToIN.Size = new System.Drawing.Size(180, 22);
+            this.tsmiConvertToIN.Size = new System.Drawing.Size(138, 22);
             this.tsmiConvertToIN.Text = "Inches";
             this.tsmiConvertToIN.Click += new System.EventHandler(this.tsmiConvertToIN_Click);
             // 
             // tsmiConvertToFT
             // 
             this.tsmiConvertToFT.Name = "tsmiConvertToFT";
-            this.tsmiConvertToFT.Size = new System.Drawing.Size(180, 22);
+            this.tsmiConvertToFT.Size = new System.Drawing.Size(138, 22);
             this.tsmiConvertToFT.Text = "Feets";
             this.tsmiConvertToFT.Click += new System.EventHandler(this.tsmiConvertToFT_Click);
             // 
@@ -200,7 +200,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.AutoScrollMinSize = new System.Drawing.Size(300, 200);
             this.Controls.Add(this.chkShowAdvanced);
             this.Controls.Add(this.dgvStrings);
             this.Controls.Add(this.label2);

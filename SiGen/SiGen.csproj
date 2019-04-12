@@ -295,6 +295,9 @@
     <EmbeddedResource Include="UI\Controls\LayoutEditors\FingerboardMarginEditor.resx">
       <DependentUpon>FingerboardMarginEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\LayoutEditorPanel.resx">
+      <DependentUpon>LayoutEditorPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\LayoutProperties.resx">
       <DependentUpon>LayoutProperties.cs</DependentUpon>
     </EmbeddedResource>
@@ -368,6 +371,7 @@
     <Content Include="Resources\OpenLayoutIcon_32.png" />
     <Content Include="Resources\OptionsIcon_32.png" />
     <Content Include="Resources\SigenIcon.ico" />
+    <None Include="Resources\SigenIcon_x64.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

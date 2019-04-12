@@ -147,7 +147,6 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             Process.Start("explorer.exe", $"/select, \"{CurrentDocument.FileName}\"");
         }
-
        
 
         private void ResetCameraButton_Click(object sender, EventArgs e)

@@ -33,6 +33,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.tsbNew = new System.Windows.Forms.ToolStripButton();
             this.tssbOpen = new System.Windows.Forms.ToolStripSplitButton();
             this.tsmiOpenFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,14 +43,14 @@
             this.tsmiSave = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveTemplate = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssbExport = new System.Windows.Forms.ToolStripButton();
-            this.tsbOptions = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbClose = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tssbUndo = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbRedo = new System.Windows.Forms.ToolStripSplitButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbExport = new System.Windows.Forms.ToolStripButton();
             this.tsbMeasureTool = new System.Windows.Forms.ToolStripButton();
-            this.tsbLayoutProperties = new System.Windows.Forms.ToolStripButton();
+            this.tsbOptions = new System.Windows.Forms.ToolStripButton();
             this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
@@ -61,6 +62,7 @@
             this.MSG_FileAlreadyOpen = new SiGen.Localization.LocalizableString(this.components);
             this.MSG_SaveBeforeClose = new SiGen.Localization.LocalizableString(this.components);
             this.LBL_Warning = new SiGen.Localization.LocalizableString(this.components);
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -89,30 +91,41 @@
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel1,
+            this.toolStripSeparator2,
             this.tsbNew,
             this.tssbOpen,
             this.tssbSave,
-            this.tssbExport,
-            this.tsbOptions,
-            this.toolStripSeparator2,
+            this.tsbClose,
+            this.toolStripSeparator3,
             this.tssbUndo,
             this.tssbRedo,
             this.toolStripSeparator1,
+            this.tsbExport,
             this.tsbMeasureTool,
-            this.tsbLayoutProperties});
+            this.tsbOptions});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1344, 69);
+            this.toolStrip1.Size = new System.Drawing.Size(1344, 54);
             this.toolStrip1.Stretch = true;
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Image = global::SiGen.Properties.Resources.SigenIcon_x64;
+            this.toolStripLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolStripLabel1.Margin = new System.Windows.Forms.Padding(6, 1, 0, 2);
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(69, 51);
+            this.toolStripLabel1.Text = "SiGen";
             // 
             // tsbNew
             // 
             this.tsbNew.Image = global::SiGen.Properties.Resources.NewLayoutIcon_32;
             this.tsbNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbNew.Name = "tsbNew";
-            this.tsbNew.Size = new System.Drawing.Size(74, 66);
+            this.tsbNew.Size = new System.Drawing.Size(74, 51);
             this.tsbNew.Text = "New Layout";
             this.tsbNew.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.tsbNew.Click += new System.EventHandler(this.tsbNew_Click);
@@ -127,7 +140,7 @@
             this.tssbOpen.Image = global::SiGen.Properties.Resources.OpenLayoutIcon_32;
             this.tssbOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tssbOpen.Name = "tssbOpen";
-            this.tssbOpen.Size = new System.Drawing.Size(65, 66);
+            this.tssbOpen.Size = new System.Drawing.Size(65, 51);
             this.tssbOpen.Text = "Open";
             this.tssbOpen.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.tssbOpen.ButtonClick += new System.EventHandler(this.tssbOpen_ButtonClick);
@@ -137,23 +150,24 @@
             // 
             this.tsmiOpenFile.Name = "tsmiOpenFile";
             this.tsmiOpenFile.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.tsmiOpenFile.Size = new System.Drawing.Size(180, 22);
+            this.tsmiOpenFile.Size = new System.Drawing.Size(176, 22);
             this.tsmiOpenFile.Text = "Open File...";
             this.tsmiOpenFile.Click += new System.EventHandler(this.tsmiOpenFile_Click);
             // 
             // tsmiOpenTemplate
             // 
             this.tsmiOpenTemplate.Name = "tsmiOpenTemplate";
-            this.tsmiOpenTemplate.Size = new System.Drawing.Size(180, 22);
+            this.tsmiOpenTemplate.Size = new System.Drawing.Size(176, 22);
             this.tsmiOpenTemplate.Text = "Open Template...";
             // 
             // tsSeparatorOpen
             // 
             this.tsSeparatorOpen.Name = "tsSeparatorOpen";
-            this.tsSeparatorOpen.Size = new System.Drawing.Size(177, 6);
+            this.tsSeparatorOpen.Size = new System.Drawing.Size(173, 6);
             // 
             // tssbSave
             // 
+            this.tssbSave.DropDownButtonWidth = 24;
             this.tssbSave.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiSave,
             this.tsmiSaveAs,
@@ -161,7 +175,7 @@
             this.tssbSave.Image = ((System.Drawing.Image)(resources.GetObject("tssbSave.Image")));
             this.tssbSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tssbSave.Name = "tssbSave";
-            this.tssbSave.Size = new System.Drawing.Size(48, 66);
+            this.tssbSave.Size = new System.Drawing.Size(61, 51);
             this.tssbSave.Text = "Save";
             this.tssbSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.tssbSave.ButtonClick += new System.EventHandler(this.tssbSave_ButtonClick);
@@ -189,30 +203,20 @@
             this.tsmiSaveTemplate.Size = new System.Drawing.Size(186, 22);
             this.tsmiSaveTemplate.Text = "Save As Template";
             // 
-            // tssbExport
+            // tsbClose
             // 
-            this.tssbExport.Image = ((System.Drawing.Image)(resources.GetObject("tssbExport.Image")));
-            this.tssbExport.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tssbExport.Name = "tssbExport";
-            this.tssbExport.Size = new System.Drawing.Size(44, 66);
-            this.tssbExport.Text = "Export";
-            this.tssbExport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.tssbExport.Click += new System.EventHandler(this.tssbExport_Click);
+            this.tsbClose.Image = ((System.Drawing.Image)(resources.GetObject("tsbClose.Image")));
+            this.tsbClose.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbClose.Name = "tsbClose";
+            this.tsbClose.Size = new System.Drawing.Size(40, 51);
+            this.tsbClose.Text = "Close";
+            this.tsbClose.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             // 
-            // tsbOptions
+            // toolStripSeparator3
             // 
-            this.tsbOptions.Image = global::SiGen.Properties.Resources.OptionsIcon_32;
-            this.tsbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbOptions.Name = "tsbOptions";
-            this.tsbOptions.Size = new System.Drawing.Size(53, 66);
-            this.tsbOptions.Text = "Options";
-            this.tsbOptions.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.tsbOptions.Click += new System.EventHandler(this.tsbOptions_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 69);
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 54);
             // 
             // tssbUndo
             // 
@@ -220,7 +224,7 @@
             this.tssbUndo.Image = ((System.Drawing.Image)(resources.GetObject("tssbUndo.Image")));
             this.tssbUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tssbUndo.Name = "tssbUndo";
-            this.tssbUndo.Size = new System.Drawing.Size(52, 66);
+            this.tssbUndo.Size = new System.Drawing.Size(52, 51);
             this.tssbUndo.Text = "Undo";
             this.tssbUndo.ButtonClick += new System.EventHandler(this.tssbUndo_ButtonClick);
             this.tssbUndo.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tssbUndo_DropDownItemClicked);
@@ -231,7 +235,7 @@
             this.tssbRedo.Image = ((System.Drawing.Image)(resources.GetObject("tssbRedo.Image")));
             this.tssbRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tssbRedo.Name = "tssbRedo";
-            this.tssbRedo.Size = new System.Drawing.Size(50, 66);
+            this.tssbRedo.Size = new System.Drawing.Size(50, 51);
             this.tssbRedo.Text = "Redo";
             this.tssbRedo.ButtonClick += new System.EventHandler(this.tssbRedo_ButtonClick);
             this.tssbRedo.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tssbRedo_DropDownItemClicked);
@@ -239,7 +243,17 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 69);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 54);
+            // 
+            // tsbExport
+            // 
+            this.tsbExport.Image = ((System.Drawing.Image)(resources.GetObject("tsbExport.Image")));
+            this.tsbExport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbExport.Name = "tsbExport";
+            this.tsbExport.Size = new System.Drawing.Size(44, 51);
+            this.tsbExport.Text = "Export";
+            this.tsbExport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tsbExport.Click += new System.EventHandler(this.tsbExport_Click);
             // 
             // tsbMeasureTool
             // 
@@ -247,28 +261,29 @@
             this.tsbMeasureTool.Image = global::SiGen.Properties.Resources.MeasureIcon_32;
             this.tsbMeasureTool.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbMeasureTool.Name = "tsbMeasureTool";
-            this.tsbMeasureTool.Size = new System.Drawing.Size(56, 66);
+            this.tsbMeasureTool.Size = new System.Drawing.Size(56, 51);
             this.tsbMeasureTool.Text = "Measure";
             this.tsbMeasureTool.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.tsbMeasureTool.Click += new System.EventHandler(this.tsbMeasureTool_Click);
             // 
-            // tsbLayoutProperties
+            // tsbOptions
             // 
-            this.tsbLayoutProperties.Image = ((System.Drawing.Image)(resources.GetObject("tsbLayoutProperties.Image")));
-            this.tsbLayoutProperties.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbLayoutProperties.Name = "tsbLayoutProperties";
-            this.tsbLayoutProperties.Size = new System.Drawing.Size(64, 66);
-            this.tsbLayoutProperties.Text = "Layout\r\nProperties";
-            this.tsbLayoutProperties.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tsbOptions.Image = global::SiGen.Properties.Resources.OptionsIcon_32;
+            this.tsbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbOptions.Name = "tsbOptions";
+            this.tsbOptions.Size = new System.Drawing.Size(53, 51);
+            this.tsbOptions.Text = "Options";
+            this.tsbOptions.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tsbOptions.Click += new System.EventHandler(this.tsbOptions_Click);
             // 
             // dockPanel1
             // 
             this.dockPanel1.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.dockPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dockPanel1.Location = new System.Drawing.Point(0, 69);
+            this.dockPanel1.Location = new System.Drawing.Point(0, 54);
             this.dockPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.dockPanel1.Name = "dockPanel1";
-            this.dockPanel1.Size = new System.Drawing.Size(1344, 747);
+            this.dockPanel1.Size = new System.Drawing.Size(1344, 762);
             this.dockPanel1.TabIndex = 2;
             this.dockPanel1.ActiveDocumentChanged += new System.EventHandler(this.dockPanel1_ActiveDocumentChanged);
             // 
@@ -335,6 +350,11 @@
             // 
             this.LBL_Warning.Text = "Warning";
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 54);
+            // 
             // LayoutEditorWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -370,16 +390,14 @@
         private System.Windows.Forms.ToolStripSeparator tsSeparatorOpen;
         private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel1;
         private System.Windows.Forms.ToolStripButton tsbOptions;
-        private System.Windows.Forms.ToolStripButton tssbExport;
+        private System.Windows.Forms.ToolStripButton tsbExport;
         private Localization.LocalizableStringList localizableStringList1;
         private Localization.LocalizableString MSG_FileAlreadyOpen;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton tsbLayoutProperties;
         private System.Windows.Forms.ToolStripButton tsbMeasureTool;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private Localization.LocalizableString MSG_SaveBeforeClose;
         private Localization.LocalizableString LBL_Warning;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripSplitButton tssbUndo;
 		private System.Windows.Forms.ToolStripSplitButton tssbRedo;
         private System.Windows.Forms.ToolStripPanel BottomToolStripPanel;
@@ -387,5 +405,9 @@
         private System.Windows.Forms.ToolStripPanel RightToolStripPanel;
         private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
         private System.Windows.Forms.ToolStripContentPanel ContentPanel;
+        private System.Windows.Forms.ToolStripButton tsbClose;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }
