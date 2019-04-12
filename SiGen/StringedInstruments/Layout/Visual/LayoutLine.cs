@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SiGen.StringedInstruments.Layout.Visual
 {
-    public class LayoutLine : VisualElement
+    public class LayoutLine : VisualElement, ILayoutLine
     {
         private bool isDirty;
         private Vector _Direction;
@@ -17,7 +17,8 @@ namespace SiGen.StringedInstruments.Layout.Visual
         private PointM _P1;
         private PointM _P2;
         private Measure _Length;
-        
+        private VisualElementType _ElementType;
+
         public PointM P1
         {
             get { return _P1; }
@@ -78,7 +79,12 @@ namespace SiGen.StringedInstruments.Layout.Visual
             }
         }
 
-        public LayoutLine() { }
+        public override VisualElementType ElementType => _ElementType;
+
+        public LayoutLine()
+        {
+            _ElementType = VisualElementType.GuideLine;
+        }
 
         public LayoutLine(PointM p1, PointM p2)
         {
@@ -136,7 +142,6 @@ namespace SiGen.StringedInstruments.Layout.Visual
                 else if (v2.Length > Length.NormalizedValue)
                     return snapMode == LineSnapDirection.Perpendicular ? P1.ToVector() : Vector.Empty;
 
-                
             }
 
             return result;
@@ -180,5 +185,41 @@ namespace SiGen.StringedInstruments.Layout.Visual
             P1 = new PointM(P1.X * -1, P1.Y);
             P2 = new PointM(P2.X * -1, P2.Y);
         }
+
+        public bool Intersects(LayoutLine line, out PointM intersection, bool infiniteLine = true)
+        {
+            intersection = PointM.Empty;
+
+            if (Intersects(line.Equation, out Vector inter, infiniteLine))
+            {
+                intersection = PointM.FromVector(inter, P1.Unit ?? P2.Unit);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool Intersects(Line line, out Vector intersection, bool infiniteLine = true)
+        {
+            intersection = Equation.GetIntersection(line);
+
+            if (intersection.IsEmpty)
+                return false;
+            else if (infiniteLine)
+                return true;
+
+
+            var v1 = intersection - P1.ToVector();
+            var v2 = intersection - P2.ToVector();
+
+            if (!v1.Normalized.EqualOrClose(Direction, 0.0001) || v1.Length > Length.NormalizedValue)
+                return false;
+
+            if (!v2.Normalized.EqualOrClose(Direction * -1, 0.0001) || v2.Length > Length.NormalizedValue)
+                return false;
+
+            return true;
+        }
+
     }
 }

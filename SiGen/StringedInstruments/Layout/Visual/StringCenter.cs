@@ -22,13 +22,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
         /// </summary>
         public StringLine Right { get { return _Right; } }
 
-        public override VisualElementType ElementType
-        {
-            get
-            {
-                return  VisualElementType.StringCenter;
-            }
-        }
+        public override VisualElementType ElementType => VisualElementType.StringCenter;
 
         public PointM P0 { get; private set; }
 

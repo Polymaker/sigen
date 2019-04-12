@@ -28,7 +28,7 @@ namespace SiGen.UI
 
         private SILayout _CurrentLayout;
         private const int PADDING_BORDER = 6;
-        private List<Vector> LayoutIntersections;
+        private List<LayoutIntersection> LayoutIntersections;
         //private List<IUIElement> _UIElements;
 
         #endregion
@@ -111,8 +111,8 @@ namespace SiGen.UI
             MouseDownPos[MouseButtons.Left] = Vector.Empty;
             MouseDownPos[MouseButtons.Right] = Vector.Empty;
             MouseDownPos[MouseButtons.Middle] = Vector.Empty;
-
-            LayoutIntersections = new List<Vector>();
+            
+            LayoutIntersections = new List<LayoutIntersection>();
             _DisplayConfig = new LayoutViewerDisplayConfig();
             _DisplayConfig.PropertyChanged += DisplayConfigChanged;
         }
@@ -208,8 +208,11 @@ namespace SiGen.UI
                     ResetCamera();
                 else
                     Invalidate();
-                ClearMeasuring();
+
+                
                 CalculateIntersections();
+
+                AdjustMeasureAfterLayoutChanged();
             }
         }
 

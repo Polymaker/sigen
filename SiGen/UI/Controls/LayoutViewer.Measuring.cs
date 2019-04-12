@@ -1,5 +1,6 @@
 ﻿using SiGen.Maths;
 using SiGen.Measuring;
+using SiGen.StringedInstruments.Layout;
 using SiGen.StringedInstruments.Layout.Visual;
 using System;
 using System.Collections.Generic;
@@ -239,6 +240,8 @@ namespace SiGen.UI
         }
 
         private Vector MeasureFirstSelection;
+        private LayoutIntersection FirstIntersection;
+        private LayoutIntersection LastIntersection;
         private Vector MeasureLastSelection;
         private Vector MeasureSnapPosition;
 
@@ -250,6 +253,8 @@ namespace SiGen.UI
             MeasureFirstSelection = Vector.Empty;
             MeasureLastSelection = Vector.Empty;
             MeasureSnapPosition = Vector.Empty;
+            FirstIntersection = null;
+            LastIntersection = null;
             _CurrentMeasure = null;
             _IsMeasuring = false;
             InitializeMeasureContextMenu();
@@ -313,7 +318,7 @@ namespace SiGen.UI
 
         #endregion
 
-        private void ClearMeasuring()
+        private void ClearMeasuring(bool redraw = true)
         {
             if (_CurrentMeasure != null || !MeasureFirstSelection.IsEmpty || MeasureBoxes.Count > 0)
             {
@@ -322,9 +327,38 @@ namespace SiGen.UI
                 MeasureBoxes.Clear();
                 MeasureFirstSelection = Vector.Empty;
                 MeasureLastSelection = Vector.Empty;
-                if (IsHandleCreated)
+                MeasureSnapPosition = Vector.Empty;
+                FirstIntersection = null;
+                LastIntersection = null;
+                if (IsHandleCreated && redraw)
                     Invalidate();
             }
+        }
+
+        private void AdjustMeasureAfterLayoutChanged()
+        {
+            _CurrentMeasure = null;
+            _IsMeasuring = false;
+            MeasureBoxes.Clear();
+
+            if (FirstIntersection != null && LastIntersection != null)
+            {
+                var similar1 = LayoutIntersections.FirstOrDefault(x => x.IsSimilar(FirstIntersection));
+                var similar2 = LayoutIntersections.FirstOrDefault(x => x.IsSimilar(LastIntersection));
+
+                if (similar1 != null && similar2 != null)
+                {
+                    FirstIntersection = similar1;
+                    MeasureFirstSelection = similar1.WorldCoord;
+                    LastIntersection = similar2;
+                    MeasureLastSelection = similar2.WorldCoord;
+                    CompleteMeasure();
+                }
+                else
+                    ClearMeasuring(false);
+            }
+            else
+                ClearMeasuring(false);
         }
 
         private void CompleteMeasure()
@@ -358,6 +392,8 @@ namespace SiGen.UI
                 if (!pos.IsEmpty)
                 {
                     MeasureFirstSelection = pos;
+                    FirstIntersection = GetVisibleIntersections().FirstOrDefault(x => x.WorldCoord.EqualOrClose(pos, 0.001));
+
                     _IsMeasuring = true;
                     Invalidate();
                 }
@@ -368,6 +404,7 @@ namespace SiGen.UI
                 if (!pos.IsEmpty)
                 {
                     MeasureLastSelection = pos;
+                    LastIntersection = GetVisibleIntersections().FirstOrDefault(x => x.WorldCoord.EqualOrClose(pos, 0.001));
                     if (Vector.EqualOrClose(MeasureFirstSelection, MeasureLastSelection))
                         ClearMeasuring();
                     else
@@ -419,17 +456,6 @@ namespace SiGen.UI
             }
 
             InvalidateWorldRegion(20, mouseWorldPos, previousSnapPos, MeasureSnapPosition, MeasureFirstSelection);
-        }
-
-        private Vector GrabMeasureLocation(Point position, double snapRange = 2)
-        {
-            if ((ModifierKeys & Keys.Control) == Keys.Control)
-                return DisplayToWorld(position, _Zoom, true);
-
-            Vector measureLocation = Vector.Empty;
-            if (LayoutIntersections.Count > 0)
-                GetNearestLayoutPoint(position, snapRange, out measureLocation);
-            return measureLocation;
         }
 
         private LengthValueBox CreateLengthMeasureBox(LayoutMeasure selection, LengthType type)
@@ -606,27 +632,16 @@ namespace SiGen.UI
             });
         }
 
-        private bool GetNearestLayoutPoint(Point pt, double range, out Vector vec)
-        {
-            vec = Vector.Empty;
-            var worldPos = DisplayToWorld(pt, _Zoom, true);
-            var pointsNear = LayoutIntersections.Where(i => (i - worldPos).Length <= range);
-            if (pointsNear.Any())
-                vec = pointsNear.OrderBy(p => (p - worldPos).Length).First();
-
-            return !vec.IsEmpty;
-        }
-
         private bool SnapToClosestIntersection(Vector mouseWorldPos, double snapRange, out Vector snapPos, out double snapDist)
         {
             snapPos = Vector.Empty;
             snapDist = -1;
-
-            var pointsNear = LayoutIntersections.Where(i => (i - mouseWorldPos).Length <= snapRange);
+            
+            var pointsNear = GetVisibleIntersections().Where(i => i.GetDistance(mouseWorldPos) <= snapRange);
 
             if (pointsNear.Any())
             {
-                snapPos = pointsNear.OrderBy(p => (p - mouseWorldPos).Length).First();
+                snapPos = pointsNear.OrderBy(i => i.GetDistance(mouseWorldPos)).First().WorldCoord;
                 snapDist = (double)(mouseWorldPos - snapPos).Length;
             }
 
@@ -640,6 +655,9 @@ namespace SiGen.UI
 
             foreach (var line in CurrentLayout.VisualElements.OfType<LayoutLine>())
             {
+                if (!IsElementVisible(line))
+                    continue;
+
                 var linePt = line.SnapToLine(mouseWorldPos, LineSnapDirection.Perpendicular, false);
                 if (linePt.IsEmpty)
                     continue;
@@ -664,8 +682,10 @@ namespace SiGen.UI
 
             foreach (var line in CurrentLayout.VisualElements.OfType<LayoutLine>())
             {
-                var linePt = line.GetIntersection(measureLine);
-                if (linePt.IsEmpty)
+                if (!IsElementVisible(line))
+                    continue;
+                
+                if (!line.Intersects(measureLine, out Vector linePt, false))
                     continue;
                 
                 var ptDist = (linePt - measureEnd).Length;
@@ -682,7 +702,7 @@ namespace SiGen.UI
 
         public Vector SnapToNearest(Vector worldPos, double intersectionRange, double lineRange)
         {
-            var pointsNear = LayoutIntersections.Where(i => (i - worldPos).Length <= intersectionRange);
+            //var pointsNear = LayoutIntersections2.Where(i => i.GetDistance(worldPos) <= intersectionRange);
             
             SnapToClosestIntersection(worldPos, intersectionRange, out Vector closestInter, out double interDist);
 
@@ -706,37 +726,75 @@ namespace SiGen.UI
         private void CalculateIntersections()
         {
             LayoutIntersections.Clear();
+
             if (CurrentLayout != null && CurrentLayout.VisualElements.Count > 0)
             {
                 var fretLines = CurrentLayout.VisualElements.OfType<FretLine>();
                 var stringLines = CurrentLayout.VisualElements.OfType<StringLine>();
                 var stringCenters = CurrentLayout.VisualElements.OfType<StringCenter>();
                 var fingerboardEdges = CurrentLayout.VisualElements.OfType<IFingerboardEdge>();
+                var centerLine = CurrentLayout.VisualElements.OfType<LayoutLine>().FirstOrDefault(x => x.ElementType == VisualElementType.CenterLine);
 
-                foreach(var fretLine in fretLines)
+                foreach (var fretLine in fretLines)
                 {
-                    LayoutIntersections.AddRange(stringLines.Select(s => fretLine.GetIntersection(s).ToVector()));
+                    foreach (var line in stringLines)
+                    {
+                        if (fretLine.Intersects(line, out PointM inter, false))
+                            LayoutIntersections.Add(new LayoutIntersection(line, fretLine, inter));
+                    }
+
+                    foreach (var line in stringCenters)
+                    {
+                        if (fretLine.Intersects(line, out PointM inter, false))
+                            LayoutIntersections.Add(new LayoutIntersection(line, fretLine, inter));
+                    }
+
+                    foreach (var line in fingerboardEdges.OfType<FingerboardSideEdge>())
+                    {
+                        if (fretLine.Intersects(line, out PointM inter, false))
+                            LayoutIntersections.Add(new LayoutIntersection(line, fretLine, inter));
+                    }
+
+
+                    if(fretLine.Intersects(centerLine, out PointM inter2, false))
+                        LayoutIntersections.Add(new LayoutIntersection(centerLine, fretLine, inter2));
                 }
-                //var fretPos = fretLines.SelectMany(fl => fl.Segments.Where(s => !s.IsVirtual)).Select(s => s.PointOnString).Distinct();
-                //LayoutIntersections.AddRange(fretPos.Select(p => p.ToVector()));
 
-                LayoutIntersections.AddRange(stringCenters.SelectMany(s => fretLines.Select(f => f.GetIntersection(s).ToVector())));
-                LayoutIntersections.RemoveAll(p => p.IsEmpty);
+                foreach (var fingerboardEnd in fingerboardEdges.Where(e => !e.IsSideEdge).OfType<ILayoutLine>())
+                {
+                    foreach (var line in stringLines)
+                    {
+                        if (fingerboardEnd.Intersects(line, out PointM inter, false))
+                            LayoutIntersections.Add(new LayoutIntersection(line, fingerboardEnd, inter));
+                    }
 
-                LayoutIntersections.AddRange(stringLines.SelectMany(s => fingerboardEdges.Where(e => !e.IsSideEdge).Select(f => f.GetIntersection(s).ToVector())));
-                LayoutIntersections.RemoveAll(p => p.IsEmpty);
+                    foreach (var line in stringCenters)
+                    {
+                        if (fingerboardEnd.Intersects(line, out PointM inter, false))
+                            LayoutIntersections.Add(new LayoutIntersection(line, fingerboardEnd, inter));
+                    }
 
-                LayoutIntersections.AddRange(stringCenters.SelectMany(s => fingerboardEdges.Where(e => !e.IsSideEdge).Select(f => f.GetIntersection(s).ToVector())));
-                LayoutIntersections.RemoveAll(p => p.IsEmpty);
+                    if (fingerboardEnd.Intersects(centerLine, out PointM inter2, false))
+                        LayoutIntersections.Add(new LayoutIntersection(centerLine, fingerboardEnd, inter2));
+                }
 
-                LayoutIntersections.AddRange(fretLines.Select(fl => fl.Points.First().ToVector()));
-                LayoutIntersections.AddRange(fretLines.Select(fl => fl.Points.Last().ToVector()));
-                LayoutIntersections.AddRange(CurrentLayout.VisualElements.OfType<LayoutLine>().Select(fl => fl.P1.ToVector()));
-                LayoutIntersections.AddRange(CurrentLayout.VisualElements.OfType<LayoutLine>().Select(fl => fl.P2.ToVector()));
+                foreach (var line in CurrentLayout.VisualElements.OfType<LayoutLine>())
+                {
+                    var v1 = line.P1.ToVector();
+                    var v2 = line.P2.ToVector();
 
-                LayoutIntersections.RemoveAll(p => p.IsEmpty);
-                LayoutIntersections = LayoutIntersections.Distinct().ToList();
+                    //if (!LayoutIntersections.Any(x => x.WorldCoord.EqualOrClose(v1, 0.001)))
+                        LayoutIntersections.Add(new LayoutIntersection(line, line.P1));
+
+                    //if (!LayoutIntersections.Any(x => x.WorldCoord.EqualOrClose(v2, 0.001)))
+                        LayoutIntersections.Add(new LayoutIntersection(line, line.P2));
+                }
             }
+        }
+
+        public IEnumerable<LayoutIntersection> GetVisibleIntersections()
+        {
+            return LayoutIntersections.Where(x => IsElementVisible(x.Element1) && (x.Element2 == null || IsElementVisible(x.Element2)));
         }
 
         private FloatingTextBox measureEditor;

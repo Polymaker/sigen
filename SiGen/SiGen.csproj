@@ -117,6 +117,7 @@
     <Compile Include="StringedInstruments\Layout\ILayoutComponent.cs" />
     <Compile Include="StringedInstruments\Layout\Edit\LayoutChangedEventArgs.cs" />
     <Compile Include="StringedInstruments\Layout\LayoutComponent.cs" />
+    <Compile Include="StringedInstruments\Layout\LayoutIntersection.cs" />
     <Compile Include="StringedInstruments\Layout\ScaleLength\ScaleLengthManager.cs" />
     <Compile Include="StringedInstruments\Layout\ScaleLength\ScaleLengthType.cs" />
     <Compile Include="StringedInstruments\Layout\SILayout.Builder.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="StringedInstruments\Layout\Visual\FingerboardEdge.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FretLine.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FretSegment.cs" />
+    <Compile Include="StringedInstruments\Layout\Visual\ILayoutLine.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\IStringBoundary.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\LayoutPolyLine.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\LineSnapDirection.cs" />

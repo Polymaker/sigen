@@ -22,13 +22,13 @@ namespace SiGen.StringedInstruments.Layout.Visual
         public bool IsVirtual { get; set; }
         public bool IsNut { get { return String.StartingFret == FretIndex; } }
 
-        public FretSegment(int index, SIString str, PointM p1, PointM p2) : base(p1, p2, VisualElementType.Fret)
+        public FretSegment(int index, SIString str, PointM p1, PointM p2) : base(p1, p2)
         {
             _FretIndex = index;
             _String = str;
         }
 
-        public FretSegment(int index, SIString str, PointM center, PointM left, PointM right) : base(left, right, VisualElementType.Fret)
+        public FretSegment(int index, SIString str, PointM center, PointM left, PointM right) : base(left, right)
         {
             _FretIndex = index;
             _String = str;

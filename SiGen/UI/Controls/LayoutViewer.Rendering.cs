@@ -76,14 +76,43 @@ namespace SiGen.UI
 
         #endregion
 
+        public bool IsElementVisible(VisualElement element)
+        {
+            switch (element.ElementType)
+            {
+                case VisualElementType.CenterLine:
+                    return DisplayConfig.ShowCenterLine;
+                case VisualElementType.Fret:
+                    return DisplayConfig.ShowFrets;
+                case VisualElementType.String:
+                    {
+                        if (DisplayConfig.ShowStrings)
+                            return true;
+                        return DisplayConfig.ShowMargins && ((element as StringLine).String == CurrentLayout.FirstString || (element as StringLine).String == CurrentLayout.LastString);
+                    }
+                case VisualElementType.StringCenter:
+                    return DisplayConfig.ShowMidlines;
+                case VisualElementType.FingerboardEdge:
+                    return DisplayConfig.ShowFingerboard;
+
+                default:
+                    {
+
+                        break;
+                    }
+            }
+            return false;
+        }
+
         private void RenderFingerboard(Graphics g)
         {
             if (DisplayConfig.ShowCenterLine)
             {
-                var layoutBounds = CurrentLayout.GetLayoutBounds();
+                //var layoutBounds = CurrentLayout.GetLayoutBounds();
+                var centerLine = CurrentLayout.VisualElements.OfType<LayoutLine>().FirstOrDefault(x => x.ElementType == VisualElementType.CenterLine);
                 using (var guidePen = GetPen(Color.Black, 1))
                 {
-                    DrawLine(g, guidePen, new PointM(Measure.Zero, layoutBounds.Top), new PointM(Measure.Zero, layoutBounds.Bottom));
+                    DrawLine(g, guidePen, centerLine.P1, centerLine.P2);
                 }
             }
 

@@ -48,6 +48,10 @@ namespace SiGen.StringedInstruments.Layout
             PlaceFrets();
             FinishFingerboardShape();
 
+            var layoutBounds = GetLayoutBounds();
+
+            VisualElements.Add(new LayoutLine(new PointM(Measure.Zero, layoutBounds.Top), new PointM(Measure.Zero, layoutBounds.Bottom), VisualElementType.CenterLine));
+
             if (LeftHanded)
                 VisualElements.ForEach(e => e.FlipHandedness());
 

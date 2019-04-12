@@ -9,20 +9,19 @@ namespace SiGen.StringedInstruments.Layout.Visual
 {
     public class StringLine : LayoutLine
     {
-        private readonly SIString _String;
+        private int _StringIndex;
+        public SIString String { get; }
 
-        public SIString String
-        {
-            get { return _String; }
-        }
-
-        public int Index { get { return _String.Index; } }
+        public int Index => _StringIndex;
 
         public PointM FretZero { get; set; }
-        
-        public StringLine(SIString str, PointM p1, PointM p2) : base(p1, p2, VisualElementType.String)
+
+        public override VisualElementType ElementType => VisualElementType.String;
+
+        public StringLine(SIString str, PointM p1, PointM p2) : base(p1, p2)
         {
-            _String = str;
+            String = str;
+            _StringIndex = str.Index;
             FretZero = p1;
         }
 

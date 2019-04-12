@@ -12,6 +12,8 @@ namespace SiGen.StringedInstruments.Layout.Visual
         Fret,
         GuideLine,
         FingerboardEdge,
-        StringCenter
+        StringCenter,
+        CenterLine,
+        Unknown
     }
 }

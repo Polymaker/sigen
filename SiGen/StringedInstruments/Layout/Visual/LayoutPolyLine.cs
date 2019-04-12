@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SiGen.StringedInstruments.Layout.Visual
 {
-    public class LayoutPolyLine : VisualElement
+    public class LayoutPolyLine : VisualElement, ILayoutLine
     {
         private bool isDirty;
         private RectangleM _Bounds;
@@ -141,16 +141,14 @@ namespace SiGen.StringedInstruments.Layout.Visual
 
         public bool Intersects(LayoutLine line, out PointM intersection, bool infiniteLine = true)
         {
-            int dummy;
-            return Intersects(line, out intersection, out dummy, infiniteLine);
+            return Intersects(line, out intersection, out _, infiniteLine);
         }
 
         public bool Intersects(LayoutLine line, out PointM intersection, out int segmentIndex, bool infiniteLine = true)
         {
             intersection = PointM.Empty;
-            Vector virtualInter;
 
-            if (Intersects(line.Equation, out virtualInter, out segmentIndex, infiniteLine))
+            if (Intersects(line.Equation, out Vector virtualInter, out segmentIndex, infiniteLine))
             {
                 intersection = PointM.FromVector(virtualInter, Points.First().Unit);
                 return true;
@@ -159,27 +157,9 @@ namespace SiGen.StringedInstruments.Layout.Visual
             return false;
         }
 
-        public bool Intersects(LayoutPolyLine line, out PointM intersection)
+        public bool Intersects(Line line, out Vector intersection, bool infiniteLine = true)
         {
-            intersection = PointM.Empty;
-            Vector virtualInter;
-            for (int i = 0; i < line.Points.Count - 1; i++)
-            {
-                var segLine = Line.FromPoints(line.Points[i].ToVector(), line.Points[i + 1].ToVector());
-                if (Intersects(segLine, out virtualInter, false))
-                {
-
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        protected bool Intersects(Line line, out Vector intersection, bool infiniteLine = true)
-        {
-            int dummy;
-            return Intersects(line, out intersection, out dummy, infiniteLine);
+            return Intersects(line, out intersection, out _, infiniteLine);
         }
 
         protected bool Intersects(Line line, out Vector intersection, out int segmentIndex, bool infiniteLine = true)
@@ -232,6 +212,22 @@ namespace SiGen.StringedInstruments.Layout.Visual
             Before,
             Inside,
             After
+        }
+
+        public bool Intersects(LayoutPolyLine line, out PointM intersection)
+        {
+            intersection = PointM.Empty;
+            for (int i = 0; i < line.Points.Count - 1; i++)
+            {
+                var segLine = Line.FromPoints(line.Points[i].ToVector(), line.Points[i + 1].ToVector());
+                if (Intersects(segLine, out Vector virtualInter, false))
+                {
+
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         #endregion

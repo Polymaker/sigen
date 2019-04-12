@@ -35,6 +35,8 @@ namespace SiGen.StringedInstruments.Layout.Visual
             get { return _IsNut; }
         }
 
+        public override VisualElementType ElementType => VisualElementType.Fret;
+
         public FretLine(IEnumerable<FretSegment> segments)
         {
             _Segments = new List<FretSegment>(segments.OrderBy(s=>s.String.Index));

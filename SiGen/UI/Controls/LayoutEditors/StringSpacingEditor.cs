@@ -30,37 +30,61 @@ namespace SiGen.UI.Controls.LayoutEditors
         private void InitializeComboboxes()
         {
 
-            var alignmentList = new List<EnumHelper.EnumItem>();
-            alignmentList.Add(new EnumHelper.EnumItem(StringSpacingAlignment.SpacingMiddle, "Centered evenly"));
-            alignmentList.Add(new EnumHelper.EnumItem(StringSpacingAlignment.StringCenter, "Centered along middle string"));
+            UpdateComboboxes();
 
-            cboNutSpacingAlignment.ValueMember = EnumHelper.EnumItem.ValueMember;
-            cboNutSpacingAlignment.DisplayMember = EnumHelper.EnumItem.DisplayMember;
-            cboBridgeSpacingAlignment.ValueMember = EnumHelper.EnumItem.ValueMember;
-            cboBridgeSpacingAlignment.DisplayMember = EnumHelper.EnumItem.DisplayMember;
             
-            cboNutSpacingAlignment.DataSource = alignmentList;
-            cboBridgeSpacingAlignment.DataSource = alignmentList.ToList();//Clone
 
-            cboNutSpacingAlignment.SelectedValue = StringSpacingAlignment.SpacingMiddle;
-            cboBridgeSpacingAlignment.SelectedValue = StringSpacingAlignment.SpacingMiddle;
+        }
 
+        private void UpdateComboboxes(bool preserveValues = false)
+        {
+            using (FlagManager.UseFlag("UpdateComboboxes"))
+            {
+                var alignmentList = new List<EnumHelper.EnumItem>();
+                alignmentList.Add(new EnumHelper.EnumItem(StringSpacingAlignment.SpacingMiddle, "Centered between outer strings"));
 
-            var spacingModeList = new List<EnumHelper.EnumItem>();
-            spacingModeList.Add(new EnumHelper.EnumItem(StringSpacingMethod.StringsCenter, "Distributed equally"));
-            spacingModeList.Add(new EnumHelper.EnumItem(StringSpacingMethod.BetweenStrings, "Equal spacing between strings"));
+                if (CurrentLayout == null || CurrentLayout.NumberOfStrings % 2 == 0)
+                    alignmentList.Add(new EnumHelper.EnumItem(StringSpacingAlignment.StringCenter, "Centered between middle strings"));
+                else
+                    alignmentList.Add(new EnumHelper.EnumItem(StringSpacingAlignment.StringCenter, "Centered along middle string"));
 
-            cboNutSpacingMethod.ValueMember = EnumHelper.EnumItem.ValueMember;
-            cboNutSpacingMethod.DisplayMember = EnumHelper.EnumItem.DisplayMember;
-            cboBridgeSpacingMethod.ValueMember = EnumHelper.EnumItem.ValueMember;
-            cboBridgeSpacingMethod.DisplayMember = EnumHelper.EnumItem.DisplayMember;
+                cboNutSpacingAlignment.ValueMember = EnumHelper.EnumItem.ValueMember;
+                cboNutSpacingAlignment.DisplayMember = EnumHelper.EnumItem.DisplayMember;
+                cboBridgeSpacingAlignment.ValueMember = EnumHelper.EnumItem.ValueMember;
+                cboBridgeSpacingAlignment.DisplayMember = EnumHelper.EnumItem.DisplayMember;
 
-            cboNutSpacingMethod.DataSource = spacingModeList;
-            cboBridgeSpacingMethod.DataSource = spacingModeList.ToList();//Clone
+                cboNutSpacingAlignment.DataSource = alignmentList;
+                cboBridgeSpacingAlignment.DataSource = alignmentList.ToList();//Clone
 
-            cboNutSpacingMethod.SelectedValue = StringSpacingMethod.StringsCenter;
-            cboBridgeSpacingMethod.SelectedValue = StringSpacingMethod.StringsCenter;
+                var spacingModeList = new List<EnumHelper.EnumItem>();
+                spacingModeList.Add(new EnumHelper.EnumItem(StringSpacingMethod.StringsCenter, "Equal spacing (center to center)"));
+                spacingModeList.Add(new EnumHelper.EnumItem(StringSpacingMethod.BetweenStrings, "Equal spacing (between strings)"));
 
+                cboNutSpacingMethod.ValueMember = EnumHelper.EnumItem.ValueMember;
+                cboNutSpacingMethod.DisplayMember = EnumHelper.EnumItem.DisplayMember;
+                cboBridgeSpacingMethod.ValueMember = EnumHelper.EnumItem.ValueMember;
+                cboBridgeSpacingMethod.DisplayMember = EnumHelper.EnumItem.DisplayMember;
+
+                cboNutSpacingMethod.DataSource = spacingModeList;
+                cboBridgeSpacingMethod.DataSource = spacingModeList.ToList();//Clone
+
+                if (preserveValues && CurrentLayout != null)
+                {
+                    cboNutSpacingMethod.SelectedValue = CurrentLayout.SimpleStringSpacing.NutSpacingMode;
+                    cboNutSpacingAlignment.SelectedValue = CurrentLayout.SimpleStringSpacing.NutAlignment;
+
+                    cboBridgeSpacingMethod.SelectedValue = CurrentLayout.SimpleStringSpacing.BridgeSpacingMode;
+                    cboBridgeSpacingAlignment.SelectedValue = CurrentLayout.SimpleStringSpacing.BridgeAlignment;
+                }
+                else
+                {
+                    cboNutSpacingAlignment.SelectedValue = StringSpacingAlignment.SpacingMiddle;
+                    cboBridgeSpacingAlignment.SelectedValue = StringSpacingAlignment.SpacingMiddle;
+
+                    cboNutSpacingMethod.SelectedValue = StringSpacingMethod.StringsCenter;
+                    cboBridgeSpacingMethod.SelectedValue = StringSpacingMethod.StringsCenter;
+                }
+            }
         }
 
         protected override void OnSizeChanged(EventArgs e)
@@ -89,8 +113,8 @@ namespace SiGen.UI.Controls.LayoutEditors
             
             if (CurrentLayout != null)
             {
+                UpdateComboboxes();
 
-                //cboNutAlignment.SelectedValue = CurrentLayout.StringSpacing.NutAlignment;
                 mtbNutSpacing.Value = CurrentLayout.SimpleStringSpacing.StringSpacingAtNut;
                 mtbNutSpread.Value = CurrentLayout.SimpleStringSpacing.StringSpreadAtNut;
 
@@ -128,6 +152,7 @@ namespace SiGen.UI.Controls.LayoutEditors
             base.OnNumberOfStringsChanged();
             using (FlagManager.UseFlag("UpdateSpacing"))
             {
+                UpdateComboboxes(true);
                 mtbNutSpread.Value = CurrentLayout.SimpleStringSpacing.StringSpreadAtNut;
                 mtbBridgeSpread.Value = CurrentLayout.SimpleStringSpacing.StringSpreadAtBridge;
             }
@@ -159,7 +184,7 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         private void cboNutSpacingMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!IsLoading && CurrentLayout != null)
+            if (!IsLoading && CurrentLayout != null && !FlagManager["UpdateComboboxes"])
             {
                 CurrentLayout.SimpleStringSpacing.NutSpacingMode = (StringSpacingMethod)cboNutSpacingMethod.SelectedValue;
                 CurrentLayout.RebuildLayout();
@@ -175,7 +200,7 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         private void cboNutSpacingAlignment_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!IsLoading && CurrentLayout != null)
+            if (!IsLoading && CurrentLayout != null && !FlagManager["UpdateComboboxes"])
             {
                 CurrentLayout.SimpleStringSpacing.NutAlignment = (StringSpacingAlignment)cboNutSpacingAlignment.SelectedValue;
                 CurrentLayout.RebuildLayout();
@@ -210,7 +235,7 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         private void cboBridgeSpacingMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!IsLoading && CurrentLayout != null)
+            if (!IsLoading && CurrentLayout != null && !FlagManager["UpdateComboboxes"])
             {
                 CurrentLayout.SimpleStringSpacing.BridgeSpacingMode = (StringSpacingMethod)cboBridgeSpacingMethod.SelectedValue;
                 CurrentLayout.RebuildLayout();
@@ -226,7 +251,7 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         private void cboBridgeSpacingAlignment_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!IsLoading && CurrentLayout != null)
+            if (!IsLoading && CurrentLayout != null && !FlagManager["UpdateComboboxes"])
             {
                 CurrentLayout.SimpleStringSpacing.BridgeAlignment = (StringSpacingAlignment)cboBridgeSpacingAlignment.SelectedValue;
                 CurrentLayout.RebuildLayout();
