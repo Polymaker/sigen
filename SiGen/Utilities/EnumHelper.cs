@@ -17,7 +17,7 @@ namespace System
             for(int i = 0; i < enumNames.Length; i++)
             {
                 var enumValMember = enumType.GetMember(enumNames[i])[0];
-                var descAttr = enumValMember.GetAttribute<DescriptionAttribute>();
+                var descAttr = enumValMember.GetCustomAttribute<DescriptionAttribute>();
                 if (descAttr != null)
                     enumNames[i] = descAttr.Description;
             }
@@ -29,7 +29,7 @@ namespace System
             var enumName = Enum.GetName(enumType, value);
 
             var enumValMember = enumType.GetMember(enumName)[0];
-            var descAttr = enumValMember.GetAttribute<DescriptionAttribute>();
+            var descAttr = enumValMember.GetCustomAttribute<DescriptionAttribute>();
             if (descAttr != null)
                 return descAttr.Description;
 

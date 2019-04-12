@@ -142,6 +142,9 @@
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingManual.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElement.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElementType.cs" />
+    <Compile Include="UI\Controls\FloatingControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\Controls\LayoutEditors\FingerboardMarginEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -187,7 +190,7 @@
     <Compile Include="UI\Controls\LayoutEditors\StringSpacingEditor.Designer.cs">
       <DependentUpon>StringSpacingEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\LayoutViewer.Measuring.cs">
+    <Compile Include="UI\Controls\LayoutViewer\LayoutViewer.Measuring.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\Controls\PreferencesPanels\MonitorPreferences.cs">
@@ -240,19 +243,13 @@
     <Compile Include="UI\Windows\LayoutEditorWindow.Designer.cs">
       <DependentUpon>LayoutEditorWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\LayoutViewer.cs">
+    <Compile Include="UI\Controls\LayoutViewer\LayoutViewer.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\Controls\LayoutViewer.Designer.cs">
+    <Compile Include="UI\Controls\LayoutViewer\LayoutViewer.Designer.cs">
       <DependentUpon>LayoutViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\LayoutViewerDisplayConfig.cs" />
-    <Compile Include="UI\Controls\ValueEditors\MeasureEdit.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Controls\ValueEditors\MeasureEdit.Designer.cs">
-      <DependentUpon>MeasureEdit.cs</DependentUpon>
-    </Compile>
+    <Compile Include="UI\Controls\LayoutViewer\LayoutViewerDisplayConfig.cs" />
     <Compile Include="UI\Controls\ValueEditors\MeasureTextbox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -271,7 +268,6 @@
     <Compile Include="Utilities\ArrayProperty.cs" />
     <Compile Include="Utilities\EnumHelper.cs" />
     <Compile Include="Utilities\ExtensionMethods\CollectionHelper.cs" />
-    <Compile Include="Utilities\ExtensionMethods\ReflectionHelper.cs" />
     <Compile Include="Utilities\FlagList.cs" />
     <Compile Include="Utilities\MeasureConverter.cs" />
     <Compile Include="Utilities\ExtensionMethods\NumberHelper.cs" />
@@ -316,7 +312,7 @@
     <EmbeddedResource Include="UI\Controls\LayoutEditors\StringSpacingEditor.resx">
       <DependentUpon>StringSpacingEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Controls\LayoutViewer.resx">
+    <EmbeddedResource Include="UI\Controls\LayoutViewer\LayoutViewer.resx">
       <DependentUpon>LayoutViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\PreferencesPanels\MonitorPreferences.resx">
@@ -333,9 +329,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\LayoutEditorWindow.resx">
       <DependentUpon>LayoutEditorWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Controls\ValueEditors\MeasureEdit.resx">
-      <DependentUpon>MeasureEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\ValueEditors\MeasureTextbox.resx">
       <DependentUpon>MeasureTextbox.cs</DependentUpon>
@@ -356,7 +349,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="UI\Controls\LayoutViewer.Rendering.cs">
+    <Compile Include="UI\Controls\LayoutViewer\LayoutViewer.Rendering.cs">
       <SubType>Component</SubType>
     </Compile>
   </ItemGroup>

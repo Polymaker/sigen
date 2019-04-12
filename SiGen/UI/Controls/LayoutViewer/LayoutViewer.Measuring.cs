@@ -15,14 +15,10 @@ namespace SiGen.UI
 {
     public partial class LayoutViewer
     {
-        private class MeasureManager
+        private class MeasureSelection
         {
-            private LayoutViewer Viewer;
-
-            public MeasureManager(LayoutViewer owner)
-            {
-                Viewer = owner;
-            }
+            public Vector Position { get; set; }
+            public LayoutIntersection Intersection { get; set; }
         }
 
         public enum MeasureType
@@ -40,13 +36,6 @@ namespace SiGen.UI
 
         public class LayoutMeasure
         {
-            private PointM _First;
-            private PointM _Last;
-            private Measure _Length;
-            private Measure _Width;
-            private Measure _Height;
-            private Angle _Direction;
-
             public Measure this[LengthType type]
             {
                 get
@@ -55,40 +44,38 @@ namespace SiGen.UI
                     {
                         default:
                         case LengthType.Length:
-                            return _Length;
+                            return Length;
                         case LengthType.Height:
-                            return _Height;
+                            return Height;
                         case LengthType.Width:
-                            return _Width;
+                            return Width;
                     }
                 }
             }
 
-            public PointM FromPoint { get { return _First; } }
-            public PointM ToPoint { get { return _Last; } }
-            public Measure Length { get { return _Length; } }
-            public Measure Width { get { return _Width; } }
-            public Measure Height { get { return _Height; } }
-            public Angle Direction { get { return _Direction; } }
+            public PointM FromPoint { get; }
+            public PointM ToPoint { get; }
+            public Measure Length { get; }
+            public Measure Width { get; }
+            public Measure Height { get; }
+            public Angle Direction { get; }
 
             public LayoutMeasure(PointM p1, PointM p2)
             {
-                _First = p1;
-                _Last = p2;
-                _Length = PointM.Distance(p1, p2);
-                _Width = Measure.Abs(p2.X - p1.X);
-                _Height = Measure.Abs(p2.Y - p1.Y);
-                _Direction = Angle.FromPoints(p1.ToVector(), p2.ToVector());
+                FromPoint = p1;
+                ToPoint = p2;
+                Length = PointM.Distance(p1, p2);
+                Width = Measure.Abs(p2.X - p1.X);
+                Height = Measure.Abs(p2.Y - p1.Y);
+                Direction = Angle.FromPoints(p1.ToVector(), p2.ToVector());
             }
         }
 
         private abstract class MeasureValueBox : IUIElement
         {
-            private bool isDirty;
-            private LayoutMeasure _Measure;
             private Rectangle _DisplayBounds;
             internal LayoutViewer Viewer;
-            protected LayoutMeasure SourceMeasure { get { return _Measure; } }
+            protected LayoutMeasure SourceMeasure { get; }
 
             public SizeF Size { get; set; }
             public Vector TargetPosition { get; set; }
@@ -98,13 +85,13 @@ namespace SiGen.UI
             public bool Suppressed { get; set; }
             public bool Visible { get; set; }
             public bool ShowExactValue { get; set; }
-            public bool IsDirty { get { return isDirty; } }
+            public bool IsDirty { get; private set; }
 
             public Rectangle DisplayBounds
             {
                 get
                 {
-                    if (isDirty)
+                    if (IsDirty)
                         UpdateDisplayBounds();
                     return _DisplayBounds;
                 }
@@ -113,14 +100,14 @@ namespace SiGen.UI
             public MeasureValueBox()
             {
                 Visible = true;
-                isDirty = true;
+                IsDirty = true;
             }
 
             internal MeasureValueBox(LayoutMeasure measure)
             {
-                _Measure = measure;
+                SourceMeasure = measure;
                 Visible = true;
-                isDirty = true;
+                IsDirty = true;
                 LocalOffset = Vector.Zero;
                 OriginalOffset = Vector.Zero;
             }
@@ -143,16 +130,16 @@ namespace SiGen.UI
 
             internal void UpdateDisplayBounds()
             {
-                if (isDirty)
+                if (IsDirty)
                 {
                     CalculateDisplayBounds();
-                    isDirty = false;
+                    IsDirty = false;
                 }
             }
 
             public void NotifyDirty()
             {
-                isDirty = true;
+                IsDirty = true;
             }
 
             public virtual bool IsMeasureVisible()
@@ -171,8 +158,7 @@ namespace SiGen.UI
 
         private class LengthValueBox : MeasureValueBox
         {
-            private LengthType _Type;
-            public LengthType Type { get { return _Type; } }
+            public LengthType Type { get; }
             public Measure Value { get { return SourceMeasure[Type]; } }
             public UnitOfMeasure DisplayUnit { get; set; }
 
@@ -181,7 +167,7 @@ namespace SiGen.UI
 
             internal LengthValueBox(LayoutMeasure measure, LengthType type, Vector p1, Vector p2) : base(measure)
             {
-                _Type = type;
+                Type = type;
                 P1 = p1;
                 P2 = p2;
                 TargetPosition = (p1 + p2) / 2;
@@ -804,68 +790,79 @@ namespace SiGen.UI
             if (measureEditor == null)
                 measureEditor = new FloatingTextBox(this);
 
-            measureEditor.Font = Font;
-
             var boxBounds = box.DisplayBounds;
 
-            var finalSize = new Size(boxBounds.Width - 2, measureEditor.textbox.PreferredHeight);
+            var finalSize = new Size(boxBounds.Width - 2, measureEditor.ValueTextbox.PreferredHeight);
             var screenPos = PointToScreen(boxBounds.Location);
 
-            screenPos.Y += (int)Math.Round((boxBounds.Height - (double)finalSize.Height) / 2d);
-            screenPos.X += (int)Math.Round((boxBounds.Width - (double)finalSize.Width) / 2d);
+            //screenPos.Y += (int)Math.Round((boxBounds.Height - (double)finalSize.Height) / 2d);
+            //screenPos.X += (int)Math.Round((boxBounds.Width - (double)finalSize.Width) / 2d);
 
-            measureEditor.ShowAt(new Rectangle(screenPos, finalSize), box.GetEditValue());
+            measureEditor.ShowAt(new Rectangle(boxBounds.Location, finalSize), box.GetEditValue());
         }
 
-        private class FloatingTextBox : Form
+        private class FloatingTextBox
         {
-            internal Controls.TextBoxEx textbox;
+            private ToolStripDropDown DropDown;
+            private ToolStripControlHost ControlHost;
+            internal Controls.TextBoxEx ValueTextbox;
             internal DateTime LastClosedTime;
-            private LayoutViewer owner;
+            private readonly LayoutViewer Owner;
+            //private MeasureTextbox MeasureTextbox;
 
             public FloatingTextBox(LayoutViewer viewer)
             {
-                owner = viewer;
+                DropDown = new ToolStripDropDown();
+                DropDown.Padding = new Padding(1, 1, 2, 1);
+                Owner = viewer;
                 LastClosedTime = DateTime.Today;
-                FormBorderStyle = FormBorderStyle.None;
-                StartPosition = FormStartPosition.Manual;
-                Padding = Padding.Empty;
-                ShowInTaskbar = false;
-                textbox = new Controls.TextBoxEx()
+
+                ValueTextbox = new Controls.TextBoxEx()
                 {
                     ReadOnly = true,
                     BackColor = SystemColors.Window,
                     BorderStyle = BorderStyle.None,
-                    TextAlign = HorizontalAlignment.Center
+                    TextAlign = HorizontalAlignment.Center,
+                    Font = viewer.Font,
+                    Margin = new Padding(0),
+                    Dock = DockStyle.Fill
                 };
-                
-                Controls.Add(textbox);
-                textbox.CommandKeyPressed += Textbox_CommandKeyPressed;
-                Deactivate += FloatingTextBox_Deactivate;
-                textbox.LostFocus += FloatingTextBox_Deactivate;
+
+                ControlHost = new ToolStripControlHost(ValueTextbox)
+                {
+                    AutoSize = false,
+                    Padding = new Padding(0),
+                };
+
+                DropDown.Items.Add(ControlHost);
+                ValueTextbox.CommandKeyPressed += Textbox_CommandKeyPressed;
+                DropDown.Closed += DropDown_Closed;
             }
 
-            private void FloatingTextBox_Deactivate(object sender, EventArgs e)
+            private void DropDown_Closed(object sender, ToolStripDropDownClosedEventArgs e)
             {
-                Hide();
                 LastClosedTime = DateTime.Now;
             }
 
             private void Textbox_CommandKeyPressed(object sender, KeyEventArgs e)
             {
                 if (e.KeyCode == Keys.Escape || e.KeyCode == Keys.Tab)
-                    Hide();
+                {
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
+                    DropDown.Close();
+                }
             }
 
             public void ShowAt(Rectangle bounds, string value)
             {
-                textbox.Text = value;
-                Location = bounds.Location;
-                Show();
-                Size = bounds.Size;
-                textbox.Width = bounds.Width;
-                textbox.Focus();
+                ControlHost.Size = bounds.Size;
+                ValueTextbox.Text = value;
+                DropDown.Show(Owner, bounds.Location);
+                ValueTextbox.Focus();
             }
         }
+
+        
     }
 }

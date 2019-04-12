@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using System.Reflection;
 
 namespace SiGen.Utilities
 {
@@ -51,15 +52,17 @@ namespace SiGen.Utilities
             var elem = new XElement(name);
             foreach (var propInfo in obj.GetType().GetProperties())
             {
-                var xmlAttr = (XmlAttributeAttribute[])propInfo.GetCustomAttributes(typeof(XmlAttributeAttribute), true);
-                var xmlElem = (XmlElementAttribute[])propInfo.GetCustomAttributes(typeof(XmlElementAttribute), true);
-                if (xmlAttr.Length > 0)
-                    elem.Add(new XAttribute(xmlAttr[0].AttributeName, SerializeValue(propInfo.GetValue(obj))));
-                if (xmlElem.Length > 0)
+                var xmlAttr = propInfo.GetCustomAttribute<XmlAttributeAttribute>(true);
+                var xmlElem = propInfo.GetCustomAttribute<XmlElementAttribute>(true);
+
+                if (xmlAttr != null)
+                    elem.Add(new XAttribute(xmlAttr.AttributeName, SerializeValue(propInfo.GetValue(obj))));
+
+                if (xmlElem != null)
                 {
                     object propVal = propInfo.GetValue(obj);
                     if(propVal != null)
-                        elem.Add(GenericSerialize(propVal, xmlElem[0].ElementName));
+                        elem.Add(GenericSerialize(propVal, xmlElem.ElementName));
                 }
             }
             return elem;
@@ -106,16 +109,16 @@ namespace SiGen.Utilities
                 if (!propInfo.CanWrite)
                     continue;
 
-                var xmlAttr = (XmlAttributeAttribute[])propInfo.GetCustomAttributes(typeof(XmlAttributeAttribute), true);
-                var xmlElem = (XmlElementAttribute[])propInfo.GetCustomAttributes(typeof(XmlElementAttribute), true);
+                var xmlAttr = propInfo.GetCustomAttribute<XmlAttributeAttribute>(true);
+                var xmlElem = propInfo.GetCustomAttribute<XmlElementAttribute>(true);
 
-                if (xmlAttr.Length > 0 && elem.ContainsAttribute(xmlAttr[0].AttributeName))
-                    propInfo.SetValue(obj, DeserializeValue(propInfo.PropertyType, elem.Attribute(xmlAttr[0].AttributeName).Value));
+                if (xmlAttr != null && elem.ContainsAttribute(xmlAttr.AttributeName))
+                    propInfo.SetValue(obj, DeserializeValue(propInfo.PropertyType, elem.Attribute(xmlAttr.AttributeName).Value));
 
-                if (xmlElem.Length > 0 && elem.ContainsElement(xmlElem[0].ElementName))
+                if (xmlElem != null && elem.ContainsElement(xmlElem.ElementName))
                 {
                     object propVal = Activator.CreateInstance(propInfo.PropertyType);
-                    GenericDeserialize(propVal, elem.Element(xmlElem[0].ElementName));
+                    GenericDeserialize(propVal, elem.Element(xmlElem.ElementName));
                     propInfo.SetValue(obj, propVal);
                 }
             }
