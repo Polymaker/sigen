@@ -13,7 +13,7 @@ namespace SiGen.StringedInstruments.Layout
 {
     public partial class SILayout
     {
-		public bool IsLayoutDirty => LayoutChanges.Any() || isLayoutDirty;
+		public bool IsLayoutDirty => LayoutChanges.Any(x => x.AffectsLayout) || isLayoutDirty;
 
         public void RebuildLayout()
         {

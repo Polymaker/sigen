@@ -82,7 +82,22 @@ namespace SiGen.StringedInstruments.Layout
 			return false;
         }
 
-		protected bool SetFieldValue<T>(ref T field, T value, string fieldName)
+        protected bool SetPropertyValue<T>(ref T property, T value, bool invalidateLayout, [CallerMemberName] string propertyName = null)
+        {
+            if (!EqualityComparer<T>.Default.Equals(property, value))
+            {
+                var propChange = new PropertyChange(this, propertyName, property, value)
+                {
+                    AffectsLayout = invalidateLayout
+                };
+                property = value;
+                NotifyLayoutChanged(propChange);
+                return true;
+            }
+            return false;
+        }
+
+        protected bool SetFieldValue<T>(ref T field, T value, string fieldName)
 		{
 			if (!EqualityComparer<T>.Default.Equals(field, value))
 			{

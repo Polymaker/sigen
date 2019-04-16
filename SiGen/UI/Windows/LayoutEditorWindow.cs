@@ -192,7 +192,6 @@ namespace SiGen.UI
                 layoutFile.Layout.RebuildLayout();
 
             documentPanel.CurrentDocument = layoutFile;
-            //documentPanel.Viewer.CurrentLayout = layoutFile.Layout;
             documentPanel.Viewer.BackColor = Color.White;
             documentPanel.Viewer.Font = new Font(Font.FontFamily, Font.Size * 1.4f);
             documentPanel.Viewer.DisplayConfig.RenderRealStrings = true;

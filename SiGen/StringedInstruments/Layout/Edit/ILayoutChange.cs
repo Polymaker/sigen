@@ -10,5 +10,7 @@ namespace SiGen.StringedInstruments.Layout
 	{
         string Name { get; }
 		PropertyChange[] GetChanges();
-	}
+        bool AffectsLayout { get; }
+
+    }
 }

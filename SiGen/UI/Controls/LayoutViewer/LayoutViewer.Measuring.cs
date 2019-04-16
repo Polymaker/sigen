@@ -19,6 +19,18 @@ namespace SiGen.UI
         {
             public Vector Position { get; set; }
             public LayoutIntersection Intersection { get; set; }
+            public bool IsUserDefined => Intersection == null;
+
+            public MeasureSelection(Vector position)
+            {
+                Position = position;
+            }
+
+            public MeasureSelection(LayoutIntersection intersection)
+            {
+                Intersection = intersection;
+                Position = intersection.WorldCoord;
+            }
         }
 
         public enum MeasureType
@@ -264,6 +276,12 @@ namespace SiGen.UI
             menuItemDisplayMeasureFT.Click += MenuItemDisplayMeasure_Click;
 
             menuItemDisplayMeasureShowDecimals.Click += MenuItemDisplayMeasureShowDecimals_Click;
+            menuItemDisplayMeasureClearMeasure.Click += MenuItemDisplayMeasureClearMeasure_Click;
+        }
+
+        private void MenuItemDisplayMeasureClearMeasure_Click(object sender, EventArgs e)
+        {
+            ClearMeasuring();
         }
 
         private void MenuMeasureBox_Opening(object sender, CancelEventArgs e)
@@ -277,28 +295,60 @@ namespace SiGen.UI
                 menuItemDisplayMeasureIN.Checked = lengthBox.DisplayUnit == UnitOfMeasure.In;
                 menuItemDisplayMeasureFT.Checked = lengthBox.DisplayUnit == UnitOfMeasure.Ft;
                 menuItemDisplayMeasureShowDecimals.Checked = lengthBox.ShowExactValue;
+                menuItemDisplayMeasureClearMeasure.Visible = false;
             }
-            else
-                e.Cancel = true;
+            else if (MeasureBoxes.Any())
+            {
+                var selectedUnits = MeasureBoxes.OfType<LengthValueBox>().Select(x => x.DisplayUnit).Distinct().ToList();
+                menuItemDisplayMeasureMM.Checked = selectedUnits.Count == 1 && selectedUnits[0] == UnitOfMeasure.Mm;
+                menuItemDisplayMeasureCM.Checked = selectedUnits.Count == 1 && selectedUnits[0] == UnitOfMeasure.Cm;
+                menuItemDisplayMeasureIN.Checked = selectedUnits.Count == 1 && selectedUnits[0] == UnitOfMeasure.In;
+                menuItemDisplayMeasureFT.Checked = selectedUnits.Count == 1 && selectedUnits[0] == UnitOfMeasure.Ft;
+                menuItemDisplayMeasureShowDecimals.Checked = MeasureBoxes.OfType<LengthValueBox>().All(x => x.ShowExactValue);
+
+                menuItemDisplayMeasureClearMeasure.Visible = true;
+            }
 
         }
 
         private void MenuItemDisplayMeasureShowDecimals_Click(object sender, EventArgs e)
         {
-            var targetBox = (LengthValueBox)menuMeasureBox.Tag;
-            targetBox.ShowExactValue = !targetBox.ShowExactValue;
-            UpdateMeasureBoxBounds(targetBox);
+            if (menuMeasureBox.Tag is LengthValueBox targetBox)
+            {
+                targetBox.ShowExactValue = menuItemDisplayMeasureShowDecimals.Checked;
+                UpdateMeasureBoxBounds(targetBox);
+            }
+            else
+            {
+                foreach (var lbox in MeasureBoxes.OfType<LengthValueBox>())
+                {
+                    lbox.ShowExactValue = menuItemDisplayMeasureShowDecimals.Checked;
+                    UpdateMeasureBoxBounds(lbox);
+                }
+            }
         }
 
         private void MenuItemDisplayMeasure_Click(object sender, EventArgs e)
         {
-            var targetBox = (LengthValueBox)menuMeasureBox.Tag;
-            var newUnit = (UnitOfMeasure)(sender as ToolStripMenuItem).Tag;
-            if (newUnit != targetBox.DisplayUnit)
+            var selectedUnit = (UnitOfMeasure)(sender as ToolStripMenuItem).Tag;
+
+            if (menuMeasureBox.Tag is LengthValueBox targetBox && selectedUnit != targetBox.DisplayUnit)
             {
-                targetBox.DisplayUnit = newUnit;
+                targetBox.DisplayUnit = selectedUnit;
                 targetBox.ShowExactValue = false;
                 UpdateMeasureBoxBounds(targetBox);
+            }
+            else
+            {
+                foreach(var lbox in MeasureBoxes.OfType<LengthValueBox>())
+                {
+                    if (lbox.DisplayUnit != selectedUnit)
+                    {
+                        lbox.DisplayUnit = selectedUnit;
+                        lbox.ShowExactValue = false;
+                        UpdateMeasureBoxBounds(lbox);
+                    }
+                }
             }
         }
 
@@ -316,6 +366,8 @@ namespace SiGen.UI
                 MeasureSnapPosition = Vector.Empty;
                 FirstIntersection = null;
                 LastIntersection = null;
+                //if (menuMeasureBox.)
+                //    menuMeasureBox.Close();
                 if (IsHandleCreated && redraw)
                     Invalidate();
             }
@@ -386,7 +438,7 @@ namespace SiGen.UI
             }
             else if (MeasureLastSelection.IsEmpty)
             {
-                var pos = MeasureSnapPosition;// GrabMeasureLocation(position);
+                var pos = MeasureSnapPosition;
                 if (!pos.IsEmpty)
                 {
                     MeasureLastSelection = pos;
@@ -408,37 +460,36 @@ namespace SiGen.UI
         {
             var previousSnapPos = MeasureSnapPosition;
             var mouseWorldPos = DisplayToWorld(mousePos);
+            bool angleSnap = !MeasureFirstSelection.IsEmpty && IsControlPressed();
+            var interSnapDist = 20 / _Zoom; // 20 pixels
+            var lineSnapDist = 32 / _Zoom; // 32 pixels
 
-            if (!MeasureFirstSelection.IsEmpty && IsControlPressed())
+            if (angleSnap)
             {
                 var measureAngle = Angle.FromDirectionVector(mouseWorldPos - MeasureFirstSelection);
                 var measureDist = (mouseWorldPos - MeasureFirstSelection).Length;
                 double snapAngle = 11.25;
                 measureAngle = Angle.FromDegrees(Math.Round(measureAngle.Degrees / snapAngle) * snapAngle);
                 mouseWorldPos = MeasureFirstSelection + (Vector.FromAngle(measureAngle) * measureDist);
-
-                if (IsAltPressed())
-                {
-                    MeasureSnapPosition = mouseWorldPos;
-                }
-                else
-                {
-                    bool isSnapped = SnapToClosestLine(MeasureFirstSelection, mouseWorldPos, 0.5, out MeasureSnapPosition, out _);
-
-                    if (!isSnapped)
-                        isSnapped = SnapToClosestLine(mouseWorldPos, 0.5, out MeasureSnapPosition, out _);
-
-                    if (!isSnapped)
-                        MeasureSnapPosition = previousSnapPos;
-                }
             }
-            else if(IsAltPressed())
+
+            if(IsAltPressed())
             {
                 MeasureSnapPosition = mouseWorldPos;
             }
+            else if (angleSnap)
+            {
+                bool isSnapped = SnapToClosestLine(MeasureFirstSelection, mouseWorldPos, 0.5, out MeasureSnapPosition, out _);
+
+                if (!isSnapped)
+                    isSnapped = SnapToClosestLine(mouseWorldPos, 0.5, out MeasureSnapPosition, out _);
+
+                if (!isSnapped)
+                    MeasureSnapPosition = previousSnapPos;
+            }
             else
             {
-                MeasureSnapPosition = SnapToNearest(mouseWorldPos, 1, 0.5);
+                MeasureSnapPosition = SnapToNearest(mouseWorldPos, interSnapDist, lineSnapDist);
             }
 
             InvalidateWorldRegion(20, mouseWorldPos, previousSnapPos, MeasureSnapPosition, MeasureFirstSelection);

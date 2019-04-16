@@ -64,7 +64,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AppPreferences.cs" />
+    <Compile Include="Common\InstrumentType.cs" />
     <Compile Include="Common\LayoutDocument.cs" />
+    <Compile Include="Common\StringData.cs" />
+    <Compile Include="Common\StringSet.cs" />
     <Compile Include="Common\StringType.cs" />
     <Compile Include="Configuration\DisplayPreferences.cs" />
     <Compile Include="Configuration\ScreenConfiguration.cs" />
@@ -142,9 +145,6 @@
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingManual.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElement.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElementType.cs" />
-    <Compile Include="UI\Controls\FloatingControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="UI\Controls\LayoutEditors\FingerboardMarginEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -204,6 +204,12 @@
     </Compile>
     <Compile Include="UI\Controls\PreferencesPanels\PreferencesPanel.Designer.cs">
       <DependentUpon>PreferencesPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\PreferencesPanels\StringsManagementPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\PreferencesPanels\StringsManagementPanel.Designer.cs">
+      <DependentUpon>StringsManagementPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\ValueEditors\NumericBox.cs">
       <SubType>Component</SubType>
@@ -317,6 +323,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\PreferencesPanels\MonitorPreferences.resx">
       <DependentUpon>MonitorPreferences.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\PreferencesPanels\StringsManagementPanel.resx">
+      <DependentUpon>StringsManagementPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\AppPreferencesWindow.resx">
       <DependentUpon>AppPreferencesWindow.cs</DependentUpon>

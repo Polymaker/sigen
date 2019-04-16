@@ -14,7 +14,7 @@ namespace SiGen.StringedInstruments.Layout
 		public object OldValue { get; }
 		public object NewValue { get; }
 		public bool IsField { get; }
-
+        public bool AffectsLayout { get; set; } = true;
         public string Name => Property;
 
         public PropertyChange(LayoutComponent component, string property, object oldValue, object newValue)

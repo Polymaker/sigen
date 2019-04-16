@@ -36,6 +36,7 @@
             this.menuItemDisplayMeasureFT = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.menuItemDisplayMeasureShowDecimals = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemDisplayMeasureClearMeasure = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMeasureBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,9 +48,10 @@
             this.menuItemDisplayMeasureIN,
             this.menuItemDisplayMeasureFT,
             this.toolStripSeparator1,
-            this.menuItemDisplayMeasureShowDecimals});
+            this.menuItemDisplayMeasureShowDecimals,
+            this.menuItemDisplayMeasureClearMeasure});
             this.menuMeasureBox.Name = "menuMeasureBox";
-            this.menuMeasureBox.Size = new System.Drawing.Size(193, 120);
+            this.menuMeasureBox.Size = new System.Drawing.Size(193, 142);
             // 
             // menuItemDisplayMeasureMM
             // 
@@ -84,9 +86,16 @@
             // 
             // menuItemDisplayMeasureShowDecimals
             // 
+            this.menuItemDisplayMeasureShowDecimals.CheckOnClick = true;
             this.menuItemDisplayMeasureShowDecimals.Name = "menuItemDisplayMeasureShowDecimals";
             this.menuItemDisplayMeasureShowDecimals.Size = new System.Drawing.Size(192, 22);
             this.menuItemDisplayMeasureShowDecimals.Text = "Show Exact Value";
+            // 
+            // menuItemDisplayMeasureClearMeasure
+            // 
+            this.menuItemDisplayMeasureClearMeasure.Name = "menuItemDisplayMeasureClearMeasure";
+            this.menuItemDisplayMeasureClearMeasure.Size = new System.Drawing.Size(192, 22);
+            this.menuItemDisplayMeasureClearMeasure.Text = "Clear Measure";
             this.menuMeasureBox.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -101,5 +110,6 @@
         private System.Windows.Forms.ToolStripMenuItem menuItemDisplayMeasureFT;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem menuItemDisplayMeasureShowDecimals;
+        private System.Windows.Forms.ToolStripMenuItem menuItemDisplayMeasureClearMeasure;
     }
 }

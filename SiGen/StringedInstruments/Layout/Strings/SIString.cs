@@ -29,7 +29,7 @@ namespace SiGen.StringedInstruments.Layout
 		#region Properties
 
 		[XmlAttribute("Index")]
-		public int Index { get; }
+		public int Index { get; internal set; }
 
 		public Measure ScaleLength
         {
@@ -114,7 +114,7 @@ namespace SiGen.StringedInstruments.Layout
             get { return _MultiScaleRatio; }
             set
             {
-				SetPropertyValue(ref _MultiScaleRatio, value);
+				SetPropertyValue(ref _MultiScaleRatio, value, Layout.ScaleLengthMode != ScaleLengthType.Single);
 			}
         }
 
@@ -172,17 +172,8 @@ namespace SiGen.StringedInstruments.Layout
 
         public StringTuning Tuning
         {
-            get { return _Tuning; }
-            set
-            {
-                if (value != _Tuning)
-                {
-                    //_Tuning = SILayout.GetTuningForNote(value.Note, Layout.FretsTemperament);
-					if (Layout.FretsTemperament != Temperament.Equal || Layout.CompensateFretPositions)
-						SetPropertyValue(ref _Tuning, value);
-                    //EnsureCanStillCalculateCompentation();
-                }
-            }
+            get => _Tuning;
+            set => SetPropertyValue(ref _Tuning, value, Layout.FretsTemperament != Temperament.Equal || Layout.CompensateFretPositions);
         }
 
         /// <summary>
@@ -192,14 +183,7 @@ namespace SiGen.StringedInstruments.Layout
         public Measure ActionAtTwelfthFret
         {
             get { return _ActionAtTwelfthFret; }
-            set
-            {
-                if (_ActionAtTwelfthFret != value)
-                {
-                    _ActionAtTwelfthFret = value;
-                    //EnsureCanStillCalculateCompentation();
-                }
-            }
+            set => SetPropertyValue(ref _ActionAtTwelfthFret, value, false);
         }
 
         public bool CanCalculateCompensation

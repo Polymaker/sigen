@@ -16,6 +16,8 @@ namespace SiGen.StringedInstruments.Layout
 
 		public IEnumerable<LayoutComponent> ChangedComponents => _ChangedProperties.Select(p => p.Component).Distinct();
 
+        public bool AffectsLayout => ChangedProperties.Any(x => x.AffectsLayout);
+
         public LayoutComponent Component { get; }
 
         public BatchChange(List<PropertyChange> changedProperties)

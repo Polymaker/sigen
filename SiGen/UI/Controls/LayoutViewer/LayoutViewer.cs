@@ -278,6 +278,28 @@ namespace SiGen.UI
             OnZoomChanged();
         }
 
+        private void PerformMouseWheelZoom(MouseEventArgs e)
+        {
+            var oldZoom = _Zoom;
+            var mousePos = e.Location;
+            manualZoom = true;
+            if (e.Delta > 0)
+                _Zoom *= 1.1;
+            else
+                _Zoom *= 0.90909090909090909090909090909091;
+
+            _Zoom = Math.Max(8, Math.Min(200, _Zoom));
+
+            if (oldZoom != _Zoom)
+            {
+                var curWorldPos = DisplayToWorldFast(mousePos, oldZoom);
+                var finalWorldPos = DisplayToWorldFast(mousePos);
+                cameraPosition -= (finalWorldPos - curWorldPos);
+                OnCameraChanged(true);
+                OnZoomChanged();
+            }
+        }
+
         private void OnCameraChanged(bool invalidate)
         {
             InvalidateMeasureBoxes();
@@ -354,7 +376,7 @@ namespace SiGen.UI
         {
             base.OnMouseMove(e);
 
-            if (EnableMeasureTool && MeasureLastSelection.IsEmpty)
+            if (EnableMeasureTool && MeasureLastSelection.IsEmpty && !IsDragging)
                 UpdateMeasureSnapPosition(e.Location);
 
             if (CanDrag || IsDragging)
@@ -424,22 +446,8 @@ namespace SiGen.UI
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            if (/*(ModifierKeys & Keys.Control) == Keys.Control*/true)
-            {
-                var oldZoom = _Zoom;
-                var mousePos = e.Location;
-                manualZoom = true;
-                if (e.Delta > 0)
-                    _Zoom *= 1.1;
-                else
-                    _Zoom *= 0.90909090909090909090909090909091;
-
-                var curWorldPos = DisplayToWorldFast(mousePos, oldZoom);
-                var finalWorldPos = DisplayToWorldFast(mousePos);
-                cameraPosition -= (finalWorldPos - curWorldPos);
-                OnCameraChanged(true);
-                OnZoomChanged();
-            }
+            base.OnMouseWheel(e);
+            PerformMouseWheelZoom(e);
         }
 
         protected override void OnMouseClick(MouseEventArgs e)
@@ -478,11 +486,16 @@ namespace SiGen.UI
                 {
                     if (EnableMeasureTool)
                         CaptureMeasure(e.Location);
-                    
                 }
                 else if (e.Button == MouseButtons.Right && !MeasureFirstSelection.IsEmpty)
                 {
-                    ClearMeasuring();
+                    if (MeasureLastSelection.IsEmpty)
+                        ClearMeasuring();
+                    else
+                    {
+                        menuMeasureBox.Tag = null;
+                        menuMeasureBox.Show(PointToScreen(e.Location));
+                    }
                 }
             }
         }
@@ -564,14 +577,14 @@ namespace SiGen.UI
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
-            if (EnableMeasureTool && MeasureLastSelection.IsEmpty && (e.KeyCode == Keys.Alt || e.KeyCode == Keys.Menu))
+            if (EnableMeasureTool && MeasureLastSelection.IsEmpty && IsAltPressed(e.KeyCode))
                 UpdateMeasureSnapPosition();
         }
 
         protected override void OnKeyUp(KeyEventArgs e)
         {
             base.OnKeyUp(e);
-            if (EnableMeasureTool && MeasureLastSelection.IsEmpty && (e.KeyCode == Keys.Alt || e.KeyCode == Keys.Menu))
+            if (EnableMeasureTool && MeasureLastSelection.IsEmpty && IsAltPressed(e.KeyCode))
                 UpdateMeasureSnapPosition();
         }
 
@@ -584,7 +597,12 @@ namespace SiGen.UI
 
         protected bool IsAltPressed()
         {
-            return ModifierKeys.HasFlag(Keys.Alt) || ModifierKeys.HasFlag(Keys.Menu);
+            return IsAltPressed(ModifierKeys);
+        }
+
+        protected bool IsAltPressed(Keys keyCode)
+        {
+            return keyCode.HasFlag(Keys.Alt) || keyCode.HasFlag(Keys.Menu);
         }
 
         protected bool IsControlPressed()

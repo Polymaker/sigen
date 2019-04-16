@@ -1,4 +1,5 @@
-﻿using SiGen.Measuring;
+﻿using SiGen.Common;
+using SiGen.Measuring;
 using SiGen.Physics;
 using SiGen.StringedInstruments.Data;
 using SiGen.StringedInstruments.Layout.Visual;
@@ -28,6 +29,7 @@ namespace SiGen.StringedInstruments.Layout
 		private bool _CompensateFretPositions;
 		private StringSpacingType _StringSpacingMode;
 		private ScaleLengthType _ScaleLengthMode;
+        private InstrumentType _InstrumentType;
 		private List<VisualElement> _VisualElements;
         private RectangleM _CachedBounds;
         private bool isLayoutDirty;
@@ -49,6 +51,12 @@ namespace SiGen.StringedInstruments.Layout
                 if (value != _NumberOfStrings)
                     InitializeStrings(_NumberOfStrings, value);
             }
+        }
+
+        public InstrumentType InstrumentType
+        {
+            get => _InstrumentType;
+            set => SetPropertyValue(ref _InstrumentType, value, nameof(InstrumentType));
         }
 
 		/// <summary>
@@ -225,6 +233,7 @@ namespace SiGen.StringedInstruments.Layout
             _CachedBounds = RectangleM.Empty;
             LayoutName = string.Empty;
 			LayoutChanges = new List<ILayoutChange>();
+            _InstrumentType = InstrumentType.Guitar;
 		}
 
         private void InitializeStrings(int oldValue, int newValue)
@@ -280,6 +289,48 @@ namespace SiGen.StringedInstruments.Layout
 			if (oldStrings != null)
 				OnNumberOfStringsChanged();
 		}
+
+        public void AddString(FingerboardSide side)
+        {
+            StartBatchChanges();
+
+            _NumberOfStrings++;
+
+            var oldStrings = Strings;
+            Strings = new SIString[NumberOfStrings];
+
+            if (side == FingerboardSide.Treble)
+            {
+                Strings[0] = new SIString(this, 0);
+
+            }
+
+            for (int i = 0; i < oldStrings.Length; i++)
+            {
+
+            }
+
+            for (int i = 0; i < _NumberOfStrings; i++)
+            {
+
+                if (oldStrings != null && i < oldStrings.Length)
+                    Strings[i] = oldStrings[i];
+                else
+                {
+                    Strings[i] = new SIString(this, i);
+                    if (i >= 2 && !Strings[i - 2].Gauge.IsEmpty && !Strings[i - 1].Gauge.IsEmpty)
+                    {
+                        var gaugeDiff = Strings[i - 1].Gauge - Strings[i - 2].Gauge;
+                        var estGauge = Strings[i - 1].Gauge * 1.3;
+                        Strings[i].Gauge = Measure.Avg(Strings[i - 1].Gauge + gaugeDiff, estGauge);
+                    }
+                    if (i >= 1 && !Strings[i - 1].Gauge.IsEmpty)
+                        Strings[i].Gauge = Strings[i - 1].Gauge * 1.3;
+                }
+            }
+
+            OnNumberOfStringsChanged();
+        }
 
         protected void OnNumberOfStringsChanged()
         {
@@ -382,7 +433,6 @@ namespace SiGen.StringedInstruments.Layout
                 }
 				NestedBatches++;
 			}
-				
 		}
 
 		internal void FinishBatchChanges()
