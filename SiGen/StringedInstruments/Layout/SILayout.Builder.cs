@@ -387,6 +387,33 @@ namespace SiGen.StringedInstruments.Layout
                 var fretboardEdge = AddVisualElement(new FingerboardEdge(edgePoints));
                 //fretboardEdge.InterpolateSpline();
             }
+
+            var fingerboardEnds = VisualElements.OfType<FingerboardEdge>();
+
+            var trebleLine = FirstString.LayoutLine;
+            foreach(var end in fingerboardEnds)
+            {
+                if (end.Intersects(trebleLine, out PointM inter, false))
+                {
+                    AddVisualElement(new LayoutLine(trebleLine.P1, inter, VisualElementType.FingerboardMargin));
+                    break;
+                }
+            }
+
+            if (LastString != FirstString)
+            {
+                var bassLine = LastString.LayoutLine;
+
+                foreach (var end in fingerboardEnds)
+                {
+                    if (end.Intersects(bassLine, out PointM inter, false))
+                    {
+                        AddVisualElement(new LayoutLine(bassLine.P1, inter, VisualElementType.FingerboardMargin));
+                        break;
+                    }
+                }
+            }
+            
         }
 
         #endregion

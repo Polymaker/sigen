@@ -8,6 +8,20 @@ using System.Threading.Tasks;
 
 namespace SiGen.Export
 {
+    public enum ExportUnit
+    {
+        Pixels,
+        Points,
+        Measure
+    }
+    public class LayoutItemExportConfig
+    {
+        public bool Enabled { get; set; }
+        public Color Color { get; set; }
+        public ExportUnit LineUnit { get; set; }
+        public double LineThickness { get; set; }
+    }
+
     [Serializable]
     public class LayoutExportOptions
     {
@@ -20,6 +34,8 @@ namespace SiGen.Export
 
         public Measure FretSlotsExtensionAmount { get; set; }
 
+        public UnitOfMeasure ExportUnit { get; set; }
+
         public bool ExtendFretSlots { get { return !FretSlotsExtensionAmount.IsEmpty && FretSlotsExtensionAmount > Measure.Zero; } }
 
         public LayoutExportOptions()
@@ -27,6 +43,7 @@ namespace SiGen.Export
             FretSlotsExtensionAmount = Measure.Empty;
             ExportFrets = true;
             ExportFingerboard = true;
+            ExportUnit = UnitOfMeasure.Cm;
         }
     }
 

@@ -52,8 +52,8 @@
             this.chkExtendFretSlots = new System.Windows.Forms.CheckBox();
             this.chkExportStrings = new System.Windows.Forms.CheckBox();
             this.flpExportFormat = new System.Windows.Forms.FlowLayoutPanel();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.rbSvgExport = new System.Windows.Forms.RadioButton();
+            this.rbDxfExport = new System.Windows.Forms.RadioButton();
             this.chkExportFingerboard = new System.Windows.Forms.CheckBox();
             this.btnExport = new System.Windows.Forms.Button();
             this.lblExportFormat = new System.Windows.Forms.Label();
@@ -338,35 +338,34 @@
             // 
             this.flpExportFormat.AutoSize = true;
             this.flpExportFormat.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.flpExportFormat.Controls.Add(this.radioButton1);
-            this.flpExportFormat.Controls.Add(this.radioButton2);
+            this.flpExportFormat.Controls.Add(this.rbSvgExport);
+            this.flpExportFormat.Controls.Add(this.rbDxfExport);
             this.flpExportFormat.Location = new System.Drawing.Point(90, 18);
             this.flpExportFormat.Name = "flpExportFormat";
             this.flpExportFormat.Size = new System.Drawing.Size(105, 23);
             this.flpExportFormat.TabIndex = 8;
             // 
-            // radioButton1
+            // rbSvgExport
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(3, 3);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(47, 17);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "SVG";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.rbSvgExport.AutoSize = true;
+            this.rbSvgExport.Checked = true;
+            this.rbSvgExport.Location = new System.Drawing.Point(3, 3);
+            this.rbSvgExport.Name = "rbSvgExport";
+            this.rbSvgExport.Size = new System.Drawing.Size(47, 17);
+            this.rbSvgExport.TabIndex = 0;
+            this.rbSvgExport.TabStop = true;
+            this.rbSvgExport.Text = "SVG";
+            this.rbSvgExport.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
+            // rbDxfExport
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Enabled = false;
-            this.radioButton2.Location = new System.Drawing.Point(56, 3);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(46, 17);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.Text = "DXF";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.rbDxfExport.AutoSize = true;
+            this.rbDxfExport.Location = new System.Drawing.Point(56, 3);
+            this.rbDxfExport.Name = "rbDxfExport";
+            this.rbDxfExport.Size = new System.Drawing.Size(46, 17);
+            this.rbDxfExport.TabIndex = 1;
+            this.rbDxfExport.Text = "DXF";
+            this.rbDxfExport.UseVisualStyleBackColor = true;
             // 
             // chkExportFingerboard
             // 
@@ -435,8 +434,8 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox chkExportStrings;
         private System.Windows.Forms.CheckBox chkExportFrets;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton rbSvgExport;
+        private System.Windows.Forms.RadioButton rbDxfExport;
         private System.Windows.Forms.Label lblExportFormat;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnExport;

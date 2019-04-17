@@ -10,8 +10,11 @@ namespace SiGen.StringedInstruments.Layout.Visual
     {
         String,
         Fret,
+        BridgeLine,
         GuideLine,
         FingerboardEdge,
+        FingerboardMargin,
+        FingerboardContinuation,
         StringCenter,
         CenterLine,
         Unknown

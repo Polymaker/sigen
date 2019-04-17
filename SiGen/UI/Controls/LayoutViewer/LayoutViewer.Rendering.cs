@@ -131,17 +131,31 @@ namespace SiGen.UI
 
             if (!DisplayConfig.ShowStrings && DisplayConfig.ShowMargins)
             {
-                var firstString = CurrentLayout.FirstString.LayoutLine;
-                var lastString = CurrentLayout.LastString.LayoutLine;
-                var trebleEdge = CurrentLayout.GetStringBoundaryLine(CurrentLayout.FirstString, FingerboardSide.Treble);
-                var bassEdge = CurrentLayout.GetStringBoundaryLine(CurrentLayout.LastString, FingerboardSide.Bass);
-
-                using (var guidePen = GetPen(Color.Gray, 1))
+                var margins = CurrentLayout.VisualElements.OfType<LayoutLine>().Where(x => x.ElementType == VisualElementType.FingerboardMargin);
+                if (margins.Any())
                 {
-                    DrawLine(g, guidePen, firstString.P1, firstString.SnapToLine(trebleEdge.P2, LineSnapDirection.Horizontal));
-                    if(firstString != lastString)
-                        DrawLine(g, guidePen, lastString.P1, lastString.SnapToLine(bassEdge.P2, LineSnapDirection.Horizontal));
+                    using (var guidePen = GetPen(Color.Gray, 1))
+                    {
+                        foreach (var marginLine in margins)
+                            DrawLine(g, guidePen, marginLine.P1, marginLine.P2);
+                    }
                 }
+                else
+                {
+                    //LEGACY
+                    var firstString = CurrentLayout.FirstString.LayoutLine;
+                    var lastString = CurrentLayout.LastString.LayoutLine;
+                    var trebleEdge = CurrentLayout.GetStringBoundaryLine(CurrentLayout.FirstString, FingerboardSide.Treble);
+                    var bassEdge = CurrentLayout.GetStringBoundaryLine(CurrentLayout.LastString, FingerboardSide.Bass);
+
+                    using (var guidePen = GetPen(Color.Gray, 1))
+                    {
+                        DrawLine(g, guidePen, firstString.P1, firstString.SnapToLine(trebleEdge.P2, LineSnapDirection.Horizontal));
+                        if (firstString != lastString)
+                            DrawLine(g, guidePen, lastString.P1, lastString.SnapToLine(bassEdge.P2, LineSnapDirection.Horizontal));
+                    }
+                }
+                
             }
 
             if (DisplayConfig.ShowFingerboard)

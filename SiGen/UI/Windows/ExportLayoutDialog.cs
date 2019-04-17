@@ -91,20 +91,45 @@ namespace SiGen.UI.Windows
 
         private void btnExport_Click(object sender, EventArgs e)
         {
+            if (rbSvgExport.Checked)
+                ExportSvgLayout();
+            else
+                ExportDxfLayout();
+        }
+
+        private void ExportSvgLayout()
+        {
             using (var sfd = new SaveFileDialog())
             {
                 if (!string.IsNullOrEmpty(layoutPreview.CurrentLayout.LayoutName))
                     sfd.FileName = layoutPreview.CurrentLayout.LayoutName + ".svg";
                 else
-                    sfd.FileName = "layout.svg";
+                    sfd.FileName = "layout.sgv" ;
+
 
                 sfd.Filter = "Scalable Vector Graphics File (*.svg)|*.svg";
                 sfd.DefaultExt = ".svg";
 
                 if (sfd.ShowDialog() == DialogResult.OK)
-                {
                     SvgLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, SvgExportOptions);
-                }
+            }
+        }
+
+        private void ExportDxfLayout()
+        {
+            using (var sfd = new SaveFileDialog())
+            {
+                if (!string.IsNullOrEmpty(layoutPreview.CurrentLayout.LayoutName))
+                    sfd.FileName = layoutPreview.CurrentLayout.LayoutName + ".dxf";
+                else
+                    sfd.FileName = "layout.dxf";
+
+
+                sfd.Filter = "Drawing Interchange Format File (*.dxf)|*.dxf";
+                sfd.DefaultExt = ".dxf";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                    DxfLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, SvgExportOptions);
             }
         }
 

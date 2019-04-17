@@ -177,7 +177,8 @@ namespace SiGen.Export
 
             GenerateFingerboardElements();
 
-            GenerateFretElements();
+            if (Options.ExportFrets)
+                GenerateFretElements();
 
             GenerateStringElements();
         }
@@ -276,8 +277,8 @@ namespace SiGen.Export
                     var layoutLine = new LayoutLine(fretLine.Points.First(), fretLine.Points.Last());
                     if (Options.ExtendFretSlots && fretLine.Length > Options.FretSlotsExtensionAmount * 2)
                     {
-                        layoutLine.P2 = layoutLine.P2 + (layoutLine.Direction * Options.FretSlotsExtensionAmount);
-                        layoutLine.P1 = layoutLine.P1 + (layoutLine.Direction * (Options.FretSlotsExtensionAmount * -1));
+                        layoutLine.P2 += (layoutLine.Direction * Options.FretSlotsExtensionAmount);
+                        layoutLine.P1 += (layoutLine.Direction * (Options.FretSlotsExtensionAmount * -1));
                     }
                     var svgLine = CreateLine(fretsGroup, layoutLine, fretStroke, Options.FretColor);
 					if (fretLine.IsNut)
