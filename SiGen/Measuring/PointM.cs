@@ -162,6 +162,13 @@ namespace SiGen.Measuring
             return new Vector(X.NormalizedValue, Y.NormalizedValue);
         }
 
+        public Vector ToVector(UnitOfMeasure unit)
+        {
+            if (IsEmpty)
+                return Vector.Empty;
+            return new Vector(X[unit], Y[unit]);
+        }
+
         #endregion
 
         #region Functions

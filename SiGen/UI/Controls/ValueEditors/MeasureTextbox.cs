@@ -383,12 +383,31 @@ namespace SiGen.UI
                 Invalidate();
         }
 
+        public override Size GetPreferredSize(Size proposedSize)
+        {
+            if (innerTextbox != null)
+            {
+                var baseSize = innerTextbox.GetPreferredSize(proposedSize);
+                if (!HideBorders)
+                {
+                    baseSize.Width += SystemInformation.BorderSize.Width * 4;
+                    baseSize.Height += SystemInformation.BorderSize.Height * 4;
+                    return baseSize;
+                }
+            }
+            return base.GetPreferredSize(proposedSize);
+        }
+
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            if (!HideBorders)
-                height = FontHeight + (SystemInformation.BorderSize.Height * 4) + 3;
-            else
-                height = FontHeight + 3;
+            if (AutoSize)
+            {
+                if (!HideBorders)
+                    height = FontHeight + (SystemInformation.BorderSize.Height * 4) + 3;
+                else
+                    height = FontHeight + 3;
+            }
+            
             base.SetBoundsCore(x, y, width, height, specified);
             RepositionTextbox();
         }

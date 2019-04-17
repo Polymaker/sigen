@@ -82,16 +82,20 @@ namespace SiGen.UI
             {
                 case VisualElementType.CenterLine:
                     return DisplayConfig.ShowCenterLine;
+
                 case VisualElementType.Fret:
                     return DisplayConfig.ShowFrets;
+
                 case VisualElementType.String:
-                    {
-                        if (DisplayConfig.ShowStrings)
-                            return true;
-                        return DisplayConfig.ShowMargins && ((element as StringLine).String == CurrentLayout.FirstString || (element as StringLine).String == CurrentLayout.LastString);
-                    }
+                    return DisplayConfig.ShowStrings;
+
+                case VisualElementType.FingerboardMargin:
+                    return DisplayConfig.ShowMargins && !DisplayConfig.ShowStrings;
+
                 case VisualElementType.StringCenter:
                     return DisplayConfig.ShowMidlines;
+
+                case VisualElementType.FingerboardContinuation:
                 case VisualElementType.FingerboardEdge:
                     return DisplayConfig.ShowFingerboard;
 
@@ -176,6 +180,13 @@ namespace SiGen.UI
             using (var guidePen = GetPen(Color.Gainsboro, 1))
             {
                 guidePen.DashPattern = new float[] { 6, 4, 2, 4 };
+
+                if (DisplayConfig.ShowFingerboard)
+                {
+                    foreach (var line in CurrentLayout.VisualElements.OfType<LayoutLine>().Where(l => l.ElementType == VisualElementType.FingerboardContinuation))
+                        DrawLine(g, guidePen, line.P1, line.P2);
+                }
+
                 foreach (var line in CurrentLayout.VisualElements.OfType<LayoutLine>().Where(l => l.ElementType == VisualElementType.GuideLine))
                     DrawLine(g, guidePen, line.P1, line.P2);
             }

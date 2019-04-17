@@ -337,8 +337,8 @@ namespace SiGen.StringedInstruments.Layout
             }
 
             //split physical from virtual fingerboard
-            var virtualTrebleEdge = AddVisualElement(new LayoutLine(trebleEndPoint, trebleSideEdge.P2, VisualElementType.GuideLine));
-            var virtualBassEdge = AddVisualElement(new LayoutLine(bassEndPoint, bassSideEdge.P2, VisualElementType.GuideLine));
+            var virtualTrebleEdge = AddVisualElement(new LayoutLine(trebleEndPoint, trebleSideEdge.P2, VisualElementType.FingerboardContinuation));
+            var virtualBassEdge = AddVisualElement(new LayoutLine(bassEndPoint, bassSideEdge.P2, VisualElementType.FingerboardContinuation));
             trebleSideEdge.P2 = virtualTrebleEdge.P1;
             bassSideEdge.P2 = virtualBassEdge.P1;
 

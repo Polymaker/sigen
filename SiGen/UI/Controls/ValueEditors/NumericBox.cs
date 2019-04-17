@@ -119,7 +119,16 @@ namespace SiGen.UI.Controls
             }
         }
 
+        private bool _AutoSize;
 
+        [Browsable(true), DefaultValue(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public override bool AutoSize { get => _AutoSize; set => base.AutoSize = _AutoSize = value; }
+
+        protected bool ShouldSerializeAutoSize()
+        {
+            return !AutoSize;
+        }
+        
         #endregion
 
         #region Events
@@ -135,6 +144,7 @@ namespace SiGen.UI.Controls
             InitializeComponent();
             _MaximumValue = 100;
             _AllowDecimals = true;
+            _AutoSize = true;
             _MaxDisplayedDecimalPlaces = 5;
         }
 

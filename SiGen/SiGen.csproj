@@ -43,7 +43,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="netDxf, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\netDXF.2.2.0.1\lib\net45\netDxf.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\netDxf.dll</HintPath>
     </Reference>
     <Reference Include="Svg, Version=2.2.1.39233, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
       <HintPath>packages\Svg.2.3.0\lib\net35\Svg.dll</HintPath>
@@ -75,8 +76,10 @@
     <Compile Include="Configuration\DisplayPreferences.cs" />
     <Compile Include="Configuration\ScreenConfiguration.cs" />
     <Compile Include="Export\DxfLayoutExporter.cs" />
+    <Compile Include="Export\ExportUnit.cs" />
     <Compile Include="Export\LayoutExporterBase.cs" />
     <Compile Include="Export\LayoutExportOptions.cs" />
+    <Compile Include="Export\LayoutItemExportConfig.cs" />
     <Compile Include="Export\SvgLayoutExporter.cs" />
     <Compile Include="Localization\LocalizableString.cs">
       <SubType>Component</SubType>
@@ -198,6 +201,12 @@
     <Compile Include="UI\Controls\LayoutViewer\LayoutViewer.Measuring.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UI\Controls\PreferencesPanels\LayoutExportOptionsEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\PreferencesPanels\LayoutExportOptionsEditor.Designer.cs">
+      <DependentUpon>LayoutExportOptionsEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Controls\PreferencesPanels\MonitorPreferences.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -215,6 +224,18 @@
     </Compile>
     <Compile Include="UI\Controls\PreferencesPanels\StringsManagementPanel.Designer.cs">
       <DependentUpon>StringsManagementPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\ValueEditors\ColorSelectButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\ValueEditors\ColorSelectButton.Designer.cs">
+      <DependentUpon>ColorSelectButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\ValueEditors\ExportLineThicknessEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\ValueEditors\ExportLineThicknessEditor.Designer.cs">
+      <DependentUpon>ExportLineThicknessEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\ValueEditors\NumericBox.cs">
       <SubType>Component</SubType>
@@ -326,11 +347,20 @@
     <EmbeddedResource Include="UI\Controls\LayoutViewer\LayoutViewer.resx">
       <DependentUpon>LayoutViewer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\PreferencesPanels\LayoutExportOptionsEditor.resx">
+      <DependentUpon>LayoutExportOptionsEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\PreferencesPanels\MonitorPreferences.resx">
       <DependentUpon>MonitorPreferences.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\PreferencesPanels\StringsManagementPanel.resx">
       <DependentUpon>StringsManagementPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\ValueEditors\ColorSelectButton.resx">
+      <DependentUpon>ColorSelectButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\ValueEditors\ExportLineThicknessEditor.resx">
+      <DependentUpon>ExportLineThicknessEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\AppPreferencesWindow.resx">
       <DependentUpon>AppPreferencesWindow.cs</DependentUpon>

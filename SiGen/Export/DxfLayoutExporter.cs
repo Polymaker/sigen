@@ -6,6 +6,7 @@ using SiGen.StringedInstruments.Layout;
 using SiGen.StringedInstruments.Layout.Visual;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,9 +32,15 @@ namespace SiGen.Export
             Document = new DxfDocument();
 
             if (Options.ExportUnit == UnitOfMeasure.Millimeters)
+            {
+                Document.DrawingVariables.Measurement = 1;
                 Document.DrawingVariables.InsUnits = netDxf.Units.DrawingUnits.Millimeters;
+            }
             else if (Options.ExportUnit == UnitOfMeasure.Centimeters)
+            {
+                Document.DrawingVariables.Measurement = 1;
                 Document.DrawingVariables.InsUnits = netDxf.Units.DrawingUnits.Centimeters;
+            }
             else if (Options.ExportUnit == UnitOfMeasure.Inches)
                 Document.DrawingVariables.InsUnits = netDxf.Units.DrawingUnits.Inches;
             else if (Options.ExportUnit == UnitOfMeasure.Feets)
@@ -45,7 +52,7 @@ namespace SiGen.Export
         }
 
 
-        protected override void AddLayoutLine(LayoutLine line, VisualElementType elementType)
+        protected override void AddLayoutLine(LayoutLine line, VisualElementType elementType, VisualElement extraInfo = null)
         {
             switch (elementType)
             {
@@ -56,19 +63,23 @@ namespace SiGen.Export
                     AddDxfLine("Fingerboard", line, AciColor.Blue);
                     break;
                 case VisualElementType.CenterLine:
-                    AddDxfLine("Layout", line, AciColor.FromHsl(0,0,0));
+                    AddDxfLine("Layout", line, GetColor(Color.Black));
                     break;
+                case VisualElementType.FingerboardContinuation:
                 case VisualElementType.GuideLine:
                 case VisualElementType.StringCenter:
                     AddDxfLine("Layout", line, AciColor.LightGray).Linetype = Linetype.Dashed;
                     break;
                 case VisualElementType.FingerboardMargin:
-                    AddDxfLine("Layout", line, AciColor.LightGray);
+                    AddDxfLine("Layout", line, GetColor(Color.Gray));
+                    break;
+                case VisualElementType.String:
+                    AddDxfLine("Strings", line, GetColor(Color.Black));
                     break;
             }
         }
 
-        protected override void AddLayoutSpline(LayoutPolyLine line, VisualElementType elementType)
+        protected override void AddLayoutSpline(LayoutPolyLine line, VisualElementType elementType, VisualElement extraInfo = null)
         {
             switch (elementType)
             {
@@ -78,17 +89,13 @@ namespace SiGen.Export
                 case VisualElementType.FingerboardEdge:
                     AddDxfSpline("Fingerboard", line, AciColor.Blue);
                     break;
-                case VisualElementType.CenterLine:
-                    AddDxfSpline("Layout", line, AciColor.FromHsl(0, 0, 0));
-                    break;
                 case VisualElementType.GuideLine:
-                case VisualElementType.StringCenter:
-                    AddDxfSpline("Layout", line, AciColor.LightGray).Linetype = Linetype.Dashed;
+                    AddDxfSpline("Layout", line, AciColor.Blue).Linetype = Linetype.Dashed;
                     break;
             }
         }
 
-        protected override void AddLayoutPolyLine(LayoutPolyLine line, VisualElementType elementType)
+        protected override void AddLayoutPolyLine(LayoutPolyLine line, VisualElementType elementType, VisualElement extraInfo = null)
         {
             switch (elementType)
             {
@@ -98,11 +105,7 @@ namespace SiGen.Export
                 case VisualElementType.FingerboardEdge:
                     AddDxfPolyLine("Fingerboard", line, AciColor.Blue);
                     break;
-                case VisualElementType.CenterLine:
-                    AddDxfPolyLine("Layout", line, AciColor.FromHsl(0, 0, 0));
-                    break;
                 case VisualElementType.GuideLine:
-                case VisualElementType.StringCenter:
                     AddDxfPolyLine("Layout", line, AciColor.LightGray).Linetype = Linetype.Dashed;
                     break;
             }
@@ -158,6 +161,11 @@ namespace SiGen.Export
                 Layers.Add(name, new Layer(name));
 
             return Layers[name];
+        }
+
+        private AciColor GetColor(Color color)
+        {
+            return new AciColor(color);
         }
 
         private Vector2 PointToVector(PointM point)

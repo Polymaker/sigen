@@ -28,16 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Export");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Viewer");
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Interface");
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Display", new System.Windows.Forms.TreeNode[] {
-            treeNode6,
-            treeNode7});
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Export");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Viewer");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Interface");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Display", new System.Windows.Forms.TreeNode[] {
+            treeNode2,
+            treeNode3});
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeView1 = new System.Windows.Forms.TreeView();
+            this.layoutExportOptionsEditor1 = new SiGen.UI.Controls.PreferencesPanels.LayoutExportOptionsEditor();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,6 +52,10 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.treeView1);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.layoutExportOptionsEditor1);
             this.splitContainer1.Size = new System.Drawing.Size(704, 385);
             this.splitContainer1.SplitterDistance = 234;
             this.splitContainer1.TabIndex = 0;
@@ -58,19 +64,26 @@
             // 
             this.treeView1.Location = new System.Drawing.Point(7, 22);
             this.treeView1.Name = "treeView1";
-            treeNode5.Name = "Node0";
-            treeNode5.Text = "Export";
-            treeNode6.Name = "Node2";
-            treeNode6.Text = "Viewer";
-            treeNode7.Name = "Node3";
-            treeNode7.Text = "Interface";
-            treeNode8.Name = "Node1";
-            treeNode8.Text = "Display";
+            treeNode1.Name = "Node0";
+            treeNode1.Text = "Export";
+            treeNode2.Name = "Node2";
+            treeNode2.Text = "Viewer";
+            treeNode3.Name = "Node3";
+            treeNode3.Text = "Interface";
+            treeNode4.Name = "Node1";
+            treeNode4.Text = "Display";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode5,
-            treeNode8});
+            treeNode1,
+            treeNode4});
             this.treeView1.Size = new System.Drawing.Size(219, 351);
             this.treeView1.TabIndex = 0;
+            // 
+            // layoutExportOptionsEditor1
+            // 
+            this.layoutExportOptionsEditor1.Location = new System.Drawing.Point(15, 65);
+            this.layoutExportOptionsEditor1.Name = "layoutExportOptionsEditor1";
+            this.layoutExportOptionsEditor1.Size = new System.Drawing.Size(374, 277);
+            this.layoutExportOptionsEditor1.TabIndex = 0;
             // 
             // AppPreferencesWindow
             // 
@@ -81,6 +94,7 @@
             this.Name = "AppPreferencesWindow";
             this.Text = "AppPreferencesWindow";
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -91,5 +105,6 @@
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TreeView treeView1;
+        private Controls.PreferencesPanels.LayoutExportOptionsEditor layoutExportOptionsEditor1;
     }
 }

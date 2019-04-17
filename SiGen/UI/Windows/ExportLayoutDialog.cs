@@ -1,4 +1,5 @@
-﻿using SiGen.Export;
+﻿using SiGen.Common;
+using SiGen.Export;
 using SiGen.Measuring;
 using SiGen.StringedInstruments.Layout;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -91,10 +93,48 @@ namespace SiGen.UI.Windows
 
         private void btnExport_Click(object sender, EventArgs e)
         {
-            if (rbSvgExport.Checked)
-                ExportSvgLayout();
-            else
-                ExportDxfLayout();
+            //if (rbSvgExport.Checked)
+            //    ExportSvgLayout();
+            //else
+            //    ExportDxfLayout();
+
+            using (var sfd = new SaveFileDialog())
+            {
+                if (!string.IsNullOrEmpty(layoutPreview.CurrentLayout.LayoutName))
+                    sfd.FileName = layoutPreview.CurrentLayout.LayoutName;
+                else
+                    sfd.FileName = LayoutDocument.GenerateLayoutName(layoutPreview.CurrentLayout);
+
+
+                sfd.Filter = "Scalable Vector Graphics File (*.svg)|*.svg|Drawing Interchange Format File (*.dxf)|*.dxf|All files|*.*";
+                if (rbDxfExport.Checked)
+                    sfd.FilterIndex = 2;
+                sfd.AddExtension = true;
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    if (sfd.FilterIndex == 1)
+                        SvgLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, SvgExportOptions);
+                    else if (sfd.FilterIndex == 2)
+                        DxfLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, SvgExportOptions);
+                    else
+                    {
+                        var fileExt = Path.GetExtension(sfd.FileName);
+                        switch (fileExt.ToLower())
+                        {
+                            case ".svg":
+                                SvgLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, SvgExportOptions);
+                                break;
+                            case ".dxf":
+                                DxfLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, SvgExportOptions);
+                                break;
+                            default:
+                                MessageBox.Show("todo");
+                                break;
+                        }
+                    }
+                }
+            }
         }
 
         private void ExportSvgLayout()
@@ -104,10 +144,10 @@ namespace SiGen.UI.Windows
                 if (!string.IsNullOrEmpty(layoutPreview.CurrentLayout.LayoutName))
                     sfd.FileName = layoutPreview.CurrentLayout.LayoutName + ".svg";
                 else
-                    sfd.FileName = "layout.sgv" ;
+                    sfd.FileName = "layout.svg";
 
 
-                sfd.Filter = "Scalable Vector Graphics File (*.svg)|*.svg";
+                sfd.Filter = "Scalable Vector Graphics File|*.svg";
                 sfd.DefaultExt = ".svg";
 
                 if (sfd.ShowDialog() == DialogResult.OK)
