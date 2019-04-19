@@ -171,8 +171,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
                 var p1 = Points[i].ToVector();
                 var p2 = Points[i + 1].ToVector();
                 var segLine = Line.FromPoints(p1, p2);
-                Vector virtualInter;
-                if (line.Intersect(segLine, out virtualInter))
+                if (line.Intersect(segLine, out Vector virtualInter))
                 {
                     var ptRelation = GetLocationRelativeToSegment(p1, p2, virtualInter);
                     if (ptRelation == PointRelation.Inside ||
@@ -222,7 +221,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
                 var segLine = Line.FromPoints(line.Points[i].ToVector(), line.Points[i + 1].ToVector());
                 if (Intersects(segLine, out Vector virtualInter, false))
                 {
-
+                    intersection = PointM.FromVector(virtualInter, UnitOfMeasure.Mm);
                     return true;
                 }
             }
@@ -231,6 +230,47 @@ namespace SiGen.StringedInstruments.Layout.Visual
         }
 
         #endregion
+
+
+        public PointM GetPerpendicularPoint(PointM pos, Measure dist)
+        {
+            var posVec = pos.ToVector();
+            for (int i = 0; i < Points.Count - 1; i++)
+            {
+                var p1 = Points[i].ToVector();
+                var p2 = Points[i + 1].ToVector();
+                var ptRelation = GetLocationRelativeToSegment(p1, p2, posVec);
+
+                if (ptRelation != PointRelation.Invalid)
+                {
+                    var segLine = Line.FromPoints(p1, p2);
+                    var perp = segLine.GetPerpendicular(posVec);
+                    var result = posVec + (perp.Vector * dist.NormalizedValue);
+                    return PointM.FromVector(result, dist.Unit);
+                }
+            }
+
+            return PointM.Empty;
+        }
+
+        public Vector GetPerpendicularPoint(Vector pos, PreciseDouble dist)
+        {
+            for (int i = 0; i < Points.Count - 1; i++)
+            {
+                var p1 = Points[i].ToVector();
+                var p2 = Points[i + 1].ToVector();
+                var ptRelation = GetLocationRelativeToSegment(p1, p2, pos);
+
+                if (ptRelation != PointRelation.Invalid)
+                {
+                    var segLine = Line.FromPoints(p1, p2);
+                    var perp = segLine.GetPerpendicular(pos);
+                    return pos + (perp.Vector * dist);
+                }
+            }
+
+            return Vector.Empty;
+        }
 
         public void MergePoints(double tolerence = 0.01)
         {
@@ -305,12 +345,8 @@ namespace SiGen.StringedInstruments.Layout.Visual
 
         public void TrimBetween(LayoutLine l1, LayoutLine l2, bool extendIfNeeded = false)
         {
-            int inter1Idx, inter2Idx;
-            PointM p1 = PointM.Empty;
-            PointM p2 = PointM.Empty;
-
-            bool canTrimStart = Intersects(l1, out p1, out inter1Idx, extendIfNeeded);
-            bool canTrimEnd = Intersects(l2, out p2, out inter2Idx, extendIfNeeded);
+            bool canTrimStart = Intersects(l1, out PointM p1, out int inter1Idx, extendIfNeeded);
+            bool canTrimEnd = Intersects(l2, out PointM p2, out int inter2Idx, extendIfNeeded);
 
             if (!canTrimStart || !canTrimEnd)
             {
@@ -352,7 +388,30 @@ namespace SiGen.StringedInstruments.Layout.Visual
             MergePoints(0.05);
         }
 
+        public void Extend(Measure dist)
+        {
+            var p1 = Points[0] + ((Points[0] - Points[1]).ToVector() * dist);
+            var p2 = Points[Points.Count - 1] + ((Points[Points.Count - 1] - Points[Points.Count - 2]).ToVector() * dist);
+            //Points.RemoveAt(0);
+            
+            Points[0] = p1;
+            Points[Points.Count - 1] = p2;
+        }
+
         #endregion
+
+        public LayoutPolyLine OffsetLine(Measure dist)
+        {
+            var points = new List<PointM>();
+
+            foreach (var pt in Points)
+            {
+                var p1 = GetPerpendicularPoint(pt, dist);
+                points.Add(p1);
+            }
+
+            return new LayoutPolyLine(points);
+        }
 
         internal override void FlipHandedness()
         {

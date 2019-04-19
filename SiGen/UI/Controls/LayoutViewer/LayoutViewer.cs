@@ -140,7 +140,7 @@ namespace SiGen.UI
             var zoomf = (float)_Zoom;
             var center = new PointF(Width / 2f, Height / 2f);
             pe.Graphics.TranslateTransform(center.X, center.Y);
-            pe.Graphics.ScaleTransform((float)_Zoom, (float)_Zoom);
+            pe.Graphics.ScaleTransform(zoomf, zoomf);
             pe.Graphics.TranslateTransform((float)cameraPosition.X * -1, (float)cameraPosition.Y);
 
             if(CurrentLayout != null)

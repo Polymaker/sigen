@@ -170,35 +170,116 @@ namespace SiGen.UI
         private void RenderFrets(Graphics g)
         {
             Pen fretPen = null;
+            Pen highlightPen = null;
             Pen nutPen = GetPen(Color.Red, 1);
-
+            Pen contourPen = GetPen(Color.DarkSlateGray, 1);
             if (!DisplayConfig.RenderRealFrets)
                 fretPen = GetPen(Color.Red, 1);
             else
+            {
                 fretPen = GetPen(Color.DarkGray, DisplayConfig.FretWidth);
+                highlightPen = GetPen(Color.LightGray, DisplayConfig.FretWidth * 0.7);
+            }
+
+            var zoomf = (float)_Zoom;
+            var scaleMatrix = new Matrix();
+            scaleMatrix.Scale(zoomf, zoomf);
+            
+            var originalTransform = g.Transform;
+            var unscaledTransform = originalTransform.Clone();
+            unscaledTransform.Scale(1f / zoomf, 1f / zoomf);
+
+            var trebleEdge = CurrentLayout.GetStringBoundaryLine(CurrentLayout.FirstString, FingerboardSide.Treble);
+            var bassEdge = CurrentLayout.GetStringBoundaryLine(CurrentLayout.LastString, FingerboardSide.Bass);
 
             foreach (var fretLine in CurrentLayout.VisualElements.OfType<FretLine>())
             {
+                //if (fretLine.LeftPath == null && !DisplayConfig.FretWidth.IsEmpty)
+                //{
+                //    fretLine.LeftPath = fretLine.OffsetLine(DisplayConfig.FretWidth * 0.5d);
+                //    fretLine.LeftPath.Extend(Measure.Mm(3));
+                //    fretLine.LeftPath.TrimBetween(bassEdge, trebleEdge, true);
+                //    fretLine.RightPath = fretLine.OffsetLine(DisplayConfig.FretWidth * -0.5d);
+                //    fretLine.RightPath.TrimBetween(bassEdge, trebleEdge, true);
+                //}
+
                 if (DisplayConfig.ShowFrets)
                 {
-                    var penToUse = fretLine.IsNut ? nutPen : fretPen;
                     var fretPoints = fretLine.Points.Select(p => PointToDisplay(p)).ToArray();
-                    if (fretLine.IsStraight || CurrentLayout.FretInterpolation == StringedInstruments.Layout.FretInterpolationMethod.Linear)
-                        g.DrawLines(penToUse, fretPoints);
+
+                    if (fretLine.IsNut)
+                    {
+                        if (fretLine.IsStraight || CurrentLayout.FretInterpolation == FretInterpolationMethod.Linear)
+                            g.DrawLines(nutPen, fretPoints);
+                        else
+                            g.DrawCurve(nutPen, fretPoints, 0.5f);
+                    }
                     else
-                        g.DrawCurve(penToUse, fretPoints, 0.5f);
+                    {
+                        //g.Transform = unscaledTransform;
+                        DrawRealFret(g, fretPen, contourPen, fretLine, fretPoints, scaleMatrix, unscaledTransform, originalTransform);
+                        //g.Transform = originalTransform;
+                    }
+                    
                 }
 
-                if(DisplayConfig.ShowTheoreticalFrets && fretLine.Strings.Count() > 1)
+                if (DisplayConfig.ShowTheoreticalFrets && fretLine.Strings.Count() > 1)
                 {
                     g.DrawLines(nutPen, fretLine.Segments.Where(s => !s.IsVirtual).Select(s => PointToDisplay(s.PointOnString)).ToArray());
                 }
-
-                //g.DrawLines(nutPen, fretLine.Points.Select(p => PointToDisplay(p)).ToArray());
             }
-
+            
             nutPen.Dispose();
             fretPen.Dispose();
+        }
+
+        private void DrawRealFret(Graphics g, Pen fretPen, Pen contourPen, FretLine fretLine, PointF[] fretPoints, Matrix scaledMatrix, Matrix unscaledTransform, Matrix originalTransform)
+        {
+
+            using (var gp = new GraphicsPath())
+            {
+                if (fretLine.LeftPath != null && fretLine.RightPath != null)
+                {
+                    gp.StartFigure();
+                    if (fretLine.IsStraight || CurrentLayout.FretInterpolation == FretInterpolationMethod.Linear)
+                    {
+                        gp.AddLines(fretLine.LeftPath.Points.Select(x => PointToDisplay(x)).ToArray());
+                        gp.AddLines(fretLine.RightPath.Points.Select(x => PointToDisplay(x)).Reverse().ToArray());
+                    }
+                    else
+                    {
+                        gp.AddCurve(fretLine.LeftPath.Points.Select(x => PointToDisplay(x)).ToArray(), 0.5f);
+                        gp.AddCurve(fretLine.RightPath.Points.Select(x => PointToDisplay(x)).Reverse().ToArray(), 0.5f);
+                    }
+                    gp.CloseFigure();
+                }
+                else
+                {
+
+                    if (fretLine.IsStraight || CurrentLayout.FretInterpolation == FretInterpolationMethod.Linear)
+                        gp.AddLines(fretPoints);
+                    else
+                        gp.AddCurve(fretPoints, 0.5f);
+
+                    g.Transform = unscaledTransform;
+                    gp.Widen(fretPen, scaledMatrix);
+                }
+
+                
+
+                using (var pgb = new PathGradientBrush(gp))
+                {
+                    pgb.CenterColor = Color.Gainsboro;
+                    pgb.SurroundColors = new Color[] { Color.DarkGray };
+                    g.FillPath(pgb, gp);
+                }
+               
+
+                g.DrawPath(contourPen, gp);
+                g.Transform = originalTransform;
+            }
+
+            
         }
 
         private void RenderStrings(Graphics g)

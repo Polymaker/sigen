@@ -35,6 +35,9 @@ namespace SiGen.StringedInstruments.Layout.Visual
             get { return _IsNut; }
         }
 
+        public LayoutPolyLine LeftPath { get; set; }
+        public LayoutPolyLine RightPath { get; set; }
+
         public override VisualElementType ElementType => VisualElementType.Fret;
 
         public FretLine(IEnumerable<FretSegment> segments)
@@ -299,6 +302,12 @@ namespace SiGen.StringedInstruments.Layout.Visual
         {
             base.FlipHandedness();
             _Segments.ForEach(s => s.FlipHandedness());
+
+            if (LeftPath != null)
+            {
+                LeftPath.FlipHandedness();
+                RightPath.FlipHandedness();
+            }
         }
     }
 }
