@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace SiGen.UI
         private bool _ShowTheoreticalFrets;
         private bool _RenderRealStrings;
         private bool _RenderRealFrets;
+        private Color _FretLineColor;
         private UnitOfMeasure _DefaultDisplayUnit;
         private Measure _FretWidth;
         private Orientation _FingerboardOrientation;
@@ -150,6 +152,20 @@ namespace SiGen.UI
             }
         }
 
+        [DefaultValue(typeof(Color), "0xFF0000")]
+        public Color FretLineColor
+        {
+            get => _FretLineColor;
+            set
+            {
+                if (value != _FretLineColor)
+                {
+                    _FretLineColor = value;
+                    OnPropertyChanged(nameof(FretLineColor));
+                }
+            }
+        }
+
         [DefaultValue(false)]
         public bool RenderRealStrings
         {
@@ -164,7 +180,7 @@ namespace SiGen.UI
             }
         }
 
-        [EditorAttribute(typeof(Designers.MeasureEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Editor(typeof(Designers.MeasureEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Measure FretWidth
         {
             get { return _FretWidth; }
@@ -178,7 +194,7 @@ namespace SiGen.UI
             }
         }
 
-        [EditorAttribute(typeof(Designers.UnitOfMeasureEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Editor(typeof(Designers.UnitOfMeasureEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public UnitOfMeasure DefaultDisplayUnit
         {
             get { return _DefaultDisplayUnit; }
@@ -206,6 +222,7 @@ namespace SiGen.UI
             _FingerboardOrientation = Orientation.Horizontal;
             _DefaultDisplayUnit = UnitOfMeasure.Mm;
             _FretWidth = Measure.Mm(2.5);
+            _FretLineColor = Color.Red;
         }
 
         protected void OnPropertyChanged(string propertyName)

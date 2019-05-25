@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpLayout = new System.Windows.Forms.TableLayoutPanel();
             this.lblBass = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -69,10 +69,10 @@
             this.tlpLayout.Controls.Add(this.mtbTrebleLength, 1, 1);
             this.tlpLayout.Controls.Add(this.mtbBassLength, 1, 2);
             this.tlpLayout.Controls.Add(this.lblTreble, 0, 1);
-            this.tlpLayout.Controls.Add(this.lblMultiScaleRatio, 0, 3);
-            this.tlpLayout.Controls.Add(this.nubMultiScaleRatio, 1, 3);
-            this.tlpLayout.Controls.Add(this.lblParallelFret, 0, 4);
-            this.tlpLayout.Controls.Add(this.cboParallelFret, 1, 4);
+            this.tlpLayout.Controls.Add(this.lblMultiScaleRatio, 0, 4);
+            this.tlpLayout.Controls.Add(this.lblParallelFret, 0, 3);
+            this.tlpLayout.Controls.Add(this.nubMultiScaleRatio, 1, 4);
+            this.tlpLayout.Controls.Add(this.cboParallelFret, 1, 3);
             this.tlpLayout.Dock = System.Windows.Forms.DockStyle.Top;
             this.tlpLayout.Location = new System.Drawing.Point(0, 0);
             this.tlpLayout.Name = "tlpLayout";
@@ -185,16 +185,15 @@
             // 
             this.lblMultiScaleRatio.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.lblMultiScaleRatio.AutoSize = true;
-            this.lblMultiScaleRatio.Location = new System.Drawing.Point(6, 76);
+            this.lblMultiScaleRatio.Location = new System.Drawing.Point(49, 102);
             this.lblMultiScaleRatio.Name = "lblMultiScaleRatio";
-            this.lblMultiScaleRatio.Size = new System.Drawing.Size(81, 13);
+            this.lblMultiScaleRatio.Size = new System.Drawing.Size(38, 13);
             this.lblMultiScaleRatio.TabIndex = 6;
-            this.lblMultiScaleRatio.Text = "Alignment Ratio";
+            this.lblMultiScaleRatio.Text = "(Ratio)";
             // 
             // nubMultiScaleRatio
             // 
-            this.nubMultiScaleRatio.Location = new System.Drawing.Point(93, 74);
-            this.nubMultiScaleRatio.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
+            this.nubMultiScaleRatio.Location = new System.Drawing.Point(93, 99);
             this.nubMultiScaleRatio.MaximumValue = 1D;
             this.nubMultiScaleRatio.Name = "nubMultiScaleRatio";
             this.nubMultiScaleRatio.Size = new System.Drawing.Size(100, 20);
@@ -206,7 +205,7 @@
             // 
             this.lblParallelFret.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.lblParallelFret.AutoSize = true;
-            this.lblParallelFret.Location = new System.Drawing.Point(34, 102);
+            this.lblParallelFret.Location = new System.Drawing.Point(34, 77);
             this.lblParallelFret.Name = "lblParallelFret";
             this.lblParallelFret.Size = new System.Drawing.Size(53, 13);
             this.lblParallelFret.TabIndex = 9;
@@ -217,7 +216,8 @@
             this.cboParallelFret.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboParallelFret.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboParallelFret.FormattingEnabled = true;
-            this.cboParallelFret.Location = new System.Drawing.Point(93, 98);
+            this.cboParallelFret.Location = new System.Drawing.Point(93, 74);
+            this.cboParallelFret.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
             this.cboParallelFret.Name = "cboParallelFret";
             this.cboParallelFret.Size = new System.Drawing.Size(100, 21);
             this.cboParallelFret.TabIndex = 10;
@@ -248,8 +248,8 @@
             // colStringNumber
             // 
             this.colStringNumber.DataPropertyName = "Index";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.colStringNumber.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colStringNumber.DefaultCellStyle = dataGridViewCellStyle4;
             this.colStringNumber.HeaderText = "#";
             this.colStringNumber.Name = "colStringNumber";
             this.colStringNumber.ReadOnly = true;
@@ -257,8 +257,8 @@
             // colScaleLength
             // 
             this.colScaleLength.DataPropertyName = "ScaleLength";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.colScaleLength.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colScaleLength.DefaultCellStyle = dataGridViewCellStyle5;
             this.colScaleLength.HeaderText = "Scale Length";
             this.colScaleLength.Name = "colScaleLength";
             this.colScaleLength.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
@@ -266,8 +266,8 @@
             // colMultiScaleRatio
             // 
             this.colMultiScaleRatio.DataPropertyName = "MultiScaleRatio";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.colMultiScaleRatio.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colMultiScaleRatio.DefaultCellStyle = dataGridViewCellStyle6;
             this.colMultiScaleRatio.HeaderText = "Alignment Ratio";
             this.colMultiScaleRatio.Name = "colMultiScaleRatio";
             this.colMultiScaleRatio.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;

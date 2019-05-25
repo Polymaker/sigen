@@ -402,9 +402,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Resources\closed hand icon.ico" />
     <Content Include="Resources\MeasureIcon_32.png" />
     <Content Include="Resources\MeasureIcon_64.png" />
     <Content Include="Resources\NewLayoutIcon_32.png" />
+    <Content Include="Resources\open hand icon.cur" />
+    <Content Include="Resources\open hand icon.ico" />
     <Content Include="Resources\OpenLayoutIcon_32.png" />
     <Content Include="Resources\OptionsIcon_32.png" />
     <Content Include="Resources\SigenIcon.ico" />

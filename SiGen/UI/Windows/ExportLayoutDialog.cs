@@ -89,6 +89,7 @@ namespace SiGen.UI.Windows
             layoutPreview.DisplayConfig.ShowMargins = SvgExportOptions.ExportFingerboardMargin;
             layoutPreview.DisplayConfig.ShowCenterLine = SvgExportOptions.ExportCenterLine;
             layoutPreview.DisplayConfig.ShowFingerboard = SvgExportOptions.ExportFingerboard;
+            layoutPreview.DisplayConfig.FretLineColor = SvgExportOptions.FretColor;
         }
 
         private void btnExport_Click(object sender, EventArgs e)
@@ -280,6 +281,7 @@ namespace SiGen.UI.Windows
                 {
                     SvgExportOptions.FretColor = dlg.Color;
                     pbxFretColor.BackColor = dlg.Color;
+                    UpdatePreview();
                 }
             }
         }

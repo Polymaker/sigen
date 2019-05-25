@@ -25,7 +25,7 @@ namespace SiGen.UI
         private LayoutMeasure _CurrentMeasure;
         private bool _EnableMeasureTool;
         private bool _IsMeasuring;
-
+        private Cursor OpenHandCursor;
         private SILayout _CurrentLayout;
         private const int PADDING_BORDER = 6;
         private List<LayoutIntersection> LayoutIntersections;
@@ -115,6 +115,8 @@ namespace SiGen.UI
             LayoutIntersections = new List<LayoutIntersection>();
             _DisplayConfig = new LayoutViewerDisplayConfig();
             _DisplayConfig.PropertyChanged += DisplayConfigChanged;
+
+            OpenHandCursor = new Cursor(Properties.Resources.open_hand_icon.Handle);
         }
 
         private void SetLayout(SILayout layout)
@@ -332,8 +334,8 @@ namespace SiGen.UI
         private Dictionary<MouseButtons, Vector> MouseDownPos;
 
         private bool CanDrag { get { return DragTarget != null; } }
-        private bool IsDragging;
-
+        private bool IsDraggingCamera;
+        private bool DragByMouseWheel;
         private Vector lastMousePos;
         private Vector dragStart;
 
@@ -343,12 +345,13 @@ namespace SiGen.UI
             Focus();
 
             MouseDownPos[e.Button] = DisplayToLocal(e.Location);
-            if (!IsDragging)
+            if (!IsDraggingCamera)
             {
                 if (e.Button == MouseButtons.Middle)
                 {
                     DragTarget = new HitTestInfo();
                     lastMousePos = DisplayToLocal(e.Location);
+                    Cursor = new Cursor(Properties.Resources.open_hand_icon.Handle);
                 }
                 else if (e.Button == MouseButtons.Left)
                 {
@@ -366,7 +369,8 @@ namespace SiGen.UI
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            ClearDrag();
+            if (e.Button == MouseButtons.Middle && DragByMouseWheel)
+                ClearDrag();
 
             MouseDownPos[e.Button] = Vector.Empty;
             base.OnMouseUp(e);
@@ -376,19 +380,21 @@ namespace SiGen.UI
         {
             base.OnMouseMove(e);
 
-            if (EnableMeasureTool && MeasureLastSelection.IsEmpty && !IsDragging)
+            if (EnableMeasureTool && MeasureLastSelection.IsEmpty && !IsDraggingCamera)
                 UpdateMeasureSnapPosition(e.Location);
 
-            if (CanDrag || IsDragging)
+            if (CanDrag || IsDraggingCamera)
             {
                 var curPos = DisplayToLocal(e.Location);
                 var moveVector = curPos - lastMousePos;
                 if (moveVector.Length > 1)//1 in local unit = 1 pixel
                 {
-                    if (!IsDragging)
+                    if (!IsDraggingCamera)
                     {
+                        DragByMouseWheel = !MouseDownPos[MouseButtons.Middle].IsEmpty;
+                        Cursor = new Cursor(Properties.Resources.closed_hand_icon.Handle);
                         dragStart = lastMousePos;
-                        IsDragging = true;
+                        IsDraggingCamera = true;
                     }
 
                     PerformDragMove(moveVector);
@@ -434,12 +440,13 @@ namespace SiGen.UI
 
         private void ClearDrag()
         {
-            if (CanDrag || IsDragging)
+            if (CanDrag || IsDraggingCamera)
             {
                 lastMousePos = Vector.Empty;
                 DragTarget = null;
-                IsDragging = false;
+                IsDraggingCamera = false;
                 IsMovingCamera = false;
+                Cursor = Cursors.Default;
                 Invalidate();
             }
         }
@@ -579,6 +586,13 @@ namespace SiGen.UI
             base.OnKeyDown(e);
             if (EnableMeasureTool && MeasureLastSelection.IsEmpty && IsAltPressed(e.KeyCode))
                 UpdateMeasureSnapPosition();
+
+            if (!IsDraggingCamera && e.KeyCode == Keys.Space)
+            {
+                DragTarget = new HitTestInfo();
+                lastMousePos = DisplayToLocal(PointToClient(MousePosition));
+                Cursor = new Cursor(Properties.Resources.open_hand_icon.Handle);
+            }
         }
 
         protected override void OnKeyUp(KeyEventArgs e)
@@ -586,6 +600,11 @@ namespace SiGen.UI
             base.OnKeyUp(e);
             if (EnableMeasureTool && MeasureLastSelection.IsEmpty && IsAltPressed(e.KeyCode))
                 UpdateMeasureSnapPosition();
+
+            if ((CanDrag || (IsDraggingCamera && !DragByMouseWheel)) && e.KeyCode == Keys.Space)
+            {
+                ClearDrag();
+            }
         }
 
         protected override bool ProcessDialogKey(Keys keyData)

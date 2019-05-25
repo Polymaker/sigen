@@ -195,10 +195,10 @@ namespace SiGen.UI
         private void RenderFrets(Graphics g)
         {
             Pen fretPen = null;
-            Pen nutPen = GetPen(Color.Red, 1);
+            Pen nutPen = GetPen(DisplayConfig.FretLineColor, 1);
 
             if (!DisplayConfig.RenderRealFrets)
-                fretPen = GetPen(Color.Red, 1);
+                fretPen = GetPen(DisplayConfig.FretLineColor, 1);
             else
                 fretPen = GetPen(Color.DarkGray, DisplayConfig.FretWidth);
 

@@ -63,7 +63,7 @@ namespace SiGen.Export
                     AddDxfLine("Fingerboard", line, AciColor.Blue);
                     break;
                 case VisualElementType.CenterLine:
-                    AddDxfLine("Layout", line, GetColor(Color.Black));
+                    AddDxfLine("Layout", line, GetColor(Color.Black)).Linetype = Linetype.Dashed;
                     break;
                 case VisualElementType.FingerboardContinuation:
                 case VisualElementType.GuideLine:
