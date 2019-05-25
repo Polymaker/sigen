@@ -24,8 +24,6 @@ namespace SiGen.UI
         private Vector cameraPosition;//independant of orientation
         private LayoutMeasure _CurrentMeasure;
         private bool _EnableMeasureTool;
-        private bool _IsMeasuring;
-        private Cursor OpenHandCursor;
         private SILayout _CurrentLayout;
         private const int PADDING_BORDER = 6;
         private List<LayoutIntersection> LayoutIntersections;
@@ -77,10 +75,7 @@ namespace SiGen.UI
         }
 
         [Browsable(false)]
-        public bool IsMeasuring
-        {
-            get { return _IsMeasuring; }
-        }
+        public bool IsMeasuring { get; private set; }
 
         #endregion
 
@@ -115,8 +110,6 @@ namespace SiGen.UI
             LayoutIntersections = new List<LayoutIntersection>();
             _DisplayConfig = new LayoutViewerDisplayConfig();
             _DisplayConfig.PropertyChanged += DisplayConfigChanged;
-
-            OpenHandCursor = new Cursor(Properties.Resources.open_hand_icon.Handle);
         }
 
         private void SetLayout(SILayout layout)
@@ -369,7 +362,7 @@ namespace SiGen.UI
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Middle && DragByMouseWheel)
+            if (e.Button == MouseButtons.Middle && (CanDrag || (IsDraggingCamera && DragByMouseWheel)))
                 ClearDrag();
 
             MouseDownPos[e.Button] = Vector.Empty;
