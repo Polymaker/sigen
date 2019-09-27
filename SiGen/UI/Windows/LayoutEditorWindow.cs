@@ -29,6 +29,7 @@ namespace SiGen.UI
         private LayoutEditorPanel<ScaleLengthEditor> scaleLengthPanel;
         //private LayoutEditorPanel<LayoutProperties> layoutInfoPanel;
         private LayoutViewerPanel PreviousDocument;
+        private string[] FilesToOpen;
 
         public LayoutViewerPanel ActiveDocument
         {
@@ -54,11 +55,28 @@ namespace SiGen.UI
             Icon = Properties.Resources.SigenIcon;
         }
 
+        public LayoutEditorWindow(string[] args)
+        {
+            InitializeComponent();
+            Icon = Properties.Resources.SigenIcon;
+            if (args != null)
+                FilesToOpen = args.Where(x => File.Exists(x)).ToArray();
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             InitializeEditingPanels();
-            OpenLayoutFile("DefaultLayout.sil", true);
+
+            if(FilesToOpen != null && FilesToOpen.Length > 0)
+            {
+                foreach (var path in FilesToOpen)
+                    OpenLayoutFile(path, false);
+            }
+            else
+            {
+                OpenDefaultLayout();
+            }
             AppPreferences.ValidateRecentFiles();
             RebuildRecentFilesMenu();
         }
@@ -289,17 +307,6 @@ namespace SiGen.UI
             return true;
         }
 
-        private string GenerateDefaultFileName(LayoutDocument file)
-        {
-            var keywords = new List<string>();
-            keywords.Add($"{file.Layout.NumberOfStrings} Strings");
-            if (file.Layout.ScaleLengthMode == ScaleLengthType.Multiple)
-                keywords.Add("Multiscale");
-            keywords.Add("Fingerboard");
-            keywords.Add("Layout");
-            return string.Join(" ", keywords) + ".sil";
-        }
-
         private void tssbSave_ButtonClick(object sender, EventArgs e)
         {
             if (CurrentLayoutDocument != null)
@@ -322,20 +329,12 @@ namespace SiGen.UI
 
         #region Open
 
-        private void tssbOpen_ButtonClick(object sender, EventArgs e)
+        private void OpenDefaultLayout()
         {
-            tssbOpen.HideDropDown();
-            using (var ofd = new OpenFileDialog())
-            {
-                ofd.Filter = "SI Layout file (*.sil)|*.sil";
-                if (ofd.ShowDialog() == DialogResult.OK)
-                    OpenLayoutFile(ofd.FileName);
-            }
-        }
-
-        private void tsmiOpenFile_Click(object sender, EventArgs e)
-        {
-            tssbOpen_ButtonClick(sender, e);
+            var defaultLayout = SILayout.GenerateDefaultLayout();
+            var layoutDoc = new LayoutDocument(defaultLayout);
+            LoadLayout(layoutDoc);
+            //OpenLayoutFile("DefaultLayout.sil", true);
         }
 
         private void OpenLayoutFile(string filename, bool asTemplate = false)

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?include $(sys.CURRENTDIR)\Variables.wxi?>
+	<Product Id="*" Name="SiGen Setup" Language="1033" Version="1.0.0.0" 
+           Manufacturer="Polymaker" UpgradeCode="fb896ebb-bff3-480a-b28a-313237f1b5e9">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine"/>
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+		<Feature Id="ProductFeature" Title="SiGen.Setup" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+    <Media Id="1" Cabinet="product.cab" EmbedCab="yes" />
+    
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <UIRef Id="WixUI_InstallDir" />
+	</Product>
+
+	<Fragment>
+    
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="$(var.PlatformProgramFilesFolder)">
+				<Directory Id="INSTALLFOLDER" Name="SiGen" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <ComponentRef Id="cmp62EC7AD196E4EF3D0A3D4381737CAC39" />
+      <ComponentRef Id="cmp46D41B23780E2F8084732EB7BE48FF13" />
+      <ComponentRef Id="cmpE08CEF05F63607C69E9F2AA09F2C96EA" />
+      <ComponentRef Id="cmpB68BAE6610A203138BCE0286C1D7BE23" />
+      <ComponentRef Id="cmp759340E7CD81353175D05CEF4CB1AB03" />
+      <ComponentRef Id="cmp122C2FF1A3FD0C0B6B64CE3DFCE823A2" />
+		</ComponentGroup>
+	</Fragment>
+
+  <Fragment>
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="cmp62EC7AD196E4EF3D0A3D4381737CAC39" Guid="{7127D878-2BC8-4D29-88D6-1F867F1945E0}">
+        <File Id="fil986EE9A46EC117FE8F4AACFD9E0D6CF2" KeyPath="yes" Source="$(var.SiGen.TargetDir)\netDxf.dll" />
+      </Component>
+      <Component Id="cmp46D41B23780E2F8084732EB7BE48FF13" Guid="{8E22609F-1EB0-4C4D-944C-96F62FA70C3C}">
+        <File Id="filA95D4C540D304467DAF076C023AE928C" KeyPath="yes" Source="$(var.SiGen.TargetDir)\SiGen.exe" />
+        <File Id="filC774CED3DE122651670C5CD9789561CF" Source="$(var.SiGen.ProjectDir)\Resources\SigenIcon.ico" />
+
+        <!--<Shortcut Id="startmenuShortcut" Directory="ProgramMenuFolder" Name="SiGen" Icon="SigenIcon.ico" IconIndex="0" WorkingDirectory="APPLICATIONFOLDER" Advertise="yes" />-->
+        <ProgId Id="SiGen.Document" Description="SiGen layout document" Advertise="yes">
+          <Extension Id="sil">
+            <Verb Id="open" Command="Open" Argument="&quot;%1&quot;" />
+            <MIME Advertise="yes" ContentType="application/sil" Default="yes" />
+          </Extension>
+        </ProgId>
+      </Component>
+      <Component Id="cmpE08CEF05F63607C69E9F2AA09F2C96EA" Guid="{ED961396-B125-47E4-AEF5-50A0ACE2B74B}">
+        <File Id="fil916B7796A44B7E82003B71144D19D3C8" KeyPath="yes" Source="$(var.SiGen.TargetDir)\SiGen.exe.config" />
+      </Component>
+      <Component Id="cmpB68BAE6610A203138BCE0286C1D7BE23" Guid="{67077B37-8DF5-4F8A-9B48-BE61286E766A}">
+        <File Id="filD87B0B1CA9037FFB1FF52A488404F074" KeyPath="yes" Source="$(var.SiGen.TargetDir)\Svg.dll" />
+      </Component>
+      <Component Id="cmp759340E7CD81353175D05CEF4CB1AB03" Guid="{5F08EBFF-33D7-43D3-9704-329A5E2FE29A}">
+        <File Id="filF9EA235ACC92C8A3E37F98C960941F0B" KeyPath="yes" Source="$(var.SiGen.TargetDir)\WeifenLuo.WinFormsUI.Docking.dll" />
+      </Component>
+      <Directory Id="dir8689BDEC957087ED5533AB8BAC9754ED" Name="fr">
+        <Component Id="cmp122C2FF1A3FD0C0B6B64CE3DFCE823A2" Guid="{FED3B85E-BA65-4F01-B7A2-B9EBDCE77B17}">
+          <File Id="fil6F093B8EC0B2E3DE10EADC6DAC9E9378" KeyPath="yes" Source="$(var.SiGen.TargetDir)\fr\SiGen.resources.dll" />
+        </Component>
+      </Directory>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

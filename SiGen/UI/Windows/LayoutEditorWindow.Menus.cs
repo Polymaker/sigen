@@ -1,4 +1,5 @@
-﻿using SiGen.StringedInstruments.Layout;
+﻿using SiGen.Common;
+using SiGen.StringedInstruments.Layout;
 using SiGen.UI.Controls;
 using SiGen.UI.Windows;
 using System;
@@ -176,7 +177,23 @@ namespace SiGen.UI
 
         private void tsbNew_Click(object sender, EventArgs e)
         {
-            OpenLayoutFile("DefaultLayout.sil", true);
+            OpenDefaultLayout();
+        }
+
+        private void tssbOpen_ButtonClick(object sender, EventArgs e)
+        {
+            tssbOpen.HideDropDown();
+            using (var ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "SI Layout file (*.sil)|*.sil";
+                if (ofd.ShowDialog() == DialogResult.OK)
+                    OpenLayoutFile(ofd.FileName);
+            }
+        }
+
+        private void tsmiOpenFile_Click(object sender, EventArgs e)
+        {
+            tssbOpen_ButtonClick(sender, e);
         }
 
         private void tsbExport_Click(object sender, EventArgs e)
