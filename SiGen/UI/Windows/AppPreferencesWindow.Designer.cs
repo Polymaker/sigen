@@ -80,9 +80,10 @@
             // 
             // layoutExportOptionsEditor1
             // 
-            this.layoutExportOptionsEditor1.Location = new System.Drawing.Point(15, 65);
+            this.layoutExportOptionsEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layoutExportOptionsEditor1.Location = new System.Drawing.Point(0, 0);
             this.layoutExportOptionsEditor1.Name = "layoutExportOptionsEditor1";
-            this.layoutExportOptionsEditor1.Size = new System.Drawing.Size(374, 277);
+            this.layoutExportOptionsEditor1.Size = new System.Drawing.Size(466, 385);
             this.layoutExportOptionsEditor1.TabIndex = 0;
             // 
             // AppPreferencesWindow

@@ -34,7 +34,7 @@ namespace SiGen.Export
         private Dictionary<string, SvgGroup> Layers;
         private SvgUnitCollection LineDashPattern;
 
-        private SvgLayoutExporter(SILayout layout, LayoutSvgExportOptions options)
+        private SvgLayoutExporter(SILayout layout, LayoutExportOptions options)
             : base(layout, options)
         {
             Layers = new Dictionary<string, SvgGroup>();
@@ -91,20 +91,15 @@ namespace SiGen.Export
             }
         }
 
-        protected override void AddLayoutLine(LayoutLine line, VisualElementType elementType, VisualElement extraInfo = null)
+        protected override void AddLayoutLine(LayoutLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
         {
             switch (elementType)
             {
                 case VisualElementType.Fret:
                     {
-                        var fretStroke = GetRelativeUnit(1, SvgUnitType.Point);
+                        var svgLine = CreateSvgLine(GetLayer("Frets"), line, lineConfig);
 
-                        if (!Options.FretLineThickness.IsEmpty)
-                            fretStroke = GetRelativeUnit(Options.FretLineThickness);
-
-                        var svgLine = CreateSvgLine(GetLayer("Frets"), line, fretStroke, Options.FretColor);
-
-                        if (extraInfo is FretLine fretLine)
+                        if (line.Tag is FretLine fretLine)
                         {
                             if (fretLine.IsNut)
                                 svgLine.CustomAttributes.Add("Fret", "Nut");
@@ -115,49 +110,44 @@ namespace SiGen.Export
                     }
 
                 case VisualElementType.FingerboardEdge:
-                    CreateSvgLine(GetLayer("Fingerboard"), line, GetRelativeUnit(1, SvgUnitType.Point), Color.Blue);
-                    break;
-
                 case VisualElementType.FingerboardMargin:
-                    CreateSvgLine(GetLayer("Layout"), line, GetRelativeUnit(1, SvgUnitType.Point), Color.Gray);
+                case VisualElementType.FingerboardContinuation:
+                    CreateSvgLine(GetLayer("Fingerboard"), line, lineConfig);
                     break;
 
-                case VisualElementType.FingerboardContinuation:
+                case VisualElementType.CenterLine:
                 case VisualElementType.StringCenter:
                 case VisualElementType.GuideLine:
-                    CreateSvgLine(GetLayer("Layout"), line, GetRelativeUnit(1, SvgUnitType.Point), Color.LightGray, LineDashPattern);
+                    CreateSvgLine(GetLayer("Layout"), line, lineConfig);
                     break;
 
                 case VisualElementType.String:
                     {
                         var stringInfo = line as StringLine;
-                        var lineThickness = Options.UseStringGauge && !stringInfo.String.Gauge.IsEmpty ?
-                            GetRelativeUnit(stringInfo.String.Gauge) : GetRelativeUnit(1, SvgUnitType.Point);
+                        SvgLine svgLine;
+                        if (Options.UseStringGauge && !stringInfo.String.Gauge.IsEmpty)
+                        {
+                            var lineThickness = GetRelativeUnit(stringInfo.String.Gauge);
+                            svgLine = CreateSvgLine(GetLayer("Strings"), line, lineThickness, Options.Strings.Color);
+                        }
+                        else
+                            svgLine = CreateSvgLine(GetLayer("Strings"), line, lineConfig);
 
-                        var svgLine = CreateSvgLine(GetLayer("Strings"), line, lineThickness, Options.StringColor);
                         svgLine.CustomAttributes.Add("Index", stringInfo.Index.ToString());
                         break;
                     }
-
-                case VisualElementType.CenterLine:
-                    CreateSvgLine(GetLayer("Layout"), line, GetRelativeUnit(1, SvgUnitType.Point), Color.Black);
-                    break;
             }
         }
 
-        protected override void AddLayoutPolyLine(LayoutPolyLine line, VisualElementType elementType, VisualElement extraInfo = null)
+        protected override void AddLayoutPolyLine(LayoutPolyLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
         {
             switch (elementType)
             {
                 case VisualElementType.Fret:
                     {
-                        var fretStroke = GetRelativeUnit(1, SvgUnitType.Point);
-                        if (!Options.FretLineThickness.IsEmpty)
-                            fretStroke = GetRelativeUnit(Options.FretLineThickness);
+                        var svgLine = CreateSvgPolyLine(GetLayer("Frets"), line, lineConfig);
 
-                        var svgLine = CreateSvgPolyLine(GetLayer("Frets"), line, fretStroke, Options.FretColor);
-
-                        var fretLine = (line as FretLine) ?? (extraInfo as FretLine);
+                        var fretLine = (line as FretLine) ?? (line.Tag as FretLine);
                         if (fretLine != null)
                         {
                             if (fretLine.IsNut)
@@ -169,35 +159,27 @@ namespace SiGen.Export
                         break;
                     }
                 case VisualElementType.FingerboardEdge:
-                    CreateSvgPolyLine(GetLayer("Fingerboard"), line, GetRelativeUnit(1, SvgUnitType.Point), Color.Blue);
+                case VisualElementType.FingerboardMargin:
+                case VisualElementType.FingerboardContinuation:
+                    CreateSvgPolyLine(GetLayer("Fingerboard"), line, lineConfig);
                     break;
 
-                case VisualElementType.GuideLine:
-                    CreateSvgPolyLine(GetLayer("Layout"), line, GetRelativeUnit(1, SvgUnitType.Point), Color.LightGray).StrokeDashArray = LineDashPattern;
+                //case VisualElementType.GuideLine:
+                default:
+                    CreateSvgPolyLine(GetLayer("Layout"), line, lineConfig);
                     break;
-                    //case VisualElementType.FingerboardMargin:
-                    //    CreateSvgPolyLine(GetLayer("Layout"), line, GetRelativeUnit(1, SvgUnitType.Point), Color.LightGray);
-                    //    break;
-                    //case VisualElementType.FingerboardContinuation:
-                    //    CreateSvgPolyLine(GetLayer("Layout"), line, GetRelativeUnit(1, SvgUnitType.Point), Color.LightGray).StrokeDashArray = LineDashPattern;
-                    //    break;
             }
         }
 
-        protected override void AddLayoutSpline(LayoutPolyLine line, VisualElementType elementType, VisualElement extraInfo = null)
+        protected override void AddLayoutSpline(LayoutPolyLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
         {
             switch (elementType)
             {
                 case VisualElementType.Fret:
                     {
-                        var fretStroke = GetRelativeUnit(1, SvgUnitType.Point);
+                        var svgSpline = CreateSvgSpline(GetLayer("Frets"), line, lineConfig);
 
-                        if (!Options.FretLineThickness.IsEmpty)
-                            fretStroke = GetRelativeUnit(Options.FretLineThickness);
-
-                        var svgSpline = CreateSvgSpline(GetLayer("Frets"), line, fretStroke, Options.FretColor);
-
-                        FretLine fretLine = (line as FretLine) ?? (extraInfo as FretLine);
+                        FretLine fretLine = (line as FretLine) ?? (line.Tag as FretLine);
                         if (fretLine != null)
                         {
                             if (fretLine.IsNut)
@@ -208,18 +190,15 @@ namespace SiGen.Export
                         break;
                     }
                 case VisualElementType.FingerboardEdge:
-                    CreateSvgSpline(GetLayer("Fingerboard"), line, GetRelativeUnit(1, SvgUnitType.Point), Color.Blue);
+                case VisualElementType.FingerboardMargin:
+                case VisualElementType.FingerboardContinuation:
+                    CreateSvgSpline(GetLayer("Fingerboard"), line, lineConfig);
                     break;
 
-                case VisualElementType.GuideLine:
-                    CreateSvgSpline(GetLayer("Layout"), line, GetRelativeUnit(1, SvgUnitType.Point), Color.LightGray).StrokeDashArray = LineDashPattern;
+                //case VisualElementType.GuideLine:
+                default:
+                    CreateSvgSpline(GetLayer("Layout"), line, lineConfig);
                     break;
-                    //case VisualElementType.FingerboardMargin:
-                    //    CreateSvgSpline(GetLayer("Layout"), line, GetRelativeUnit(1, SvgUnitType.Point), Color.LightGray);
-                    //    break;
-                    //case VisualElementType.FingerboardContinuation:
-                    //    CreateSvgSpline(GetLayer("Layout"), line, GetRelativeUnit(1, SvgUnitType.Point), Color.LightGray).StrokeDashArray = LineDashPattern;
-                    //    break;
             }
         }
 
@@ -242,24 +221,29 @@ namespace SiGen.Export
             return svgLine;
         }
 
-        private SvgLine CreateSvgLine(SvgElement owner, PointM p1, PointM p2, SvgUnit stroke, Color color)
-        {
-            return CreateSvgLine(owner, p1, p2, stroke, color, null);
-        }
-
         private SvgLine CreateSvgLine(SvgElement owner, LayoutLine line, SvgUnit stroke, Color color)
         {
             return CreateSvgLine(owner, line.P1, line.P2, stroke, color, null);
         }
 
-        private SvgLine CreateSvgLine(SvgElement owner, LayoutLine line, SvgUnit stroke, Color color, SvgUnitCollection dashPattern)
+        private SvgLine CreateSvgLine(SvgElement owner, LayoutLine line, LayoutLineExportConfig lineConfig)
         {
-            return CreateSvgLine(owner, line.P1, line.P2, stroke, color, dashPattern);
+            return CreateSvgLine(owner, line.P1, line.P2, 
+                GetLineThickness(lineConfig), 
+                lineConfig.Color, 
+                lineConfig.IsDashed ? LineDashPattern : null);
         }
 
-        private SvgPath CreateSvgPolyLine(SvgElement owner, LayoutPolyLine line, SvgUnit stroke, Color color)
+        private SvgPath CreateSvgPolyLine(SvgElement owner, LayoutPolyLine line, LayoutLineExportConfig lineConfig)
         {
-            var path = new SvgPath() { StrokeWidth = stroke, Stroke = new SvgColourServer(color), Fill = SvgPaintServer.None };
+            var path = new SvgPath() { 
+                StrokeWidth = GetLineThickness(lineConfig), 
+                Stroke = new SvgColourServer(lineConfig.Color), 
+                Fill = SvgPaintServer.None 
+            };
+
+            if (lineConfig.IsDashed)
+                path.StrokeDashArray = LineDashPattern;
 
             path.PathData.Add(new SvgMoveToSegment(GetRelativePosition(line.Points[0])));
 
@@ -276,9 +260,17 @@ namespace SiGen.Export
             return path;
         }
 
-        private SvgPath CreateSvgSpline(SvgElement owner, LayoutPolyLine line, SvgUnit stroke, Color color)
+        private SvgPath CreateSvgSpline(SvgElement owner, LayoutPolyLine line, LayoutLineExportConfig lineConfig)
         {
-            var path = new SvgPath() { StrokeWidth = stroke, Stroke = new SvgColourServer(color), Fill = SvgPaintServer.None };
+            var path = new SvgPath()
+            {
+                StrokeWidth = GetLineThickness(lineConfig),
+                Stroke = new SvgColourServer(lineConfig.Color),
+                Fill = SvgPaintServer.None
+            };
+
+            if (lineConfig.IsDashed)
+                path.StrokeDashArray = LineDashPattern;
 
             path.PathData.Add(new SvgMoveToSegment(GetRelativePosition(line.Spline.Curves[0].StartPoint)));
 
@@ -321,6 +313,26 @@ namespace SiGen.Export
             }
 
             return Layers[id];
+        }
+
+        private SvgUnit GetLineThickness(LayoutLineExportConfig lineExportConfig)
+        {
+            if (lineExportConfig.LineThickness > 0)
+            {
+                switch (lineExportConfig.LineUnit)
+                {
+                    case ExportUnit.Pixels:
+                        return GetRelativeUnit(lineExportConfig.LineThickness, SvgUnitType.Pixel);
+                    case ExportUnit.Points:
+                        return GetRelativeUnit(lineExportConfig.LineThickness, SvgUnitType.Point);
+                    case ExportUnit.Measure:
+                        var sizeM = Measure.FromNormalizedValue(lineExportConfig.LineThickness, Options.ExportUnit); ;
+                        return GetRelativeUnit(sizeM);
+                }
+            }
+            
+
+            return GetRelativeUnit(1, SvgUnitType.Point);
         }
 
         private SvgUnit GetRelativeUnit(double value, SvgUnitType type)
@@ -388,7 +400,7 @@ namespace SiGen.Export
 
         #endregion
 
-        public static void ExportLayout(string filename, SILayout layout, LayoutSvgExportOptions options)
+        public static void ExportLayout(string filename, SILayout layout, LayoutExportOptions options)
         {
             var exporter = new SvgLayoutExporter(layout, options);
             exporter.GenerateDocument();

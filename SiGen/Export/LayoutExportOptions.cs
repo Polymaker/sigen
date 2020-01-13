@@ -1,4 +1,5 @@
-﻿using SiGen.Measuring;
+﻿using Newtonsoft.Json;
+using SiGen.Measuring;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,49 +13,119 @@ namespace SiGen.Export
     [Serializable]
     public class LayoutExportOptions
     {
-        public bool ExportStrings { get; set; }
-        public bool ExportStringCenters { get; set; }
-        public bool ExportCenterLine { get; set; }
-        public bool ExportFrets { get; set; }
-        public bool ExportFingerboard { get; set; }
-        public bool ExportFingerboardMargin { get; set; }
+        public string ConfigurationName { get; set; }
 
-        //public LayoutItemExportConfig FretsConfig
+        public StringsExportConfig Strings { get; set; }
 
-        public Measure FretSlotsExtensionAmount { get; set; }
+        [JsonIgnore]
+        public bool ExportStrings
+        {
+            get => Strings.Enabled;
+            set => Strings.Enabled = value;
+        }
+
+        [JsonIgnore]
+        public bool UseStringGauge
+        {
+            get => Strings.UseStringGauge;
+            set => Strings.UseStringGauge = value;
+        }
+
+        public LayoutLineExportConfig StringCenters { get; set; }
+
+        [JsonIgnore]
+        public bool ExportStringCenters
+        {
+            get => StringCenters.Enabled;
+            set => StringCenters.Enabled = value;
+        }
+
+        public LayoutLineExportConfig CenterLine { get; set; }
+
+        [JsonIgnore]
+        public bool ExportCenterLine
+        {
+            get => CenterLine.Enabled;
+            set => CenterLine.Enabled = value;
+        }
+
+        public FretsExportConfig Frets { get; set; }
+
+        [JsonIgnore]
+        public bool ExportFrets
+        {
+            get => Frets.Enabled;
+            set => Frets.Enabled = value;
+        }
+
+        public bool ExtendFretSlots => Frets.ExtendFretSlots;
+
+        public LayoutLineExportConfig FingerboardEdges { get; set; }
+
+        [JsonIgnore]
+        public bool ExportFingerboardEdges
+        {
+            get => FingerboardEdges.Enabled;
+            set => FingerboardEdges.Enabled = value;
+        }
+
+        public LayoutLineExportConfig FingerboardMargins { get; set; }
+
+        [JsonIgnore]
+        public bool ExportFingerboardMargins
+        {
+            get => FingerboardMargins.Enabled;
+            set => FingerboardMargins.Enabled = value;
+        }
+
+        public LayoutLineExportConfig GuideLines { get; set; }
+
+        [JsonIgnore]
+        public bool ExportGuideLines
+        {
+            get => GuideLines.Enabled;
+            set => GuideLines.Enabled = value;
+        }
+
+        public bool InkscapeCompatible { get; set; }
+
+        public int TargetDPI { get; set; }
 
         public UnitOfMeasure ExportUnit { get; set; }
 
-        public bool ExtendFretSlots { get { return !FretSlotsExtensionAmount.IsEmpty && FretSlotsExtensionAmount > Measure.Zero; } }
-
         public LayoutExportOptions()
         {
-            FretSlotsExtensionAmount = Measure.Empty;
+            Strings = new StringsExportConfig();
+            StringCenters = new LayoutLineExportConfig();
+            CenterLine = new LayoutLineExportConfig();
+            Frets = new FretsExportConfig();
+            FingerboardEdges = new LayoutLineExportConfig();
+            FingerboardMargins = new LayoutLineExportConfig();
+            GuideLines = new LayoutLineExportConfig();
             ExportFrets = true;
-            ExportFingerboard = true;
+            ExportFingerboardEdges = true;
             ExportUnit = UnitOfMeasure.Mm;
         }
-    }
 
-    [Serializable]
-    public class LayoutSvgExportOptions : LayoutExportOptions
-    {
-        public bool InkscapeCompatible { get; set; }
-        public int TargetDPI { get; set; }
-        public Measure FretLineThickness { get; set; }
-        public Color FretColor { get; set; }
-        public Color StringColor { get; set; }
-        public Color FingerboardColor { get; set; }
-        public bool UseStringGauge { get; set; }
-
-        public LayoutSvgExportOptions() : base()
+        public static LayoutExportOptions CreateDefault()
         {
-            InkscapeCompatible = true;
-            TargetDPI = 90;
-            FretColor = Color.Red;
-            StringColor = Color.Black;
-            FingerboardColor = Color.Blue;
-            FretLineThickness = Measure.Empty;
+            var exportConfig = new LayoutExportOptions()
+            {
+                ConfigurationName = "Default",
+                ExportFrets = true,
+                ExportFingerboardEdges = true,
+                ExportCenterLine = true,
+                ExportUnit = UnitOfMeasure.Mm,
+                InkscapeCompatible = true,
+                TargetDPI = 90
+            };
+            exportConfig.Frets.Color = Color.Red;
+            exportConfig.Strings.Color = Color.Black;
+            exportConfig.StringCenters.Color = Color.LightGray;
+            exportConfig.FingerboardEdges.Color = Color.Blue;
+            exportConfig.FingerboardMargins.Color = Color.Gray;
+            exportConfig.GuideLines.Color = Color.LightGray;
+            return exportConfig;
         }
     }
 }

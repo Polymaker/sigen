@@ -93,9 +93,11 @@
     <OutputPath>bin\Wix Prep\Any\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="netDxf, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="netDxf">
       <HintPath>..\Libraries\netDxf.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Svg, Version=2.2.1.39233, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
       <HintPath>packages\Svg.2.3.0\lib\net35\Svg.dll</HintPath>
@@ -130,7 +132,7 @@
     <Compile Include="Export\ExportUnit.cs" />
     <Compile Include="Export\LayoutExporterBase.cs" />
     <Compile Include="Export\LayoutExportOptions.cs" />
-    <Compile Include="Export\LayoutItemExportConfig.cs" />
+    <Compile Include="Export\LayoutLineExportConfig.cs" />
     <Compile Include="Export\SvgLayoutExporter.cs" />
     <Compile Include="Localization\LocalizableString.cs">
       <SubType>Component</SubType>
@@ -276,6 +278,12 @@
     <Compile Include="UI\Controls\PreferencesPanels\StringsManagementPanel.Designer.cs">
       <DependentUpon>StringsManagementPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Controls\Preferences\LineExportConfigEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\Preferences\LineExportConfigEdit.Designer.cs">
+      <DependentUpon>LineExportConfigEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Controls\ValueEditors\ColorSelectButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -406,6 +414,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\PreferencesPanels\StringsManagementPanel.resx">
       <DependentUpon>StringsManagementPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\Preferences\LineExportConfigEdit.resx">
+      <DependentUpon>LineExportConfigEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\ValueEditors\ColorSelectButton.resx">
       <DependentUpon>ColorSelectButton.cs</DependentUpon>

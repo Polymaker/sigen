@@ -28,43 +28,129 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
-            this.chkExportFingerboardEdges = new System.Windows.Forms.CheckBox();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.FingerboardEdgesConfig = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
+            this.FingerboardMarginsConfig = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
+            this.ConfigSelectionLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.StringsConfig = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
+            this.FretsConfig = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.colorBtnFingerboardEdges = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
-            this.lineOptFingerboardEdges = new SiGen.UI.Controls.ValueEditors.ExportLineThicknessEditor();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.colorSelectButton1 = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
-            this.label5 = new System.Windows.Forms.Label();
-            this.exportLineThicknessEditor1 = new SiGen.UI.Controls.ValueEditors.ExportLineThicknessEditor();
+            this.flowLayoutPanel1.SuspendLayout();
+            this.ConfigSelectionLayout.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(3, 233);
+            this.label1.Margin = new System.Windows.Forms.Padding(3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(93, 16);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Fingerboard";
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.flowLayoutPanel1.Controls.Add(this.FingerboardEdgesConfig);
+            this.flowLayoutPanel1.Controls.Add(this.FingerboardMarginsConfig);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 255);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(612, 186);
+            this.flowLayoutPanel1.TabIndex = 3;
+            // 
+            // FingerboardEdgesConfig
+            // 
+            this.FingerboardEdgesConfig.ConfigName = "Fingerboard edges";
+            this.FingerboardEdgesConfig.LineConfig = null;
+            this.FingerboardEdgesConfig.Location = new System.Drawing.Point(3, 3);
+            this.FingerboardEdgesConfig.Name = "FingerboardEdgesConfig";
+            this.FingerboardEdgesConfig.Size = new System.Drawing.Size(367, 87);
+            this.FingerboardEdgesConfig.TabIndex = 2;
+            // 
+            // FingerboardMarginsConfig
+            // 
+            this.FingerboardMarginsConfig.ConfigName = "Fingerboard margins";
+            this.FingerboardMarginsConfig.LineConfig = null;
+            this.FingerboardMarginsConfig.Location = new System.Drawing.Point(3, 96);
+            this.FingerboardMarginsConfig.Name = "FingerboardMarginsConfig";
+            this.FingerboardMarginsConfig.Size = new System.Drawing.Size(367, 87);
+            this.FingerboardMarginsConfig.TabIndex = 4;
+            // 
+            // ConfigSelectionLayout
+            // 
+            this.ConfigSelectionLayout.AutoSize = true;
+            this.ConfigSelectionLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ConfigSelectionLayout.ColumnCount = 3;
+            this.ConfigSelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.ConfigSelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.ConfigSelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ConfigSelectionLayout.Controls.Add(this.label6, 0, 0);
+            this.ConfigSelectionLayout.Controls.Add(this.comboBox1, 1, 0);
+            this.ConfigSelectionLayout.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ConfigSelectionLayout.Location = new System.Drawing.Point(0, 0);
+            this.ConfigSelectionLayout.Name = "ConfigSelectionLayout";
+            this.ConfigSelectionLayout.RowCount = 1;
+            this.ConfigSelectionLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.ConfigSelectionLayout.Size = new System.Drawing.Size(635, 27);
+            this.ConfigSelectionLayout.TabIndex = 4;
+            // 
+            // label6
+            // 
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(25, 7);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(72, 13);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "Configuration:";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(103, 3);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(173, 21);
+            this.comboBox1.TabIndex = 1;
+            // 
+            // panel1
+            // 
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.tableLayoutPanel1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 27);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(635, 434);
+            this.panel1.TabIndex = 5;
+            // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26.73797F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 73.26203F));
-            this.tableLayoutPanel1.Controls.Add(this.checkBox1, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.colorBtnFingerboardEdges, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.lineOptFingerboardEdges, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.label4, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.chkExportFingerboardEdges, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.colorSelectButton1, 1, 5);
-            this.tableLayoutPanel1.Controls.Add(this.label5, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.exportLineThicknessEditor1, 1, 6);
+            this.tableLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.StringsConfig, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.FretsConfig, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 4);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 8;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowCount = 7;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -72,163 +158,82 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(374, 232);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(618, 464);
+            this.tableLayoutPanel1.TabIndex = 4;
             // 
-            // label1
+            // StringsConfig
             // 
-            this.label1.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.label1, 2);
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(3, 3);
-            this.label1.Margin = new System.Windows.Forms.Padding(3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(93, 16);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Fingerboard";
+            this.StringsConfig.ConfigName = "Export strings";
+            this.StringsConfig.LineConfig = null;
+            this.StringsConfig.Location = new System.Drawing.Point(3, 140);
+            this.StringsConfig.Name = "StringsConfig";
+            this.StringsConfig.Size = new System.Drawing.Size(367, 87);
+            this.StringsConfig.TabIndex = 6;
             // 
-            // chkExportFingerboardEdges
+            // FretsConfig
             // 
-            this.chkExportFingerboardEdges.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.chkExportFingerboardEdges.AutoSize = true;
-            this.chkExportFingerboardEdges.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkExportFingerboardEdges.Checked = true;
-            this.chkExportFingerboardEdges.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.tableLayoutPanel1.SetColumnSpan(this.chkExportFingerboardEdges, 2);
-            this.chkExportFingerboardEdges.Location = new System.Drawing.Point(3, 25);
-            this.chkExportFingerboardEdges.Name = "chkExportFingerboardEdges";
-            this.chkExportFingerboardEdges.Size = new System.Drawing.Size(144, 17);
-            this.chkExportFingerboardEdges.TabIndex = 3;
-            this.chkExportFingerboardEdges.Text = "Export fingerboard edges";
-            this.chkExportFingerboardEdges.UseVisualStyleBackColor = true;
-            this.chkExportFingerboardEdges.CheckedChanged += new System.EventHandler(this.ChkExportFingerboardEdges_CheckedChanged);
+            this.FretsConfig.ConfigName = "Export frets";
+            this.FretsConfig.LineConfig = null;
+            this.FretsConfig.Location = new System.Drawing.Point(3, 25);
+            this.FretsConfig.Name = "FretsConfig";
+            this.FretsConfig.Size = new System.Drawing.Size(370, 87);
+            this.FretsConfig.TabIndex = 5;
             // 
             // label3
             // 
-            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(22, 77);
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(3, 118);
+            this.label3.Margin = new System.Windows.Forms.Padding(3);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(75, 13);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Line thickness";
-            // 
-            // label4
-            // 
-            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(44, 51);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(53, 13);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "Line color";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(226, 238);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // colorBtnFingerboardEdges
-            // 
-            this.colorBtnFingerboardEdges.Location = new System.Drawing.Point(103, 46);
-            this.colorBtnFingerboardEdges.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.colorBtnFingerboardEdges.Name = "colorBtnFingerboardEdges";
-            this.colorBtnFingerboardEdges.Size = new System.Drawing.Size(98, 23);
-            this.colorBtnFingerboardEdges.TabIndex = 1;
-            this.colorBtnFingerboardEdges.Value = System.Drawing.Color.Red;
-            // 
-            // lineOptFingerboardEdges
-            // 
-            this.lineOptFingerboardEdges.Location = new System.Drawing.Point(103, 73);
-            this.lineOptFingerboardEdges.Name = "lineOptFingerboardEdges";
-            this.lineOptFingerboardEdges.SelectedUnit = SiGen.Export.ExportUnit.Pixels;
-            this.lineOptFingerboardEdges.Size = new System.Drawing.Size(150, 21);
-            this.lineOptFingerboardEdges.TabIndex = 1;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.tableLayoutPanel1.SetColumnSpan(this.checkBox1, 2);
-            this.checkBox1.Location = new System.Drawing.Point(3, 100);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(151, 17);
-            this.checkBox1.TabIndex = 5;
-            this.checkBox1.Text = "Export fingerboard margins";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.label3.Size = new System.Drawing.Size(56, 16);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Strings";
             // 
             // label2
             // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(44, 126);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(3, 3);
+            this.label2.Margin = new System.Windows.Forms.Padding(3);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 13);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Line color";
-            // 
-            // colorSelectButton1
-            // 
-            this.colorSelectButton1.Location = new System.Drawing.Point(103, 121);
-            this.colorSelectButton1.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.colorSelectButton1.Name = "colorSelectButton1";
-            this.colorSelectButton1.Size = new System.Drawing.Size(98, 23);
-            this.colorSelectButton1.TabIndex = 7;
-            this.colorSelectButton1.Value = System.Drawing.Color.Red;
-            // 
-            // label5
-            // 
-            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(22, 152);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(75, 13);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "Line thickness";
-            // 
-            // exportLineThicknessEditor1
-            // 
-            this.exportLineThicknessEditor1.Location = new System.Drawing.Point(103, 148);
-            this.exportLineThicknessEditor1.Name = "exportLineThicknessEditor1";
-            this.exportLineThicknessEditor1.SelectedUnit = SiGen.Export.ExportUnit.Pixels;
-            this.exportLineThicknessEditor1.Size = new System.Drawing.Size(150, 21);
-            this.exportLineThicknessEditor1.TabIndex = 9;
+            this.label2.Size = new System.Drawing.Size(43, 16);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Frets";
             // 
             // LayoutExportOptionsEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.ConfigSelectionLayout);
             this.Name = "LayoutExportOptionsEditor";
-            this.Size = new System.Drawing.Size(374, 277);
+            this.Size = new System.Drawing.Size(635, 461);
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.ConfigSelectionLayout.ResumeLayout(false);
+            this.ConfigSelectionLayout.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.CheckBox chkExportFingerboardEdges;
+        private Preferences.LineExportConfigEdit FingerboardEdgesConfig;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private Preferences.LineExportConfigEdit FingerboardMarginsConfig;
+        private System.Windows.Forms.TableLayoutPanel ConfigSelectionLayout;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label3;
-        private ValueEditors.ExportLineThicknessEditor lineOptFingerboardEdges;
-        private ValueEditors.ColorSelectButton colorBtnFingerboardEdges;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label label2;
-        private ValueEditors.ColorSelectButton colorSelectButton1;
-        private System.Windows.Forms.Label label5;
-        private ValueEditors.ExportLineThicknessEditor exportLineThicknessEditor1;
+        private Preferences.LineExportConfigEdit StringsConfig;
+        private Preferences.LineExportConfigEdit FretsConfig;
     }
 }

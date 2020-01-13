@@ -12,9 +12,9 @@ namespace SiGen.Export
     {
         public SILayout Layout { get; protected set; }
 
-        public LayoutSvgExportOptions Options { get; protected set; }
+        public LayoutExportOptions Options { get; protected set; }
 
-        protected LayoutExporterBase(SILayout layout, LayoutSvgExportOptions options)
+        protected LayoutExporterBase(SILayout layout, LayoutExportOptions options)
         {
             Layout = layout;
             Options = options;
@@ -34,7 +34,7 @@ namespace SiGen.Export
         {
             InitializeDocument();
 
-            if (Options.ExportFingerboard)
+            if (Options.ExportFingerboardEdges)
                 GenerateFingerboard();
 
             GenerateLayoutLines();
@@ -55,40 +55,42 @@ namespace SiGen.Export
                 if (fretLine.IsStraight)
                 {
                     var layoutLine = new LayoutLine(fretLine.Points.First(), fretLine.Points.Last());
-                    if (Options.ExtendFretSlots && (fretLine.Length + (Options.FretSlotsExtensionAmount * 2)).NormalizedValue > 0)
+                    if (Options.ExtendFretSlots && (fretLine.Length + (Options.Frets.ExtensionAmount * 2)).NormalizedValue > 0)
                     {
-                        layoutLine.P2 += (layoutLine.Direction * Options.FretSlotsExtensionAmount);
-                        layoutLine.P1 += (layoutLine.Direction * (Options.FretSlotsExtensionAmount * -1));
+                        layoutLine.P2 += (layoutLine.Direction * Options.Frets.ExtensionAmount);
+                        layoutLine.P1 += (layoutLine.Direction * (Options.Frets.ExtensionAmount * -1));
                     }
-
-                    AddLayoutLine(layoutLine, VisualElementType.Fret, fretLine);
+                    layoutLine.Tag = fretLine;
+                    AddLayoutLine(layoutLine, VisualElementType.Fret, Options.Frets);
                 }
                 else
                 {
                     fretLine.RebuildSpline();
 
-                    if (Options.ExtendFretSlots && (fretLine.Length + (Options.FretSlotsExtensionAmount * 2)).NormalizedValue > 0)
+                    if (Options.ExtendFretSlots && (fretLine.Length + (Options.Frets.ExtensionAmount * 2)).NormalizedValue > 0)
                     {
                         var tmpLine = new LayoutPolyLine(fretLine.Points);
                         var bounds = fretLine.GetFretBoundaries(false);
-                        var offset1 = LayoutLine.Offset(bounds.Item1, Options.FretSlotsExtensionAmount * -1);
-                        var offset2 = LayoutLine.Offset(bounds.Item2, Options.FretSlotsExtensionAmount);
+                        var offset1 = LayoutLine.Offset(bounds.Item1, Options.Frets.ExtensionAmount * -1);
+                        var offset2 = LayoutLine.Offset(bounds.Item2, Options.Frets.ExtensionAmount);
 
                         tmpLine.TrimBetween(offset1, offset2, true);
                         if (fretLine.Spline != null)
                             tmpLine.InterpolateSpline(0.5);
 
+                        tmpLine.Tag = fretLine;
+
                         if (tmpLine.Spline != null)
-                            AddLayoutSpline(tmpLine, VisualElementType.Fret, fretLine);
+                            AddLayoutSpline(tmpLine, VisualElementType.Fret, Options.Frets);
                         else
-                            AddLayoutPolyLine(tmpLine, VisualElementType.Fret, fretLine);
+                            AddLayoutPolyLine(tmpLine, VisualElementType.Fret, Options.Frets);
                     }
                     else
                     {
                         if (fretLine.Spline != null)
-                            AddLayoutSpline(fretLine, VisualElementType.Fret, fretLine);
+                            AddLayoutSpline(fretLine, VisualElementType.Fret, Options.Frets);
                         else
-                            AddLayoutPolyLine(fretLine, VisualElementType.Fret, fretLine);
+                            AddLayoutPolyLine(fretLine, VisualElementType.Fret, Options.Frets);
                     }
                 }
             }
@@ -97,14 +99,14 @@ namespace SiGen.Export
         private void GenerateFingerboard()
         {
             foreach (var fingerboardEdge in Layout.VisualElements.OfType<FingerboardSideEdge>())
-                AddLayoutLine(fingerboardEdge, VisualElementType.FingerboardEdge);
+                AddLayoutLine(fingerboardEdge, VisualElementType.FingerboardEdge, Options.FingerboardEdges);
 
             foreach (var fingerboardEdge in Layout.VisualElements.OfType<FingerboardEdge>())
             {
                 if (fingerboardEdge.Spline != null)
-                    AddLayoutSpline(fingerboardEdge, VisualElementType.FingerboardEdge);
+                    AddLayoutSpline(fingerboardEdge, VisualElementType.FingerboardEdge, Options.FingerboardEdges);
                 else
-                    AddLayoutPolyLine(fingerboardEdge, VisualElementType.FingerboardEdge);
+                    AddLayoutPolyLine(fingerboardEdge, VisualElementType.FingerboardEdge, Options.FingerboardEdges);
             }
         }
 
@@ -129,23 +131,23 @@ namespace SiGen.Export
                 }
 
                 if (!centerExist)
-                    AddLayoutLine(centerLine, VisualElementType.CenterLine);
+                    AddLayoutLine(centerLine, VisualElementType.CenterLine, Options.CenterLine);
             }
 
             if (Options.ExportStringCenters)
             {
                 foreach (var stringCenter in Layout.VisualElements.OfType<StringCenter>())
-                    AddLayoutLine(stringCenter, VisualElementType.StringCenter);
+                    AddLayoutLine(stringCenter, VisualElementType.StringCenter, Options.StringCenters);
             }
 
-            if (!Options.ExportStrings && Options.ExportFingerboardMargin)//export first & last string to show fingerboard margin
+            if (!Options.ExportStrings && Options.ExportFingerboardMargins)//export first & last string to show fingerboard margin
             {
                 var margins = Layout.VisualElements.OfType<LayoutLine>().Where(x => x.ElementType == VisualElementType.FingerboardMargin);
 
                 if (margins.Any())
                 {
                     foreach(var marginLine in margins)
-                        AddLayoutLine(marginLine, VisualElementType.FingerboardMargin);
+                        AddLayoutLine(marginLine, VisualElementType.FingerboardMargin, Options.FingerboardMargins);
                 }
                 else
                 {
@@ -155,12 +157,12 @@ namespace SiGen.Export
                     var bassEdge = Layout.GetStringBoundaryLine(Layout.LastString, FingerboardSide.Bass);
 
                     var trebleMargin = new LayoutLine(firstString.P1, firstString.SnapToLine(trebleEdge.P2, LineSnapDirection.Horizontal));
-                    AddLayoutLine(trebleMargin, VisualElementType.FingerboardMargin);
+                    AddLayoutLine(trebleMargin, VisualElementType.FingerboardMargin, Options.FingerboardMargins);
 
                     if (firstString != lastString)
                     {
                         var bassMargin = new LayoutLine(lastString.P1, lastString.SnapToLine(bassEdge.P2, LineSnapDirection.Horizontal));
-                        AddLayoutLine(bassMargin, VisualElementType.FingerboardMargin);
+                        AddLayoutLine(bassMargin, VisualElementType.FingerboardMargin, Options.FingerboardMargins);
                     }
                 }
             }
@@ -170,30 +172,30 @@ namespace SiGen.Export
             //    AddLayoutLine(guideLine, VisualElementType.GuideLine);
             //}
 
-            if (Options.ExportFingerboard)
+            if (Options.ExportFingerboardEdges)
             {
                 foreach (var guideLine in Layout.VisualElements.OfType<LayoutLine>().Where(l => l.ElementType == VisualElementType.FingerboardContinuation))
-                    AddLayoutLine(guideLine, VisualElementType.GuideLine);
+                    AddLayoutLine(guideLine, VisualElementType.GuideLine, Options.GuideLines);
             }
         }
 
         private void GenerateStrings()
         {
             foreach (var stringLine in Layout.VisualElements.OfType<StringLine>().OrderBy(sl => sl.Index))
-                AddLayoutLine(stringLine, VisualElementType.String);
+                AddLayoutLine(stringLine, VisualElementType.String, Options.Strings);
         }
 
-        protected virtual void AddLayoutLine(LayoutLine line, VisualElementType elementType, VisualElement extraInfo = null)
+        protected virtual void AddLayoutLine(LayoutLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
         {
 
         }
 
-        protected virtual void AddLayoutPolyLine(LayoutPolyLine line, VisualElementType elementType, VisualElement extraInfo = null)
+        protected virtual void AddLayoutPolyLine(LayoutPolyLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
         {
 
         }
 
-        protected virtual void AddLayoutSpline(LayoutPolyLine line, VisualElementType elementType, VisualElement extraInfo = null)
+        protected virtual void AddLayoutSpline(LayoutPolyLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
         {
 
         }

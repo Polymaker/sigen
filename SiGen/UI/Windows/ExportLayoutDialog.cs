@@ -17,19 +17,19 @@ namespace SiGen.UI.Windows
 {
     public partial class ExportLayoutDialog : Form
     {
-        private LayoutSvgExportOptions SvgExportOptions;
+        private LayoutExportOptions ExportOptions;
         private bool isLoading;
 
         public ExportLayoutDialog()
         {
             InitializeComponent();
-            SvgExportOptions = new LayoutSvgExportOptions();
+            ExportOptions = LayoutExportOptions.CreateDefault();
         }
 
         public ExportLayoutDialog(SILayout layout)
         {
             InitializeComponent();
-            SvgExportOptions = new LayoutSvgExportOptions();
+            ExportOptions = LayoutExportOptions.CreateDefault();
             layoutPreview.CurrentLayout = layout;
         }
 
@@ -43,22 +43,22 @@ namespace SiGen.UI.Windows
         {
             isLoading = true;
 
-            chkExtendFretSlots.Checked = SvgExportOptions.ExtendFretSlots;
-            chkExportFrets.Checked = SvgExportOptions.ExportFrets;
-            chkExportStrings.Checked = SvgExportOptions.ExportStrings;
-            chkExportStringCenters.Checked = SvgExportOptions.ExportStringCenters;
-            chkExportCenterLine.Checked = SvgExportOptions.ExportCenterLine;
-            chkExportFingerboard.Checked = SvgExportOptions.ExportFingerboard;
+            chkExtendFretSlots.Checked = ExportOptions.ExtendFretSlots;
+            chkExportFrets.Checked = ExportOptions.ExportFrets;
+            chkExportStrings.Checked = ExportOptions.ExportStrings;
+            chkExportStringCenters.Checked = ExportOptions.ExportStringCenters;
+            chkExportCenterLine.Checked = ExportOptions.ExportCenterLine;
+            chkExportFingerboard.Checked = ExportOptions.ExportFingerboardEdges;
             UpdatePreview();
 
-            if (SvgExportOptions.ExtendFretSlots)
+            if (ExportOptions.ExtendFretSlots)
             {
-                if (SvgExportOptions.FretSlotsExtensionAmount > Measure.Zero)
+                if (ExportOptions.Frets.ExtensionAmount > Measure.Zero)
                     rbExtendOutward.Checked = true;
                 else
                     rbExtendInward.Checked = true;
                 
-                mtbFretExtendAmount.Value = Measure.Abs(SvgExportOptions.FretSlotsExtensionAmount);
+                mtbFretExtendAmount.Value = Measure.Abs(ExportOptions.Frets.ExtensionAmount);
             }
             else
             {
@@ -66,30 +66,34 @@ namespace SiGen.UI.Windows
                 mtbFretExtendAmount.Value = Measure.Mm(2);
             }
 
-            chkFretThickness.Checked = !SvgExportOptions.FretLineThickness.IsEmpty;
-            if (!SvgExportOptions.FretLineThickness.IsEmpty)
+            chkFretThickness.Checked = (ExportOptions.Frets.LineUnit == ExportUnit.Measure);
+            if (chkFretThickness.Checked)
             {
-                mtbFretThickness.Value = SvgExportOptions.FretLineThickness;
+                mtbFretThickness.Value = Measure.FromNormalizedValue(
+                    ExportOptions.Frets.LineThickness, 
+                    ExportOptions.ExportUnit);
             }
             else
             {
                 mtbFretThickness.Value = Measure.Mm(0.5);
             }
 
-            pbxFretColor.BackColor = SvgExportOptions.FretColor;
+            pbxFretColor.BackColor = ExportOptions.Frets.Color;
 
             isLoading = false;
         }
 
         private void UpdatePreview()
         {
-            layoutPreview.DisplayConfig.ShowStrings = SvgExportOptions.ExportStrings;
-            layoutPreview.DisplayConfig.ShowFrets = SvgExportOptions.ExportFrets;
-            layoutPreview.DisplayConfig.ShowMidlines = SvgExportOptions.ExportStringCenters;
-            layoutPreview.DisplayConfig.ShowMargins = SvgExportOptions.ExportFingerboardMargin;
-            layoutPreview.DisplayConfig.ShowCenterLine = SvgExportOptions.ExportCenterLine;
-            layoutPreview.DisplayConfig.ShowFingerboard = SvgExportOptions.ExportFingerboard;
-            layoutPreview.DisplayConfig.FretLineColor = SvgExportOptions.FretColor;
+            layoutPreview.DisplayConfig.ShowStrings = ExportOptions.ExportStrings;
+            layoutPreview.DisplayConfig.ShowFrets = ExportOptions.ExportFrets;
+            layoutPreview.DisplayConfig.ShowMidlines = ExportOptions.ExportStringCenters;
+            layoutPreview.DisplayConfig.ShowMargins = ExportOptions.ExportFingerboardMargins;
+            layoutPreview.DisplayConfig.ShowCenterLine = ExportOptions.ExportCenterLine;
+            layoutPreview.DisplayConfig.ShowFingerboard = ExportOptions.ExportFingerboardEdges;
+            layoutPreview.DisplayConfig.FretLineColor = ExportOptions.Frets.Color;
+            layoutPreview.DisplayConfig.RenderRealStrings = ExportOptions.Strings.UseStringGauge;
+            
         }
 
         private void btnExport_Click(object sender, EventArgs e)
@@ -115,19 +119,19 @@ namespace SiGen.UI.Windows
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
                     if (sfd.FilterIndex == 1)
-                        SvgLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, SvgExportOptions);
+                        SvgLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, ExportOptions);
                     else if (sfd.FilterIndex == 2)
-                        DxfLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, SvgExportOptions);
+                        DxfLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, ExportOptions);
                     else
                     {
                         var fileExt = Path.GetExtension(sfd.FileName);
                         switch (fileExt.ToLower())
                         {
                             case ".svg":
-                                SvgLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, SvgExportOptions);
+                                SvgLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, ExportOptions);
                                 break;
                             case ".dxf":
-                                DxfLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, SvgExportOptions);
+                                DxfLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, ExportOptions);
                                 break;
                             default:
                                 MessageBox.Show("todo");
@@ -152,7 +156,7 @@ namespace SiGen.UI.Windows
                 sfd.DefaultExt = ".svg";
 
                 if (sfd.ShowDialog() == DialogResult.OK)
-                    SvgLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, SvgExportOptions);
+                    SvgLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, ExportOptions);
             }
         }
 
@@ -170,7 +174,7 @@ namespace SiGen.UI.Windows
                 sfd.DefaultExt = ".dxf";
 
                 if (sfd.ShowDialog() == DialogResult.OK)
-                    DxfLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, SvgExportOptions);
+                    DxfLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, ExportOptions);
             }
         }
 
@@ -190,7 +194,7 @@ namespace SiGen.UI.Windows
                 if (chkExtendFretSlots.Checked)
                     mtbFretExtendAmount_ValueChanged(mtbFretExtendAmount, EventArgs.Empty);
                 else
-                    SvgExportOptions.FretSlotsExtensionAmount = Measure.Empty;
+                    ExportOptions.Frets.ExtensionAmount = Measure.Empty;
             }
         }
 
@@ -203,7 +207,7 @@ namespace SiGen.UI.Windows
                     var amount = mtbFretExtendAmount.Value;
                     if (rbExtendInward.Checked)
                         amount = amount * -1;
-                    SvgExportOptions.FretSlotsExtensionAmount = amount;
+                    ExportOptions.Frets.ExtensionAmount = amount;
                 }
             }
         }
@@ -217,7 +221,10 @@ namespace SiGen.UI.Windows
                 if (chkExtendFretSlots.Checked)
                     mtbFretThickness_ValueChanged(mtbFretThickness, EventArgs.Empty);
                 else
-                    SvgExportOptions.FretLineThickness = Measure.Empty;
+                {
+                    ExportOptions.Frets.LineThickness = 1d;
+                    ExportOptions.Frets.LineUnit = ExportUnit.Points;
+                }
             }
         }
 
@@ -226,49 +233,52 @@ namespace SiGen.UI.Windows
             if (!isLoading)
             {
                 if (!mtbFretThickness.Value.IsEmpty && mtbFretThickness.Value != Measure.Zero)
-                    SvgExportOptions.FretLineThickness = mtbFretThickness.Value;
+                {
+                    ExportOptions.Frets.LineThickness = (double)mtbFretThickness.Value.NormalizedValue;
+                    ExportOptions.Frets.LineUnit = ExportUnit.Measure;
+                }
             }
         }
 
         private void chkExportFrets_CheckedChanged(object sender, EventArgs e)
         {
             if (!isLoading)
-                SvgExportOptions.ExportFrets = chkExportFrets.Checked;
+                ExportOptions.ExportFrets = chkExportFrets.Checked;
             UpdatePreview();
         }
 
         private void chkExportStrings_CheckedChanged(object sender, EventArgs e)
         {
             if (!isLoading)
-                SvgExportOptions.ExportStrings = chkExportStrings.Checked;
+                ExportOptions.ExportStrings = chkExportStrings.Checked;
             UpdatePreview(); 
         }
 
         private void chkExportStringCenters_CheckedChanged(object sender, EventArgs e)
         {
             if (!isLoading)
-                SvgExportOptions.ExportStringCenters = chkExportStringCenters.Checked;
+                ExportOptions.ExportStringCenters = chkExportStringCenters.Checked;
             UpdatePreview();
         }
 
         private void chkExportCenterLine_CheckedChanged(object sender, EventArgs e)
         {
             if (!isLoading)
-                SvgExportOptions.ExportCenterLine = chkExportCenterLine.Checked;
+                ExportOptions.ExportCenterLine = chkExportCenterLine.Checked;
             UpdatePreview();
         }
 
         private void chkExportMargins_CheckedChanged(object sender, EventArgs e)
         {
             if (!isLoading)
-                SvgExportOptions.ExportFingerboardMargin = chkExportMargins.Checked;
+                ExportOptions.ExportFingerboardMargins = chkExportMargins.Checked;
             UpdatePreview();
         }
 
         private void chkExportFingerboard_CheckedChanged(object sender, EventArgs e)
         {
             if (!isLoading)
-                SvgExportOptions.ExportFingerboard = chkExportFingerboard.Checked;
+                ExportOptions.ExportFingerboardEdges = chkExportFingerboard.Checked;
             UpdatePreview();
         }
 
@@ -276,10 +286,10 @@ namespace SiGen.UI.Windows
         {
             using(var dlg = new ColorDialog())
             {
-                dlg.Color = SvgExportOptions.FretColor;
+                dlg.Color = ExportOptions.Frets.Color;
                 if(dlg.ShowDialog() == DialogResult.OK)
                 {
-                    SvgExportOptions.FretColor = dlg.Color;
+                    ExportOptions.Frets.Color = dlg.Color;
                     pbxFretColor.BackColor = dlg.Color;
                     UpdatePreview();
                 }

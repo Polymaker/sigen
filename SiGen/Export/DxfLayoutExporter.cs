@@ -21,10 +21,14 @@ namespace SiGen.Export
         private DxfDocument Document;
         private Dictionary<string, Layer> Layers;
 
-        private DxfLayoutExporter(SILayout layout, LayoutSvgExportOptions options)
+        private Dictionary<string, AciColor> ColorDictionary;
+        
+
+        private DxfLayoutExporter(SILayout layout, LayoutExportOptions options)
             : base(layout, options)
         {
             Layers = new Dictionary<string, Layer>();
+            ColorDictionary = new Dictionary<string, AciColor>();
         }
 
         protected override void InitializeDocument()
@@ -52,77 +56,81 @@ namespace SiGen.Export
         }
 
 
-        protected override void AddLayoutLine(LayoutLine line, VisualElementType elementType, VisualElement extraInfo = null)
+        protected override void AddLayoutLine(LayoutLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
         {
             switch (elementType)
             {
                 case VisualElementType.Fret:
-                    AddDxfLine("Frets", line, AciColor.Red);
-                    break;
-                case VisualElementType.FingerboardEdge:
-                    AddDxfLine("Fingerboard", line, AciColor.Blue);
-                    break;
-                case VisualElementType.CenterLine:
-                    AddDxfLine("Layout", line, GetColor(Color.Black)).Linetype = Linetype.Dashed;
-                    break;
-                case VisualElementType.FingerboardContinuation:
-                case VisualElementType.GuideLine:
-                case VisualElementType.StringCenter:
-                    AddDxfLine("Layout", line, AciColor.LightGray).Linetype = Linetype.Dashed;
-                    break;
-                case VisualElementType.FingerboardMargin:
-                    AddDxfLine("Layout", line, GetColor(Color.Gray));
+                    AddDxfLine("Frets", line, lineConfig);
                     break;
                 case VisualElementType.String:
-                    AddDxfLine("Strings", line, GetColor(Color.Black));
+                    AddDxfLine("Strings", line, lineConfig);
+                    break;
+                case VisualElementType.FingerboardEdge:
+                case VisualElementType.FingerboardMargin:
+                case VisualElementType.FingerboardContinuation:
+                    AddDxfLine("Fingerboard", line, lineConfig);
+                    break;
+                case VisualElementType.CenterLine:
+                case VisualElementType.GuideLine:
+                case VisualElementType.StringCenter:
+                    AddDxfLine("Layout", line, lineConfig);
                     break;
             }
         }
 
-        protected override void AddLayoutSpline(LayoutPolyLine line, VisualElementType elementType, VisualElement extraInfo = null)
+        protected override void AddLayoutSpline(LayoutPolyLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
         {
             switch (elementType)
             {
                 case VisualElementType.Fret:
-                    AddDxfSpline("Frets", line, AciColor.Red);
+                    AddDxfSpline("Frets", line, lineConfig);
                     break;
                 case VisualElementType.FingerboardEdge:
-                    AddDxfSpline("Fingerboard", line, AciColor.Blue);
+                case VisualElementType.FingerboardMargin:
+                case VisualElementType.FingerboardContinuation:
+                    AddDxfSpline("Fingerboard", line, lineConfig);
                     break;
-                case VisualElementType.GuideLine:
-                    AddDxfSpline("Layout", line, AciColor.Blue).Linetype = Linetype.Dashed;
+                //case VisualElementType.GuideLine:
+                default:
+                    AddDxfSpline("Layout", line, lineConfig);
                     break;
             }
         }
 
-        protected override void AddLayoutPolyLine(LayoutPolyLine line, VisualElementType elementType, VisualElement extraInfo = null)
+        protected override void AddLayoutPolyLine(LayoutPolyLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
         {
             switch (elementType)
             {
                 case VisualElementType.Fret:
-                    AddDxfPolyLine("Frets", line, AciColor.Red);
+                    AddDxfPolyLine("Frets", line, lineConfig);
                     break;
                 case VisualElementType.FingerboardEdge:
-                    AddDxfPolyLine("Fingerboard", line, AciColor.Blue);
+                case VisualElementType.FingerboardMargin:
+                case VisualElementType.FingerboardContinuation:
+                    AddDxfPolyLine("Fingerboard", line, lineConfig);
                     break;
-                case VisualElementType.GuideLine:
-                    AddDxfPolyLine("Layout", line, AciColor.LightGray).Linetype = Linetype.Dashed;
+                //case VisualElementType.GuideLine:
+                default:
+                    AddDxfPolyLine("Layout", line, lineConfig);
                     break;
             }
         }
 
-        private Line AddDxfLine(string layerName, LayoutLine line, AciColor color)
+        private Line AddDxfLine(string layerName, LayoutLine line, LayoutLineExportConfig lineConfig)
         {
             var dxfLine = new Line(PointToVector(line.P1), PointToVector(line.P2))
             {
                 Layer = GetLayer(layerName),
-                Color = color
+                Color = GetColor(lineConfig.Color)
             };
+            if (lineConfig.IsDashed)
+                dxfLine.Linetype = Linetype.Dashed;
             Document.AddEntity(dxfLine);
             return dxfLine;
         }
 
-        private Spline AddDxfSpline(string layerName, LayoutPolyLine line, AciColor color)
+        private Spline AddDxfSpline(string layerName, LayoutPolyLine line, LayoutLineExportConfig lineConfig)
         {
             var splinePoints = new List<Vector2>();
             foreach (var pt in line.Points)
@@ -131,14 +139,17 @@ namespace SiGen.Export
             var splineLine = new Spline(splinePoints.Select(x => new SplineVertex(x)).ToList())
             {
                 Layer = GetLayer(layerName),
-                Color = color,
+                Color = GetColor(lineConfig.Color)
             };
+
+            if (lineConfig.IsDashed)
+                splineLine.Linetype = Linetype.Dashed;
 
             Document.AddEntity(splineLine);
             return splineLine;
         }
 
-        private LwPolyline AddDxfPolyLine(string layerName, LayoutPolyLine line, AciColor color)
+        private LwPolyline AddDxfPolyLine(string layerName, LayoutPolyLine line, LayoutLineExportConfig lineConfig)
         {
             var splinePoints = new List<Vector2>();
             foreach (var pt in line.Points)
@@ -147,10 +158,14 @@ namespace SiGen.Export
             var polyLine = new LwPolyline(splinePoints)
             {
                 Layer = GetLayer(layerName),
-                Color = color,
+                Color = GetColor(lineConfig.Color),
             };
             //foreach (var vec in splinePoints)
             //    polyLine.Vertexes.Add(new LwPolylineVertex(vec));
+
+            if (lineConfig.IsDashed)
+                polyLine.Linetype = Linetype.Dashed;
+
             Document.AddEntity(polyLine);
             return polyLine;
         }
@@ -165,7 +180,10 @@ namespace SiGen.Export
 
         private AciColor GetColor(Color color)
         {
-            return new AciColor(color);
+            string argb = $"{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}";
+            if (!ColorDictionary.ContainsKey(argb))
+                ColorDictionary.Add(argb, new AciColor(color));
+            return ColorDictionary[argb];
         }
 
         private Vector2 PointToVector(PointM point)
@@ -173,7 +191,7 @@ namespace SiGen.Export
             return new Vector2((double)point.X[Options.ExportUnit], (double)point.Y[Options.ExportUnit]);
         }
 
-        public static void ExportLayout(string filename, SILayout layout, LayoutSvgExportOptions options)
+        public static void ExportLayout(string filename, SILayout layout, LayoutExportOptions options)
         {
             var exporter = new DxfLayoutExporter(layout, options);
             exporter.GenerateDocument();

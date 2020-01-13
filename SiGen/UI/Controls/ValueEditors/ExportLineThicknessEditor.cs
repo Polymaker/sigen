@@ -25,9 +25,6 @@ namespace SiGen.UI.Controls.ValueEditors
             get
             {
                 return _SelectedUnit;
-                //if (cboUnitType.SelectedItem == null || string.IsNullOrEmpty(cboUnitType.ValueMember))
-                //    return ExportUnit.Pixels;
-                //return (ExportUnit)cboUnitType.SelectedValue;
             }
             set
             {
@@ -50,8 +47,16 @@ namespace SiGen.UI.Controls.ValueEditors
         public ExportLineThicknessEditor()
         {
             InitializeComponent();
-            IsLoading = true;
             _SelectedUnit = ExportUnit.Points;
+            _SelectedThickness = 1;
+            IsLoading = true;
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            IsLoading = true;
 
             var unitList = new List<EnumHelper.EnumItem>
             {
@@ -64,8 +69,7 @@ namespace SiGen.UI.Controls.ValueEditors
             cboUnitType.DisplayMember = EnumHelper.EnumItem.DisplayMember;
             cboUnitType.DataSource = unitList.ToList();
 
-            _SelectedThickness = 1;
-            txtNumber.Value = 1;
+            txtNumber.Value = _SelectedThickness;
             txtMeasure.Value = Measure.Mm(1);
 
             cboUnitType.SelectedValue = _SelectedUnit;
@@ -84,7 +88,7 @@ namespace SiGen.UI.Controls.ValueEditors
         {
             //var oldType = _SelectedUnit;
 
-            if (cboUnitType.SelectedItem != null && !string.IsNullOrEmpty(cboUnitType.ValueMember))
+            if (!IsLoading && cboUnitType.SelectedItem != null && !string.IsNullOrEmpty(cboUnitType.ValueMember))
             {
                 _SelectedUnit = (ExportUnit)cboUnitType.SelectedValue;
             }
