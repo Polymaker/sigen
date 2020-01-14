@@ -34,11 +34,11 @@
             this.chkCompensateGauge = new System.Windows.Forms.CheckBox();
             this.lblNut = new System.Windows.Forms.Label();
             this.lblBass = new System.Windows.Forms.Label();
-            this.mtbBridgeTreble = new SiGen.UI.MeasureTextbox();
-            this.mtbBridgeBass = new SiGen.UI.MeasureTextbox();
-            this.mtbNutTreble = new SiGen.UI.MeasureTextbox();
-            this.mtbNutBass = new SiGen.UI.MeasureTextbox();
-            this.mtbLastFret = new SiGen.UI.MeasureTextbox();
+            this.mtbBridgeTreble = new SiGen.UI.Controls.MeasureTextbox();
+            this.mtbBridgeBass = new SiGen.UI.Controls.MeasureTextbox();
+            this.mtbNutTreble = new SiGen.UI.Controls.MeasureTextbox();
+            this.mtbNutBass = new SiGen.UI.Controls.MeasureTextbox();
+            this.mtbLastFret = new SiGen.UI.Controls.MeasureTextbox();
             this.label2 = new System.Windows.Forms.Label();
             this.lblEditMode = new System.Windows.Forms.Label();
             this.lblTreble = new System.Windows.Forms.Label();

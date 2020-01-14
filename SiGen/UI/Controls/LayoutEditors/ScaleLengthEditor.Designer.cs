@@ -39,8 +39,8 @@
             this.rbSingle = new System.Windows.Forms.RadioButton();
             this.rbDual = new System.Windows.Forms.RadioButton();
             this.rbMultiple = new System.Windows.Forms.RadioButton();
-            this.mtbTrebleLength = new SiGen.UI.MeasureTextbox();
-            this.mtbBassLength = new SiGen.UI.MeasureTextbox();
+            this.mtbTrebleLength = new SiGen.UI.Controls.MeasureTextbox();
+            this.mtbBassLength = new SiGen.UI.Controls.MeasureTextbox();
             this.lblTreble = new System.Windows.Forms.Label();
             this.lblMultiScaleRatio = new System.Windows.Forms.Label();
             this.nubMultiScaleRatio = new SiGen.UI.Controls.NumericBox();

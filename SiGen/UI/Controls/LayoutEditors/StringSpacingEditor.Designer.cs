@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.mtbNutSpacing = new SiGen.UI.MeasureTextbox();
-            this.mtbNutSpread = new SiGen.UI.MeasureTextbox();
-            this.mtbBridgeSpacing = new SiGen.UI.MeasureTextbox();
-            this.mtbBridgeSpread = new SiGen.UI.MeasureTextbox();
+            this.mtbNutSpacing = new SiGen.UI.Controls.MeasureTextbox();
+            this.mtbNutSpread = new SiGen.UI.Controls.MeasureTextbox();
+            this.mtbBridgeSpacing = new SiGen.UI.Controls.MeasureTextbox();
+            this.mtbBridgeSpread = new SiGen.UI.Controls.MeasureTextbox();
             this.lblNutStringSpacing = new System.Windows.Forms.Label();
             this.cboNutSpacingMethod = new System.Windows.Forms.ComboBox();
             this.lblNutSpacingMethod = new System.Windows.Forms.Label();
@@ -61,7 +61,7 @@
             this.mtbNutSpacing.Name = "mtbNutSpacing";
             this.mtbNutSpacing.Size = new System.Drawing.Size(122, 20);
             this.mtbNutSpacing.TabIndex = 0;
-            this.mtbNutSpacing.ValueChanging += new System.EventHandler<SiGen.UI.MeasureTextbox.ValueChangingEventArgs>(this.mtbSpacings_ValueChanging);
+            this.mtbNutSpacing.ValueChanging += new System.EventHandler<SiGen.UI.Controls.MeasureTextbox.ValueChangingEventArgs>(this.mtbSpacings_ValueChanging);
             this.mtbNutSpacing.ValueChanged += new System.EventHandler(this.mtbNutSpacing_ValueChanged);
             // 
             // mtbNutSpread
@@ -72,7 +72,7 @@
             this.mtbNutSpread.Name = "mtbNutSpread";
             this.mtbNutSpread.Size = new System.Drawing.Size(122, 20);
             this.mtbNutSpread.TabIndex = 1;
-            this.mtbNutSpread.ValueChanging += new System.EventHandler<SiGen.UI.MeasureTextbox.ValueChangingEventArgs>(this.mtbSpacings_ValueChanging);
+            this.mtbNutSpread.ValueChanging += new System.EventHandler<SiGen.UI.Controls.MeasureTextbox.ValueChangingEventArgs>(this.mtbSpacings_ValueChanging);
             this.mtbNutSpread.ValueChanged += new System.EventHandler(this.mtbNutSpread_ValueChanged);
             // 
             // mtbBridgeSpacing
@@ -83,7 +83,7 @@
             this.mtbBridgeSpacing.Name = "mtbBridgeSpacing";
             this.mtbBridgeSpacing.Size = new System.Drawing.Size(122, 20);
             this.mtbBridgeSpacing.TabIndex = 0;
-            this.mtbBridgeSpacing.ValueChanging += new System.EventHandler<SiGen.UI.MeasureTextbox.ValueChangingEventArgs>(this.mtbSpacings_ValueChanging);
+            this.mtbBridgeSpacing.ValueChanging += new System.EventHandler<SiGen.UI.Controls.MeasureTextbox.ValueChangingEventArgs>(this.mtbSpacings_ValueChanging);
             this.mtbBridgeSpacing.ValueChanged += new System.EventHandler(this.mtbBridgeSpacing_ValueChanged);
             // 
             // mtbBridgeSpread
@@ -94,7 +94,7 @@
             this.mtbBridgeSpread.Name = "mtbBridgeSpread";
             this.mtbBridgeSpread.Size = new System.Drawing.Size(122, 20);
             this.mtbBridgeSpread.TabIndex = 1;
-            this.mtbBridgeSpread.ValueChanging += new System.EventHandler<SiGen.UI.MeasureTextbox.ValueChangingEventArgs>(this.mtbSpacings_ValueChanging);
+            this.mtbBridgeSpread.ValueChanging += new System.EventHandler<SiGen.UI.Controls.MeasureTextbox.ValueChangingEventArgs>(this.mtbSpacings_ValueChanging);
             this.mtbBridgeSpread.ValueChanged += new System.EventHandler(this.mtbBridgeSpread_ValueChanged);
             // 
             // lblNutStringSpacing

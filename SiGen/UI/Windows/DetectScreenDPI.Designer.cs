@@ -41,7 +41,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.numDPI = new SiGen.UI.Controls.NumericBox();
-            this.measureTextbox1 = new SiGen.UI.MeasureTextbox();
+            this.measureTextbox1 = new SiGen.UI.Controls.MeasureTextbox();
             ((System.ComponentModel.ISupportInitialize)(this.pbxMeasureDPI)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -218,7 +218,7 @@
 
         #endregion
 
-        private MeasureTextbox measureTextbox1;
+        private SiGen.UI.Controls.MeasureTextbox measureTextbox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.PictureBox pbxMeasureDPI;

@@ -31,13 +31,13 @@
             this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
-            this.mtbLayoutWidth = new SiGen.UI.MeasureTextbox();
+            this.mtbLayoutWidth = new SiGen.UI.Controls.MeasureTextbox();
             this.lblLayoutWidth = new System.Windows.Forms.Label();
-            this.measureTextbox1 = new SiGen.UI.MeasureTextbox();
+            this.measureTextbox1 = new SiGen.UI.Controls.MeasureTextbox();
             this.label3 = new System.Windows.Forms.Label();
-            this.mtbShortFret = new SiGen.UI.MeasureTextbox();
-            this.mtbLayoutHeight = new SiGen.UI.MeasureTextbox();
-            this.mtbLongFret = new SiGen.UI.MeasureTextbox();
+            this.mtbShortFret = new SiGen.UI.Controls.MeasureTextbox();
+            this.mtbLayoutHeight = new SiGen.UI.Controls.MeasureTextbox();
+            this.mtbLongFret = new SiGen.UI.Controls.MeasureTextbox();
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();

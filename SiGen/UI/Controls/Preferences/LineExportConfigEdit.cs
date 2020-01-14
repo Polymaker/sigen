@@ -93,7 +93,7 @@ namespace SiGen.UI.Controls.Preferences
                 DashedCheckbox.Checked = LineConfig?.IsDashed ?? false;
 
                 LineColorSelector.Value = LineConfig?.Color ?? Color.Black;
-                LineThicknessEditor.SelectedUnit = LineConfig?.LineUnit ?? ExportUnit.Points;
+                LineThicknessEditor.SelectedUnit = LineConfig?.LineUnit ?? LineUnit.Points;
                 LineThicknessEditor.SelectedThickness = LineConfig?.LineThickness ?? 1d;
             }
         }
@@ -133,7 +133,15 @@ namespace SiGen.UI.Controls.Preferences
         private void FitToContent()
         {
             Height = tableLayoutPanel1.Height;
+
         }
+
+        public void AutoSizeWidth()
+        {
+            var prefSize = tableLayoutPanel1.GetPreferredSize(new Size(99999, 99999));
+            Width = prefSize.Width + 6;
+        }
+
     }
 
 }

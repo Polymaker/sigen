@@ -1,6 +1,6 @@
 ﻿namespace SiGen.UI.Controls.ValueEditors
 {
-    partial class ExportLineThicknessEditor
+    partial class LineThicknessEditor
     {
         /// <summary> 
         /// Variable nécessaire au concepteur.
@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.cboUnitType = new System.Windows.Forms.ComboBox();
-            this.txtMeasure = new SiGen.UI.MeasureTextbox();
+            this.txtMeasure = new SiGen.UI.Controls.MeasureTextbox();
             this.txtNumber = new SiGen.UI.Controls.NumericBox();
             this.localizableStrings = new SiGen.Localization.LocalizableStringList(this.components);
             this.ExportUnitPixels = new SiGen.Localization.LocalizableString(this.components);

@@ -1,4 +1,5 @@
-﻿using SiGen.Common;
+﻿using Newtonsoft.Json;
+using SiGen.Common;
 using SiGen.Export;
 using SiGen.Measuring;
 using SiGen.StringedInstruments.Layout;
@@ -66,12 +67,13 @@ namespace SiGen.UI.Windows
                 mtbFretExtendAmount.Value = Measure.Mm(2);
             }
 
-            chkFretThickness.Checked = (ExportOptions.Frets.LineUnit == ExportUnit.Measure);
+            chkFretThickness.Checked = (ExportOptions.Frets.LineUnit >= LineUnit.Millimeters);
             if (chkFretThickness.Checked)
             {
-                mtbFretThickness.Value = Measure.FromNormalizedValue(
-                    ExportOptions.Frets.LineThickness, 
-                    ExportOptions.ExportUnit);
+                if (ExportOptions.Frets.LineUnit == LineUnit.Millimeters)
+                    mtbFretThickness.Value = new Measure(ExportOptions.Frets.LineThickness, UnitOfMeasure.Mm);
+                else
+                    mtbFretThickness.Value = new Measure(ExportOptions.Frets.LineThickness, UnitOfMeasure.In);
             }
             else
             {
@@ -98,6 +100,7 @@ namespace SiGen.UI.Windows
 
         private void btnExport_Click(object sender, EventArgs e)
         {
+            //string json = JsonConvert.SerializeObject(ExportOptions, Formatting.Indented);
             //if (rbSvgExport.Checked)
             //    ExportSvgLayout();
             //else
@@ -223,7 +226,7 @@ namespace SiGen.UI.Windows
                 else
                 {
                     ExportOptions.Frets.LineThickness = 1d;
-                    ExportOptions.Frets.LineUnit = ExportUnit.Points;
+                    ExportOptions.Frets.LineUnit = LineUnit.Points;
                 }
             }
         }
@@ -234,8 +237,16 @@ namespace SiGen.UI.Windows
             {
                 if (!mtbFretThickness.Value.IsEmpty && mtbFretThickness.Value != Measure.Zero)
                 {
-                    ExportOptions.Frets.LineThickness = (double)mtbFretThickness.Value.NormalizedValue;
-                    ExportOptions.Frets.LineUnit = ExportUnit.Measure;
+                    if (mtbFretThickness.Value.Unit.IsMetric)
+                    {
+                        ExportOptions.Frets.LineThickness = (double)mtbFretThickness.Value[UnitOfMeasure.Mm];
+                        ExportOptions.Frets.LineUnit = LineUnit.Millimeters;
+                    }
+                    else
+                    {
+                        ExportOptions.Frets.LineThickness = (double)mtbFretThickness.Value[UnitOfMeasure.In];
+                        ExportOptions.Frets.LineUnit = LineUnit.Inches;
+                    }
                 }
             }
         }

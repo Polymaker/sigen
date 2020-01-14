@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,39 +10,43 @@ using System.Threading.Tasks;
 namespace SiGen.Measuring
 {
     [System.ComponentModel.TypeConverter(typeof(UnitOfMeasureConverter))]
+    [DebuggerDisplay("{Name}")]
     public class UnitOfMeasure
     {
         public static readonly PreciseDouble CmToInch = 1d / 2.54d;
+
         //0.3937007874015748d
         //0.3937007874015748031496062992126d
 
         #region Fields
 
-        private string _Name;
-        private string _Abreviation;
-        private string _Symbol;
         private PreciseDouble _ConversionFactor;
 
         #endregion
 
         #region Properties
 
-        public string Name { get { return _Name; } }
+        public string Name { get; }
 
-        public string Abreviation { get { return _Abreviation; } }
+        public string Abreviation { get; }
 
-        public string Symbol { get { return _Symbol; } }
+        public string Symbol { get; }
 
-        public PreciseDouble ConversionFactor { get { return _ConversionFactor; } }
+        public bool IsMetric { get; }
+
+        public bool IsImperial => !IsMetric;
+
+        public PreciseDouble ConversionFactor => _ConversionFactor;
 
         #endregion
 
-        private UnitOfMeasure(string name, string symbol, string abv, PreciseDouble norm)
+        private UnitOfMeasure(string name, string symbol, string abv, PreciseDouble factor)
         {
-            _Name = name;
-            _Abreviation = abv;
-            _Symbol = symbol;
-            _ConversionFactor = norm;
+            Name = name;
+            Abreviation = abv;
+            Symbol = symbol;
+            _ConversionFactor = factor;
+            IsMetric = ((factor.DoubleValue * 100d) % 1d) == 0;
         }
 
         public static readonly UnitOfMeasure Millimeters = new UnitOfMeasure("Millimeters", "mm", "mm", 0.1d);
@@ -111,6 +118,20 @@ namespace SiGen.Measuring
                     return unit.Name;
                 }
                 return base.ConvertTo(context, culture, value, destinationType);
+            }
+
+            public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+            {
+                if (sourceType == typeof(string))
+                    return true;
+                return base.CanConvertFrom(context, sourceType);
+            }
+
+            public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+            {
+                if (value is string unitStr)
+                    return UnitOfMeasure.GetUnitByName(unitStr);
+                return base.ConvertFrom(context, culture, value);
             }
         }
 

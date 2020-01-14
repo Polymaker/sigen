@@ -35,7 +35,7 @@
             this.UseStringGaugeCheckbox = new System.Windows.Forms.CheckBox();
             this.DashedCheckbox = new System.Windows.Forms.CheckBox();
             this.LineColorSelector = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
-            this.LineThicknessEditor = new SiGen.UI.Controls.ValueEditors.ExportLineThicknessEditor();
+            this.LineThicknessEditor = new SiGen.UI.Controls.ValueEditors.LineThicknessEditor();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -136,7 +136,7 @@
             this.LineThicknessEditor.Location = new System.Drawing.Point(102, 55);
             this.LineThicknessEditor.Name = "LineThicknessEditor";
             this.LineThicknessEditor.SelectedThickness = 1D;
-            this.LineThicknessEditor.SelectedUnit = SiGen.Export.ExportUnit.Pixels;
+            this.LineThicknessEditor.SelectedUnit = SiGen.Export.LineUnit.Pixels;
             this.LineThicknessEditor.Size = new System.Drawing.Size(140, 21);
             this.LineThicknessEditor.TabIndex = 4;
             this.LineThicknessEditor.ConfigurationChanged += new System.EventHandler(this.LineThicknessEditor_ConfigurationChanged);
@@ -162,7 +162,7 @@
         private System.Windows.Forms.Label LineColorLabel;
         private System.Windows.Forms.Label LineThicknessLabel;
         private ValueEditors.ColorSelectButton LineColorSelector;
-        private ValueEditors.ExportLineThicknessEditor LineThicknessEditor;
+        private ValueEditors.LineThicknessEditor LineThicknessEditor;
         private System.Windows.Forms.CheckBox UseStringGaugeCheckbox;
         private System.Windows.Forms.CheckBox DashedCheckbox;
     }

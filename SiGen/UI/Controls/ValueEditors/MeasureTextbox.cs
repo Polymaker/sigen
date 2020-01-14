@@ -12,7 +12,7 @@ using SiGen.Utilities;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Forms.Design;
 
-namespace SiGen.UI
+namespace SiGen.UI.Controls
 {
     [Designer(typeof(MeasureTextboxDesigner)), DefaultEvent("ValueChanged")]
     public partial class MeasureTextbox : UserControl

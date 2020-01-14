@@ -34,7 +34,7 @@
             this.FingerboardMarginsConfig = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
             this.ConfigSelectionLayout = new System.Windows.Forms.TableLayoutPanel();
             this.label6 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.SelectConfigCombo = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.StringsConfig = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
@@ -51,7 +51,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(3, 233);
+            this.label1.Location = new System.Drawing.Point(3, 225);
             this.label1.Margin = new System.Windows.Forms.Padding(3);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(93, 16);
@@ -66,9 +66,9 @@
             this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanel1.Controls.Add(this.FingerboardEdgesConfig);
             this.flowLayoutPanel1.Controls.Add(this.FingerboardMarginsConfig);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 255);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 247);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(612, 186);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(612, 178);
             this.flowLayoutPanel1.TabIndex = 3;
             // 
             // FingerboardEdgesConfig
@@ -77,16 +77,16 @@
             this.FingerboardEdgesConfig.LineConfig = null;
             this.FingerboardEdgesConfig.Location = new System.Drawing.Point(3, 3);
             this.FingerboardEdgesConfig.Name = "FingerboardEdgesConfig";
-            this.FingerboardEdgesConfig.Size = new System.Drawing.Size(367, 87);
+            this.FingerboardEdgesConfig.Size = new System.Drawing.Size(367, 83);
             this.FingerboardEdgesConfig.TabIndex = 2;
             // 
             // FingerboardMarginsConfig
             // 
             this.FingerboardMarginsConfig.ConfigName = "Fingerboard margins";
             this.FingerboardMarginsConfig.LineConfig = null;
-            this.FingerboardMarginsConfig.Location = new System.Drawing.Point(3, 96);
+            this.FingerboardMarginsConfig.Location = new System.Drawing.Point(3, 92);
             this.FingerboardMarginsConfig.Name = "FingerboardMarginsConfig";
-            this.FingerboardMarginsConfig.Size = new System.Drawing.Size(367, 87);
+            this.FingerboardMarginsConfig.Size = new System.Drawing.Size(367, 83);
             this.FingerboardMarginsConfig.TabIndex = 4;
             // 
             // ConfigSelectionLayout
@@ -98,7 +98,7 @@
             this.ConfigSelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.ConfigSelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.ConfigSelectionLayout.Controls.Add(this.label6, 0, 0);
-            this.ConfigSelectionLayout.Controls.Add(this.comboBox1, 1, 0);
+            this.ConfigSelectionLayout.Controls.Add(this.SelectConfigCombo, 1, 0);
             this.ConfigSelectionLayout.Dock = System.Windows.Forms.DockStyle.Top;
             this.ConfigSelectionLayout.Location = new System.Drawing.Point(0, 0);
             this.ConfigSelectionLayout.Name = "ConfigSelectionLayout";
@@ -117,13 +117,14 @@
             this.label6.TabIndex = 0;
             this.label6.Text = "Configuration:";
             // 
-            // comboBox1
+            // SelectConfigCombo
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(103, 3);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(173, 21);
-            this.comboBox1.TabIndex = 1;
+            this.SelectConfigCombo.FormattingEnabled = true;
+            this.SelectConfigCombo.Location = new System.Drawing.Point(103, 3);
+            this.SelectConfigCombo.Name = "SelectConfigCombo";
+            this.SelectConfigCombo.Size = new System.Drawing.Size(173, 21);
+            this.SelectConfigCombo.TabIndex = 1;
+            this.SelectConfigCombo.SelectedIndexChanged += new System.EventHandler(this.SelectConfigCombo_SelectedIndexChanged);
             // 
             // panel1
             // 
@@ -158,16 +159,16 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(618, 464);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(618, 448);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // StringsConfig
             // 
             this.StringsConfig.ConfigName = "Export strings";
             this.StringsConfig.LineConfig = null;
-            this.StringsConfig.Location = new System.Drawing.Point(3, 140);
+            this.StringsConfig.Location = new System.Drawing.Point(3, 136);
             this.StringsConfig.Name = "StringsConfig";
-            this.StringsConfig.Size = new System.Drawing.Size(367, 87);
+            this.StringsConfig.Size = new System.Drawing.Size(367, 83);
             this.StringsConfig.TabIndex = 6;
             // 
             // FretsConfig
@@ -176,14 +177,14 @@
             this.FretsConfig.LineConfig = null;
             this.FretsConfig.Location = new System.Drawing.Point(3, 25);
             this.FretsConfig.Name = "FretsConfig";
-            this.FretsConfig.Size = new System.Drawing.Size(370, 87);
+            this.FretsConfig.Size = new System.Drawing.Size(370, 83);
             this.FretsConfig.TabIndex = 5;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(3, 118);
+            this.label3.Location = new System.Drawing.Point(3, 114);
             this.label3.Margin = new System.Windows.Forms.Padding(3);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(56, 16);
@@ -228,7 +229,7 @@
         private Preferences.LineExportConfigEdit FingerboardMarginsConfig;
         private System.Windows.Forms.TableLayoutPanel ConfigSelectionLayout;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox SelectConfigCombo;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label3;

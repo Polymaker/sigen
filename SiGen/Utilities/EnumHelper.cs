@@ -41,37 +41,34 @@ namespace System
             public const string ValueMember = "Value";
             public const string DisplayMember = "Description";
 
-            private readonly object _Value;
-            private readonly string _Name;
-            private readonly string _Description;
-            private readonly Type _EnumType;
+            public object Value { get; }
+            public string Name { get; }
+            public string Description { get; set; }
 
-            public object Value { get { return _Value; } }
-            public string Name { get { return _Name; } }
-            public string Description { get { return _Description; } }
+            public Type EnumType { get; }
 
             public EnumItem(Type enumType, object value)
             {
-                _EnumType = enumType;
-                _Name = value.ToString();
-                _Value = value;
-                _Description = GetEnumDescription(enumType, value);
+                EnumType = enumType;
+                Name = value.ToString();
+                Value = value;
+                Description = GetEnumDescription(enumType, value);
             }
 
             public EnumItem(Type enumType, object value, string description)
             {
-                _EnumType = enumType;
-                _Name = value.ToString();
-                _Value = value;
-                _Description = description;
+                EnumType = enumType;
+                Name = value.ToString();
+                Value = value;
+                Description = description;
             }
 
             public EnumItem(object value, string description)
             {
-                _EnumType = value.GetType();
-                _Name = value.ToString();
-                _Value = value;
-                _Description = description;
+                EnumType = value.GetType();
+                Name = value.ToString();
+                Value = value;
+                Description = description;
             }
         }
 

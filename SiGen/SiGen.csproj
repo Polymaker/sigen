@@ -120,16 +120,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\AppPreferences.cs" />
+    <Compile Include="Configuration\AppConfig.cs" />
+    <Compile Include="Configuration\AppConfigManager.cs" />
     <Compile Include="Common\InstrumentType.cs" />
     <Compile Include="Common\LayoutDocument.cs" />
     <Compile Include="Common\StringData.cs" />
     <Compile Include="Common\StringSet.cs" />
     <Compile Include="Common\StringType.cs" />
+    <Compile Include="Configuration\ColorJsonConverter.cs" />
     <Compile Include="Configuration\DisplayPreferences.cs" />
+    <Compile Include="Configuration\RecentFile.cs" />
     <Compile Include="Configuration\ScreenConfiguration.cs" />
     <Compile Include="Export\DxfLayoutExporter.cs" />
-    <Compile Include="Export\ExportUnit.cs" />
+    <Compile Include="Export\LineUnit.cs" />
     <Compile Include="Export\LayoutExporterBase.cs" />
     <Compile Include="Export\LayoutExportOptions.cs" />
     <Compile Include="Export\LayoutLineExportConfig.cs" />
@@ -290,11 +293,11 @@
     <Compile Include="UI\Controls\ValueEditors\ColorSelectButton.Designer.cs">
       <DependentUpon>ColorSelectButton.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\ValueEditors\ExportLineThicknessEditor.cs">
+    <Compile Include="UI\Controls\Preferences\LineThicknessEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\Controls\ValueEditors\ExportLineThicknessEditor.Designer.cs">
-      <DependentUpon>ExportLineThicknessEditor.cs</DependentUpon>
+    <Compile Include="UI\Controls\Preferences\LineThicknessEditor.Designer.cs">
+      <DependentUpon>LineThicknessEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\ValueEditors\NumericBox.cs">
       <SubType>Component</SubType>
@@ -421,8 +424,8 @@
     <EmbeddedResource Include="UI\Controls\ValueEditors\ColorSelectButton.resx">
       <DependentUpon>ColorSelectButton.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Controls\ValueEditors\ExportLineThicknessEditor.resx">
-      <DependentUpon>ExportLineThicknessEditor.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Controls\Preferences\LineThicknessEditor.resx">
+      <DependentUpon>LineThicknessEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\AppPreferencesWindow.resx">
       <DependentUpon>AppPreferencesWindow.cs</DependentUpon>
@@ -460,7 +463,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Resources\Images\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\closed hand icon.ico" />
     <Content Include="Resources\MeasureIcon_32.png" />

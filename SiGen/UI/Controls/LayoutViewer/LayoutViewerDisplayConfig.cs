@@ -180,7 +180,7 @@ namespace SiGen.UI
             }
         }
 
-        [Editor(typeof(Designers.MeasureEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Editor(typeof(Controls.Designers.MeasureEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Measure FretWidth
         {
             get { return _FretWidth; }

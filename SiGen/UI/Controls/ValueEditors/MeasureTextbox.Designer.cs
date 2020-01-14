@@ -1,4 +1,4 @@
-﻿namespace SiGen.UI
+﻿namespace SiGen.UI.Controls
 {
     partial class MeasureTextbox
     {

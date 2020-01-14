@@ -321,16 +321,18 @@ namespace SiGen.Export
             {
                 switch (lineExportConfig.LineUnit)
                 {
-                    case ExportUnit.Pixels:
+                    case LineUnit.Pixels:
                         return GetRelativeUnit(lineExportConfig.LineThickness, SvgUnitType.Pixel);
-                    case ExportUnit.Points:
+                    case LineUnit.Points:
                         return GetRelativeUnit(lineExportConfig.LineThickness, SvgUnitType.Point);
-                    case ExportUnit.Measure:
-                        var sizeM = Measure.FromNormalizedValue(lineExportConfig.LineThickness, Options.ExportUnit); ;
-                        return GetRelativeUnit(sizeM);
+                    case LineUnit.Millimeters:
+                        return GetRelativeUnit(
+                            new Measure(lineExportConfig.LineThickness, UnitOfMeasure.Mm));
+                    case LineUnit.Inches:
+                        return GetRelativeUnit(
+                            new Measure(lineExportConfig.LineThickness, UnitOfMeasure.In));
                 }
             }
-            
 
             return GetRelativeUnit(1, SvgUnitType.Point);
         }

@@ -2,6 +2,7 @@
 using SiGen.Measuring;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -11,10 +12,21 @@ namespace SiGen.Export
 {
 
     [Serializable]
-    public class LayoutExportOptions
+    public class LayoutExportOptions : INotifyPropertyChanged
     {
+        [JsonProperty("Name")]
         public string ConfigurationName { get; set; }
 
+        [JsonProperty]
+        public UnitOfMeasure ExportUnit { get; set; }
+
+        [JsonProperty]
+        public bool InkscapeCompatible { get; set; }
+
+        [JsonProperty]
+        public int TargetDPI { get; set; }
+
+        [JsonProperty]
         public StringsExportConfig Strings { get; set; }
 
         [JsonIgnore]
@@ -31,6 +43,7 @@ namespace SiGen.Export
             set => Strings.UseStringGauge = value;
         }
 
+        [JsonProperty]
         public LayoutLineExportConfig StringCenters { get; set; }
 
         [JsonIgnore]
@@ -40,6 +53,7 @@ namespace SiGen.Export
             set => StringCenters.Enabled = value;
         }
 
+        [JsonProperty]
         public LayoutLineExportConfig CenterLine { get; set; }
 
         [JsonIgnore]
@@ -49,6 +63,7 @@ namespace SiGen.Export
             set => CenterLine.Enabled = value;
         }
 
+        [JsonProperty]
         public FretsExportConfig Frets { get; set; }
 
         [JsonIgnore]
@@ -58,8 +73,10 @@ namespace SiGen.Export
             set => Frets.Enabled = value;
         }
 
+        [JsonIgnore]
         public bool ExtendFretSlots => Frets.ExtendFretSlots;
 
+        [JsonProperty]
         public LayoutLineExportConfig FingerboardEdges { get; set; }
 
         [JsonIgnore]
@@ -69,6 +86,7 @@ namespace SiGen.Export
             set => FingerboardEdges.Enabled = value;
         }
 
+        [JsonProperty]
         public LayoutLineExportConfig FingerboardMargins { get; set; }
 
         [JsonIgnore]
@@ -78,6 +96,7 @@ namespace SiGen.Export
             set => FingerboardMargins.Enabled = value;
         }
 
+        [JsonProperty]
         public LayoutLineExportConfig GuideLines { get; set; }
 
         [JsonIgnore]
@@ -86,12 +105,6 @@ namespace SiGen.Export
             get => GuideLines.Enabled;
             set => GuideLines.Enabled = value;
         }
-
-        public bool InkscapeCompatible { get; set; }
-
-        public int TargetDPI { get; set; }
-
-        public UnitOfMeasure ExportUnit { get; set; }
 
         public LayoutExportOptions()
         {
@@ -105,6 +118,74 @@ namespace SiGen.Export
             ExportFrets = true;
             ExportFingerboardEdges = true;
             ExportUnit = UnitOfMeasure.Mm;
+        }
+
+        public void DettachPropertyChangedEvent()
+        {
+            var configObjs = new LayoutLineExportConfig[]
+            {
+                Strings,
+                StringCenters,
+                CenterLine,
+                Frets,
+                FingerboardEdges,
+                FingerboardMargins,
+                GuideLines
+            };
+
+            for (int i = 0; i < configObjs.Length; i++)
+                configObjs[i].PropertyChanged -= ConfigObj_PropertyChanged;
+        }
+
+        public void AttachPropertyChangedEvent()
+        {
+            var configObjs = new LayoutLineExportConfig[]
+            {
+                Strings,
+                StringCenters,
+                CenterLine,
+                Frets,
+                FingerboardEdges,
+                FingerboardMargins,
+                GuideLines
+            };
+
+            for (int i = 0; i < configObjs.Length; i++)
+            {
+                configObjs[i].PropertyChanged -= ConfigObj_PropertyChanged;
+                configObjs[i].PropertyChanged += ConfigObj_PropertyChanged;
+            }
+        }
+
+        private void ConfigObj_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (sender == Strings)
+                OnPropertyChanged($"{nameof(Strings)}.{e.PropertyName}");
+
+            else if (sender == StringCenters)
+                OnPropertyChanged($"{nameof(StringCenters)}.{e.PropertyName}");
+
+            else if (sender == CenterLine)
+                OnPropertyChanged($"{nameof(CenterLine)}.{e.PropertyName}");
+
+            else if (sender == Frets)
+                OnPropertyChanged($"{nameof(Frets)}.{e.PropertyName}");
+
+            else if (sender == FingerboardEdges)
+                OnPropertyChanged($"{nameof(FingerboardEdges)}.{e.PropertyName}");
+
+            else if (sender == FingerboardMargins)
+                OnPropertyChanged($"{nameof(FingerboardMargins)}.{e.PropertyName}");
+
+            else if (sender == GuideLines)
+                OnPropertyChanged($"{nameof(GuideLines)}.{e.PropertyName}");
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public static LayoutExportOptions CreateDefault()

@@ -235,23 +235,17 @@ namespace SiGen.UI.Controls
 
         protected void OnBeginEdit()
         {
-            var handler = BeginEdit;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
+            BeginEdit?.Invoke(this, EventArgs.Empty);
         }
 
         protected void OnEndEdit()
         {
-            var handler = EndEdit;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
+            EndEdit?.Invoke(this, EventArgs.Empty);
         }
 
         protected void OnValueChanged(EventArgs e)
         {
-            var handler = ValueChanged;
-            if (handler != null)
-                handler(this, e);
+            ValueChanged?.Invoke(this, e);
         }
 
         protected override void OnValidating(CancelEventArgs e)

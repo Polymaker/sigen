@@ -56,8 +56,8 @@
             this.lblExportFormat = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.layoutPreview = new SiGen.UI.LayoutViewer();
-            this.mtbFretThickness = new SiGen.UI.MeasureTextbox();
-            this.mtbFretExtendAmount = new SiGen.UI.MeasureTextbox();
+            this.mtbFretThickness = new SiGen.UI.Controls.MeasureTextbox();
+            this.mtbFretExtendAmount = new SiGen.UI.Controls.MeasureTextbox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -445,10 +445,10 @@
         private System.Windows.Forms.RadioButton rbExtendOutward;
         private System.Windows.Forms.FlowLayoutPanel flpExportFormat;
         private System.Windows.Forms.CheckBox chkExtendFretSlots;
-        private MeasureTextbox mtbFretExtendAmount;
+        private SiGen.UI.Controls.MeasureTextbox mtbFretExtendAmount;
         private System.Windows.Forms.GroupBox gbxFretsOptions;
         private System.Windows.Forms.Label lblExtendAmount;
-        private MeasureTextbox mtbFretThickness;
+        private SiGen.UI.Controls.MeasureTextbox mtbFretThickness;
         private System.Windows.Forms.CheckBox chkFretThickness;
         private System.Windows.Forms.Button btnPickFretColor;
         private System.Windows.Forms.PictureBox pbxFretColor;

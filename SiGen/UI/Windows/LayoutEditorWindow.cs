@@ -1,4 +1,5 @@
 ﻿using SiGen.Common;
+using SiGen.Configuration;
 using SiGen.Export;
 using SiGen.Measuring;
 using SiGen.Physics;
@@ -77,7 +78,7 @@ namespace SiGen.UI
             {
                 OpenDefaultLayout();
             }
-            AppPreferences.ValidateRecentFiles();
+            AppConfigManager.ValidateRecentFiles();
             RebuildRecentFilesMenu();
         }
 
@@ -300,7 +301,7 @@ namespace SiGen.UI
 
             if (isNew)
             {
-                AppPreferences.AddRecentFile(file.FileName);
+                AppConfigManager.AddRecentFile(file.FileName);
                 RebuildRecentFilesMenu();
             }
 
@@ -377,7 +378,7 @@ namespace SiGen.UI
 
                 if (!asTemplate)
                 {
-                    AppPreferences.AddRecentFile(filename);
+                    AppConfigManager.AddRecentFile(filename);
                     RebuildRecentFilesMenu();
                 }
             }
@@ -403,7 +404,7 @@ namespace SiGen.UI
         {
             for (int i = tssbOpen.DropDownItems.Count - 1; i >= 0; i--)
             {
-                if (tssbOpen.DropDownItems[i].Tag is AppPreferences.RecentFile)
+                if (tssbOpen.DropDownItems[i].Tag is RecentFile)
                 {
                     tssbOpen.DropDownItems[i].Click -= RecentFileMenu_Click;
                     tssbOpen.DropDownItems.RemoveAt(i);
@@ -412,19 +413,19 @@ namespace SiGen.UI
 
             int counter = 0;
 
-            foreach (var filename in AppPreferences.Current.RecentFiles)
+            foreach (var filename in AppConfigManager.Current.RecentFiles)
             {
                 var fileMenu = tssbOpen.DropDownItems.Add(string.Format("{0}: {1}", ++counter, filename.Filename));
                 fileMenu.Tag = filename;
                 fileMenu.Click += RecentFileMenu_Click;
             }
 
-            tsSeparatorOpen.Visible = AppPreferences.Current.RecentFiles.Count > 0;
+            tsSeparatorOpen.Visible = AppConfigManager.Current.RecentFiles.Count > 0;
         }
 
         private void RecentFileMenu_Click(object sender, EventArgs e)
         {
-            OpenLayoutFile(((sender as ToolStripItem).Tag as AppPreferences.RecentFile).Filename);
+            OpenLayoutFile(((sender as ToolStripItem).Tag as RecentFile).Filename);
         }
 
         #endregion
