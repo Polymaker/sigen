@@ -227,6 +227,37 @@ namespace SiGen.StringedInstruments.Layout.Visual
             TrimBetween((LayoutLine)firstBound, (LayoutLine)lastBound, true);
         }
 
+        public ILayoutLine GetExtendedFretLine(Measure amount)
+        {
+            if ((Length + (amount * 2)).NormalizedValue > 0)
+            {
+                if (IsStraight)
+                {
+                    var layoutLine = new LayoutLine(Points.First(), Points.Last());
+                    layoutLine.P2 += (layoutLine.Direction * amount);
+                    layoutLine.P1 += (layoutLine.Direction * (amount * -1));
+                    return layoutLine;
+                }
+                else
+                {
+                    RebuildSpline();
+
+                    var tmpLine = new LayoutPolyLine(Points);
+                    var bounds = GetFretBoundaries(false);
+                    var offset1 = LayoutLine.Offset(bounds.Item1, amount * -1);
+                    var offset2 = LayoutLine.Offset(bounds.Item2, amount);
+
+                    tmpLine.TrimBetween(offset1, offset2, true);
+                    if (Spline != null)
+                        tmpLine.InterpolateSpline(0.5);
+
+                    return tmpLine;
+                }
+            }
+            
+            return null;
+        }
+
         public void RebuildSpline()
         {
             if (Spline != null)

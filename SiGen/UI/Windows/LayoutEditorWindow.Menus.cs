@@ -10,6 +10,15 @@ namespace SiGen.UI
 {
 	public partial class LayoutEditorWindow
 	{
+
+        private void RefreshToolbarButtonStates()
+        {
+            tsbClose.Enabled = CurrentLayoutDocument != null;
+            tsbExport.Enabled = CurrentLayoutDocument != null;
+            tssbSave.Enabled = CurrentLayoutDocument != null;
+
+        }
+
 		#region Undo/Redo
 
 		private void RebuildUndoRedoMenus()

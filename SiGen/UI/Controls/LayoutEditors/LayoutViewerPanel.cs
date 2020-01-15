@@ -24,11 +24,8 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         public LayoutDocument CurrentDocument
         {
-            get { return _CurrentFile; }
-            set
-            {
-                SetCurrentLayout(value);
-            }
+            get => _CurrentFile;
+            set => SetCurrentLayout(value);
         }
 
         public SILayout CurrentLayout => CurrentDocument?.Layout;

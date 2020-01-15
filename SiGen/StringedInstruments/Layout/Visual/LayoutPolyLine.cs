@@ -361,5 +361,10 @@ namespace SiGen.StringedInstruments.Layout.Visual
             Points.Clear();
             _Points.AddRange(points.Select(p => new PointM(p.X * -1, p.Y)));
         }
+
+        public PointM[] GetLinePoints()
+        {
+            return _Points.ToArray();
+        }
     }
 }

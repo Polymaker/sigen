@@ -50,6 +50,7 @@ namespace SiGen.UI.Controls.LayoutEditors
             base.OnLoad(e);
             Controls.Add(_Editor);
             _Editor.Dock = System.Windows.Forms.DockStyle.Fill;
+            Text = _Editor.Title;
         }
 
         protected override void OnDockStateChanged(EventArgs e)

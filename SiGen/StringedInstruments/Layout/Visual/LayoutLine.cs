@@ -221,5 +221,9 @@ namespace SiGen.StringedInstruments.Layout.Visual
             return true;
         }
 
+        public PointM[] GetLinePoints()
+        {
+            return new PointM[] { P1, P2 };
+        }
     }
 }

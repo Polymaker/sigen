@@ -90,15 +90,15 @@ namespace SiGen.UI
             
             stringConfigPanel = new LayoutEditorPanel<StringsConfigurationEditor>();
             stringConfigPanel.Show(dockPanel1, DockState.DockBottom);
-            stringConfigPanel.Text = "General Configuration";
+            //stringConfigPanel.Text = "General Configuration";
 
             layoutMarginPanel = new LayoutEditorPanel<FingerboardMarginEditor>();
             layoutMarginPanel.Show(stringConfigPanel.Pane, DockAlignment.Right, .6);
-            layoutMarginPanel.Text = "Fingerboard Margins";
+            //layoutMarginPanel.Text = "Fingerboard Margins";
 
             stringSpacingPanel = new LayoutEditorPanel<StringSpacingEditor>();
             stringSpacingPanel.Show(layoutMarginPanel.Pane, DockAlignment.Right, 0.5);
-            stringSpacingPanel.Text = "String Spacing";
+            //stringSpacingPanel.Text = "String Spacing";
 
             //layoutInfoPanel = new LayoutEditorPanel<LayoutProperties>();
             //layoutInfoPanel.Show(layoutMarginPanel.Pane, DockAlignment.Bottom, .4);
@@ -107,7 +107,7 @@ namespace SiGen.UI
             scaleLengthPanel = new LayoutEditorPanel<ScaleLengthEditor>();
             scaleLengthPanel.Show(layoutMarginPanel.Pane, DockAlignment.Bottom, .5);
             //scaleLengthPanel.Show(stringConfigPanel.Pane, null);
-            scaleLengthPanel.Text = "Scale Length";
+            //scaleLengthPanel.Text = "Scale Length";
             //stringConfigPanel.Activate();
 
         }
@@ -131,10 +131,7 @@ namespace SiGen.UI
                 tsbMeasureTool.CheckOnClick = false;
             }
 
-            tsbClose.Enabled = CurrentLayoutDocument != null;
-            tsbExport.Enabled = CurrentLayoutDocument != null;
-
-
+            RefreshToolbarButtonStates();
             RebuildUndoRedoMenus();
 
 			PreviousDocument = ActiveDocument;
@@ -142,10 +139,10 @@ namespace SiGen.UI
 
         private void CurrentFile_LayoutChanged(object sender, EventArgs e)
         {
-            if(CurrentLayoutDocument != null)
+            if (CurrentLayoutDocument != null)
             {
-				RebuildUndoRedoMenus();
-			}
+                RebuildUndoRedoMenus();
+            }
         }
 
         private void SetEditorsActiveLayout(SILayout layout)

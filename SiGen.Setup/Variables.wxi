@@ -2,11 +2,11 @@
 <Include>
 	<!-- TODO: Put your code here. -->
   <?if $(var.Platform) = x64 ?>
-  <?define ProductName = "Product Name (64 bit)" ?>
+  <?define ProductName = "SiGen (64 bit)" ?>
   <?define Win64 = "yes" ?>
   <?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
   <?else ?>
-  <?define ProductName = "Product Name" ?>
+  <?define ProductName = "SiGen" ?>
   <?define Win64 = "no" ?>
   <?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
   <?endif ?>

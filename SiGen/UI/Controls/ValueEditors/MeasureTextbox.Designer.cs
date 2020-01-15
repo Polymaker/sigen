@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MeasureTextbox));
             this.innerTextbox = new SiGen.UI.Controls.TextBoxEx();
             this.cmsConvert = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiClearValue = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,11 +46,8 @@
             // 
             this.innerTextbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.innerTextbox.ContextMenuStrip = this.cmsConvert;
-            this.innerTextbox.Location = new System.Drawing.Point(2, 0);
+            resources.ApplyResources(this.innerTextbox, "innerTextbox");
             this.innerTextbox.Name = "innerTextbox";
-            this.innerTextbox.Size = new System.Drawing.Size(100, 13);
-            this.innerTextbox.TabIndex = 0;
-            this.innerTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.innerTextbox.ValidateOnEnter = true;
             this.innerTextbox.CommandKeyPressed += new System.Windows.Forms.KeyEventHandler(this.innerTextbox_CommandKeyPressed);
             this.innerTextbox.TextChanged += new System.EventHandler(this.innerTextbox_TextChanged);
@@ -70,63 +68,56 @@
             this.tsmiConvertToIN,
             this.tsmiConvertToFT});
             this.cmsConvert.Name = "cmsConvert";
-            this.cmsConvert.Size = new System.Drawing.Size(139, 142);
+            resources.ApplyResources(this.cmsConvert, "cmsConvert");
             this.cmsConvert.Opening += new System.ComponentModel.CancelEventHandler(this.cmsConvert_Opening);
             // 
             // tsmiClearValue
             // 
             this.tsmiClearValue.Name = "tsmiClearValue";
-            this.tsmiClearValue.Size = new System.Drawing.Size(138, 22);
-            this.tsmiClearValue.Text = "Clear Value";
+            resources.ApplyResources(this.tsmiClearValue, "tsmiClearValue");
             this.tsmiClearValue.Click += new System.EventHandler(this.tsmiClearValue_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(135, 6);
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             // 
             // convertToToolStripMenuItem
             // 
             this.convertToToolStripMenuItem.Name = "convertToToolStripMenuItem";
-            this.convertToToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
-            this.convertToToolStripMenuItem.Text = "Convert to:";
+            resources.ApplyResources(this.convertToToolStripMenuItem, "convertToToolStripMenuItem");
             // 
             // tsmiConvertToMM
             // 
             this.tsmiConvertToMM.Name = "tsmiConvertToMM";
-            this.tsmiConvertToMM.Size = new System.Drawing.Size(138, 22);
-            this.tsmiConvertToMM.Text = "Millimeters";
+            resources.ApplyResources(this.tsmiConvertToMM, "tsmiConvertToMM");
             this.tsmiConvertToMM.Click += new System.EventHandler(this.tsmiConvertToMM_Click);
             // 
             // tsmiConvertToCM
             // 
             this.tsmiConvertToCM.Name = "tsmiConvertToCM";
-            this.tsmiConvertToCM.Size = new System.Drawing.Size(138, 22);
-            this.tsmiConvertToCM.Text = "Centimeters";
+            resources.ApplyResources(this.tsmiConvertToCM, "tsmiConvertToCM");
             this.tsmiConvertToCM.Click += new System.EventHandler(this.tsmiConvertToCM_Click);
             // 
             // tsmiConvertToIN
             // 
             this.tsmiConvertToIN.Name = "tsmiConvertToIN";
-            this.tsmiConvertToIN.Size = new System.Drawing.Size(138, 22);
-            this.tsmiConvertToIN.Text = "Inches";
+            resources.ApplyResources(this.tsmiConvertToIN, "tsmiConvertToIN");
             this.tsmiConvertToIN.Click += new System.EventHandler(this.tsmiConvertToIN_Click);
             // 
             // tsmiConvertToFT
             // 
             this.tsmiConvertToFT.Name = "tsmiConvertToFT";
-            this.tsmiConvertToFT.Size = new System.Drawing.Size(138, 22);
-            this.tsmiConvertToFT.Text = "Feets";
+            resources.ApplyResources(this.tsmiConvertToFT, "tsmiConvertToFT");
             this.tsmiConvertToFT.Click += new System.EventHandler(this.tsmiConvertToFT_Click);
             // 
             // MeasureTextbox
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ContextMenuStrip = this.cmsConvert;
             this.Controls.Add(this.innerTextbox);
             this.Name = "MeasureTextbox";
-            this.Size = new System.Drawing.Size(100, 49);
             this.cmsConvert.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

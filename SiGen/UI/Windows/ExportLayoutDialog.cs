@@ -95,7 +95,7 @@ namespace SiGen.UI.Windows
             layoutPreview.DisplayConfig.ShowFingerboard = ExportOptions.ExportFingerboardEdges;
             layoutPreview.DisplayConfig.FretLineColor = ExportOptions.Frets.Color;
             layoutPreview.DisplayConfig.RenderRealStrings = ExportOptions.Strings.UseStringGauge;
-            
+            layoutPreview.DisplayConfig.FretExtensionAmount = ExportOptions.Frets.ExtensionAmount;
         }
 
         private void btnExport_Click(object sender, EventArgs e)
@@ -198,6 +198,7 @@ namespace SiGen.UI.Windows
                     mtbFretExtendAmount_ValueChanged(mtbFretExtendAmount, EventArgs.Empty);
                 else
                     ExportOptions.Frets.ExtensionAmount = Measure.Empty;
+                UpdatePreview();
             }
         }
 
@@ -211,6 +212,7 @@ namespace SiGen.UI.Windows
                     if (rbExtendInward.Checked)
                         amount = amount * -1;
                     ExportOptions.Frets.ExtensionAmount = amount;
+                    UpdatePreview();
                 }
             }
         }

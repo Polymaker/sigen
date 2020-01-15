@@ -52,14 +52,34 @@ namespace SiGen.Export
         {
             foreach (var fretLine in Layout.VisualElements.OfType<FretLine>())
             {
+                if (Options.ExtendFretSlots)
+                {
+                    var extendedFretLine = fretLine.GetExtendedFretLine(Options.Frets.ExtensionAmount);
+                    if (extendedFretLine is LayoutLine line)
+                    {
+                        line.Tag = fretLine;
+                        AddLayoutLine(line, VisualElementType.Fret, Options.Frets);
+                        continue;
+                    }
+                    else if (extendedFretLine is LayoutPolyLine polyline)
+                    {
+                        polyline.Tag = fretLine;
+                        if (polyline.Spline != null)
+                            AddLayoutSpline(polyline, VisualElementType.Fret, Options.Frets);
+                        else
+                            AddLayoutPolyLine(polyline, VisualElementType.Fret, Options.Frets);
+                        continue;
+                    }
+                }
+
                 if (fretLine.IsStraight)
                 {
                     var layoutLine = new LayoutLine(fretLine.Points.First(), fretLine.Points.Last());
-                    if (Options.ExtendFretSlots && (fretLine.Length + (Options.Frets.ExtensionAmount * 2)).NormalizedValue > 0)
-                    {
-                        layoutLine.P2 += (layoutLine.Direction * Options.Frets.ExtensionAmount);
-                        layoutLine.P1 += (layoutLine.Direction * (Options.Frets.ExtensionAmount * -1));
-                    }
+                    //if (Options.ExtendFretSlots && (fretLine.Length + (Options.Frets.ExtensionAmount * 2)).NormalizedValue > 0)
+                    //{
+                    //    layoutLine.P2 += (layoutLine.Direction * Options.Frets.ExtensionAmount);
+                    //    layoutLine.P1 += (layoutLine.Direction * (Options.Frets.ExtensionAmount * -1));
+                    //}
                     layoutLine.Tag = fretLine;
                     AddLayoutLine(layoutLine, VisualElementType.Fret, Options.Frets);
                 }
@@ -67,31 +87,35 @@ namespace SiGen.Export
                 {
                     fretLine.RebuildSpline();
 
-                    if (Options.ExtendFretSlots && (fretLine.Length + (Options.Frets.ExtensionAmount * 2)).NormalizedValue > 0)
-                    {
-                        var tmpLine = new LayoutPolyLine(fretLine.Points);
-                        var bounds = fretLine.GetFretBoundaries(false);
-                        var offset1 = LayoutLine.Offset(bounds.Item1, Options.Frets.ExtensionAmount * -1);
-                        var offset2 = LayoutLine.Offset(bounds.Item2, Options.Frets.ExtensionAmount);
-
-                        tmpLine.TrimBetween(offset1, offset2, true);
-                        if (fretLine.Spline != null)
-                            tmpLine.InterpolateSpline(0.5);
-
-                        tmpLine.Tag = fretLine;
-
-                        if (tmpLine.Spline != null)
-                            AddLayoutSpline(tmpLine, VisualElementType.Fret, Options.Frets);
-                        else
-                            AddLayoutPolyLine(tmpLine, VisualElementType.Fret, Options.Frets);
-                    }
+                    if (fretLine.Spline != null)
+                        AddLayoutSpline(fretLine, VisualElementType.Fret, Options.Frets);
                     else
-                    {
-                        if (fretLine.Spline != null)
-                            AddLayoutSpline(fretLine, VisualElementType.Fret, Options.Frets);
-                        else
-                            AddLayoutPolyLine(fretLine, VisualElementType.Fret, Options.Frets);
-                    }
+                        AddLayoutPolyLine(fretLine, VisualElementType.Fret, Options.Frets);
+                    //if (Options.ExtendFretSlots && (fretLine.Length + (Options.Frets.ExtensionAmount * 2)).NormalizedValue > 0)
+                    //{
+                    //    var tmpLine = new LayoutPolyLine(fretLine.Points);
+                    //    var bounds = fretLine.GetFretBoundaries(false);
+                    //    var offset1 = LayoutLine.Offset(bounds.Item1, Options.Frets.ExtensionAmount * -1);
+                    //    var offset2 = LayoutLine.Offset(bounds.Item2, Options.Frets.ExtensionAmount);
+
+                    //    tmpLine.TrimBetween(offset1, offset2, true);
+                    //    if (fretLine.Spline != null)
+                    //        tmpLine.InterpolateSpline(0.5);
+
+                    //    tmpLine.Tag = fretLine;
+
+                    //    if (tmpLine.Spline != null)
+                    //        AddLayoutSpline(tmpLine, VisualElementType.Fret, Options.Frets);
+                    //    else
+                    //        AddLayoutPolyLine(tmpLine, VisualElementType.Fret, Options.Frets);
+                    //}
+                    //else
+                    //{
+                    //    if (fretLine.Spline != null)
+                    //        AddLayoutSpline(fretLine, VisualElementType.Fret, Options.Frets);
+                    //    else
+                    //        AddLayoutPolyLine(fretLine, VisualElementType.Fret, Options.Frets);
+                    //}
                 }
             }
         }

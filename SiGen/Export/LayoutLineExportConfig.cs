@@ -119,6 +119,6 @@ namespace SiGen.Export
         public Measure ExtensionAmount { get => _ExtensionAmount; set { if (value != _ExtensionAmount) { _ExtensionAmount = value; OnPropertyChanged(nameof(ExtensionAmount)); } } }
 
         [JsonIgnore]
-        public bool ExtendFretSlots { get { return !ExtensionAmount.IsEmpty && ExtensionAmount > Measure.Zero; } }
+        public bool ExtendFretSlots { get { return !ExtensionAmount.IsEmpty && Math.Abs(ExtensionAmount.NormalizedValue.DoubleValue) > 0; } }
     }
 }

@@ -19,12 +19,16 @@ namespace SiGen.UI.Controls
     {
         private enum MarginEditMode
         {
+            [LocDescription("Margins_Edges")]
             Edges,
-            [Description("Nut & Bridge")]
+            //[Description("Nut & Bridge")]
+            [LocDescription("Margins_NutBridge")]
             NutBridge,
-            [Description("Bass & Treble")]
+            //[Description("Bass & Treble")]
+            [LocDescription("Margins_BassTreble")]
             BassTreble,
-            [Description("All Sides")]
+            //[Description("All Sides")]
+            [LocDescription("Margins_All")]
             All
         }
 

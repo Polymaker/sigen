@@ -191,6 +191,12 @@ namespace SiGen.UI
 
         private void DisplayConfigChanged(object sender, PropertyChangedEventArgs e)
         {
+            switch (e.PropertyName)
+            {
+                case nameof(DisplayConfig.FretExtensionAmount):
+                    RecalculateFretExtensions();
+                    break;
+            }
             if (IsHandleCreated)
                 Invalidate();
         }
@@ -199,6 +205,9 @@ namespace SiGen.UI
         {
             if (IsHandleCreated)
             {
+                if (!DisplayConfig.FretExtensionAmount.IsEmpty)
+                    RecalculateFretExtensions();
+
                 if (!manualZoom)
                     ResetCamera();
                 else
@@ -208,6 +217,8 @@ namespace SiGen.UI
                 CalculateIntersections();
 
                 AdjustMeasureAfterLayoutChanged();
+
+               
             }
         }
 
@@ -220,6 +231,25 @@ namespace SiGen.UI
 
             if (!manualZoom)
                 ZoomToFit();
+        }
+
+        #endregion
+
+        #region Misc
+
+        private void RecalculateFretExtensions()
+        {
+            if (CurrentLayout != null)
+            {
+                foreach (var fretLine in CurrentLayout.VisualElements.OfType<FretLine>())
+                {
+                    if (DisplayConfig.FretExtensionAmount.IsEmpty)
+                        fretLine.Tag = null;
+                    else
+                        fretLine.Tag = fretLine.GetExtendedFretLine(DisplayConfig.FretExtensionAmount);
+                }
+            }
+            
         }
 
         #endregion

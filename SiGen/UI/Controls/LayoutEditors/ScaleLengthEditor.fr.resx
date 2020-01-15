@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,56 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="OpenLayoutIcon_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\openlayouticon_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="$this.Title" xml:space="preserve">
+    <value>Configuration du diapason</value>
   </data>
-  <data name="SigenIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sigenicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="colScaleLength.HeaderText" xml:space="preserve">
+    <value>Diapason</value>
   </data>
-  <data name="MeasureIcon_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\measureicon_64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="rbMultiple.Text" xml:space="preserve">
+    <value>Multiple</value>
   </data>
-  <data name="MeasureIcon_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\measureicon_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="rbDual.Text" xml:space="preserve">
+    <value>Double</value>
   </data>
-  <data name="OptionsIcon_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\optionsicon_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="rbSingle.Text" xml:space="preserve">
+    <value>Simple</value>
   </data>
-  <data name="NewLayoutIcon_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\newlayouticon_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="lblParallelFret.Text" xml:space="preserve">
+    <value>Parallèle à</value>
   </data>
-  <data name="SigenIcon_x64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SigenIcon_x64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="lblTreble.Text" xml:space="preserve">
+    <value>Aigus</value>
   </data>
-  <data name="open_hand_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\open hand icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="lblBass.Text" xml:space="preserve">
+    <value>Basse</value>
   </data>
-  <data name="closed_hand_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\closed hand icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="colMultiScaleRatio.HeaderText" xml:space="preserve">
+    <value>Ratio d'alignement</value>
   </data>
-  <data name="CloseLayout_x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\images\closelayout_x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="lblMultiScaleRatio.Text" xml:space="preserve">
+    <value>(Ratio)</value>
   </data>
-  <data name="ExportLayout_x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\images\exportlayout_x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="NewLayout_x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\images\newlayout_x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="OpenLayout_x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\images\openlayout_x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Redo_x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\images\redo_x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SaveLayout_x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\images\savelayout_x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Settings_x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\images\settings_x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Undo_x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\images\undo_x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="lblScaleLength.Text" xml:space="preserve">
+    <value>Diapason</value>
   </data>
 </root>

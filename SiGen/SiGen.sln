@@ -57,6 +57,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
+		RESX_SaveFilesImmediatelyUponChange = False
 		SolutionGuid = {10366DA2-F209-453C-9ED8-563304F56BDF}
 	EndGlobalSection
 EndGlobal

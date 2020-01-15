@@ -149,6 +149,7 @@
     <Compile Include="Localization\LocalizableStringList.Designer.cs">
       <DependentUpon>LocalizableStringList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Localization\LocDescriptionAttribute.cs" />
     <Compile Include="Maths\Angle.cs" />
     <Compile Include="Maths\AngleUnit.cs" />
     <Compile Include="Maths\BezierCurve.cs" />
@@ -169,6 +170,11 @@
     <Compile Include="Physics\Temperament.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Localizations.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Localizations.resx</DependentUpon>
+    </Compile>
     <Compile Include="StringedInstruments\Data\StringProperties.cs" />
     <Compile Include="StringedInstruments\Data\StringTuning.cs" />
     <Compile Include="StringedInstruments\Layout\Edit\BatchChange.cs" />
@@ -382,6 +388,14 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Resources\Localizations.fr.resx" />
+    <EmbeddedResource Include="Resources\Localizations.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localizations.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\FingerboardMarginEditor.fr.resx">
+      <DependentUpon>FingerboardMarginEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\FingerboardMarginEditor.resx">
       <DependentUpon>FingerboardMarginEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -394,14 +408,23 @@
     <EmbeddedResource Include="UI\Controls\LayoutEditors\LayoutViewerPanel.resx">
       <DependentUpon>LayoutViewerPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\ScaleLengthEditor.fr.resx">
+      <DependentUpon>ScaleLengthEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\ScaleLengthEditor.resx">
       <DependentUpon>ScaleLengthEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\StringPropertiesEditor.resx">
       <DependentUpon>StringPropertiesEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\StringsConfigurationEditor.fr.resx">
+      <DependentUpon>StringsConfigurationEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\StringsConfigurationEditor.resx">
       <DependentUpon>StringsConfigurationEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\StringSpacingEditor.fr.resx">
+      <DependentUpon>StringSpacingEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\StringSpacingEditor.resx">
       <DependentUpon>StringSpacingEditor.cs</DependentUpon>
@@ -426,6 +449,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\Preferences\LineThicknessEditor.resx">
       <DependentUpon>LineThicknessEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\ValueEditors\MeasureTextbox.fr.resx">
+      <DependentUpon>MeasureTextbox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\AppPreferencesWindow.resx">
       <DependentUpon>AppPreferencesWindow.cs</DependentUpon>
@@ -463,11 +489,17 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\Images\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Resources\closed hand icon.ico" />
+    <Content Include="Resources\Images\CloseLayout_x32.png" />
+    <Content Include="Resources\Images\ExportLayout_x32.png" />
+    <Content Include="Resources\Images\NewLayout_x32.png" />
+    <Content Include="Resources\Images\OpenLayout_x32.png" />
+    <Content Include="Resources\Images\Redo_x32.png" />
+    <Content Include="Resources\Images\SaveLayout_x32.png" />
+    <Content Include="Resources\Images\Settings_x32.png" />
+    <Content Include="Resources\Images\Undo_x32.png" />
     <Content Include="Resources\MeasureIcon_32.png" />
     <Content Include="Resources\MeasureIcon_64.png" />
     <Content Include="Resources\NewLayoutIcon_32.png" />

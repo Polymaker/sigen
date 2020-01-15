@@ -25,6 +25,7 @@ namespace SiGen.UI
         private UnitOfMeasure _DefaultDisplayUnit;
         private Measure _FretWidth;
         private Orientation _FingerboardOrientation;
+        private Measure _FretExtensionAmount;
 
         [DefaultValue(false)]
         public bool ShowCenterLine
@@ -35,7 +36,7 @@ namespace SiGen.UI
                 if (value != _ShowCenterLine)
                 {
                     _ShowCenterLine = value;
-                    OnPropertyChanged("ShowCenterLine");
+                    OnPropertyChanged(nameof(ShowCenterLine));
                 }
             }
         }
@@ -49,7 +50,7 @@ namespace SiGen.UI
                 if (value != _ShowStrings)
                 {
                     _ShowStrings = value;
-                    OnPropertyChanged("ShowStrings");
+                    OnPropertyChanged(nameof(ShowStrings));
                 }
             }
         }
@@ -63,7 +64,7 @@ namespace SiGen.UI
                 if (value != _ShowFrets)
                 {
                     _ShowFrets = value;
-                    OnPropertyChanged("ShowFrets");
+                    OnPropertyChanged(nameof(ShowFrets));
                 }
             }
         }
@@ -77,7 +78,7 @@ namespace SiGen.UI
                 if (value != _ShowTheoreticalFrets)
                 {
                     _ShowTheoreticalFrets = value;
-                    OnPropertyChanged("ShowTheoreticalFrets");
+                    OnPropertyChanged(nameof(ShowTheoreticalFrets));
                 }
             }
         }
@@ -91,7 +92,7 @@ namespace SiGen.UI
                 if (value != _ShowMidlines)
                 {
                     _ShowMidlines = value;
-                    OnPropertyChanged("ShowMidlines");
+                    OnPropertyChanged(nameof(ShowMidlines));
                 }
             }
         }
@@ -105,7 +106,7 @@ namespace SiGen.UI
                 if (value != _ShowMargins)
                 {
                     _ShowMargins = value;
-                    OnPropertyChanged("ShowMargins");
+                    OnPropertyChanged(nameof(ShowMargins));
                 }
             }
         }
@@ -119,7 +120,7 @@ namespace SiGen.UI
                 if (value != _ShowFingerboard)
                 {
                     _ShowFingerboard = value;
-                    OnPropertyChanged("ShowFingerboard");
+                    OnPropertyChanged(nameof(ShowFingerboard));
                 }
             }
         }
@@ -133,7 +134,7 @@ namespace SiGen.UI
                 if (value != _FingerboardOrientation)
                 {
                     _FingerboardOrientation = value;
-                    OnPropertyChanged("FingerboardOrientation");
+                    OnPropertyChanged(nameof(FingerboardOrientation));
                 }
             }
         }
@@ -147,7 +148,23 @@ namespace SiGen.UI
                 if (value != _RenderRealFrets)
                 {
                     _RenderRealFrets = value;
-                    OnPropertyChanged("RenderRealFrets");
+                    OnPropertyChanged(nameof(RenderRealFrets));
+                }
+            }
+        }
+
+        public bool ExtendFrets => !FretExtensionAmount.IsEmpty;
+
+        [Browsable(false)]
+        public Measure FretExtensionAmount
+        {
+            get => _FretExtensionAmount;
+            set
+            {
+                if (value != _FretExtensionAmount)
+                {
+                    _FretExtensionAmount = value;
+                    OnPropertyChanged(nameof(FretExtensionAmount));
                 }
             }
         }
@@ -175,7 +192,7 @@ namespace SiGen.UI
                 if (value != _RenderRealStrings)
                 {
                     _RenderRealStrings = value;
-                    OnPropertyChanged("RenderRealStrings");
+                    OnPropertyChanged(nameof(RenderRealStrings));
                 }
             }
         }
@@ -189,7 +206,7 @@ namespace SiGen.UI
                 if (!value.IsEmpty && (value != _FretWidth || _FretWidth.Unit != value.Unit))
                 {
                     _FretWidth = value;
-                    OnPropertyChanged("FretWidth");
+                    OnPropertyChanged(nameof(FretWidth));
                 }
             }
         }
@@ -203,7 +220,7 @@ namespace SiGen.UI
                 if (value != _DefaultDisplayUnit)
                 {
                     _DefaultDisplayUnit = value;
-                    OnPropertyChanged("DefaultDisplayUnit");
+                    OnPropertyChanged(nameof(DefaultDisplayUnit));
                 }
             }
         }
@@ -222,6 +239,7 @@ namespace SiGen.UI
             _FingerboardOrientation = Orientation.Horizontal;
             _DefaultDisplayUnit = UnitOfMeasure.Mm;
             _FretWidth = Measure.Mm(2.5);
+            _FretExtensionAmount = Measure.Empty;
             _FretLineColor = Color.Red;
         }
 
@@ -239,6 +257,16 @@ namespace SiGen.UI
         public bool ShouldSerializeFretWidth()
         {
             return FretWidth.NormalizedValue != 0.25;
+        }
+
+        public void ResetFretExtensionAmount()
+        {
+            FretExtensionAmount = Measure.Empty;
+        }
+
+        public bool ShouldSerializeFretExtensionAmount()
+        {
+            return !FretExtensionAmount.IsEmpty;
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]

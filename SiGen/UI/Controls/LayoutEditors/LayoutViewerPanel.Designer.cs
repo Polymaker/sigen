@@ -49,12 +49,12 @@
             this.DisplayMarginsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DisplayFingerboardMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DisplayCenterLineMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.ResetCameraButton = new System.Windows.Forms.ToolStripButton();
             this.ZoomToolstripLabel = new System.Windows.Forms.ToolStripLabel();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.layoutViewer1 = new SiGen.UI.LayoutViewer();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.layoutViewer1 = new SiGen.UI.LayoutViewer();
             this.cmsDocumentTab.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -245,12 +245,6 @@
             this.DisplayCenterLineMenuItem.Text = "Center line";
             this.DisplayCenterLineMenuItem.CheckedChanged += new System.EventHandler(this.DisplayOptionsMenuItem_CheckedChanged);
             // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
-            // 
             // ResetCameraButton
             // 
             this.ResetCameraButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -278,16 +272,11 @@
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton1.Text = "toolStripButton1";
             // 
-            // layoutViewer1
+            // toolStripSeparator3
             // 
-            this.layoutViewer1.BackColor = System.Drawing.SystemColors.Window;
-            this.layoutViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layoutViewer1.Location = new System.Drawing.Point(0, 0);
-            this.layoutViewer1.Name = "layoutViewer1";
-            this.layoutViewer1.Size = new System.Drawing.Size(577, 336);
-            this.layoutViewer1.TabIndex = 1;
-            this.layoutViewer1.Text = "layoutViewer1";
-            this.layoutViewer1.ZoomChanged += new System.EventHandler(this.layoutViewer1_ZoomChanged);
+            this.toolStripSeparator3.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
             // toolStripButton2
             // 
@@ -300,6 +289,17 @@
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton2.Text = "toolStripButton2";
+            // 
+            // layoutViewer1
+            // 
+            this.layoutViewer1.BackColor = System.Drawing.SystemColors.Window;
+            this.layoutViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layoutViewer1.Location = new System.Drawing.Point(0, 0);
+            this.layoutViewer1.Name = "layoutViewer1";
+            this.layoutViewer1.Size = new System.Drawing.Size(577, 336);
+            this.layoutViewer1.TabIndex = 1;
+            this.layoutViewer1.Text = "layoutViewer1";
+            this.layoutViewer1.ZoomChanged += new System.EventHandler(this.layoutViewer1_ZoomChanged);
             // 
             // LayoutViewerPanel
             // 

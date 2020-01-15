@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,56 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="OpenLayoutIcon_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\openlayouticon_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Margins_Edges" xml:space="preserve">
+    <value>Tous</value>
   </data>
-  <data name="SigenIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sigenicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Margins_BassTreble" xml:space="preserve">
+    <value>Côtés basse et aigus</value>
   </data>
-  <data name="MeasureIcon_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\measureicon_64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Margins_NutBridge" xml:space="preserve">
+    <value>Sillet et pont</value>
   </data>
-  <data name="MeasureIcon_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\measureicon_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Margins_All" xml:space="preserve">
+    <value>Individuel</value>
   </data>
-  <data name="OptionsIcon_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\optionsicon_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="FingerboardEnd_Nut" xml:space="preserve">
+    <value>Sillet</value>
   </data>
-  <data name="NewLayoutIcon_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\newlayouticon_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="FingerboardEnd_Bridge" xml:space="preserve">
+    <value>Pont</value>
   </data>
-  <data name="SigenIcon_x64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SigenIcon_x64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="FingerboardSide_Bass" xml:space="preserve">
+    <value>Basse</value>
   </data>
-  <data name="open_hand_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\open hand icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="FingerboardSide_Treble" xml:space="preserve">
+    <value>Aigus</value>
   </data>
-  <data name="closed_hand_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\closed hand icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Words_Fret" xml:space="preserve">
+    <value>Frette</value>
   </data>
-  <data name="CloseLayout_x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\images\closelayout_x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Words_CustomRatio" xml:space="preserve">
+    <value>Manuel</value>
   </data>
-  <data name="ExportLayout_x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\images\exportlayout_x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Words_Length" xml:space="preserve">
+    <value>Longeur</value>
   </data>
-  <data name="NewLayout_x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\images\newlayout_x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="StringSpacingAlignment_SpacingMiddle" xml:space="preserve">
+    <value>Centré entre les cordes extérieures</value>
   </data>
-  <data name="OpenLayout_x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\images\openlayout_x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="StringSpacingAlignment_StringCenterEven" xml:space="preserve">
+    <value>Centré entre les cordes du milieu</value>
   </data>
-  <data name="Redo_x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\images\redo_x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="StringSpacingAlignment_StringCenterOdd" xml:space="preserve">
+    <value>Centré le long de la corde du milieu</value>
   </data>
-  <data name="SaveLayout_x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\images\savelayout_x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="StringSpacingMethod_StringsCenter" xml:space="preserve">
+    <value>Distance égale (centre à centre)</value>
   </data>
-  <data name="Settings_x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\images\settings_x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Undo_x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\images\undo_x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="StringSpacingMethod_BetweenStrings" xml:space="preserve">
+    <value>Espacement égal (entre les cordes)</value>
   </data>
 </root>

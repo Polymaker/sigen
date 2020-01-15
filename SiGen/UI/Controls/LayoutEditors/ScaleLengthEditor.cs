@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using SiGen.StringedInstruments.Layout;
 using SiGen.Measuring;
 using SiGen.Utilities;
+using SiGen.Resources;
 
 namespace SiGen.UI.Controls
 {
@@ -43,7 +44,7 @@ namespace SiGen.UI.Controls
                 FretPositions.Add(new FretPosition()
                 {
                     FretNumber = 0,
-                    Name = "Nut",
+                    Name = Localizations.FingerboardEnd_Nut,
                     PositionRatio = 0
                 });
                 
@@ -53,7 +54,7 @@ namespace SiGen.UI.Controls
                     FretPositions.Add(new FretPosition()
                     {
                         FretNumber = i,
-                        Name = $"{i}{i.GetSuffix()} Fret",
+                        Name = $"{i}{i.GetSuffix()} {Localizations.Words_Fret}",
                         PositionRatio = ratio
                     });
                 }
@@ -61,7 +62,7 @@ namespace SiGen.UI.Controls
                 FretPositions.Add(new FretPosition()
                 {
                     FretNumber = FretPositions.Count,
-                    Name = "Bridge",
+                    Name = Localizations.FingerboardEnd_Bridge,
                     PositionRatio = 1
                 });
 
@@ -147,7 +148,7 @@ namespace SiGen.UI.Controls
                     case ScaleLengthType.Single:
                         mtbTrebleLength.Value = CurrentLayout.SingleScaleConfig.Length;
                         mtbTrebleLength.AllowEmptyValue = false;
-                        lblTreble.Text = "Length";
+                        lblTreble.Text = Localizations.Words_Length;
                         break;
                     case ScaleLengthType.Multiple:
                         {
@@ -156,7 +157,7 @@ namespace SiGen.UI.Controls
                             mtbBassLength.Value = CurrentLayout.MultiScaleConfig.Bass;
                             nubMultiScaleRatio.Value = CurrentLayout.MultiScaleConfig.PerpendicularFretRatio;
                             SelectClosestFretPosition(CurrentLayout.MultiScaleConfig.PerpendicularFretRatio);
-                            lblTreble.Text = "Treble";
+                            lblTreble.Text = Localizations.FingerboardSide_Treble;
                         }
                         break;
                     case ScaleLengthType.Individual:
@@ -306,7 +307,7 @@ namespace SiGen.UI.Controls
 			if(EditMode == ScaleLengthType.Multiple)
 			{
 				var current = cboParallelFret.SelectedItem as FretPosition;
-				return current?.Name ?? "Custom";
+				return current?.Name ?? Localizations.Words_CustomRatio;
 			}
 			return string.Empty;
 		}
@@ -314,7 +315,7 @@ namespace SiGen.UI.Controls
 		public string GetPerpendicularFretName(double fretRatio, double tolerance = 0.0005)
 		{
 			var closestFretPos = FretPositions.FirstOrDefault(p => p.PositionRatio.EqualOrClose(fretRatio, tolerance));
-			return closestFretPos?.Name ?? "Custom";
+			return closestFretPos?.Name ?? Localizations.Words_CustomRatio;
 		}
 
 		#region Manual Mode
@@ -345,14 +346,10 @@ namespace SiGen.UI.Controls
 
         private void dgvScaleLengths_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
-            if (e.ColumnIndex == colScaleLength.Index)
+            if (e.ColumnIndex == colMultiScaleRatio.Index)
             {
-
-            }
-            else if (e.ColumnIndex == colMultiScaleRatio.Index)
-            {
-                double ratio = 0;
-                if (!double.TryParse((string)e.FormattedValue, out ratio) || ratio < 0 || ratio > 1)
+                if (!double.TryParse((string)e.FormattedValue, out double ratio)
+                    || ratio < 0 || ratio > 1)
                     e.Cancel = true;
             }
         }
@@ -368,6 +365,15 @@ namespace SiGen.UI.Controls
                     e.Value = newValue;
                     e.ParsingApplied = true;
                 }
+            }
+        }
+
+        private void dgvScaleLengths_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.ColumnIndex == colStringNumber.Index)
+            {
+                var rowStr = (SIString)dgvScaleLengths.Rows[e.RowIndex].DataBoundItem;
+                e.Value = rowStr.Index + 1;
             }
         }
 
@@ -426,7 +432,7 @@ namespace SiGen.UI.Controls
 
             using (var g = cboParallelFret.CreateGraphics())
             {
-                MaxCboItemWidth = (int)g.MeasureString("Custom", cboParallelFret.Font).Width;
+                MaxCboItemWidth = (int)g.MeasureString(Localizations.Words_CustomRatio, cboParallelFret.Font).Width;
 
                 foreach (FretPosition item in cboParallelFret.Items)
                 {
@@ -473,9 +479,11 @@ namespace SiGen.UI.Controls
                 }
                 else
                 {
-                    e.Graphics.DrawString("Custom", e.Font, new SolidBrush(e.ForeColor), e.Bounds, sf);
+                    e.Graphics.DrawString(Localizations.Words_CustomRatio, e.Font, new SolidBrush(e.ForeColor), e.Bounds, sf);
                 }
             }
         }
+
+        
     }
 }

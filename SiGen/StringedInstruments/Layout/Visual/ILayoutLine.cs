@@ -12,5 +12,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
     {
         bool Intersects(LayoutLine line, out PointM intersection, bool infiniteLine = true);
         bool Intersects(Line line, out Vector intersection, bool infiniteLine = true);
+
+        PointM[] GetLinePoints();
     }
 }
