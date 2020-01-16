@@ -51,7 +51,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(3, 225);
+            this.label1.Location = new System.Drawing.Point(3, 215);
             this.label1.Margin = new System.Windows.Forms.Padding(3);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(93, 16);
@@ -66,27 +66,31 @@
             this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanel1.Controls.Add(this.FingerboardEdgesConfig);
             this.flowLayoutPanel1.Controls.Add(this.FingerboardMarginsConfig);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 247);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 237);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(612, 178);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(629, 168);
             this.flowLayoutPanel1.TabIndex = 3;
             // 
             // FingerboardEdgesConfig
             // 
+            this.FingerboardEdgesConfig.AutoSize = true;
+            this.FingerboardEdgesConfig.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.FingerboardEdgesConfig.ConfigName = "Fingerboard edges";
             this.FingerboardEdgesConfig.LineConfig = null;
             this.FingerboardEdgesConfig.Location = new System.Drawing.Point(3, 3);
             this.FingerboardEdgesConfig.Name = "FingerboardEdgesConfig";
-            this.FingerboardEdgesConfig.Size = new System.Drawing.Size(367, 83);
+            this.FingerboardEdgesConfig.Size = new System.Drawing.Size(363, 78);
             this.FingerboardEdgesConfig.TabIndex = 2;
             // 
             // FingerboardMarginsConfig
             // 
+            this.FingerboardMarginsConfig.AutoSize = true;
+            this.FingerboardMarginsConfig.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.FingerboardMarginsConfig.ConfigName = "Fingerboard margins";
             this.FingerboardMarginsConfig.LineConfig = null;
-            this.FingerboardMarginsConfig.Location = new System.Drawing.Point(3, 92);
+            this.FingerboardMarginsConfig.Location = new System.Drawing.Point(3, 87);
             this.FingerboardMarginsConfig.Name = "FingerboardMarginsConfig";
-            this.FingerboardMarginsConfig.Size = new System.Drawing.Size(367, 83);
+            this.FingerboardMarginsConfig.Size = new System.Drawing.Size(363, 78);
             this.FingerboardMarginsConfig.TabIndex = 4;
             // 
             // ConfigSelectionLayout
@@ -159,32 +163,36 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(618, 448);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(635, 428);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // StringsConfig
             // 
+            this.StringsConfig.AutoSize = true;
+            this.StringsConfig.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.StringsConfig.ConfigName = "Export strings";
             this.StringsConfig.LineConfig = null;
-            this.StringsConfig.Location = new System.Drawing.Point(3, 136);
+            this.StringsConfig.Location = new System.Drawing.Point(3, 131);
             this.StringsConfig.Name = "StringsConfig";
-            this.StringsConfig.Size = new System.Drawing.Size(367, 83);
+            this.StringsConfig.Size = new System.Drawing.Size(363, 78);
             this.StringsConfig.TabIndex = 6;
             // 
             // FretsConfig
             // 
+            this.FretsConfig.AutoSize = true;
+            this.FretsConfig.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.FretsConfig.ConfigName = "Export frets";
             this.FretsConfig.LineConfig = null;
             this.FretsConfig.Location = new System.Drawing.Point(3, 25);
             this.FretsConfig.Name = "FretsConfig";
-            this.FretsConfig.Size = new System.Drawing.Size(370, 83);
+            this.FretsConfig.Size = new System.Drawing.Size(363, 78);
             this.FretsConfig.TabIndex = 5;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(3, 114);
+            this.label3.Location = new System.Drawing.Point(3, 109);
             this.label3.Margin = new System.Windows.Forms.Padding(3);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(56, 16);
@@ -211,6 +219,7 @@
             this.Name = "LayoutExportOptionsEditor";
             this.Size = new System.Drawing.Size(635, 461);
             this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             this.ConfigSelectionLayout.ResumeLayout(false);
             this.ConfigSelectionLayout.PerformLayout();
             this.panel1.ResumeLayout(false);

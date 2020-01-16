@@ -14,9 +14,9 @@
    viewBox="0 0 8.4666665 8.466667"
    version="1.1"
    id="svg8"
-   inkscape:export-filename="C:\Users\JWTurner\Documents\Development\Test\sigen\SiGen\Resources\Images\Settings_x32.png"
-   inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96"
+   inkscape:export-filename="C:\Users\JWTurner\Documents\Development\Test\sigen\SiGen\Resources\Images\Measure_x16.png"
+   inkscape:export-xdpi="48"
+   inkscape:export-ydpi="48"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="MenuIcons.svg">
   <defs
@@ -28,20 +28,20 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="29.203201"
-     inkscape:cy="37.173839"
+     inkscape:zoom="8"
+     inkscape:cx="9.2950277"
+     inkscape:cy="16.273612"
      inkscape:document-units="px"
-     inkscape:current-layer="layer8"
+     inkscape:current-layer="layer11"
      showgrid="false"
      units="px"
      inkscape:snap-grids="true"
      inkscape:snap-to-guides="true"
      inkscape:snap-page="false"
-     inkscape:window-width="1123"
-     inkscape:window-height="679"
-     inkscape:window-x="1946"
-     inkscape:window-y="26"
+     inkscape:window-width="950"
+     inkscape:window-height="509"
+     inkscape:window-x="2104"
+     inkscape:window-y="254"
      inkscape:window-maximized="0">
     <inkscape:grid
        type="xygrid"
@@ -56,7 +56,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -240,11 +240,96 @@
      inkscape:groupmode="layer"
      id="layer8"
      inkscape:label="Settings"
-     style="display:inline">
+     style="display:none"
+     sodipodi:insensitive="true">
     <path
-       style="fill:#dddddd;stroke:#505050;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
-       d="M 12.720703 2.2050781 L 8.5644531 3.9257812 L 9.2753906 7.3027344 A 11 11 0 0 0 7.3105469 9.2753906 L 3.9257812 8.5644531 L 2.2050781 12.720703 L 5.0996094 14.609375 A 11 11 0 0 0 5 16 A 11 11 0 0 0 5.1015625 17.388672 L 2.2050781 19.279297 L 3.9257812 23.435547 L 7.3027344 22.724609 A 11 11 0 0 0 9.2753906 24.689453 L 8.5644531 28.074219 L 12.720703 29.794922 L 14.609375 26.900391 A 11 11 0 0 0 16 27 A 11 11 0 0 0 17.388672 26.898438 L 19.279297 29.794922 L 23.435547 28.074219 L 22.724609 24.697266 A 11 11 0 0 0 24.689453 22.724609 L 28.074219 23.435547 L 29.794922 19.279297 L 26.900391 17.390625 A 11 11 0 0 0 27 16 A 11 11 0 0 0 26.898438 14.611328 L 29.794922 12.720703 L 28.074219 8.5644531 L 24.697266 9.2753906 A 11 11 0 0 0 22.724609 7.3105469 L 23.435547 3.9257812 L 19.279297 2.2050781 L 17.390625 5.0996094 A 11 11 0 0 0 16 5 A 11 11 0 0 0 14.611328 5.1015625 L 12.720703 2.2050781 z M 16 11 A 5.0000003 5.0000003 0 0 1 21 16 A 5.0000003 5.0000003 0 0 1 16 21 A 5.0000003 5.0000003 0 0 1 11 16 A 5.0000003 5.0000003 0 0 1 16 11 z "
+       style="opacity:0.98999999;fill:#dddddd;fill-opacity:1;stroke:#505050;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 12.720703,2.2050781 8.5644531,3.9257812 9.2753906,7.3027344 A 11,11 0 0 0 7.3105469,9.2753906 L 3.9257812,8.5644531 2.2050781,12.720703 5.0996094,14.609375 A 11,11 0 0 0 5,16 11,11 0 0 0 5.1015625,17.388672 l -2.8964844,1.890625 1.7207031,4.15625 3.3769532,-0.710938 a 11,11 0 0 0 1.9726562,1.964844 l -0.7109375,3.384766 4.1562499,1.720703 1.888672,-2.894531 A 11,11 0 0 0 16,27 11,11 0 0 0 17.388672,26.898438 l 1.890625,2.896484 4.15625,-1.720703 -0.710938,-3.376953 a 11,11 0 0 0 1.964844,-1.972657 l 3.384766,0.710938 1.720703,-4.15625 -2.894531,-1.888672 A 11,11 0 0 0 27,16 11,11 0 0 0 26.898438,14.611328 L 29.794922,12.720703 28.074219,8.5644531 24.697266,9.2753906 A 11,11 0 0 0 22.724609,7.3105469 L 23.435547,3.9257812 19.279297,2.2050781 17.390625,5.0996094 A 11,11 0 0 0 16,5 11,11 0 0 0 14.611328,5.1015625 Z M 16,11 a 5.0000003,5.0000003 0 0 1 5,5 5.0000003,5.0000003 0 0 1 -5,5 5.0000003,5.0000003 0 0 1 -5,-5 5.0000003,5.0000003 0 0 1 5,-5 z"
        transform="scale(0.26458334)"
-       id="path5038" />
+       id="path5038"
+       inkscape:connector-curvature="0" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer11"
+     inkscape:label="Measure">
+    <path
+       style="display:inline;fill:#e0e0e0;fill-opacity:1;fill-rule:evenodd;stroke:#505050;stroke-width:0.5291667;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 0.26458334,1.3229167 V 7.1437501 H 8.2020834 Z M 1.5658219,3.6521333 4.6887941,5.8477283 H 1.5658575 Z"
+       id="path2299"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.5291667;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 7.1437502,5.6885392 7.9134474,4.6302057"
+       id="path4578-0"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.5291667;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 1.5875,1.6139584 2.3571972,0.55562495"
+       id="path4578-0-3"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.5291667;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 3.4395834,2.972152 4.2092806,1.9138186"
+       id="path4578-0-2"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.5291667;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 5.2916668,4.3303456 6.061364,3.2720121"
+       id="path4578-0-7"
+       inkscape:connector-curvature="0" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer9"
+     inkscape:label="SiGen Logo"
+     style="display:none;opacity:1">
+    <rect
+       style="opacity:0.98999999;vector-effect:none;fill:#132aae;fill-opacity:1;stroke:none;stroke-width:0.5291667;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect871"
+       width="8.4666672"
+       height="8.4666672"
+       x="0"
+       y="0" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#b4b4b4;fill-opacity:1;fill-rule:nonzero;stroke:#505050;stroke-width:0.5291667;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="M 7.1445312,-0.0078125 6.6152344,0.0078125 6.8789062,8.4746094 7.4082031,8.4589844 Z"
+       id="path854-1-7"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#b4b4b4;fill-opacity:1;fill-rule:nonzero;stroke:#505050;stroke-width:0.5291667;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="M 1.3222656,-0.0078125 1.0585938,8.4589844 1.5878906,8.4746094 1.8515625,0.0078125 Z"
+       id="path852-3-2"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#505050;stroke-width:0.5291667;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="M 1.793689,1.8520834 1.702738,4.7625001 h 4.5361573 l 0.057878,1.8520834 H 1.3725261 V 7.1437502 H 6.8429933 L 6.7520427,4.2333334 H 2.2489584 L 2.306836,2.3812501 H 6.9453127 V 1.8520834 Z"
+       id="path974"
+       inkscape:connector-curvature="0" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer10"
+     inkscape:label="SiGen Logo Dots"
+     style="display:none">
+    <circle
+       style="opacity:0.98999999;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.5291667;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path864"
+       cx="2.778125"
+       cy="7.8052077"
+       r="0.39687499" />
+    <circle
+       style="opacity:0.98999999;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.5291667;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path864-2"
+       cx="5.6885419"
+       cy="7.8052077"
+       r="0.39687499" />
+    <circle
+       style="opacity:0.98999999;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.5291667;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path864-2-8"
+       cx="4.2333336"
+       cy="0.66145831"
+       r="0.39687499" />
   </g>
 </svg>

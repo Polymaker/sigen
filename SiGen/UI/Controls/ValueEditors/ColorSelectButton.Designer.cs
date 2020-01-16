@@ -29,27 +29,39 @@
         private void InitializeComponent()
         {
             this.btnPickColor = new System.Windows.Forms.Button();
+            this.HexTexbox = new SiGen.UI.Controls.TextBoxEx();
             this.SuspendLayout();
             // 
             // btnPickColor
             // 
-            this.btnPickColor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPickColor.AutoSize = true;
-            this.btnPickColor.Location = new System.Drawing.Point(33, 3);
+            this.btnPickColor.Location = new System.Drawing.Point(78, -1);
             this.btnPickColor.Name = "btnPickColor";
-            this.btnPickColor.Size = new System.Drawing.Size(75, 23);
+            this.btnPickColor.Size = new System.Drawing.Size(26, 22);
             this.btnPickColor.TabIndex = 0;
-            this.btnPickColor.Text = "Pick color...";
+            this.btnPickColor.Text = "...";
             this.btnPickColor.UseVisualStyleBackColor = true;
             this.btnPickColor.Click += new System.EventHandler(this.BtnPickColor_Click);
+            // 
+            // HexTexbox
+            // 
+            this.HexTexbox.Location = new System.Drawing.Point(20, 0);
+            this.HexTexbox.Name = "HexTexbox";
+            this.HexTexbox.Size = new System.Drawing.Size(60, 20);
+            this.HexTexbox.TabIndex = 1;
+            this.HexTexbox.Text = "FFFFFF";
+            this.HexTexbox.ValidateOnEnter = true;
+            this.HexTexbox.CommandKeyPressed += new System.Windows.Forms.KeyEventHandler(this.HexTexbox_CommandKeyPressed);
+            this.HexTexbox.Validating += new System.ComponentModel.CancelEventHandler(this.HexTexbox_Validating);
+            this.HexTexbox.Validated += new System.EventHandler(this.HexTexbox_Validated);
             // 
             // ColorSelectButton
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.HexTexbox);
             this.Controls.Add(this.btnPickColor);
             this.Name = "ColorSelectButton";
-            this.Size = new System.Drawing.Size(150, 28);
+            this.Size = new System.Drawing.Size(109, 20);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -58,5 +70,6 @@
         #endregion
 
         private System.Windows.Forms.Button btnPickColor;
+        private TextBoxEx HexTexbox;
     }
 }

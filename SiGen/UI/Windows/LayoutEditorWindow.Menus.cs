@@ -221,7 +221,7 @@ namespace SiGen.UI
         {
             if (ActiveDocument != null)
             {
-                ActiveDocument.Viewer.EnableMeasureTool = tsbMeasureTool.Checked;
+                //ActiveDocument.Viewer.EnableMeasureTool = tsbMeasureTool.Checked;
             }
         }
 

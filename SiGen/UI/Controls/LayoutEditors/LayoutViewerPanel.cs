@@ -42,15 +42,14 @@ namespace SiGen.UI.Controls.LayoutEditors
         private void DropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
         {
             if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
-            {
                 e.Cancel = true;
-            }
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             ScreenDPI = 109;
+            Viewer.EnableMeasureTool = true;
         }
 
         private void SetCurrentLayout(LayoutDocument value)
@@ -177,6 +176,11 @@ namespace SiGen.UI.Controls.LayoutEditors
             {
                 Viewer.DisplayConfig.ShowCenterLine = DisplayCenterLineMenuItem.Checked;
             }
+        }
+
+        private void tsbMeasureTool_CheckedChanged(object sender, EventArgs e)
+        {
+            Viewer.EnableMeasureTool = tsbMeasureTool.Checked;
         }
     }
 }

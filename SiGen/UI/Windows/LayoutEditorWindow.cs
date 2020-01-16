@@ -53,13 +53,13 @@ namespace SiGen.UI
         public LayoutEditorWindow()
         {
             InitializeComponent();
-            Icon = Properties.Resources.SigenIcon;
+            Icon = Properties.Resources.SiGenIcon;
         }
 
         public LayoutEditorWindow(string[] args)
         {
             InitializeComponent();
-            Icon = Properties.Resources.SigenIcon;
+            Icon = Properties.Resources.SiGenIcon;
             if (args != null)
                 FilesToOpen = args.Where(x => File.Exists(x)).ToArray();
         }
@@ -120,15 +120,11 @@ namespace SiGen.UI
             if (CurrentLayoutDocument != null)
             {
                 SetEditorsActiveLayout(CurrentLayoutDocument.Layout);
-                tsbMeasureTool.Checked = ActiveDocument.Viewer.EnableMeasureTool;
-                tsbMeasureTool.CheckOnClick = true;
                 CurrentLayoutDocument.LayoutChanged += CurrentFile_LayoutChanged;
             }
             else
             {
                 SetEditorsActiveLayout(null);
-                tsbMeasureTool.Checked = false;
-                tsbMeasureTool.CheckOnClick = false;
             }
 
             RefreshToolbarButtonStates();

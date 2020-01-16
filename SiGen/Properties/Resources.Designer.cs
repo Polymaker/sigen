@@ -93,19 +93,9 @@ namespace SiGen.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap MeasureIcon_32 {
+        internal static System.Drawing.Bitmap Measure_x32 {
             get {
-                object obj = ResourceManager.GetObject("MeasureIcon_32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap MeasureIcon_64 {
-            get {
-                object obj = ResourceManager.GetObject("MeasureIcon_64", resourceCulture);
+                object obj = ResourceManager.GetObject("Measure_x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -116,16 +106,6 @@ namespace SiGen.Properties {
         internal static System.Drawing.Bitmap NewLayout_x32 {
             get {
                 object obj = ResourceManager.GetObject("NewLayout_x32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap NewLayoutIcon_32 {
-            get {
-                object obj = ResourceManager.GetObject("NewLayoutIcon_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -146,26 +126,6 @@ namespace SiGen.Properties {
         internal static System.Drawing.Bitmap OpenLayout_x32 {
             get {
                 object obj = ResourceManager.GetObject("OpenLayout_x32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap OpenLayoutIcon_32 {
-            get {
-                object obj = ResourceManager.GetObject("OpenLayoutIcon_32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap OptionsIcon_32 {
-            get {
-                object obj = ResourceManager.GetObject("OptionsIcon_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -203,9 +163,9 @@ namespace SiGen.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Icon semblable à (Icône).
         /// </summary>
-        internal static System.Drawing.Icon SigenIcon {
+        internal static System.Drawing.Icon SiGenIcon {
             get {
-                object obj = ResourceManager.GetObject("SigenIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("SiGenIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -213,9 +173,9 @@ namespace SiGen.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap SigenIcon_x64 {
+        internal static System.Drawing.Bitmap SiGenIcon_x32 {
             get {
-                object obj = ResourceManager.GetObject("SigenIcon_x64", resourceCulture);
+                object obj = ResourceManager.GetObject("SiGenIcon_x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

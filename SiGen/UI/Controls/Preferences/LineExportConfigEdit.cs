@@ -54,7 +54,6 @@ namespace SiGen.UI.Controls.Preferences
             //UseStringGaugeCheckbox.Visible = false;
 
             SetControlsFont();
-            FitToContent();
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -63,21 +62,9 @@ namespace SiGen.UI.Controls.Preferences
             SetControlsFont();
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            FitToContent();
-        }
-
         private void SetControlsFont()
         {
             EnableExportChecbox.Font = new Font(Font.FontFamily, Font.Size * 1.2f);
-        }
-
-        protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
-        {
-            height = Math.Max(tableLayoutPanel1.Height, 30);
-            base.SetBoundsCore(x, y, width, height, specified);
         }
 
         private void UpdateControls()
@@ -124,24 +111,6 @@ namespace SiGen.UI.Controls.Preferences
             if (!FlagManager.IsSet("LoadConfig") && LineConfig != null)
                 LineConfig.IsDashed = DashedCheckbox.Checked;
         }
-
-        private void tableLayoutPanel1_SizeChanged(object sender, EventArgs e)
-        {
-            FitToContent();
-        }
-
-        private void FitToContent()
-        {
-            Height = tableLayoutPanel1.Height;
-
-        }
-
-        public void AutoSizeWidth()
-        {
-            var prefSize = tableLayoutPanel1.GetPreferredSize(new Size(99999, 99999));
-            Width = prefSize.Width + 6;
-        }
-
     }
 
 }

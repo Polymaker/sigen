@@ -57,7 +57,7 @@ namespace SiGen.UI.Controls.ValueEditors
             txtMeasure.Value = Measure.Mm(1);
 
             cboUnitType.SelectedValue = _SelectedUnit;
-
+            UpdateEditorsVisibility();
             IsLoading = false;
         }
 

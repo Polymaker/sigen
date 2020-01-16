@@ -51,9 +51,9 @@
             this.DisplayCenterLineMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ResetCameraButton = new System.Windows.Forms.ToolStripButton();
             this.ZoomToolstripLabel = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.tsbDisplayOptions = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.tsbMeasureTool = new System.Windows.Forms.ToolStripButton();
             this.layoutViewer1 = new SiGen.UI.LayoutViewer();
             this.cmsDocumentTab.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
@@ -162,9 +162,9 @@
             this.DisplayOptionsDropDown,
             this.ResetCameraButton,
             this.ZoomToolstripLabel,
-            this.toolStripButton1,
+            this.tsbDisplayOptions,
             this.toolStripSeparator3,
-            this.toolStripButton2});
+            this.tsbMeasureTool});
             this.ToolStripDisplayOptions.Location = new System.Drawing.Point(0, 0);
             this.ToolStripDisplayOptions.Name = "ToolStripDisplayOptions";
             this.ToolStripDisplayOptions.Size = new System.Drawing.Size(577, 25);
@@ -263,14 +263,14 @@
             this.ZoomToolstripLabel.Size = new System.Drawing.Size(73, 22);
             this.ZoomToolstripLabel.Text = "Zoom: 100%";
             // 
-            // toolStripButton1
+            // tsbDisplayOptions
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = global::SiGen.Properties.Resources.OptionsIcon_32;
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
+            this.tsbDisplayOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbDisplayOptions.Image = global::SiGen.Properties.Resources.Settings_x32;
+            this.tsbDisplayOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbDisplayOptions.Name = "tsbDisplayOptions";
+            this.tsbDisplayOptions.Size = new System.Drawing.Size(23, 22);
+            this.tsbDisplayOptions.Text = "toolStripButton1";
             // 
             // toolStripSeparator3
             // 
@@ -278,17 +278,18 @@
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
-            // toolStripButton2
+            // tsbMeasureTool
             // 
-            this.toolStripButton2.Checked = true;
-            this.toolStripButton2.CheckOnClick = true;
-            this.toolStripButton2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = global::SiGen.Properties.Resources.MeasureIcon_32;
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton2.Text = "toolStripButton2";
+            this.tsbMeasureTool.Checked = true;
+            this.tsbMeasureTool.CheckOnClick = true;
+            this.tsbMeasureTool.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsbMeasureTool.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbMeasureTool.Image = global::SiGen.Properties.Resources.Measure_x32;
+            this.tsbMeasureTool.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbMeasureTool.Name = "tsbMeasureTool";
+            this.tsbMeasureTool.Size = new System.Drawing.Size(23, 22);
+            this.tsbMeasureTool.Text = "Measure";
+            this.tsbMeasureTool.CheckedChanged += new System.EventHandler(this.tsbMeasureTool_CheckedChanged);
             // 
             // layoutViewer1
             // 
@@ -346,7 +347,7 @@
         private System.Windows.Forms.ToolStripMenuItem DisplayMarginsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem DisplayFingerboardMenuItem;
         private System.Windows.Forms.ToolStripMenuItem DisplayCenterLineMenuItem;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripButton tsbDisplayOptions;
+        private System.Windows.Forms.ToolStripButton tsbMeasureTool;
     }
 }

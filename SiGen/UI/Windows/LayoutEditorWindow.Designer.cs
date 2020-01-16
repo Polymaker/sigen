@@ -49,7 +49,6 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbExport = new System.Windows.Forms.ToolStripButton();
             this.tsbOptions = new System.Windows.Forms.ToolStripButton();
-            this.tsbMeasureTool = new System.Windows.Forms.ToolStripButton();
             this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
@@ -80,15 +79,14 @@
             this.tssbRedo,
             this.toolStripSeparator1,
             this.tsbExport,
-            this.tsbOptions,
-            this.tsbMeasureTool});
+            this.tsbOptions});
             resources.ApplyResources(this.toolStrip1, "toolStrip1");
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Stretch = true;
             // 
             // toolStripLabel1
             // 
-            this.toolStripLabel1.Image = global::SiGen.Properties.Resources.SigenIcon_x64;
+            this.toolStripLabel1.Image = global::SiGen.Properties.Resources.SiGenIcon_x32;
             resources.ApplyResources(this.toolStripLabel1, "toolStripLabel1");
             this.toolStripLabel1.Margin = new System.Windows.Forms.Padding(6, 1, 0, 2);
             this.toolStripLabel1.Name = "toolStripLabel1";
@@ -210,14 +208,6 @@
             this.tsbOptions.Name = "tsbOptions";
             this.tsbOptions.Click += new System.EventHandler(this.tsbOptions_Click);
             // 
-            // tsbMeasureTool
-            // 
-            this.tsbMeasureTool.CheckOnClick = true;
-            this.tsbMeasureTool.Image = global::SiGen.Properties.Resources.MeasureIcon_32;
-            resources.ApplyResources(this.tsbMeasureTool, "tsbMeasureTool");
-            this.tsbMeasureTool.Name = "tsbMeasureTool";
-            this.tsbMeasureTool.Click += new System.EventHandler(this.tsbMeasureTool_Click);
-            // 
             // dockPanel1
             // 
             this.dockPanel1.BackColor = System.Drawing.SystemColors.AppWorkspace;
@@ -313,7 +303,6 @@
         private Localization.LocalizableStringList localizableStringList1;
         private Localization.LocalizableString MSG_FileAlreadyOpen;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton tsbMeasureTool;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private Localization.LocalizableString MSG_SaveBeforeClose;
         private Localization.LocalizableString LBL_Warning;
