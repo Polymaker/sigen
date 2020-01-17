@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SiGen.Export;
+using SiGen.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -48,7 +49,7 @@ namespace SiGen.Configuration
         {
             if (!Directory.Exists(AppConfigDirectory))
                 Directory.CreateDirectory(AppConfigDirectory);
-            Directory.CreateDirectory(Path.Combine(AppConfigDirectory, "ExportConfigs"));
+            //Directory.CreateDirectory(Path.Combine(AppConfigDirectory, "ExportConfigs"));
         }
 
         private static void Initialize()
@@ -61,6 +62,15 @@ namespace SiGen.Configuration
             if (_Current == null)
             {
                 _Current = AppConfig.CreateDefault();
+                SaveAppConfig(_Current);
+            }
+            
+            if (_Current.DisplayConfig == null || _Current.ExportConfig == null)
+            {
+                if (_Current.DisplayConfig == null)
+                    _Current.DisplayConfig = LayoutViewerDisplayConfig.CreateDefault();
+                if (_Current.ExportConfig == null)
+                    _Current.ExportConfig = LayoutExportConfig.CreateDefault();
                 SaveAppConfig(_Current);
             }
 
@@ -78,11 +88,13 @@ namespace SiGen.Configuration
         {
             try
             {
-                //var ser = new XmlSerializer(typeof(AppConfig));
-                //using (var fs = File.Open(Path.Combine(AppConfigDirectory, "config.xml"), FileMode.Create))
-                //    ser.Serialize(fs, config);
+                var jsonConfig = new JsonSerializerSettings
+                {
+                    ContractResolver = new ShouldSerializeContractResolver(),
+                    Formatting = Formatting.Indented
+                };
 
-                string json = JsonConvert.SerializeObject(config, Formatting.Indented);
+                string json = JsonConvert.SerializeObject(config, jsonConfig);
                 using (var fs = File.Open(AppConfigPath, FileMode.Create))
                 using (var sw = new StreamWriter(fs))
                 {
@@ -108,11 +120,6 @@ namespace SiGen.Configuration
                     config = (AppConfig)serializer.Deserialize(file, typeof(AppConfig));
                 }
 
-                //using (var fs = File.Open(Path.Combine(AppDirectoryPath, "config.xml"), FileMode.Open, FileAccess.Read))
-                //    config = (AppConfig)ser.Deserialize(fs);
-
-                config.ExportConfigs.AddRange(LoadExportConfigs());
-
                 return config;
             }
             catch (Exception ex)
@@ -122,24 +129,24 @@ namespace SiGen.Configuration
             return null;
         }
 
-        public static IEnumerable<LayoutExportOptions> LoadExportConfigs()
-        {
-            foreach (var cfgFile in Directory.GetFiles(GetAppDataFolder("ExportConfigs"), "*.json"))
-            {
-                LayoutExportOptions exportCfg = null;
-                try
-                {
-                    var jsonContent = File.ReadAllText(cfgFile);
-                    exportCfg = JsonConvert.DeserializeObject<LayoutExportOptions>(jsonContent);
+        //public static IEnumerable<LayoutExportConfig> LoadExportConfigs()
+        //{
+        //    foreach (var cfgFile in Directory.GetFiles(GetAppDataFolder("ExportConfigs"), "*.json"))
+        //    {
+        //        LayoutExportConfig exportCfg = null;
+        //        try
+        //        {
+        //            var jsonContent = File.ReadAllText(cfgFile);
+        //            exportCfg = JsonConvert.DeserializeObject<LayoutExportConfig>(jsonContent);
 
-                }
-                catch { }
+        //        }
+        //        catch { }
 
-                if (exportCfg != null)
-                    yield return exportCfg;
-            }
-            yield break;
-        }
+        //        if (exportCfg != null)
+        //            yield return exportCfg;
+        //    }
+        //    yield break;
+        //}
 
         public static void Save()
         {

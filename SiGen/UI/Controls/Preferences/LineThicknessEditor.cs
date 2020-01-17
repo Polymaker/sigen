@@ -56,7 +56,7 @@ namespace SiGen.UI.Controls.ValueEditors
             txtNumber.Value = _SelectedThickness;
             txtMeasure.Value = Measure.Mm(1);
 
-            cboUnitType.SelectedValue = _SelectedUnit;
+            SetSelectedUnit();
             UpdateEditorsVisibility();
             IsLoading = false;
         }
@@ -140,6 +140,22 @@ namespace SiGen.UI.Controls.ValueEditors
             txtNumber.Visible = !isMesureUnit;
 
             txtNumber.AllowDecimals = SelectedUnit == LineUnit.Points;
+        }
+
+        private void SetSelectedUnit()
+        {
+            switch (SelectedUnit)
+            {
+                case LineUnit.Points:
+                    cboUnitType.SelectedIndex = 0;
+                    break;
+                case LineUnit.Pixels:
+                    cboUnitType.SelectedIndex = 1;
+                    break;
+                default:
+                    cboUnitType.SelectedIndex = 2;
+                    break;
+            }
         }
 
         private LineUnit GetSelectedUnit()

@@ -243,23 +243,18 @@ namespace SiGen.UI
                     {
                         var outlineColor = stringLine.String.Gauge.NormalizedValue >= 0.06090 ? Color.Gray : Color.DarkGray;
                         var stringColor = stringLine.String.Gauge.NormalizedValue >= 0.06090 ? Color.Silver : Color.Gainsboro;
+                        
+                        if (IsExportViewer)
+                            stringColor = defaultPen.Color;
 
-
-                        using (var gaugePen = GetPen(outlineColor, stringLine.String.Gauge, 1.5))
-                            DrawLine(g, gaugePen, stringLine.P1, stringLine.P2);
+                        if (!IsExportViewer)
+                        {
+                            using (var gaugePen = GetPen(outlineColor, stringLine.String.Gauge, 1.5))
+                                DrawLine(g, gaugePen, stringLine.P1, stringLine.P2);
+                        }
 
                         using (var gaugePen = GetPen(stringColor, stringLine.String.Gauge))
                             DrawLine(g, gaugePen, stringLine.P1, stringLine.P2);
-
-                        //if(stringLine.String.Gauge.NormalizedValue >= 0.06090)
-                        //{
-                        //    using (var gaugePen = GetPen(Color.FromArgb(100, outlineColor), stringLine.String.Gauge))
-                        //    {
-                        //        float offset = (1f / gaugePen.Width) / 10f;
-                        //        gaugePen.DashPattern = new float[] { .5f * offset, 1.0f * offset, .5f * offset, 1.0f * offset };
-                        //        DrawLine(g, gaugePen, stringLine.P1, stringLine.P2);
-                        //    }
-                        //}
                     }
                     else
                         DrawLine(g, defaultPen, stringLine.P1, stringLine.P2);

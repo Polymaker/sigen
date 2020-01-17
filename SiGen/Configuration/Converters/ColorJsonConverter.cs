@@ -18,18 +18,27 @@ namespace SiGen.Configuration
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            string argbHex = (string)reader.Value;
-            if (argbHex.StartsWith("#"))
+            string rgbaHEX = (string)reader.Value;
+            
+            if (rgbaHEX.StartsWith("#"))
             {
-                int alpha = int.Parse(argbHex.Substring(1, 2), 
+                int red = int.Parse(rgbaHEX.Substring(1, 2), 
                     System.Globalization.NumberStyles.HexNumber);
-                int red = int.Parse(argbHex.Substring(3, 2),
+                int green = int.Parse(rgbaHEX.Substring(3, 2),
                     System.Globalization.NumberStyles.HexNumber);
-                int green = int.Parse(argbHex.Substring(5, 2),
+                int blue = int.Parse(rgbaHEX.Substring(5, 2),
                     System.Globalization.NumberStyles.HexNumber);
-                int blue = int.Parse(argbHex.Substring(7, 2),
+                int alpha = int.Parse(rgbaHEX.Substring(7, 2),
                     System.Globalization.NumberStyles.HexNumber);
                 return Color.FromArgb(alpha, red, green, blue);
+            }
+            else
+            {
+                try
+                {
+                    return Color.FromName(rgbaHEX);
+                }
+                catch { }
             }
             return Color.Empty;
         }
@@ -37,7 +46,7 @@ namespace SiGen.Configuration
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             if (value is Color color)
-                writer.WriteValue($"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}");
+                writer.WriteValue($"#{color.R:X2}{color.G:X2}{color.B:X2}{color.A:X2}");
         }
     }
 }

@@ -128,15 +128,21 @@
     <Compile Include="Common\StringData.cs" />
     <Compile Include="Common\StringSet.cs" />
     <Compile Include="Common\StringType.cs" />
-    <Compile Include="Configuration\ColorJsonConverter.cs" />
-    <Compile Include="Configuration\DisplayPreferences.cs" />
+    <Compile Include="Configuration\ConfigObjectBase.cs" />
+    <Compile Include="Configuration\Converters\ColorJsonConverter.cs" />
+    <Compile Include="Configuration\Converters\MeasureJsonConverter.cs" />
+    <Compile Include="Configuration\Display\FretsDisplayConfigs.cs" />
+    <Compile Include="Configuration\Display\LineDisplayConfig.cs" />
+    <Compile Include="Configuration\Export\FingerboardExportConfig.cs" />
+    <Compile Include="Configuration\Export\FretsExportConfig.cs" />
+    <Compile Include="Configuration\Export\StringsExportConfig.cs" />
     <Compile Include="Configuration\RecentFile.cs" />
-    <Compile Include="Configuration\ScreenConfiguration.cs" />
+    <Compile Include="Configuration\Converters\ShouldSerializeContractResolver.cs" />
     <Compile Include="Export\DxfLayoutExporter.cs" />
     <Compile Include="Export\LineUnit.cs" />
     <Compile Include="Export\LayoutExporterBase.cs" />
-    <Compile Include="Export\LayoutExportOptions.cs" />
-    <Compile Include="Export\LayoutLineExportConfig.cs" />
+    <Compile Include="Configuration\Export\LayoutExportConfig.cs" />
+    <Compile Include="Configuration\Export\LineExportConfig.cs" />
     <Compile Include="Export\SvgLayoutExporter.cs" />
     <Compile Include="Localization\LocalizableString.cs">
       <SubType>Component</SubType>
@@ -269,30 +275,6 @@
     <Compile Include="UI\Controls\LayoutViewer\LayoutViewer.Measuring.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\Controls\PreferencesPanels\LayoutExportOptionsEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Controls\PreferencesPanels\LayoutExportOptionsEditor.Designer.cs">
-      <DependentUpon>LayoutExportOptionsEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\PreferencesPanels\MonitorPreferences.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Controls\PreferencesPanels\MonitorPreferences.Designer.cs">
-      <DependentUpon>MonitorPreferences.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\PreferencesPanels\PreferencesPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Controls\PreferencesPanels\PreferencesPanel.Designer.cs">
-      <DependentUpon>PreferencesPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\PreferencesPanels\StringsManagementPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Controls\PreferencesPanels\StringsManagementPanel.Designer.cs">
-      <DependentUpon>StringsManagementPanel.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\Controls\Preferences\LineExportConfigEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -337,12 +319,6 @@
     <Compile Include="UI\Windows\AppPreferencesWindow.Designer.cs">
       <DependentUpon>AppPreferencesWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Windows\DetectScreenDPI.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Windows\DetectScreenDPI.Designer.cs">
-      <DependentUpon>DetectScreenDPI.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\Windows\LayoutEditorWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -355,7 +331,7 @@
     <Compile Include="UI\Controls\LayoutViewer\LayoutViewer.Designer.cs">
       <DependentUpon>LayoutViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\LayoutViewer\LayoutViewerDisplayConfig.cs" />
+    <Compile Include="Configuration\Display\LayoutViewerDisplayConfig.cs" />
     <Compile Include="UI\Controls\ValueEditors\MeasureTextbox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -433,15 +409,6 @@
     <EmbeddedResource Include="UI\Controls\LayoutViewer\LayoutViewer.resx">
       <DependentUpon>LayoutViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Controls\PreferencesPanels\LayoutExportOptionsEditor.resx">
-      <DependentUpon>LayoutExportOptionsEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Controls\PreferencesPanels\MonitorPreferences.resx">
-      <DependentUpon>MonitorPreferences.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Controls\PreferencesPanels\StringsManagementPanel.resx">
-      <DependentUpon>StringsManagementPanel.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\Preferences\LineExportConfigEdit.resx">
       <DependentUpon>LineExportConfigEdit.cs</DependentUpon>
     </EmbeddedResource>
@@ -456,9 +423,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\AppPreferencesWindow.resx">
       <DependentUpon>AppPreferencesWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Windows\DetectScreenDPI.resx">
-      <DependentUpon>DetectScreenDPI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\LayoutEditorWindow.fr.resx">
       <DependentUpon>LayoutEditorWindow.cs</DependentUpon>

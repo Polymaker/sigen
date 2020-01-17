@@ -77,6 +77,9 @@ namespace SiGen.UI
         [Browsable(false)]
         public bool IsMeasuring { get; private set; }
 
+        [DefaultValue(false)]
+        public bool IsExportViewer { get; set; }
+
         #endregion
 
         #region Classes
@@ -110,6 +113,17 @@ namespace SiGen.UI
             LayoutIntersections = new List<LayoutIntersection>();
             _DisplayConfig = new LayoutViewerDisplayConfig();
             _DisplayConfig.PropertyChanged += DisplayConfigChanged;
+        }
+
+        public void SetDisplayConfig(LayoutViewerDisplayConfig config)
+        {
+            if (_DisplayConfig != null)
+                _DisplayConfig.PropertyChanged -= DisplayConfigChanged;
+
+            _DisplayConfig = config ?? new LayoutViewerDisplayConfig();
+            _DisplayConfig.PropertyChanged += DisplayConfigChanged;
+            if (IsHandleCreated)
+                Invalidate();
         }
 
         private void SetLayout(SILayout layout)

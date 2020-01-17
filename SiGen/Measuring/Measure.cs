@@ -505,7 +505,7 @@ namespace SiGen.Measuring
         {
             if(IsEmpty)
                 return new System.Xml.Linq.XAttribute(name, "N/A");
-            return new System.Xml.Linq.XAttribute(name, string.Format(NumberFormatInfo.InvariantInfo, "{0}{1}", Value, Unit != null ? Unit.Abreviation : string.Empty));
+            return new System.Xml.Linq.XAttribute(name, string.Format(NumberFormatInfo.InvariantInfo, "{0}{1}", Value, Unit != null ? Unit.Abbreviation : string.Empty));
         }
 
         public static Measure Parse(string value)

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SiGen.Common;
+using SiGen.Configuration;
 using SiGen.Export;
 using SiGen.Measuring;
 using SiGen.StringedInstruments.Layout;
@@ -18,25 +19,26 @@ namespace SiGen.UI.Windows
 {
     public partial class ExportLayoutDialog : Form
     {
-        private LayoutExportOptions ExportOptions;
+        private LayoutExportConfig ExportOptions;
         private bool isLoading;
 
         public ExportLayoutDialog()
         {
             InitializeComponent();
-            ExportOptions = LayoutExportOptions.CreateDefault();
+            ExportOptions = LayoutExportConfig.CreateDefault();
         }
 
         public ExportLayoutDialog(SILayout layout)
         {
             InitializeComponent();
-            ExportOptions = LayoutExportOptions.CreateDefault();
+            ExportOptions = LayoutExportConfig.CreateDefault();
             layoutPreview.CurrentLayout = layout;
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            ExportOptions = AppConfig.Current.ExportConfig;
             LoadOptions();
         }
 

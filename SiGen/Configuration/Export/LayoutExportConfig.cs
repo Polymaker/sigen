@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,19 +13,16 @@ namespace SiGen.Export
 {
 
     [Serializable]
-    public class LayoutExportOptions : INotifyPropertyChanged
+    public class LayoutExportConfig : INotifyPropertyChanged
     {
-        [JsonProperty("Name")]
-        public string ConfigurationName { get; set; }
+        //[JsonProperty("Name")]
+        //public string ConfigurationName { get; set; }
 
         [JsonProperty]
         public UnitOfMeasure ExportUnit { get; set; }
 
         [JsonProperty]
         public bool InkscapeCompatible { get; set; }
-
-        [JsonProperty]
-        public int TargetDPI { get; set; }
 
         [JsonProperty]
         public StringsExportConfig Strings { get; set; }
@@ -44,7 +42,7 @@ namespace SiGen.Export
         }
 
         [JsonProperty]
-        public LayoutLineExportConfig StringCenters { get; set; }
+        public LineExportConfig StringCenters { get; set; }
 
         [JsonIgnore]
         public bool ExportStringCenters
@@ -54,7 +52,7 @@ namespace SiGen.Export
         }
 
         [JsonProperty]
-        public LayoutLineExportConfig CenterLine { get; set; }
+        public LineExportConfig CenterLine { get; set; }
 
         [JsonIgnore]
         public bool ExportCenterLine
@@ -77,7 +75,7 @@ namespace SiGen.Export
         public bool ExtendFretSlots => Frets.ExtendFretSlots;
 
         [JsonProperty]
-        public LayoutLineExportConfig FingerboardEdges { get; set; }
+        public FingerboardExportConfig FingerboardEdges { get; set; }
 
         [JsonIgnore]
         public bool ExportFingerboardEdges
@@ -87,7 +85,7 @@ namespace SiGen.Export
         }
 
         [JsonProperty]
-        public LayoutLineExportConfig FingerboardMargins { get; set; }
+        public LineExportConfig FingerboardMargins { get; set; }
 
         [JsonIgnore]
         public bool ExportFingerboardMargins
@@ -97,7 +95,7 @@ namespace SiGen.Export
         }
 
         [JsonProperty]
-        public LayoutLineExportConfig GuideLines { get; set; }
+        public LineExportConfig GuideLines { get; set; }
 
         [JsonIgnore]
         public bool ExportGuideLines
@@ -106,23 +104,31 @@ namespace SiGen.Export
             set => GuideLines.Enabled = value;
         }
 
-        public LayoutExportOptions()
+        public LayoutExportConfig()
         {
             Strings = new StringsExportConfig();
-            StringCenters = new LayoutLineExportConfig();
-            CenterLine = new LayoutLineExportConfig();
+            StringCenters = new LineExportConfig();
+            CenterLine = new LineExportConfig();
             Frets = new FretsExportConfig();
-            FingerboardEdges = new LayoutLineExportConfig();
-            FingerboardMargins = new LayoutLineExportConfig();
-            GuideLines = new LayoutLineExportConfig();
+            FingerboardEdges = new FingerboardExportConfig();
+            FingerboardMargins = new LineExportConfig();
+            GuideLines = new LineExportConfig();
             ExportFrets = true;
             ExportFingerboardEdges = true;
             ExportUnit = UnitOfMeasure.Mm;
         }
 
+        public LayoutExportConfig Clone()
+        {
+            string json = JsonConvert.SerializeObject(this);
+            JsonSerializer serializer = new JsonSerializer();
+            using (var sr = new StringReader(json))
+                return (LayoutExportConfig)serializer.Deserialize(sr, typeof(LayoutExportConfig));
+        }
+
         public void DettachPropertyChangedEvent()
         {
-            var configObjs = new LayoutLineExportConfig[]
+            var configObjs = new LineExportConfig[]
             {
                 Strings,
                 StringCenters,
@@ -139,7 +145,7 @@ namespace SiGen.Export
 
         public void AttachPropertyChangedEvent()
         {
-            var configObjs = new LayoutLineExportConfig[]
+            var configObjs = new LineExportConfig[]
             {
                 Strings,
                 StringCenters,
@@ -188,24 +194,26 @@ namespace SiGen.Export
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public static LayoutExportOptions CreateDefault()
+        public static LayoutExportConfig CreateDefault()
         {
-            var exportConfig = new LayoutExportOptions()
+            var exportConfig = new LayoutExportConfig()
             {
-                ConfigurationName = "Default",
+                //ConfigurationName = "Default",
                 ExportFrets = true,
                 ExportFingerboardEdges = true,
                 ExportCenterLine = true,
                 ExportUnit = UnitOfMeasure.Mm,
-                InkscapeCompatible = true,
-                TargetDPI = 90
+                InkscapeCompatible = true
             };
             exportConfig.Frets.Color = Color.Red;
             exportConfig.Strings.Color = Color.Black;
             exportConfig.StringCenters.Color = Color.LightGray;
+            exportConfig.StringCenters.IsDashed = true;
             exportConfig.FingerboardEdges.Color = Color.Blue;
+            exportConfig.FingerboardEdges.ContinueLines = true;
             exportConfig.FingerboardMargins.Color = Color.Gray;
             exportConfig.GuideLines.Color = Color.LightGray;
+            exportConfig.GuideLines.IsDashed = true;
             return exportConfig;
         }
     }

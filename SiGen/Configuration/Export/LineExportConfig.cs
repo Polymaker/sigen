@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using SiGen.Configuration;
-using SiGen.Measuring;
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -8,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace SiGen.Export
 {
-    public class LayoutLineExportConfig : INotifyPropertyChanged
+    public class LineExportConfig : ConfigObjectBase
     {
         private bool _Enabled;
         private Color _Color;
@@ -31,7 +30,7 @@ namespace SiGen.Export
         [JsonProperty]
         public bool IsDashed { get => _IsDashed; set { if (value != _IsDashed) { _IsDashed = value; OnPropertyChanged(nameof(IsDashed)); } } }
 
-        public LayoutLineExportConfig()
+        public LineExportConfig()
         {
             _LineThickness = 1d;
             _LineUnit = LineUnit.Points;
@@ -39,12 +38,8 @@ namespace SiGen.Export
             _Color = Color.Black;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        
 
 
         class LineUnitConverter : JsonConverter
@@ -101,24 +96,5 @@ namespace SiGen.Export
                 }
             }
         }
-    }
-
-    public class StringsExportConfig : LayoutLineExportConfig
-    {
-        private bool _UseStringGauge;
-
-        [JsonProperty]
-        public bool UseStringGauge { get => _UseStringGauge; set { if (value != _UseStringGauge) { _UseStringGauge = value; OnPropertyChanged(nameof(UseStringGauge)); } } }
-    }
-
-    public class FretsExportConfig : LayoutLineExportConfig
-    {
-        private Measure _ExtensionAmount = Measure.Empty;
-
-        [JsonProperty("ExtendAmount")]
-        public Measure ExtensionAmount { get => _ExtensionAmount; set { if (value != _ExtensionAmount) { _ExtensionAmount = value; OnPropertyChanged(nameof(ExtensionAmount)); } } }
-
-        [JsonIgnore]
-        public bool ExtendFretSlots { get { return !ExtensionAmount.IsEmpty && Math.Abs(ExtensionAmount.NormalizedValue.DoubleValue) > 0; } }
     }
 }

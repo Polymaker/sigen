@@ -75,7 +75,7 @@ namespace SiGen.Utilities
                 var measure = (Measuring.Measure)value;
                 if (measure.IsEmpty)
                     return "N/A";
-                return string.Format(NumberFormatInfo.InvariantInfo,"{0}{1}", measure.Value, measure.Unit != null ? measure.Unit.Abreviation : string.Empty);
+                return string.Format(NumberFormatInfo.InvariantInfo,"{0}{1}", measure.Value, measure.Unit != null ? measure.Unit.Abbreviation : string.Empty);
             }
             else if(value is double dblvalue)
             {

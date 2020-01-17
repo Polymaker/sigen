@@ -28,7 +28,7 @@ namespace SiGen.Measuring
 
         public string Name { get; }
 
-        public string Abreviation { get; }
+        public string Abbreviation { get; }
 
         public string Symbol { get; }
 
@@ -43,7 +43,7 @@ namespace SiGen.Measuring
         private UnitOfMeasure(string name, string symbol, string abv, PreciseDouble factor)
         {
             Name = name;
-            Abreviation = abv;
+            Abbreviation = abv;
             Symbol = symbol;
             _ConversionFactor = factor;
             IsMetric = ((factor.DoubleValue * 100d) % 1d) == 0;

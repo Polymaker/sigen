@@ -14,12 +14,12 @@ namespace SiGen.UI.Controls.Preferences
 {
     public partial class LineExportConfigEdit : UserControl
     {
-        private LayoutLineExportConfig _LineConfig;
+        private LineExportConfig _LineConfig;
         private string _ConfigName;
         private FlagList FlagManager;
 
         [Browsable(false)]
-        public LayoutLineExportConfig LineConfig
+        public LineExportConfig LineConfig
         {
             get => _LineConfig;
             set
@@ -110,6 +110,12 @@ namespace SiGen.UI.Controls.Preferences
         {
             if (!FlagManager.IsSet("LoadConfig") && LineConfig != null)
                 LineConfig.IsDashed = DashedCheckbox.Checked;
+        }
+
+        private void UseStringGaugeCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!FlagManager.IsSet("LoadConfig") && LineConfig is StringsExportConfig stringsExport)
+                stringsExport.UseStringGauge = UseStringGaugeCheckbox.Checked;
         }
     }
 

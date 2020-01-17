@@ -34,12 +34,14 @@ namespace SiGen.Export
         private Dictionary<string, SvgGroup> Layers;
         private SvgUnitCollection LineDashPattern;
 
-        private SvgLayoutExporter(SILayout layout, LayoutExportOptions options)
+        private SvgLayoutExporter(SILayout layout, LayoutExportConfig options)
             : base(layout, options)
         {
             Layers = new Dictionary<string, SvgGroup>();
-            PixelToCm = (PreciseDouble)2.54d / (PreciseDouble)Options.TargetDPI;
-            PointToCm = PixelToCm * 1.25d;
+
+            var svgDPI = (PreciseDouble)96;
+            PixelToCm = (PreciseDouble)2.54d / svgDPI;
+            PointToCm = PixelToCm / 0.75;
         }
 
         protected override void InitializeDocument()
@@ -60,9 +62,9 @@ namespace SiGen.Export
             {
                 Document.CustomAttributes.Add("xmlns:inkscape", "http://www.inkscape.org/namespaces/inkscape");
                 //The Svg library serializes the viewbox with comma and space, but this combination is not handled by the Inkscape DXF exporter
-                Document.CustomAttributes.Add("viewBox", 
+                Document.CustomAttributes.Add("viewBox",
                     string.Format(NumberFormatInfo.InvariantInfo, "0,0,{0},{1}",
-                    LayoutBounds.Width[Options.ExportUnit].DoubleValue, 
+                    LayoutBounds.Width[Options.ExportUnit].DoubleValue,
                     LayoutBounds.Height[Options.ExportUnit].DoubleValue));
             }
             else
@@ -91,7 +93,7 @@ namespace SiGen.Export
             }
         }
 
-        protected override void AddLayoutLine(LayoutLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
+        protected override void AddLayoutLine(LayoutLine line, VisualElementType elementType, LineExportConfig lineConfig)
         {
             switch (elementType)
             {
@@ -139,7 +141,7 @@ namespace SiGen.Export
             }
         }
 
-        protected override void AddLayoutPolyLine(LayoutPolyLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
+        protected override void AddLayoutPolyLine(LayoutPolyLine line, VisualElementType elementType, LineExportConfig lineConfig)
         {
             switch (elementType)
             {
@@ -171,7 +173,7 @@ namespace SiGen.Export
             }
         }
 
-        protected override void AddLayoutSpline(LayoutPolyLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
+        protected override void AddLayoutSpline(LayoutPolyLine line, VisualElementType elementType, LineExportConfig lineConfig)
         {
             switch (elementType)
             {
@@ -226,7 +228,7 @@ namespace SiGen.Export
             return CreateSvgLine(owner, line.P1, line.P2, stroke, color, null);
         }
 
-        private SvgLine CreateSvgLine(SvgElement owner, LayoutLine line, LayoutLineExportConfig lineConfig)
+        private SvgLine CreateSvgLine(SvgElement owner, LayoutLine line, LineExportConfig lineConfig)
         {
             return CreateSvgLine(owner, line.P1, line.P2, 
                 GetLineThickness(lineConfig), 
@@ -234,7 +236,7 @@ namespace SiGen.Export
                 lineConfig.IsDashed ? LineDashPattern : null);
         }
 
-        private SvgPath CreateSvgPolyLine(SvgElement owner, LayoutPolyLine line, LayoutLineExportConfig lineConfig)
+        private SvgPath CreateSvgPolyLine(SvgElement owner, LayoutPolyLine line, LineExportConfig lineConfig)
         {
             var path = new SvgPath() { 
                 StrokeWidth = GetLineThickness(lineConfig), 
@@ -260,7 +262,7 @@ namespace SiGen.Export
             return path;
         }
 
-        private SvgPath CreateSvgSpline(SvgElement owner, LayoutPolyLine line, LayoutLineExportConfig lineConfig)
+        private SvgPath CreateSvgSpline(SvgElement owner, LayoutPolyLine line, LineExportConfig lineConfig)
         {
             var path = new SvgPath()
             {
@@ -315,7 +317,7 @@ namespace SiGen.Export
             return Layers[id];
         }
 
-        private SvgUnit GetLineThickness(LayoutLineExportConfig lineExportConfig)
+        private SvgUnit GetLineThickness(LineExportConfig lineExportConfig)
         {
             if (lineExportConfig.LineThickness > 0)
             {
@@ -402,7 +404,7 @@ namespace SiGen.Export
 
         #endregion
 
-        public static void ExportLayout(string filename, SILayout layout, LayoutExportOptions options)
+        public static void ExportLayout(string filename, SILayout layout, LayoutExportConfig options)
         {
             var exporter = new SvgLayoutExporter(layout, options);
             exporter.GenerateDocument();

@@ -12,9 +12,9 @@ namespace SiGen.Export
     {
         public SILayout Layout { get; protected set; }
 
-        public LayoutExportOptions Options { get; protected set; }
+        public LayoutExportConfig Options { get; protected set; }
 
-        protected LayoutExporterBase(SILayout layout, LayoutExportOptions options)
+        protected LayoutExporterBase(SILayout layout, LayoutExportConfig options)
         {
             Layout = layout;
             Options = options;
@@ -196,10 +196,11 @@ namespace SiGen.Export
             //    AddLayoutLine(guideLine, VisualElementType.GuideLine);
             //}
 
-            if (Options.ExportFingerboardEdges)
+            if (Options.ExportFingerboardEdges && Options.FingerboardEdges.ContinueLines)
             {
-                foreach (var guideLine in Layout.VisualElements.OfType<LayoutLine>().Where(l => l.ElementType == VisualElementType.FingerboardContinuation))
-                    AddLayoutLine(guideLine, VisualElementType.GuideLine, Options.GuideLines);
+                foreach (var guideLine in Layout.VisualElements.OfType<LayoutLine>()
+                    .Where(l => l.ElementType == VisualElementType.FingerboardContinuation))
+                    AddLayoutLine(guideLine, VisualElementType.FingerboardContinuation, Options.GuideLines);
             }
         }
 
@@ -209,17 +210,17 @@ namespace SiGen.Export
                 AddLayoutLine(stringLine, VisualElementType.String, Options.Strings);
         }
 
-        protected virtual void AddLayoutLine(LayoutLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
+        protected virtual void AddLayoutLine(LayoutLine line, VisualElementType elementType, LineExportConfig lineConfig)
         {
 
         }
 
-        protected virtual void AddLayoutPolyLine(LayoutPolyLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
+        protected virtual void AddLayoutPolyLine(LayoutPolyLine line, VisualElementType elementType, LineExportConfig lineConfig)
         {
 
         }
 
-        protected virtual void AddLayoutSpline(LayoutPolyLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
+        protected virtual void AddLayoutSpline(LayoutPolyLine line, VisualElementType elementType, LineExportConfig lineConfig)
         {
 
         }

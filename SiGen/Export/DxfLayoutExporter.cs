@@ -24,7 +24,7 @@ namespace SiGen.Export
         private Dictionary<string, AciColor> ColorDictionary;
         
 
-        private DxfLayoutExporter(SILayout layout, LayoutExportOptions options)
+        private DxfLayoutExporter(SILayout layout, LayoutExportConfig options)
             : base(layout, options)
         {
             Layers = new Dictionary<string, Layer>();
@@ -56,7 +56,7 @@ namespace SiGen.Export
         }
 
 
-        protected override void AddLayoutLine(LayoutLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
+        protected override void AddLayoutLine(LayoutLine line, VisualElementType elementType, LineExportConfig lineConfig)
         {
             switch (elementType)
             {
@@ -79,7 +79,7 @@ namespace SiGen.Export
             }
         }
 
-        protected override void AddLayoutSpline(LayoutPolyLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
+        protected override void AddLayoutSpline(LayoutPolyLine line, VisualElementType elementType, LineExportConfig lineConfig)
         {
             switch (elementType)
             {
@@ -98,7 +98,7 @@ namespace SiGen.Export
             }
         }
 
-        protected override void AddLayoutPolyLine(LayoutPolyLine line, VisualElementType elementType, LayoutLineExportConfig lineConfig)
+        protected override void AddLayoutPolyLine(LayoutPolyLine line, VisualElementType elementType, LineExportConfig lineConfig)
         {
             switch (elementType)
             {
@@ -117,7 +117,7 @@ namespace SiGen.Export
             }
         }
 
-        private Line AddDxfLine(string layerName, LayoutLine line, LayoutLineExportConfig lineConfig)
+        private Line AddDxfLine(string layerName, LayoutLine line, LineExportConfig lineConfig)
         {
             var dxfLine = new Line(PointToVector(line.P1), PointToVector(line.P2))
             {
@@ -130,7 +130,7 @@ namespace SiGen.Export
             return dxfLine;
         }
 
-        private Spline AddDxfSpline(string layerName, LayoutPolyLine line, LayoutLineExportConfig lineConfig)
+        private Spline AddDxfSpline(string layerName, LayoutPolyLine line, LineExportConfig lineConfig)
         {
             var splinePoints = new List<Vector2>();
             foreach (var pt in line.Points)
@@ -149,7 +149,7 @@ namespace SiGen.Export
             return splineLine;
         }
 
-        private LwPolyline AddDxfPolyLine(string layerName, LayoutPolyLine line, LayoutLineExportConfig lineConfig)
+        private LwPolyline AddDxfPolyLine(string layerName, LayoutPolyLine line, LineExportConfig lineConfig)
         {
             var splinePoints = new List<Vector2>();
             foreach (var pt in line.Points)
@@ -191,7 +191,7 @@ namespace SiGen.Export
             return new Vector2((double)point.X[Options.ExportUnit], (double)point.Y[Options.ExportUnit]);
         }
 
-        public static void ExportLayout(string filename, SILayout layout, LayoutExportOptions options)
+        public static void ExportLayout(string filename, SILayout layout, LayoutExportConfig options)
         {
             var exporter = new DxfLayoutExporter(layout, options);
             exporter.GenerateDocument();

@@ -1,9 +1,14 @@
-﻿using SiGen.Measuring;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using SiGen.Configuration;
+using SiGen.Measuring;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -28,176 +33,107 @@ namespace SiGen.UI
         private Measure _FretExtensionAmount;
 
         [DefaultValue(false)]
+        [JsonProperty]
         public bool ShowCenterLine
         {
-            get { return _ShowCenterLine; }
-            set
-            {
-                if (value != _ShowCenterLine)
-                {
-                    _ShowCenterLine = value;
-                    OnPropertyChanged(nameof(ShowCenterLine));
-                }
-            }
+            get => _ShowCenterLine;
+            set => SetPropertyValue(ref _ShowCenterLine, value);
         }
 
         [DefaultValue(true)]
+        [JsonProperty]
         public bool ShowStrings
         {
-            get { return _ShowStrings; }
-            set
-            {
-                if (value != _ShowStrings)
-                {
-                    _ShowStrings = value;
-                    OnPropertyChanged(nameof(ShowStrings));
-                }
-            }
+            get => _ShowStrings;
+            set => SetPropertyValue(ref _ShowStrings, value);
         }
 
         [DefaultValue(true)]
+        [JsonProperty]
         public bool ShowFrets
         {
-            get { return _ShowFrets; }
-            set
-            {
-                if (value != _ShowFrets)
-                {
-                    _ShowFrets = value;
-                    OnPropertyChanged(nameof(ShowFrets));
-                }
-            }
+            get => _ShowFrets;
+            set => SetPropertyValue(ref _ShowFrets, value);
         }
 
         [DefaultValue(false)]
+        [JsonProperty]
         public bool ShowTheoreticalFrets
         {
-            get { return _ShowTheoreticalFrets; }
-            set
-            {
-                if (value != _ShowTheoreticalFrets)
-                {
-                    _ShowTheoreticalFrets = value;
-                    OnPropertyChanged(nameof(ShowTheoreticalFrets));
-                }
-            }
+            get => _ShowTheoreticalFrets;
+            set => SetPropertyValue(ref _ShowTheoreticalFrets, value);
         }
 
         [DefaultValue(true)]
+        [JsonProperty]
         public bool ShowMidlines
         {
-            get { return _ShowMidlines; }
-            set
-            {
-                if (value != _ShowMidlines)
-                {
-                    _ShowMidlines = value;
-                    OnPropertyChanged(nameof(ShowMidlines));
-                }
-            }
+            get => _ShowMidlines;
+            set => SetPropertyValue(ref _ShowMidlines, value);
         }
 
         [DefaultValue(true)]
+        [JsonProperty]
         public bool ShowMargins
         {
-            get { return _ShowMargins; }
-            set
-            {
-                if (value != _ShowMargins)
-                {
-                    _ShowMargins = value;
-                    OnPropertyChanged(nameof(ShowMargins));
-                }
-            }
+            get => _ShowMargins;
+            set => SetPropertyValue(ref _ShowMargins, value);
         }
 
         [DefaultValue(true)]
+        [JsonProperty]
         public bool ShowFingerboard
         {
-            get { return _ShowFingerboard; }
-            set
-            {
-                if (value != _ShowFingerboard)
-                {
-                    _ShowFingerboard = value;
-                    OnPropertyChanged(nameof(ShowFingerboard));
-                }
-            }
+            get => _ShowFingerboard;
+            set => SetPropertyValue(ref _ShowFingerboard, value);
         }
 
         [DefaultValue(Orientation.Horizontal)]
+        [JsonProperty]
+        [JsonConverter(typeof(StringEnumConverter))]
         public Orientation FingerboardOrientation
         {
-            get { return _FingerboardOrientation; }
-            set
-            {
-                if (value != _FingerboardOrientation)
-                {
-                    _FingerboardOrientation = value;
-                    OnPropertyChanged(nameof(FingerboardOrientation));
-                }
-            }
+            get => _FingerboardOrientation;
+            set => SetPropertyValue(ref _FingerboardOrientation, value);
         }
 
         [DefaultValue(true)]
+        [JsonProperty]
         public bool RenderRealFrets
         {
-            get { return _RenderRealFrets; }
-            set
-            {
-                if (value != _RenderRealFrets)
-                {
-                    _RenderRealFrets = value;
-                    OnPropertyChanged(nameof(RenderRealFrets));
-                }
-            }
+            get => _RenderRealFrets;
+            set => SetPropertyValue(ref _RenderRealFrets, value);
         }
 
+        [JsonIgnore]
         public bool ExtendFrets => !FretExtensionAmount.IsEmpty;
 
         [Browsable(false)]
+        [JsonIgnore]
         public Measure FretExtensionAmount
         {
             get => _FretExtensionAmount;
-            set
-            {
-                if (value != _FretExtensionAmount)
-                {
-                    _FretExtensionAmount = value;
-                    OnPropertyChanged(nameof(FretExtensionAmount));
-                }
-            }
+            set => SetPropertyValue(ref _FretExtensionAmount, value);
         }
 
         [DefaultValue(typeof(Color), "0xFF0000")]
+        [JsonProperty, JsonConverter(typeof(ColorJsonConverter))]
         public Color FretLineColor
         {
             get => _FretLineColor;
-            set
-            {
-                if (value != _FretLineColor)
-                {
-                    _FretLineColor = value;
-                    OnPropertyChanged(nameof(FretLineColor));
-                }
-            }
+            set => SetPropertyValue(ref _FretLineColor, value);
         }
 
         [DefaultValue(false)]
+        [JsonProperty]
         public bool RenderRealStrings
         {
-            get { return _RenderRealStrings; }
-            set
-            {
-                if (value != _RenderRealStrings)
-                {
-                    _RenderRealStrings = value;
-                    OnPropertyChanged(nameof(RenderRealStrings));
-                }
-            }
+            get => _RenderRealStrings;
+            set => SetPropertyValue(ref _RenderRealStrings, value);
         }
 
         [Editor(typeof(Controls.Designers.MeasureEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [JsonProperty, JsonConverter(typeof(MeasureJsonConverter))]
         public Measure FretWidth
         {
             get { return _FretWidth; }
@@ -212,17 +148,11 @@ namespace SiGen.UI
         }
 
         [Editor(typeof(Designers.UnitOfMeasureEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [JsonProperty, JsonConverter(typeof(MeasureJsonConverter))]
         public UnitOfMeasure DefaultDisplayUnit
         {
-            get { return _DefaultDisplayUnit; }
-            set
-            {
-                if (value != _DefaultDisplayUnit)
-                {
-                    _DefaultDisplayUnit = value;
-                    OnPropertyChanged(nameof(DefaultDisplayUnit));
-                }
-            }
+            get => _DefaultDisplayUnit;
+            set => SetPropertyValue(ref _DefaultDisplayUnit, value);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -241,6 +171,31 @@ namespace SiGen.UI
             _FretWidth = Measure.Mm(2.5);
             _FretExtensionAmount = Measure.Empty;
             _FretLineColor = Color.Red;
+        }
+
+        public static LayoutViewerDisplayConfig CreateDefault()
+        {
+            return new LayoutViewerDisplayConfig()
+            {
+
+            };
+        }
+
+        public LayoutViewerDisplayConfig Clone()
+        {
+            string json = JsonConvert.SerializeObject(this);
+            JsonSerializer serializer = new JsonSerializer();
+            using (var sr = new StringReader(json))
+                return (LayoutViewerDisplayConfig)serializer.Deserialize(sr, typeof(LayoutViewerDisplayConfig));
+        }
+
+        protected void SetPropertyValue<T>(ref T property, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (!EqualityComparer<T>.Default.Equals(property, value))
+            {
+                property = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
         protected void OnPropertyChanged(string propertyName)
