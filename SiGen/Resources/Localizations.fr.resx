@@ -150,19 +150,31 @@
   <data name="Words_Length" xml:space="preserve">
     <value>Longeur</value>
   </data>
-  <data name="StringSpacingAlignment_SpacingMiddle" xml:space="preserve">
+  <data name="StringSpacingAlignment_OuterStrings" xml:space="preserve">
     <value>Centré entre les cordes extérieures</value>
   </data>
-  <data name="StringSpacingAlignment_StringCenterEven" xml:space="preserve">
+  <data name="StringSpacingAlignment_MiddleStringEven" xml:space="preserve">
     <value>Centré entre les cordes du milieu</value>
   </data>
-  <data name="StringSpacingAlignment_StringCenterOdd" xml:space="preserve">
+  <data name="StringSpacingAlignment_MiddleStringOdd" xml:space="preserve">
     <value>Centré le long de la corde du milieu</value>
   </data>
-  <data name="StringSpacingMethod_StringsCenter" xml:space="preserve">
+  <data name="StringSpacingMethod_EqualDistance" xml:space="preserve">
     <value>Distance égale (centre à centre)</value>
   </data>
-  <data name="StringSpacingMethod_BetweenStrings" xml:space="preserve">
+  <data name="StringSpacingMethod_EqualSpacing" xml:space="preserve">
     <value>Espacement égal (entre les cordes)</value>
+  </data>
+  <data name="StringSpacingAlignment_FingerboardEdges" xml:space="preserve">
+    <value>Centré entre les bords du manche</value>
+  </data>
+  <data name="LineRenderMode_PlainLine" xml:space="preserve">
+    <value>Ligne simple</value>
+  </data>
+  <data name="LineRenderMode_RealWidth" xml:space="preserve">
+    <value>Taille réelle</value>
+  </data>
+  <data name="LineRenderMode_RealisticLook" xml:space="preserve">
+    <value>Look réaliste</value>
   </data>
 </root>

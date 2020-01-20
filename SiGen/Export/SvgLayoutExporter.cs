@@ -118,7 +118,7 @@ namespace SiGen.Export
                     break;
 
                 case VisualElementType.CenterLine:
-                case VisualElementType.StringCenter:
+                case VisualElementType.StringMidline:
                 case VisualElementType.GuideLine:
                     CreateSvgLine(GetLayer("Layout"), line, lineConfig);
                     break;

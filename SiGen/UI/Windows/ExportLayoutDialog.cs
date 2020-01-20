@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SiGen.Common;
 using SiGen.Configuration;
+using SiGen.Configuration.Display;
 using SiGen.Export;
 using SiGen.Measuring;
 using SiGen.StringedInstruments.Layout;
@@ -49,7 +50,7 @@ namespace SiGen.UI.Windows
             chkExtendFretSlots.Checked = ExportOptions.ExtendFretSlots;
             chkExportFrets.Checked = ExportOptions.ExportFrets;
             chkExportStrings.Checked = ExportOptions.ExportStrings;
-            chkExportStringCenters.Checked = ExportOptions.ExportStringCenters;
+            chkExportStringCenters.Checked = ExportOptions.ExportMidlines;
             chkExportCenterLine.Checked = ExportOptions.ExportCenterLine;
             chkExportFingerboard.Checked = ExportOptions.ExportFingerboardEdges;
             UpdatePreview();
@@ -89,14 +90,23 @@ namespace SiGen.UI.Windows
 
         private void UpdatePreview()
         {
-            layoutPreview.DisplayConfig.ShowStrings = ExportOptions.ExportStrings;
-            layoutPreview.DisplayConfig.ShowFrets = ExportOptions.ExportFrets;
-            layoutPreview.DisplayConfig.ShowMidlines = ExportOptions.ExportStringCenters;
+            layoutPreview.DisplayConfig.ShowMidlines = ExportOptions.ExportMidlines;
             layoutPreview.DisplayConfig.ShowMargins = ExportOptions.ExportFingerboardMargins;
             layoutPreview.DisplayConfig.ShowCenterLine = ExportOptions.ExportCenterLine;
-            layoutPreview.DisplayConfig.ShowFingerboard = ExportOptions.ExportFingerboardEdges;
-            layoutPreview.DisplayConfig.FretLineColor = ExportOptions.Frets.Color;
-            layoutPreview.DisplayConfig.RenderRealStrings = ExportOptions.Strings.UseStringGauge;
+
+            layoutPreview.DisplayConfig.Fingerboard.Color = ExportOptions.FingerboardEdges.Color;
+            layoutPreview.DisplayConfig.Fingerboard.Visible = ExportOptions.ExportFingerboardEdges;
+
+            layoutPreview.DisplayConfig.Frets.Visible = ExportOptions.Frets.Enabled;
+            layoutPreview.DisplayConfig.Frets.Color = ExportOptions.Frets.Color;
+
+            layoutPreview.DisplayConfig.Strings.Visible = ExportOptions.Strings.Enabled;
+            layoutPreview.DisplayConfig.Strings.Color = ExportOptions.Strings.Color;
+            layoutPreview.DisplayConfig.Strings.RenderMode = 
+                ExportOptions.Strings.UseStringGauge ? 
+                LineRenderMode.RealWidth : 
+                LineRenderMode.PlainLine;
+
             layoutPreview.DisplayConfig.FretExtensionAmount = ExportOptions.Frets.ExtensionAmount;
         }
 
@@ -272,7 +282,7 @@ namespace SiGen.UI.Windows
         private void chkExportStringCenters_CheckedChanged(object sender, EventArgs e)
         {
             if (!isLoading)
-                ExportOptions.ExportStringCenters = chkExportStringCenters.Checked;
+                ExportOptions.ExportMidlines = chkExportStringCenters.Checked;
             UpdatePreview();
         }
 

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SiGen.Configuration;
 using SiGen.Measuring;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace SiGen.Export
         //[JsonProperty("Name")]
         //public string ConfigurationName { get; set; }
 
-        [JsonProperty]
+        [JsonProperty, JsonConverter(typeof(MeasureJsonConverter))]
         public UnitOfMeasure ExportUnit { get; set; }
 
         [JsonProperty]
@@ -42,13 +43,13 @@ namespace SiGen.Export
         }
 
         [JsonProperty]
-        public LineExportConfig StringCenters { get; set; }
+        public LineExportConfig Midlines { get; set; }
 
         [JsonIgnore]
-        public bool ExportStringCenters
+        public bool ExportMidlines
         {
-            get => StringCenters.Enabled;
-            set => StringCenters.Enabled = value;
+            get => Midlines.Enabled;
+            set => Midlines.Enabled = value;
         }
 
         [JsonProperty]
@@ -107,7 +108,7 @@ namespace SiGen.Export
         public LayoutExportConfig()
         {
             Strings = new StringsExportConfig();
-            StringCenters = new LineExportConfig();
+            Midlines = new LineExportConfig();
             CenterLine = new LineExportConfig();
             Frets = new FretsExportConfig();
             FingerboardEdges = new FingerboardExportConfig();
@@ -131,7 +132,7 @@ namespace SiGen.Export
             var configObjs = new LineExportConfig[]
             {
                 Strings,
-                StringCenters,
+                Midlines,
                 CenterLine,
                 Frets,
                 FingerboardEdges,
@@ -148,7 +149,7 @@ namespace SiGen.Export
             var configObjs = new LineExportConfig[]
             {
                 Strings,
-                StringCenters,
+                Midlines,
                 CenterLine,
                 Frets,
                 FingerboardEdges,
@@ -168,8 +169,8 @@ namespace SiGen.Export
             if (sender == Strings)
                 OnPropertyChanged($"{nameof(Strings)}.{e.PropertyName}");
 
-            else if (sender == StringCenters)
-                OnPropertyChanged($"{nameof(StringCenters)}.{e.PropertyName}");
+            else if (sender == Midlines)
+                OnPropertyChanged($"{nameof(Midlines)}.{e.PropertyName}");
 
             else if (sender == CenterLine)
                 OnPropertyChanged($"{nameof(CenterLine)}.{e.PropertyName}");
@@ -207,8 +208,8 @@ namespace SiGen.Export
             };
             exportConfig.Frets.Color = Color.Red;
             exportConfig.Strings.Color = Color.Black;
-            exportConfig.StringCenters.Color = Color.LightGray;
-            exportConfig.StringCenters.IsDashed = true;
+            exportConfig.Midlines.Color = Color.LightGray;
+            exportConfig.Midlines.IsDashed = true;
             exportConfig.FingerboardEdges.Color = Color.Blue;
             exportConfig.FingerboardEdges.ContinueLines = true;
             exportConfig.FingerboardMargins.Color = Color.Gray;

@@ -126,12 +126,14 @@
     <Compile Include="Common\LayoutDocument.cs" />
     <Compile Include="Common\StringData.cs" />
     <Compile Include="Common\StringSet.cs" />
-    <Compile Include="Common\StringType.cs" />
+    <Compile Include="Common\StringMaterial.cs" />
     <Compile Include="Configuration\ConfigObjectBase.cs" />
     <Compile Include="Configuration\Converters\ColorJsonConverter.cs" />
     <Compile Include="Configuration\Converters\MeasureJsonConverter.cs" />
     <Compile Include="Configuration\Display\FretsDisplayConfigs.cs" />
     <Compile Include="Configuration\Display\LineDisplayConfig.cs" />
+    <Compile Include="Configuration\Display\LineRenderMode.cs" />
+    <Compile Include="Configuration\Display\StringsDisplayConfig.cs" />
     <Compile Include="Configuration\Export\FingerboardExportConfig.cs" />
     <Compile Include="Configuration\Export\FretsExportConfig.cs" />
     <Compile Include="Configuration\Export\StringsExportConfig.cs" />
@@ -330,7 +332,7 @@
     <Compile Include="UI\Controls\LayoutViewer\LayoutViewer.Designer.cs">
       <DependentUpon>LayoutViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Configuration\Display\LayoutViewerDisplayConfig.cs" />
+    <Compile Include="Configuration\Display\ViewerDisplayConfig.cs" />
     <Compile Include="UI\Controls\ValueEditors\MeasureTextbox.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -209,9 +209,10 @@ namespace SiGen.UI
             documentPanel.CurrentDocument = layoutFile;
             documentPanel.Viewer.BackColor = Color.White;
             documentPanel.Viewer.Font = new Font(Font.FontFamily, Font.Size * 1.4f);
-            documentPanel.Viewer.DisplayConfig.RenderRealStrings = true;
+            
             documentPanel.Viewer.Select();
             documentPanel.Tag = layoutFile;
+
             documentPanel.FormClosing += DocumentPanel_FormClosing;
             documentPanel.FormClosed += DocumentPanel_FormClosed;
             return documentPanel;

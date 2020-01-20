@@ -24,7 +24,7 @@ namespace SiGen.Configuration
         public LayoutExportConfig ExportConfig { get; set; }
 
         [JsonProperty]
-        public LayoutViewerDisplayConfig DisplayConfig { get; set; }
+        public ViewerDisplayConfig DisplayConfig { get; set; }
 
         public AppConfig()
         {
@@ -38,7 +38,7 @@ namespace SiGen.Configuration
             {
                 MaxRecentFileHistory = 10,
                 ExportConfig = LayoutExportConfig.CreateDefault(),
-                DisplayConfig = LayoutViewerDisplayConfig.CreateDefault()
+                DisplayConfig = ViewerDisplayConfig.CreateDefault()
             };
         }
 

@@ -15,7 +15,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
         FingerboardEdge,
         FingerboardMargin,
         FingerboardContinuation,
-        StringCenter,
+        StringMidline,
         CenterLine,
         Unknown
     }

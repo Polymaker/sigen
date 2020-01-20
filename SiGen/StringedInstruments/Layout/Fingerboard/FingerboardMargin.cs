@@ -201,11 +201,17 @@ namespace SiGen.StringedInstruments.Layout
 
         public void Deserialize(XElement elem)
         {
-            if(elem.ContainsAttribute("LastFret"))
-                _LastFret = Measure.ParseInvariant(elem.Attribute("LastFret").Value);
-            if (elem.ContainsAttribute("Edges"))
+            //if (elem.ContainsAttribute("LastFret"))
+            //    _LastFret = Measure.ParseInvariant(elem.Attribute("LastFret").Value);
+
+            _LastFret = elem.ReadAttribute("LastFret", Measure.Mm(0));
+
+            if (elem.HasAttribute("Edges", out XAttribute edgesAttr))
             {
-                _NutTrebleMargin = _NutBassMargin = _BridgeTrebleMargin = _BridgeBassMargin = Measure.ParseInvariant(elem.Attribute("Edges").Value);
+                _NutTrebleMargin = 
+                    _NutBassMargin = 
+                    _BridgeTrebleMargin = 
+                    _BridgeBassMargin = Measure.ParseInvariant(edgesAttr.Value);
             }
             else if (elem.ContainsAttribute("Treble") && elem.ContainsAttribute("Bass"))
             {

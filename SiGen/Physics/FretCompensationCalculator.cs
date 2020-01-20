@@ -50,7 +50,9 @@ namespace SiGen.Physics
 
             PreciseDouble L = frettedLengths[0];// stringLength[UnitOfMeasure.Inches];
             PreciseDouble f = openTuning.Frequency;//Frequency, Hz.
-            PreciseDouble E = properties.ModulusOfElasticity;//Modulus of Elasticity, core wire, psi
+            PreciseDouble E = properties.ModulusOfElasticity;//Modulus of Elasticity, core wire, GPa
+            E *= 145038d;//GPa to PSI
+
             PreciseDouble A = properties.CoreWireArea != 0 ? properties.CoreWireArea : properties.StringArea;//Area, core wire, in²
             PreciseDouble mul = properties.UnitWeight;//String mass per unit length, lbs./ inch
 			PreciseDouble g = 386.089; //Gravity, 386.089 in./ sec²
@@ -64,11 +66,11 @@ namespace SiGen.Physics
             for (int i = 1; i <= numberOfFrets; i++)//i=1 to skip the nut
             {
                 var fretTopPos = new Vector(fretPositions[i], fretHeight[UnitOfMeasure.Inches]);
-                var fretCenterPos = new Vector(fretPositions[i - 1], i == 1 ? nutPos.Y : fretHeight[UnitOfMeasure.Inches]);
+                //var fretCenterPos = new Vector(fretPositions[i - 1], i == 1 ? nutPos.Y : fretHeight[UnitOfMeasure.Inches]);
 
                 //Calculate the fretted string length : Ls(n) = The sum of the distances between the top of the fret from the nut and saddle
-                //var Lsn = frettedLengths[i] = (nutPos - fretTopPos).Length + (saddlePos - fretTopPos).Length;
-                var Lsn = frettedLengths[i] = (nutPos - fretCenterPos).Length + (fretCenterPos - fretTopPos).Length + (fretTopPos - saddlePos).Length;
+                var Lsn = frettedLengths[i] = (nutPos - fretTopPos).Length + (saddlePos - fretTopPos).Length;
+                //var Lsn = frettedLengths[i] = (nutPos - fretCenterPos).Length + (fretCenterPos - fretTopPos).Length + (fretTopPos - saddlePos).Length;
 
                 //Calculate the fretted string tension : Ts(n) = ((Lsn - Lor) / Lor) * E * A
                 var Tsn = frettedTensions[i] = ((Lsn - Lor) / Lor) * E * A;

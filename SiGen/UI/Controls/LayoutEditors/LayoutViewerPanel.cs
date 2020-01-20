@@ -50,6 +50,8 @@ namespace SiGen.UI.Controls.LayoutEditors
             base.OnLoad(e);
             ScreenDPI = 109;
             Viewer.EnableMeasureTool = true;
+            Viewer.DisplayConfig.Strings.RenderMode = Configuration.Display.LineRenderMode.RealisticLook;
+            Viewer.DisplayConfig.Frets.RenderMode = Configuration.Display.LineRenderMode.RealisticLook;
         }
 
         private void SetCurrentLayout(LayoutDocument value)
@@ -154,7 +156,7 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             if (sender == DisplayStringsMenuItem)
             {
-                Viewer.DisplayConfig.ShowStrings = DisplayStringsMenuItem.Checked;
+                Viewer.DisplayConfig.Strings.Visible = DisplayStringsMenuItem.Checked;
             }
             else if (sender == DisplayStringCentersMenuItem)
             {
@@ -162,7 +164,7 @@ namespace SiGen.UI.Controls.LayoutEditors
             }
             else if (sender == DisplayFretsMenuItem)
             {
-                Viewer.DisplayConfig.ShowFrets = DisplayFretsMenuItem.Checked;
+                Viewer.DisplayConfig.Frets.Visible = DisplayFretsMenuItem.Checked;
             }
             else if (sender == DisplayMarginsMenuItem)
             {
@@ -170,7 +172,7 @@ namespace SiGen.UI.Controls.LayoutEditors
             }
             else if (sender == DisplayFingerboardMenuItem)
             {
-                Viewer.DisplayConfig.ShowFingerboard = DisplayFingerboardMenuItem.Checked;
+                Viewer.DisplayConfig.Fingerboard.Visible = DisplayFingerboardMenuItem.Checked;
             }
             else if (sender == DisplayCenterLineMenuItem)
             {

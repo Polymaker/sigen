@@ -46,7 +46,7 @@ namespace SiGen.StringedInstruments.Data
                 new XAttribute("Note", Note.NoteName),
                 new XAttribute("Octave", Note.Octave),
                 new XAttribute("Intonation", Note.BaseIntonation));
-            if (PitchOffset.Cents > 0)
+            if (PitchOffset.Cents != 0)
                 elem.Add(new XAttribute("CentsOffset", PitchOffset.Cents));
             return elem;
         }
@@ -55,13 +55,19 @@ namespace SiGen.StringedInstruments.Data
         {
             var tuning = new StringTuning(
                 MusicalNote.CreateNote(
-                    (NoteName)Enum.Parse(typeof(NoteName), elem.Attribute("Note").Value),
-                    elem.GetIntAttribute("Octave"),
-                    (IntonationMethod)Enum.Parse(typeof(IntonationMethod), elem.Attribute("Intonation").Value)
+                    //(NoteName)Enum.Parse(typeof(NoteName), elem.Attribute("Note").Value),
+                    //elem.GetIntAttribute("Octave"),
+                    //(IntonationMethod)Enum.Parse(typeof(IntonationMethod), elem.Attribute("Intonation").Value)
+                    elem.ReadAttribute("Note", NoteName.C),
+                    elem.ReadAttribute("Octave", 4),
+                    elem.ReadAttribute("Intonation", IntonationMethod.EqualTempered)
                 )
             );
-            if (elem.ContainsAttribute("CentsOffset"))
-                tuning.PitchOffset = PitchValue.FromCents(double.Parse(elem.Attribute("CentsOffset").Value));
+
+            tuning.PitchOffset = PitchValue.FromCents(elem.ReadAttribute("CentsOffset", 0d));
+
+            //if (elem.HasAttribute("CentsOffset", out XAttribute centsAttr))
+            //    tuning.PitchOffset = PitchValue.FromCents(double.Parse(centsAttr.Value));
 
             return tuning;
         }

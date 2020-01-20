@@ -371,11 +371,7 @@
             // layoutPreview
             // 
             this.layoutPreview.BackColor = System.Drawing.SystemColors.Window;
-            this.layoutPreview.DisplayConfig.RenderRealFrets = false;
-            this.layoutPreview.DisplayConfig.ShowMidlines = false;
-            this.layoutPreview.DisplayConfig.ShowStrings = false;
             this.layoutPreview.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layoutPreview.IsExportViewer = true;
             this.layoutPreview.Location = new System.Drawing.Point(0, 0);
             this.layoutPreview.Name = "layoutPreview";
             this.layoutPreview.Size = new System.Drawing.Size(617, 239);

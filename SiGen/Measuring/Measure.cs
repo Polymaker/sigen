@@ -161,21 +161,29 @@ namespace SiGen.Measuring
 
         public static bool operator >(Measure m1, Measure m2)
         {
+            if (m1.IsEmpty || m2.IsEmpty)
+                return false;
             return m1.NormalizedValue > m2.NormalizedValue;
         }
 
         public static bool operator <(Measure m1, Measure m2)
         {
+            if (m1.IsEmpty || m2.IsEmpty)
+                return false;
             return m1.NormalizedValue < m2.NormalizedValue;
         }
 
         public static bool operator >=(Measure m1, Measure m2)
         {
+            if (m1.IsEmpty || m2.IsEmpty)
+                return false;
             return m1.NormalizedValue >= m2.NormalizedValue;
         }
 
         public static bool operator <=(Measure m1, Measure m2)
         {
+            if (m1.IsEmpty || m2.IsEmpty)
+                return false;
             return m1.NormalizedValue <= m2.NormalizedValue;
         }
 

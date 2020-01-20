@@ -82,7 +82,7 @@ namespace SiGen.StringedInstruments.Layout
                     return (line1 as FretLine).FretIndex == (line2 as FretLine).FretIndex;
                 case VisualElementType.String:
                     return (line1 as StringLine).Index == (line2 as StringLine).Index;
-                case VisualElementType.StringCenter:
+                case VisualElementType.StringMidline:
                     return (line1 as StringCenter).Right.Index == (line2 as StringCenter).Right.Index &&
                         (line1 as StringCenter).Left.Index == (line2 as StringCenter).Left.Index;
                 case VisualElementType.FingerboardEdge:

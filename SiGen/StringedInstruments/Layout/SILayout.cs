@@ -289,6 +289,7 @@ namespace SiGen.StringedInstruments.Layout
 			if (oldStrings != null)
 				OnNumberOfStringsChanged();
 		}
+
         /*
         public void AddString(FingerboardSide side)
         {
@@ -381,8 +382,8 @@ namespace SiGen.StringedInstruments.Layout
                 //    offset = PitchValue.FromCents(4);
                 //else if (newNote.NoteName == NoteName.B && newNote.Octave == 3)
                 //    offset = PitchValue.FromCents(-1);
-                //else if (newNote.NoteName == NoteName.E && newNote.Octave == 4)
-                //    offset = PitchValue.FromCents(-1);
+                if (newNote.NoteName == NoteName.E && newNote.Octave == 4)
+                    offset = PitchValue.FromCents(-1);
             }
             else if (temperament == Temperament.DieWohltemperirte)
             {
@@ -603,6 +604,10 @@ namespace SiGen.StringedInstruments.Layout
             {
                 root.Add(new XComment(string.Format("StringSpacingAlignment: {0}",
                     Enum.GetNames(typeof(StringSpacingAlignment)).Aggregate((i, j) => i + ", " + j)
+                    )
+                ));
+                root.Add(new XComment(string.Format("StringSpacingMethod: {0}",
+                    Enum.GetNames(typeof(StringSpacingMethod)).Aggregate((i, j) => i + ", " + j)
                     )
                 ));
                 root.Add(StringSpacing.Serialize("StringSpacings"));

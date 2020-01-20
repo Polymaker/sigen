@@ -10,43 +10,44 @@
   <Strings Count="6">
     <String Index="0">
       <Frets StartingFret="0" NumberOfFrets="24" />
-      <Action AtFirstFret="N/A" AtTwelfthFret="0.063in" />
+      <Action AtFirstFret="0.4mm" AtTwelfthFret="2.4mm" />
       <Tuning Note="E" Octave="4" Intonation="EqualTempered" />
-      <Properties CoreWireDiameter="0.01in" StringDiameter="0.01in" UW="2.215E-05" MOE="29442660.75919" Material="" />
+      <Properties CoreWireDiameter="0.01in" StringDiameter="0.01in" UW="2.215E-05" MOE="188" Material="PlainSteel" />
     </String>
     <String Index="1">
       <Frets StartingFret="0" NumberOfFrets="24" />
-      <Action AtFirstFret="N/A" AtTwelfthFret="0.069in" />
+      <Action AtFirstFret="0.472mm" AtTwelfthFret="2.4mm" />
       <Tuning Note="B" Octave="3" Intonation="EqualTempered" />
-      <Properties CoreWireDiameter="0.013in" StringDiameter="0.013in" UW="3.744E-05" MOE="29442660.75919" Material="" />
+      <Properties CoreWireDiameter="0.013in" StringDiameter="0.013in" UW="3.744E-05" MOE="188" Material="PlainSteel" />
     </String>
     <String Index="2">
       <Frets StartingFret="0" NumberOfFrets="24" />
-      <Action AtFirstFret="N/A" AtTwelfthFret="0.075in" />
+      <Action AtFirstFret="0.544mm" AtTwelfthFret="2.4mm" />
       <Tuning Note="G" Octave="3" Intonation="EqualTempered" />
-      <Properties CoreWireDiameter="0.017in" StringDiameter="0.017in" UW="6.402E-05" MOE="29442660.75919" Material="" />
+      <Properties CoreWireDiameter="0.017in" StringDiameter="0.017in" UW="6.402E-05" MOE="188" Material="PlainSteel" />
     </String>
     <String Index="3">
       <Frets StartingFret="0" NumberOfFrets="24" />
-      <Action AtFirstFret="N/A" AtTwelfthFret="0.082in" />
+      <Action AtFirstFret="0.616mm" AtTwelfthFret="2.5mm" />
       <Tuning Note="D" Octave="3" Intonation="EqualTempered" />
-      <Properties CoreWireDiameter="0.014in" StringDiameter="0.026in" UW="0.00012671" MOE="29442660.75919" Material="" />
+      <Properties CoreWireDiameter="0.014in" StringDiameter="0.026in" UW="0.00012671" MOE="64" Material="SteelWound" />
     </String>
     <String Index="4">
       <Frets StartingFret="0" NumberOfFrets="24" />
-      <Action AtFirstFret="N/A" AtTwelfthFret="0.088in" />
+      <Action AtFirstFret="0.688mm" AtTwelfthFret="2.5mm" />
       <Tuning Note="A" Octave="2" Intonation="EqualTempered" />
-      <Properties CoreWireDiameter="0.014in" StringDiameter="0.036in" UW="0.00023964" MOE="29442660.75919" Material="" />
+      <Properties CoreWireDiameter="0.014in" StringDiameter="0.036in" UW="0.00023964" MOE="64" Material="SteelWound" />
     </String>
     <String Index="5">
       <Frets StartingFret="0" NumberOfFrets="24" />
-      <Action AtFirstFret="N/A" AtTwelfthFret="0.094in" />
+      <Action AtFirstFret="0.76mm" AtTwelfthFret="2.5mm" />
       <Tuning Note="E" Octave="2" Intonation="EqualTempered" />
-      <Properties CoreWireDiameter="0.016in" StringDiameter="0.046in" UW="0.00038216" MOE="29442660.75919" Material="" />
+      <Properties CoreWireDiameter="0.016in" StringDiameter="0.046in" UW="0.00038216" MOE="64" Material="SteelWound" />
     </String>
   </Strings>
-  <!--StringSpacingAlignment: SpacingMiddle, StringCenter-->
-  <StringSpacings Mode="Simple" NutAlignment="SpacingMiddle" StringSpreadAtNut="36.5mm" BridgeAlignment="SpacingMiddle" StringSpreadAtBridge="52.5mm" NutSpacingMode="BetweenStrings" BridgeSpacingMode="StringsCenter" StringSpacingAtNut="7.3mm" StringSpacingAtBridge="10.5mm">
+  <!--StringSpacingAlignment: OuterStrings, MiddleString, FingerboardEdges-->
+  <!--StringSpacingMethod: EqualDistance, EqualSpacing-->
+  <StringSpacings Mode="Simple" NutAlignment="OuterStrings" StringSpreadAtNut="36.5mm" BridgeAlignment="OuterStrings" StringSpreadAtBridge="52.5mm" NutSpacingMode="EqualSpacing" BridgeSpacingMode="EqualDistance" StringSpacingAtNut="7.3mm" StringSpacingAtBridge="10.5mm">
     <!--Nut slot positions are adjusted in consideration of the strings gauge-->
     <Spacing Index="0" Nut="6.9825mm" Bridge="10.5mm" />
     <Spacing Index="1" Nut="7.0714mm" Bridge="10.5mm" />

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace SiGen.Common
 {
-    public enum StringType
+    public enum StringMaterial
     {
         Nylon,
-        Plain,
-        Wound
+        PlainSteel,
+        SteelWound,
+        BronzeWound,
     }
 }

@@ -20,9 +20,10 @@ namespace SiGen.StringedInstruments.Layout
         private int _StartingFret;
         private StringTuning _Tuning;
         private StringProperties _PhysicalProperties;
+        private Measure _ActionAtFirstFret;
         private Measure _ActionAtTwelfthFret;
         private double _MultiScaleRatio;
-        private FretManager _Frets;
+        //private FretManager _Frets;
 
 		#endregion
 
@@ -177,6 +178,16 @@ namespace SiGen.StringedInstruments.Layout
         }
 
         /// <summary>
+        /// Gets or sets the string action at the first fret, measured above the fret.
+        /// Used only for fret compensation calculation.
+        /// </summary>
+        public Measure ActionAtFirstFret
+        {
+            get { return _ActionAtFirstFret; }
+            set => SetPropertyValue(ref _ActionAtFirstFret, value, false);
+        }
+
+        /// <summary>
         /// Gets or sets the string action at the twelfth fret, measured above the fret.
         /// Used only for fret compensation calculation.
         /// </summary>
@@ -191,7 +202,8 @@ namespace SiGen.StringedInstruments.Layout
             get { return Tuning != null && 
                     PhysicalProperties != null && 
                     PhysicalProperties.CanCalculateCompensation && 
-                    ActionAtTwelfthFret != Measure.Zero; }
+                    ActionAtFirstFret > Measure.Zero &&
+                    ActionAtTwelfthFret > Measure.Zero; }
         }
 
         public SIString Previous
@@ -215,10 +227,11 @@ namespace SiGen.StringedInstruments.Layout
         {
             Index = stringIndex;
             _ActionAtTwelfthFret = Measure.Empty;
+            _ActionAtFirstFret = Measure.Mm(0.5);
             _MultiScaleRatio = 0.5;
             _NumberOfFrets = 24;
             RealScaleLength = Measure.Empty;
-            _Frets = new FretManager(this);
+            //_Frets = new FretManager(this);
         }
 
         public bool HasFret(int fretNo)
@@ -263,7 +276,7 @@ namespace SiGen.StringedInstruments.Layout
             if (!ActionAtTwelfthFret.IsEmpty)
             {
                 var actionElem = new XElement("Action",
-                    Measure.Empty.SerializeAsAttribute("AtFirstFret"),
+                    ActionAtFirstFret.SerializeAsAttribute("AtFirstFret"),
                     ActionAtTwelfthFret.SerializeAsAttribute("AtTwelfthFret"));
                 stringElem.Add(actionElem);
             }
@@ -296,7 +309,8 @@ namespace SiGen.StringedInstruments.Layout
             if (elem.ContainsElement("Action"))
             {
                 var actionElem = elem.Element("Action");
-                _ActionAtTwelfthFret = Measure.ParseInvariant(actionElem.Attribute("AtTwelfthFret").Value);
+                _ActionAtFirstFret = actionElem.ReadAttribute("AtFirstFret", Measure.Empty);
+                _ActionAtTwelfthFret = actionElem.ReadAttribute("AtTwelfthFret", Measure.Empty);
             }
 
             if (elem.ContainsElement("Properties"))

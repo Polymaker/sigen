@@ -146,7 +146,7 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.layoutViewer1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(577, 336);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(577, 311);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
@@ -297,7 +297,7 @@
             this.layoutViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layoutViewer1.Location = new System.Drawing.Point(0, 0);
             this.layoutViewer1.Name = "layoutViewer1";
-            this.layoutViewer1.Size = new System.Drawing.Size(577, 336);
+            this.layoutViewer1.Size = new System.Drawing.Size(577, 311);
             this.layoutViewer1.TabIndex = 1;
             this.layoutViewer1.Text = "layoutViewer1";
             this.layoutViewer1.ZoomChanged += new System.EventHandler(this.layoutViewer1_ZoomChanged);

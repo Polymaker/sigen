@@ -68,7 +68,7 @@ namespace SiGen.Configuration
             if (_Current.DisplayConfig == null || _Current.ExportConfig == null)
             {
                 if (_Current.DisplayConfig == null)
-                    _Current.DisplayConfig = LayoutViewerDisplayConfig.CreateDefault();
+                    _Current.DisplayConfig = ViewerDisplayConfig.CreateDefault();
                 if (_Current.ExportConfig == null)
                     _Current.ExportConfig = LayoutExportConfig.CreateDefault();
                 SaveAppConfig(_Current);

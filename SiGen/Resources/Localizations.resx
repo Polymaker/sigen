@@ -130,19 +130,31 @@
   <data name="Words_Length" xml:space="preserve">
     <value>Length</value>
   </data>
-  <data name="StringSpacingAlignment_SpacingMiddle" xml:space="preserve">
+  <data name="StringSpacingAlignment_OuterStrings" xml:space="preserve">
     <value>Centered between outer strings</value>
   </data>
-  <data name="StringSpacingAlignment_StringCenterEven" xml:space="preserve">
+  <data name="StringSpacingAlignment_MiddleStringEven" xml:space="preserve">
     <value>Centered between middle strings</value>
   </data>
-  <data name="StringSpacingAlignment_StringCenterOdd" xml:space="preserve">
+  <data name="StringSpacingAlignment_MiddleStringOdd" xml:space="preserve">
     <value>Centered along middle string</value>
   </data>
-  <data name="StringSpacingMethod_StringsCenter" xml:space="preserve">
+  <data name="StringSpacingMethod_EqualDistance" xml:space="preserve">
     <value>Equal distance (center to center)</value>
   </data>
-  <data name="StringSpacingMethod_BetweenStrings" xml:space="preserve">
+  <data name="StringSpacingMethod_EqualSpacing" xml:space="preserve">
     <value>Equal spacing (between strings)</value>
+  </data>
+  <data name="StringSpacingAlignment_FingerboardEdges" xml:space="preserve">
+    <value>Centered between fingerboard edges</value>
+  </data>
+  <data name="LineRenderMode_PlainLine" xml:space="preserve">
+    <value>Simple line</value>
+  </data>
+  <data name="LineRenderMode_RealWidth" xml:space="preserve">
+    <value>Real width</value>
+  </data>
+  <data name="LineRenderMode_RealisticLook" xml:space="preserve">
+    <value>Realistic look</value>
   </data>
 </root>

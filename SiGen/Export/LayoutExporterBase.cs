@@ -141,7 +141,7 @@ namespace SiGen.Export
                 bool centerExist = false;
                 var centerLine = Layout.VisualElements.OfType<LayoutLine>().First(x => x.ElementType == VisualElementType.CenterLine);
 
-                if (Options.ExportStringCenters && Layout.NumberOfStrings % 2 == 0)//even number of strings
+                if (Options.ExportMidlines && Layout.NumberOfStrings % 2 == 0)//even number of strings
                 {
                     var stringCenter = Layout.GetStringsCenter(Layout.Strings[(Layout.NumberOfStrings / 2) - 1], Layout.Strings[Layout.NumberOfStrings / 2]);
                     if (stringCenter.Equation.IsVertical && stringCenter.Equation.X == 0)
@@ -158,10 +158,10 @@ namespace SiGen.Export
                     AddLayoutLine(centerLine, VisualElementType.CenterLine, Options.CenterLine);
             }
 
-            if (Options.ExportStringCenters)
+            if (Options.ExportMidlines)
             {
                 foreach (var stringCenter in Layout.VisualElements.OfType<StringCenter>())
-                    AddLayoutLine(stringCenter, VisualElementType.StringCenter, Options.StringCenters);
+                    AddLayoutLine(stringCenter, VisualElementType.StringMidline, Options.Midlines);
             }
 
             if (!Options.ExportStrings && Options.ExportFingerboardMargins)//export first & last string to show fingerboard margin

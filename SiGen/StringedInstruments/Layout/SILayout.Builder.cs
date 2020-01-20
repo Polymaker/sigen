@@ -444,7 +444,8 @@ namespace SiGen.StringedInstruments.Layout
                 var positions = FretCompensationCalculator.CalculateFretsCompensatedPositions(
                     str.PhysicalProperties, str.StringLength,
                     str.Tuning.FinalPitch, FretsTemperament,
-                    Measure.Mm(0.5), str.ActionAtTwelfthFret, Measure.Mm(1.2), str.TotalNumberOfFrets);
+                    str.ActionAtFirstFret, str.ActionAtTwelfthFret, Measure.Mm(1.1938), str.TotalNumberOfFrets);
+                
                 for (int i = 0; i < positions.Length; i++)
                 {
                     PreciseDouble fretPosRatio = (str.StringLength - positions[i]).NormalizedValue / str.StringLength.NormalizedValue;

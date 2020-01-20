@@ -97,6 +97,33 @@ namespace SiGen.Resources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Simple line.
+        /// </summary>
+        internal static string LineRenderMode_PlainLine {
+            get {
+                return ResourceManager.GetString("LineRenderMode_PlainLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Realistic look.
+        /// </summary>
+        internal static string LineRenderMode_RealisticLook {
+            get {
+                return ResourceManager.GetString("LineRenderMode_RealisticLook", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Real width.
+        /// </summary>
+        internal static string LineRenderMode_RealWidth {
+            get {
+                return ResourceManager.GetString("LineRenderMode_RealWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à All.
         /// </summary>
         internal static string Margins_All {
@@ -133,47 +160,56 @@ namespace SiGen.Resources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Centered between outer strings.
+        ///   Recherche une chaîne localisée semblable à Centered between fingerboard edges.
         /// </summary>
-        internal static string StringSpacingAlignment_SpacingMiddle {
+        internal static string StringSpacingAlignment_FingerboardEdges {
             get {
-                return ResourceManager.GetString("StringSpacingAlignment_SpacingMiddle", resourceCulture);
+                return ResourceManager.GetString("StringSpacingAlignment_FingerboardEdges", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Centered between middle strings.
         /// </summary>
-        internal static string StringSpacingAlignment_StringCenterEven {
+        internal static string StringSpacingAlignment_MiddleStringEven {
             get {
-                return ResourceManager.GetString("StringSpacingAlignment_StringCenterEven", resourceCulture);
+                return ResourceManager.GetString("StringSpacingAlignment_MiddleStringEven", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Centered along middle string.
         /// </summary>
-        internal static string StringSpacingAlignment_StringCenterOdd {
+        internal static string StringSpacingAlignment_MiddleStringOdd {
             get {
-                return ResourceManager.GetString("StringSpacingAlignment_StringCenterOdd", resourceCulture);
+                return ResourceManager.GetString("StringSpacingAlignment_MiddleStringOdd", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Equal spacing (between strings).
+        ///   Recherche une chaîne localisée semblable à Centered between outer strings.
         /// </summary>
-        internal static string StringSpacingMethod_BetweenStrings {
+        internal static string StringSpacingAlignment_OuterStrings {
             get {
-                return ResourceManager.GetString("StringSpacingMethod_BetweenStrings", resourceCulture);
+                return ResourceManager.GetString("StringSpacingAlignment_OuterStrings", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Equal distance (center to center).
         /// </summary>
-        internal static string StringSpacingMethod_StringsCenter {
+        internal static string StringSpacingMethod_EqualDistance {
             get {
-                return ResourceManager.GetString("StringSpacingMethod_StringsCenter", resourceCulture);
+                return ResourceManager.GetString("StringSpacingMethod_EqualDistance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Equal spacing (between strings).
+        /// </summary>
+        internal static string StringSpacingMethod_EqualSpacing {
+            get {
+                return ResourceManager.GetString("StringSpacingMethod_EqualSpacing", resourceCulture);
             }
         }
         

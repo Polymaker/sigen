@@ -18,7 +18,7 @@ namespace SiGen.UI.Windows
 
         private LayoutExportConfig ExportConfig { get; set; }
 
-        private LayoutViewerDisplayConfig DisplayConfig { get; set; }
+        private ViewerDisplayConfig DisplayConfig { get; set; }
 
         public AppPreferencesWindow()
         {
@@ -40,8 +40,8 @@ namespace SiGen.UI.Windows
 
         private void LoadDisplayConfigs()
         {
-            checkBox1.Checked = DisplayConfig.ShowFrets;
-            colorSelectButton1.Value = DisplayConfig.FretLineColor;
+            checkBox1.Checked = DisplayConfig.Frets.Visible;
+            colorSelectButton1.Value = DisplayConfig.Frets.Color;
         }
 
         private void LoadExportConfigs()
@@ -51,7 +51,7 @@ namespace SiGen.UI.Windows
             MarginsExportCfg.LineConfig = ExportConfig.FingerboardMargins;
             CenterLineExportCfg.LineConfig = ExportConfig.CenterLine;
             StringsExportCfg.LineConfig = ExportConfig.Strings;
-            StringCentersExportCfg.LineConfig = ExportConfig.StringCenters;
+            StringCentersExportCfg.LineConfig = ExportConfig.Midlines;
             GuideExportCfg.LineConfig = ExportConfig.GuideLines;
         }
 

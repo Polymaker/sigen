@@ -73,7 +73,7 @@ namespace SiGen.Export
                     break;
                 case VisualElementType.CenterLine:
                 case VisualElementType.GuideLine:
-                case VisualElementType.StringCenter:
+                case VisualElementType.StringMidline:
                     AddDxfLine("Layout", line, lineConfig);
                     break;
             }

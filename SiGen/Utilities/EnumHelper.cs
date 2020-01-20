@@ -8,8 +8,87 @@ using System.Reflection;
 
 namespace System
 {
+    public class OldValueAttribute : Attribute
+    {
+        public string Value { get; set; }
+
+        public OldValueAttribute(string value)
+        {
+            Value = value;
+        }
+    }
+
     public static class EnumHelper
     {
+
+        public static T Parse<T>(string value) where T : Enum
+        {
+            var enumType = typeof(T);
+            var enumNames = Enum.GetNames(enumType);
+
+            for (int i = 0; i < enumNames.Length; i++)
+            {
+                if (enumNames[i].ToLower() == value.ToLower())
+                    return (T)Enum.Parse(enumType, enumNames[i]);
+
+                var enumValMember = enumType.GetMember(enumNames[i])[0];
+                var oldValAttr = enumValMember.GetCustomAttribute<OldValueAttribute>();
+
+                if (oldValAttr != null && oldValAttr.Value.ToLower() == value.ToLower())
+                    return (T)Enum.Parse(enumType, enumNames[i]);
+            }
+
+            return default(T);
+        }
+
+        public static object Parse(Type enumType, string value)
+        {
+            var enumNames = Enum.GetNames(enumType);
+
+            for (int i = 0; i < enumNames.Length; i++)
+            {
+                if (enumNames[i].ToLower() == value.ToLower())
+                    return Enum.Parse(enumType, enumNames[i], true);
+
+                var enumValMember = enumType.GetMember(enumNames[i])[0];
+                var oldValAttr = enumValMember.GetCustomAttribute<OldValueAttribute>();
+
+                if (oldValAttr != null && oldValAttr.Value.ToLower() == value.ToLower())
+                    return Enum.Parse(enumType, enumNames[i], true);
+            }
+
+            throw new ArgumentException();
+        }
+
+        public static bool TryParse<T>(string stringValue, out T value) where T : Enum
+        {
+            value = default(T);
+
+            var enumType = typeof(T);
+            var enumNames = Enum.GetNames(enumType);
+
+            for (int i = 0; i < enumNames.Length; i++)
+            {
+                if (enumNames[i] == stringValue)
+                {
+                    value = (T)Enum.Parse(enumType, enumNames[i]);
+                    return true;
+                }
+
+                var enumValMember = enumType.GetMember(enumNames[i])[0];
+                var oldValAttr = enumValMember.GetCustomAttribute<OldValueAttribute>();
+
+                if (oldValAttr != null && oldValAttr.Value == stringValue)
+                {
+                    value = (T)Enum.Parse(enumType, enumNames[i]);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+
         public static string[] GetEnumDescriptions(Type enumType)
         {
             var enumNames = Enum.GetNames(enumType);
