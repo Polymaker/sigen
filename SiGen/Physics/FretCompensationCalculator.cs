@@ -35,7 +35,8 @@ namespace SiGen.Physics
             PreciseDouble flatLength = stringLength[UnitOfMeasure.Inches];
             for (int i = 1; i <= numberOfFrets; i++)//i=1 to skip the nut
             {
-                var fretRatio = Math.Pow(2, i / 12d);
+                var fretRatio = (PreciseDouble)Math.Pow(2, i / 12d);
+                fretRatio = GetAdjustedFretRatio(openTuning, i, temperament);
                 fretPositions[i] = flatLength - (flatLength / fretRatio);
             }
 
@@ -86,6 +87,7 @@ namespace SiGen.Physics
         public static PitchValue GetPitchAtFret(PitchValue openStringPitch, int fret, Temperament temperament)
         {
             var intonation = temperament == Temperament.Just ? IntonationMethod.Just : IntonationMethod.EqualTempered;
+            
             var openStringNote = MusicalNote.FromPitch(openStringPitch).AddSteps(0, intonation);
             var fretNote = openStringNote.AddSteps(fret);
 
@@ -106,5 +108,14 @@ namespace SiGen.Physics
             return PitchValue.FromCents(fretCents);
         }
 
+        public static PreciseDouble GetAdjustedFretRatio(PitchValue tuning, int fret, Temperament temperament)
+        {
+            if (fret == 0)
+                return 0d;
+
+            var pitchAtFret = GetPitchAtFret(tuning, fret, temperament);
+            PreciseDouble fretRatio = NoteConverter.CentsToIntonationRatio(pitchAtFret.Cents - tuning.Cents);
+            return fretRatio;
+        }
     }
 }
