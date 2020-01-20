@@ -39,8 +39,7 @@
     <StartupObject>SiGen.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Resources\Icons\SiGenIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -351,10 +350,11 @@
     <Compile Include="Utilities\EnumHelper.cs" />
     <Compile Include="Utilities\ExtensionMethods\CollectionHelper.cs" />
     <Compile Include="Utilities\FlagList.cs" />
-    <Compile Include="Utilities\MeasureConverter.cs" />
+    <Compile Include="Measuring\MeasureConverter.cs" />
     <Compile Include="Utilities\ExtensionMethods\NumberHelper.cs" />
     <Compile Include="Utilities\ExtensionMethods\XmlLinqExtensions.cs" />
-    <Compile Include="Utilities\MeasureParser.cs" />
+    <Compile Include="Measuring\MeasureParser.cs" />
+    <Compile Include="Utilities\NativeUtils.cs" />
     <Compile Include="Utilities\ObservableCollectionEx.cs" />
     <Compile Include="Maths\PreciseDouble.cs" />
     <Compile Include="Utilities\SerializationHelper.cs" />
@@ -456,8 +456,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Resources\closed hand icon.ico" />
     <Content Include="Resources\Icons\closed hand icon.ico" />
+    <Content Include="Resources\Icons\LayoutFileIcon.ico" />
     <Content Include="Resources\Icons\open hand icon.ico" />
     <Content Include="Resources\Images\CloseLayout_x32.png" />
     <Content Include="Resources\Images\ExportLayout_x32.png" />
@@ -470,14 +470,6 @@
     <Content Include="Resources\Icons\SiGenIcon.ico" />
     <Content Include="Resources\Images\SiGenIcon_x32.png" />
     <Content Include="Resources\Images\Undo_x32.png" />
-    <Content Include="Resources\MeasureIcon_32.png" />
-    <Content Include="Resources\MeasureIcon_64.png" />
-    <Content Include="Resources\NewLayoutIcon_32.png" />
-    <Content Include="Resources\open hand icon.cur" />
-    <Content Include="Resources\open hand icon.ico" />
-    <Content Include="Resources\OpenLayoutIcon_32.png" />
-    <Content Include="Resources\OptionsIcon_32.png" />
-    <None Include="Resources\SigenIcon_x64.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -33,6 +33,10 @@ namespace SiGen.UI.Controls.LayoutEditors
             using (FlagManager.UseFlag("UpdateComboboxes"))
             {
                 var alignmentList = new List<EnumHelper.EnumItem>();
+
+                alignmentList.Add(new EnumHelper.EnumItem(StringSpacingAlignment.FingerboardEdges,
+                    "Fingerboard Edges"));
+
                 alignmentList.Add(new EnumHelper.EnumItem(StringSpacingAlignment.SpacingMiddle, 
                     Localizations.StringSpacingAlignment_SpacingMiddle));
 

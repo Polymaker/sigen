@@ -12,11 +12,19 @@
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 
-		<Feature Id="ProductFeature" Title="SiGen.Setup" Level="1">
+    <Icon Id="icon.ico" SourceFile="$(var.SiGen.ProjectDir)Resources\Icons\SiGenIcon.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+    
+		<Feature Id="ProductFeature" Title="SiGen.Setup" Level="1" Absent="disallow">
 			<ComponentGroupRef Id="ProductComponents" />
 			<ComponentGroupRef Id="Localizations" />
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="DesktopShortcut" />
+      <!--
+      <Feature Id="DesktopShortcutFeature" Title="Desktop Shortcut" Absent="allow">
+        <ComponentRef Id="DesktopShortcut" />
+      </Feature>
+      -->
     </Feature>
     
     <MediaTemplate EmbedCab="yes"/>
@@ -46,11 +54,12 @@
         <File Id="SiGen.exe" Name="SiGen.exe" Source="$(var.SiGen.TargetDir)SiGen.exe" />
         <File Id="SiGen.exe.config" Name="SiGen.exe.config" Source="$(var.SiGen.TargetDir)SiGen.exe.config" />
         
-        <ProgId Id="SiGen.silfile" Description="SiGen Layout File">
+        <ProgId Id="SiGen.silfile" Description="SiGen Layout File" Icon="Resources_LayoutFileIcon.ico">
           <Extension Id="sil" ContentType="application/sil">
             <Verb Id="open" Command="Open" TargetFile="SiGen.exe" Argument="&quot;%1&quot;" />
           </Extension>
         </ProgId>
+        
       </Component>
       
       <Component Id="References" Guid="851D08CB-91C1-4D62-802D-88FF6FB85F75">
@@ -61,8 +70,10 @@
       </Component>
       
       <Component Id="Resources" Guid="3e5ae673-406d-4ad8-abb6-cb5e567bfb3b">
-        <File Id="Resources_SigenIcon.ico" Name="SigenIcon.ico" Source="$(var.SiGen.ProjectDir)Resources\SigenIcon.ico" />
+        <File Id="Resources_SigenIcon.ico" Name="SigenIcon.ico" Source="$(var.SiGen.ProjectDir)Resources\Icons\SiGenIcon.ico" />
+        <File Id="Resources_LayoutFileIcon.ico" Name="LayoutFileIcon.ico" Source="$(var.SiGen.ProjectDir)Resources\Icons\LayoutFileIcon.ico" />
       </Component>
+      
 		</ComponentGroup>
 	</Fragment>
 

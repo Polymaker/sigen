@@ -21,7 +21,7 @@ namespace System.ComponentModel
 
         public string GetDescription()
         {
-            return GetDescription(CultureInfo.CurrentCulture);
+            return GetDescription(CultureInfo.CurrentUICulture);
         }
 
         public string GetDescription(CultureInfo culture)

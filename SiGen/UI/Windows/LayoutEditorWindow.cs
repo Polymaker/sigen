@@ -8,6 +8,7 @@ using SiGen.StringedInstruments.Layout;
 using SiGen.UI.Controls;
 using SiGen.UI.Controls.LayoutEditors;
 using SiGen.UI.Windows;
+using SiGen.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,6 +16,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -60,6 +62,7 @@ namespace SiGen.UI
         {
             InitializeComponent();
             Icon = Properties.Resources.SiGenIcon;
+
             if (args != null)
                 FilesToOpen = args.Where(x => File.Exists(x)).ToArray();
         }
@@ -423,6 +426,38 @@ namespace SiGen.UI
 
         #endregion
 
-        
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == NativeUtils.WM_COPYDATA)
+            {
+                var dataStruct = Marshal.PtrToStructure<NativeUtils.COPYDATASTRUCT>(m.LParam);
+                var messageStr = Marshal.PtrToStringUni(dataStruct.lpData, dataStruct.cbData / 2);
+
+                if (WindowState == FormWindowState.Minimized)
+                    WindowState = FormWindowState.Normal;
+
+                BringToFront();
+
+                if (messageStr.StartsWith("MUTEX#"))
+                    messageStr = messageStr.Substring(6);
+
+                var filesToOpen = new List<string>();
+
+                if (messageStr.Contains(","))
+                {
+                    var args = messageStr.Split(',').Select(x => x.Replace("&#44;", ",")).ToArray();
+                    filesToOpen.AddRange(args);
+                }
+                else
+                    filesToOpen.Add(messageStr);
+
+                foreach(var fileArg in filesToOpen)
+                {
+                    if (File.Exists(fileArg))
+                        OpenLayoutFile(fileArg, false);
+                }
+            }
+            base.WndProc(ref m);
+        }
     }
 }

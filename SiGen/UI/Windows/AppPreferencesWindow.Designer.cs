@@ -30,6 +30,12 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.colorSelectButton2 = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.colorSelectButton1 = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
+            this.SaveDisplayConfigButton = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.StringCentersExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
@@ -40,17 +46,11 @@
             this.FingerboardExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
             this.FretsExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
             this.SaveExportConfigButton = new System.Windows.Forms.Button();
-            this.SaveDisplayConfigButton = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.colorSelectButton1 = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.colorSelectButton2 = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -75,6 +75,69 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Viewer Settings";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // panel2
+            // 
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel2.AutoScroll = true;
+            this.panel2.Controls.Add(this.checkBox2);
+            this.panel2.Controls.Add(this.colorSelectButton2);
+            this.panel2.Controls.Add(this.checkBox1);
+            this.panel2.Controls.Add(this.colorSelectButton1);
+            this.panel2.Location = new System.Drawing.Point(0, 3);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(610, 339);
+            this.panel2.TabIndex = 1;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBox2.Location = new System.Drawing.Point(5, 32);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(114, 17);
+            this.checkBox2.TabIndex = 4;
+            this.checkBox2.Text = "Fingerboard edges";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // colorSelectButton2
+            // 
+            this.colorSelectButton2.Location = new System.Drawing.Point(128, 30);
+            this.colorSelectButton2.Name = "colorSelectButton2";
+            this.colorSelectButton2.Size = new System.Drawing.Size(103, 20);
+            this.colorSelectButton2.TabIndex = 3;
+            this.colorSelectButton2.Value = System.Drawing.Color.Red;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBox1.Location = new System.Drawing.Point(5, 6);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(76, 17);
+            this.checkBox1.TabIndex = 2;
+            this.checkBox1.Text = "Show frets";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // colorSelectButton1
+            // 
+            this.colorSelectButton1.Location = new System.Drawing.Point(128, 4);
+            this.colorSelectButton1.Name = "colorSelectButton1";
+            this.colorSelectButton1.Size = new System.Drawing.Size(103, 20);
+            this.colorSelectButton1.TabIndex = 1;
+            this.colorSelectButton1.Value = System.Drawing.Color.Red;
+            // 
+            // SaveDisplayConfigButton
+            // 
+            this.SaveDisplayConfigButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.SaveDisplayConfigButton.Location = new System.Drawing.Point(532, 348);
+            this.SaveDisplayConfigButton.Name = "SaveDisplayConfigButton";
+            this.SaveDisplayConfigButton.Size = new System.Drawing.Size(75, 23);
+            this.SaveDisplayConfigButton.TabIndex = 0;
+            this.SaveDisplayConfigButton.Text = "Save";
+            this.SaveDisplayConfigButton.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
@@ -194,69 +257,6 @@
             this.SaveExportConfigButton.UseVisualStyleBackColor = true;
             this.SaveExportConfigButton.Click += new System.EventHandler(this.SaveExportConfigButton_Click);
             // 
-            // SaveDisplayConfigButton
-            // 
-            this.SaveDisplayConfigButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.SaveDisplayConfigButton.Location = new System.Drawing.Point(532, 348);
-            this.SaveDisplayConfigButton.Name = "SaveDisplayConfigButton";
-            this.SaveDisplayConfigButton.Size = new System.Drawing.Size(75, 23);
-            this.SaveDisplayConfigButton.TabIndex = 0;
-            this.SaveDisplayConfigButton.Text = "Save";
-            this.SaveDisplayConfigButton.UseVisualStyleBackColor = true;
-            // 
-            // panel2
-            // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2.AutoScroll = true;
-            this.panel2.Controls.Add(this.checkBox2);
-            this.panel2.Controls.Add(this.colorSelectButton2);
-            this.panel2.Controls.Add(this.checkBox1);
-            this.panel2.Controls.Add(this.colorSelectButton1);
-            this.panel2.Location = new System.Drawing.Point(0, 3);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(610, 339);
-            this.panel2.TabIndex = 1;
-            // 
-            // colorSelectButton1
-            // 
-            this.colorSelectButton1.Location = new System.Drawing.Point(128, 4);
-            this.colorSelectButton1.Name = "colorSelectButton1";
-            this.colorSelectButton1.Size = new System.Drawing.Size(103, 20);
-            this.colorSelectButton1.TabIndex = 1;
-            this.colorSelectButton1.Value = System.Drawing.Color.Red;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBox1.Location = new System.Drawing.Point(5, 6);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(76, 17);
-            this.checkBox1.TabIndex = 2;
-            this.checkBox1.Text = "Show frets";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBox2.Location = new System.Drawing.Point(5, 32);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(114, 17);
-            this.checkBox2.TabIndex = 4;
-            this.checkBox2.Text = "Fingerboard edges";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            // 
-            // colorSelectButton2
-            // 
-            this.colorSelectButton2.Location = new System.Drawing.Point(128, 30);
-            this.colorSelectButton2.Name = "colorSelectButton2";
-            this.colorSelectButton2.Size = new System.Drawing.Size(103, 20);
-            this.colorSelectButton2.TabIndex = 3;
-            this.colorSelectButton2.Value = System.Drawing.Color.Red;
-            // 
             // AppPreferencesWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -264,14 +264,15 @@
             this.ClientSize = new System.Drawing.Size(621, 403);
             this.Controls.Add(this.tabControl1);
             this.Name = "AppPreferencesWindow";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "AppPreferencesWindow";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             this.ResumeLayout(false);
 
         }

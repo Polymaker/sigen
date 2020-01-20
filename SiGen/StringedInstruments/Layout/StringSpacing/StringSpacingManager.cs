@@ -71,14 +71,47 @@ namespace SiGen.StringedInstruments.Layout
                 else
                     stringPos[i] = stringPos[i - 1] + GetSpacingBetweenStrings(i - 1, i, side);
             }
-            if ((side == FingerboardEnd.Nut ? NutAlignment : BridgeAlignment) == StringSpacingAlignment.SpacingMiddle)
-                center = (side == FingerboardEnd.Nut ? StringSpreadAtNut : StringSpreadAtBridge) / 2d;
-            else if (NumberOfStrings % 2 == 1)//odd number of strings
-                center = stringPos[(NumberOfStrings - 1) / 2];
-            else//even number of strings
+
+            var sideAlign = (side == FingerboardEnd.Nut) ? NutAlignment : BridgeAlignment;
+            var sideSpread = (side == FingerboardEnd.Nut) ? StringSpreadAtNut : StringSpreadAtBridge;
+
+
+
+            switch (sideAlign)
             {
-                int mid = NumberOfStrings / 2;
-                center = ((stringPos[mid] - stringPos[mid - 1]) / 2) + stringPos[mid - 1];
+                default:
+                case StringSpacingAlignment.FingerboardEdges:
+                    {
+                        if (Layout.Margins.CompensateStringGauge && 
+                            !(Layout.FirstString.Gauge.IsEmpty || Layout.LastString.Gauge.IsEmpty))
+                        {
+                            var leftMargin = Layout.Margins.BassMargins[side] + Layout.LastString.Gauge / 2d;
+                            var rightMargin = Layout.Margins.TrebleMargins[side] + Layout.FirstString.Gauge / 2d;
+                            var totalWidth = leftMargin + sideSpread + rightMargin;
+                            center = totalWidth / 2d;
+                            center -= rightMargin;
+                        }
+                        else
+                            center = sideSpread / 2d;
+                        break;
+                    }
+                case StringSpacingAlignment.OuterStrings:
+                    center = sideSpread / 2d;
+                    break;
+                case StringSpacingAlignment.StringCenter:
+                    {
+                        if (NumberOfStrings % 2 == 1)//odd number of strings
+                        {
+                            center = stringPos[(NumberOfStrings - 1) / 2];
+                        }
+                        else
+                        {
+                            //even number of strings
+                            int mid = NumberOfStrings / 2;
+                            center = ((stringPos[mid] - stringPos[mid - 1]) / 2) + stringPos[mid - 1];
+                        }
+                        break;
+                    }
             }
 
             for (int i = 0; i < NumberOfStrings; i++)

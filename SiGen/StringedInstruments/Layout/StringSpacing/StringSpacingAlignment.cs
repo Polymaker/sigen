@@ -12,11 +12,13 @@ namespace SiGen.StringedInstruments.Layout
         /// Centers the fretboard in the middle of the strings spread, so that first and last string are equally distant from the center. 
         /// </summary>
         SpacingMiddle,
+        
         /// <summary>
         /// Centers the fretboard along the middle string. 
         /// Useful for having a trully straight middle string when the nut slots are adjusted relative to the strings gauges.
         /// </summary>
-        StringCenter
-            //,Symmetrical
+        StringCenter,
+        FingerboardEdges,
+        OuterStrings = SpacingMiddle,
     }
 }

@@ -39,7 +39,7 @@ namespace SiGen
             if (value <= 0)
                 return string.Empty;
 
-            var languageID = CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToUpper();
+            var languageID = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpper();
 
             if (languageID == "FR")
             {
