@@ -217,14 +217,6 @@ namespace SiGen.UI
                 dlg.ShowDialog();
         }
 
-        private void tsbMeasureTool_Click(object sender, EventArgs e)
-        {
-            if (ActiveDocument != null)
-            {
-                //ActiveDocument.Viewer.EnableMeasureTool = tsbMeasureTool.Checked;
-            }
-        }
-
         private void tsbClose_Click(object sender, EventArgs e)
         {
             if (ActiveDocument != null)

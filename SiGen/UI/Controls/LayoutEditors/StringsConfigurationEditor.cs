@@ -160,9 +160,9 @@ namespace SiGen.UI.Controls.LayoutEditors
             PivotFields.Add(new PivotField("ScaleLength", "Scale Length") { Visible = false });
             PivotFields.Add(new PivotField("MultiScaleRatio", "Align. Ratio") { Visible = false });
             PivotFields.Add(new PivotField("Gauge", "Gauge"));
-            PivotFields.Add(new PivotField("PhysicalProperties.CoreWireDiameter", "Core Wire Diameter") { Visible = false });
+            PivotFields.Add(new PivotField("PhysicalProperties.CoreWireDiameter", "Core Wire diam.") { Visible = false });
             PivotFields.Add(new PivotField("PhysicalProperties.UnitWeight", "Unit Weight (lbs/in)") { Visible = false });
-            PivotFields.Add(new PivotField("PhysicalProperties.ModulusOfElasticity", "Elast. Modulus (psi)") { Visible = false });
+            PivotFields.Add(new PivotField("PhysicalProperties.ModulusOfElasticity", "Elast. Modulus (GPa)") { Visible = false });
             PivotFields.Add(new PivotField("Tuning.Note", "Note") { Visible = false });
 
             foreach (var field in PivotFields)
@@ -245,6 +245,8 @@ namespace SiGen.UI.Controls.LayoutEditors
                     if (field.PropertyName == "ScaleLength" || field.PropertyName == "MultiScaleRatio")
                         field.Visible = (CurrentLayout.ScaleLengthMode == ScaleLengthType.Individual);
                     else if (field.PropertyName.Contains("PhysicalProperties"))
+                        field.Visible = chkShowAdvanced.Checked;
+                    else if (field.PropertyName.Contains("Tuning"))
                         field.Visible = chkShowAdvanced.Checked;
                 }
             }

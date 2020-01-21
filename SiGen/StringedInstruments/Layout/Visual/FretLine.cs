@@ -12,7 +12,6 @@ namespace SiGen.StringedInstruments.Layout.Visual
     {
         private List<FretSegment> _Segments;
         private bool _IsStraight;
-        private bool _IsNut;
 
         public List<FretSegment> Segments
         {
@@ -30,17 +29,14 @@ namespace SiGen.StringedInstruments.Layout.Visual
             get { return _IsStraight; }
         }
 
-        public bool IsNut
-        {
-            get { return _IsNut; }
-        }
+        public bool IsNut { get; }
 
         public override VisualElementType ElementType => VisualElementType.Fret;
 
         public FretLine(IEnumerable<FretSegment> segments)
         {
             _Segments = new List<FretSegment>(segments.OrderBy(s=>s.String.Index));
-            _IsNut = Segments.All(s => s.IsNut || s.IsVirtual);
+            IsNut = Segments.All(s => s.IsNut || s.IsVirtual);
         }
 
         public void VerifyIsStraight()

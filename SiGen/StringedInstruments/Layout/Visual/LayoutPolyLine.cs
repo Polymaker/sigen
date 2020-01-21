@@ -64,6 +64,13 @@ namespace SiGen.StringedInstruments.Layout.Visual
             _Points.AddRange(points);
         }
 
+        public LayoutPolyLine(IEnumerable<PointM> points, VisualElementType elementType) : base(elementType)
+        {
+            _Points = new ObservableCollectionEx<PointM>();
+            _Points.CollectionChanged += Points_CollectionChanged;
+            _Points.AddRange(points);
+        }
+
         private void Points_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             isDirty = true;

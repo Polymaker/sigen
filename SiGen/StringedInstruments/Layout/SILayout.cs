@@ -77,6 +77,7 @@ namespace SiGen.StringedInstruments.Layout
                 {
                     if (NumberOfStrings == 1)
                         return;
+
                     if (value == ScaleLengthType.Individual)
                         ManualScaleConfig.InitializeIfNeeded();
 

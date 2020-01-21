@@ -123,6 +123,8 @@ namespace SiGen.UI
                 _DisplayConfig.PropertyChanged -= DisplayConfigChanged;
 
             _DisplayConfig = config ?? new ViewerDisplayConfig();
+            _DisplayConfig.InitDefaultDesignerValues();
+            _DisplayConfig.AttachPropertyChangedEvent();
             _DisplayConfig.PropertyChanged += DisplayConfigChanged;
             if (IsHandleCreated)
                 Invalidate();

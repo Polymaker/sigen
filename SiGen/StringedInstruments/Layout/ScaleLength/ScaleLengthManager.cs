@@ -204,6 +204,7 @@ namespace SiGen.StringedInstruments.Layout
                 if(_Lengths == null || _Lengths.Length != NumberOfStrings)
                 {
                     _Lengths = new Measure[Layout.NumberOfStrings];
+
                     for (int i = 0; i < Layout.NumberOfStrings; i++)
                     {
                         _Lengths[i] = !Layout.Strings[i].RealScaleLength.IsEmpty ? Layout.Strings[i].RealScaleLength : Layout.Strings[i].ScaleLength;

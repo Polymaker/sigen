@@ -186,6 +186,7 @@
             this.DisplayOptionsDropDown.Name = "DisplayOptionsDropDown";
             this.DisplayOptionsDropDown.Size = new System.Drawing.Size(58, 22);
             this.DisplayOptionsDropDown.Text = "Display";
+            this.DisplayOptionsDropDown.DropDownOpening += new System.EventHandler(this.DisplayOptionsDropDown_DropDownOpening);
             // 
             // DisplayStringsMenuItem
             // 
@@ -294,6 +295,12 @@
             // layoutViewer1
             // 
             this.layoutViewer1.BackColor = System.Drawing.SystemColors.Window;
+            this.layoutViewer1.DisplayConfig.ShowCenterLine = false;
+            this.layoutViewer1.DisplayConfig.ShowFingerboard = true;
+            this.layoutViewer1.DisplayConfig.ShowFrets = true;
+            this.layoutViewer1.DisplayConfig.ShowMargins = true;
+            this.layoutViewer1.DisplayConfig.ShowMidlines = true;
+            this.layoutViewer1.DisplayConfig.ShowStrings = true;
             this.layoutViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layoutViewer1.Location = new System.Drawing.Point(0, 0);
             this.layoutViewer1.Name = "layoutViewer1";

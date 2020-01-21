@@ -1,4 +1,5 @@
 ﻿using SiGen.Common;
+using SiGen.Configuration;
 using SiGen.StringedInstruments.Layout;
 using System;
 using System.Collections.Generic;
@@ -50,8 +51,9 @@ namespace SiGen.UI.Controls.LayoutEditors
             base.OnLoad(e);
             ScreenDPI = 109;
             Viewer.EnableMeasureTool = true;
-            Viewer.DisplayConfig.Strings.RenderMode = Configuration.Display.LineRenderMode.RealisticLook;
-            Viewer.DisplayConfig.Frets.RenderMode = Configuration.Display.LineRenderMode.RealisticLook;
+            Viewer.SetDisplayConfig(AppConfig.Current.DisplayConfig);
+            //Viewer.DisplayConfig.Strings.RenderMode = Configuration.Display.LineRenderMode.RealisticLook;
+            //Viewer.DisplayConfig.Frets.RenderMode = Configuration.Display.LineRenderMode.RealisticLook;
         }
 
         private void SetCurrentLayout(LayoutDocument value)
@@ -152,11 +154,30 @@ namespace SiGen.UI.Controls.LayoutEditors
             Viewer.ResetCamera();
         }
 
+        private bool UpdatingDisplayOptionsMenuItem;
+
+        private void DisplayOptionsDropDown_DropDownOpening(object sender, EventArgs e)
+        {
+            UpdatingDisplayOptionsMenuItem = true;
+
+            DisplayStringsMenuItem.Checked = Viewer.DisplayConfig.ShowStrings;
+            DisplayStringCentersMenuItem.Checked = Viewer.DisplayConfig.ShowMidlines;
+            DisplayFretsMenuItem.Checked = Viewer.DisplayConfig.ShowFrets;
+            DisplayMarginsMenuItem.Checked = Viewer.DisplayConfig.ShowMargins;
+            DisplayFingerboardMenuItem.Checked = Viewer.DisplayConfig.ShowFingerboard;
+            DisplayCenterLineMenuItem.Checked = Viewer.DisplayConfig.ShowCenterLine;
+
+            UpdatingDisplayOptionsMenuItem = false;
+        }
+
         private void DisplayOptionsMenuItem_CheckedChanged(object sender, EventArgs e)
         {
+            if (UpdatingDisplayOptionsMenuItem)
+                return;
+
             if (sender == DisplayStringsMenuItem)
             {
-                Viewer.DisplayConfig.Strings.Visible = DisplayStringsMenuItem.Checked;
+                Viewer.DisplayConfig.ShowStrings = DisplayStringsMenuItem.Checked;
             }
             else if (sender == DisplayStringCentersMenuItem)
             {
@@ -164,7 +185,7 @@ namespace SiGen.UI.Controls.LayoutEditors
             }
             else if (sender == DisplayFretsMenuItem)
             {
-                Viewer.DisplayConfig.Frets.Visible = DisplayFretsMenuItem.Checked;
+                Viewer.DisplayConfig.ShowFrets = DisplayFretsMenuItem.Checked;
             }
             else if (sender == DisplayMarginsMenuItem)
             {
@@ -172,7 +193,7 @@ namespace SiGen.UI.Controls.LayoutEditors
             }
             else if (sender == DisplayFingerboardMenuItem)
             {
-                Viewer.DisplayConfig.Fingerboard.Visible = DisplayFingerboardMenuItem.Checked;
+                Viewer.DisplayConfig.ShowFingerboard= DisplayFingerboardMenuItem.Checked;
             }
             else if (sender == DisplayCenterLineMenuItem)
             {
@@ -184,5 +205,7 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             Viewer.EnableMeasureTool = tsbMeasureTool.Checked;
         }
+
+        
     }
 }

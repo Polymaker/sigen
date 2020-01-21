@@ -79,6 +79,45 @@ namespace SiGen.UI
             g.DrawLine(pen, PointToDisplay(p1), PointToDisplay(p2));
         }
 
+        //private GraphicsPath GetLinePath(PointM p1, PointM p2, Measure thickness)
+        //{
+        //    var line = Line.FromPoints(p1.ToVector(), p2.ToVector());
+        //    var perpVec = line.GetPerpendicular(p1.ToVector());
+        //    var p1a = p1 + (perpVec.Vector * (thickness * -0.5d));
+        //    var p1b = p1 + (perpVec.Vector * (thickness * 0.5d));
+        //    var p2a = p2 + (perpVec.Vector * (thickness * -0.5d));
+        //    var p2b = p2 + (perpVec.Vector * (thickness * 0.5d));
+        //    var gp = new GraphicsPath();
+        //    gp.StartFigure();
+        //    gp.AddLine(PointToDisplay(p1a), PointToDisplay(p2a));
+        //    gp.AddLine(PointToDisplay(p2b), PointToDisplay(p1b));
+        //    gp.CloseFigure();
+
+        //    return gp;
+        //}
+
+        //private GraphicsPath GetLinePath(PointM p1, PointM p2, Measure thickness, out PointF gradPt1, out PointF gradPt2)
+        //{
+        //    var line = Line.FromPoints(p1.ToVector(), p2.ToVector());
+        //    var perpVec = line.GetPerpendicular(p1.ToVector());
+        //    var p1a = p1 + (perpVec.Vector * (thickness * -0.5d));
+        //    var p1b = p1 + (perpVec.Vector * (thickness * 0.5d));
+        //    var p2a = p2 + (perpVec.Vector * (thickness * -0.5d));
+        //    var p2b = p2 + (perpVec.Vector * (thickness * 0.5d));
+        //    var gp = new GraphicsPath();
+        //    gp.StartFigure();
+        //    gp.AddLine(PointToDisplay(p1a), PointToDisplay(p2a));
+        //    gp.AddLine(PointToDisplay(p2b), PointToDisplay(p1b));
+        //    gp.CloseFigure();
+
+        //    p1a = p1 + (perpVec.Vector * (thickness * -2d));
+        //    p1b = p1 + (perpVec.Vector * (thickness * 2d));
+        //    gradPt1 = PointToDisplay(p1a);
+        //    gradPt2 = PointToDisplay(p1b);
+
+        //    return gp;
+        //}
+
         private void DrawLines(Graphics g, Pen pen, IEnumerable<PointM> points)
         {
             g.DrawLines(pen, points.Select(p => PointToDisplay(p)).ToArray());
@@ -233,6 +272,13 @@ namespace SiGen.UI
                 //g.DrawLines(nutPen, fretLine.Points.Select(p => PointToDisplay(p)).ToArray());
             }
 
+            var bridgeLine = CurrentLayout.VisualElements.OfType<LayoutPolyLine>().FirstOrDefault(x => x.ElementType == VisualElementType.BridgeLine);
+            if (bridgeLine != null)
+            {
+                var linePoints = bridgeLine.GetLinePoints()
+                            .Select(x => PointToDisplay(x)).ToArray();
+                g.DrawLines(nutPen, linePoints);
+            }
             nutPen.Dispose();
             fretPen.Dispose();
         }
@@ -266,19 +312,29 @@ namespace SiGen.UI
 
                                 GetStringMaterialColors(stringMaterial, out Color stringColor, out Color outlineColor);
 
-                                using (var gaugePen = GetPen(outlineColor, stringLine.String.Gauge, 1.5))
+                                using (var gaugePen = GetPen(outlineColor, stringLine.String.Gauge, 1.8))
                                     DrawLine(g, gaugePen, stringLine.P1, stringLine.P2);
 
                                 using (var gaugePen = GetPen(stringColor, stringLine.String.Gauge))
                                     DrawLine(g, gaugePen, stringLine.P1, stringLine.P2);
 
-                                var testP1 = stringLine.P1;
-                                testP1.X -= (stringLine.String.Gauge * 0.2);
-                                var testP2 = stringLine.P2;
-                                testP2.X -= (stringLine.String.Gauge * 0.2);
 
-                                using (var gaugePen = GetPen(Color.FromArgb(120, 255, 255, 255), stringLine.String.Gauge * 0.333d))
-                                    DrawLine(g, gaugePen, testP1, testP2);
+                                var highlightSize = (stringLine.String.Gauge * 0.5d).NormalizedValue * _Zoom;
+
+                                if (highlightSize >= 0.5d)
+                                {
+                                    var testP1 = stringLine.P1;
+                                    testP1.X -= (stringLine.String.Gauge * 0.1);
+                                    var testP2 = stringLine.P2;
+                                    testP2.X -= (stringLine.String.Gauge * 0.1);
+
+                                    using (var gaugePen = GetPen(Color.FromArgb(80, 255, 255, 255), stringLine.String.Gauge * 0.50d))
+                                        DrawLine(g, gaugePen, testP1, testP2);
+
+                                    //using (var gaugePen = GetPen(Color.FromArgb(80, 255, 255, 255), stringLine.String.Gauge * 0.2d))
+                                    //    DrawLine(g, gaugePen, testP1, testP2);
+                                }
+                                
 
                                 break;
                             }
