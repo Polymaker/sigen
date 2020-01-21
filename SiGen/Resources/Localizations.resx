@@ -157,4 +157,49 @@
   <data name="LineRenderMode_RealisticLook" xml:space="preserve">
     <value>Realistic look</value>
   </data>
+  <data name="Words_ScaleLength" xml:space="preserve">
+    <value>Scale length</value>
+  </data>
+  <data name="ScaleLengthType_Single" xml:space="preserve">
+    <value>Single</value>
+  </data>
+  <data name="ScaleLengthType_Dual" xml:space="preserve">
+    <value>Dual</value>
+  </data>
+  <data name="ScaleLengthType_Multiple" xml:space="preserve">
+    <value>Multiple</value>
+  </data>
+  <data name="LayoutProperty_ScaleLengthMode" xml:space="preserve">
+    <value>Scale length mode</value>
+  </data>
+  <data name="StringSpacingType_Simple" xml:space="preserve">
+    <value>Simple</value>
+  </data>
+  <data name="StringSpacingType_Manual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="LayoutProperty_StringSpacingMode" xml:space="preserve">
+    <value>String spacing mode</value>
+  </data>
+  <data name="LayoutProperty_NumberOfStrings" xml:space="preserve">
+    <value>Number of strings</value>
+  </data>
+  <data name="StringSpacingProperty_BridgeAlignment" xml:space="preserve">
+    <value>Bridge alignment</value>
+  </data>
+  <data name="StringSpacingProperty_NutAlignment" xml:space="preserve">
+    <value>Nut alignment</value>
+  </data>
+  <data name="StringSpacingProperty_SpacingMode" xml:space="preserve">
+    <value>Spacing mode</value>
+  </data>
+  <data name="StringSpacingProperty_Spacing" xml:space="preserve">
+    <value>Spacing</value>
+  </data>
+  <data name="Words_PerpendicularFret" xml:space="preserve">
+    <value>Perpendicular fret</value>
+  </data>
+  <data name="LayoutProperty_NumberOfFrets" xml:space="preserve">
+    <value>Number of frets</value>
+  </data>
 </root>

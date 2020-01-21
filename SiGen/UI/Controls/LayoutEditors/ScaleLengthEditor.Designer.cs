@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ScaleLengthEditor));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpLayout = new System.Windows.Forms.TableLayoutPanel();
             this.lblBass = new System.Windows.Forms.Label();
             this.lblScaleLength = new System.Windows.Forms.Label();
@@ -176,8 +176,8 @@
             // colStringNumber
             // 
             this.colStringNumber.DataPropertyName = "Index";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.colStringNumber.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colStringNumber.DefaultCellStyle = dataGridViewCellStyle1;
             resources.ApplyResources(this.colStringNumber, "colStringNumber");
             this.colStringNumber.Name = "colStringNumber";
             this.colStringNumber.ReadOnly = true;
@@ -185,8 +185,8 @@
             // colScaleLength
             // 
             this.colScaleLength.DataPropertyName = "ScaleLength";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.colScaleLength.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colScaleLength.DefaultCellStyle = dataGridViewCellStyle2;
             resources.ApplyResources(this.colScaleLength, "colScaleLength");
             this.colScaleLength.Name = "colScaleLength";
             this.colScaleLength.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
@@ -194,8 +194,8 @@
             // colMultiScaleRatio
             // 
             this.colMultiScaleRatio.DataPropertyName = "MultiScaleRatio";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.colMultiScaleRatio.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colMultiScaleRatio.DefaultCellStyle = dataGridViewCellStyle3;
             resources.ApplyResources(this.colMultiScaleRatio, "colMultiScaleRatio");
             this.colMultiScaleRatio.Name = "colMultiScaleRatio";
             this.colMultiScaleRatio.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;

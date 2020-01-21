@@ -133,11 +133,11 @@ namespace SiGen.UI.Controls
             mtbTrebleLength.Enabled = (CurrentLayout != null);
             mtbBassLength.Enabled = (CurrentLayout != null);
 
-            SetControlsVisibility(EditMode == ScaleLengthType.Multiple, lblBass, lblMultiScaleRatio, lblParallelFret, mtbBassLength, nubMultiScaleRatio, cboParallelFret);
+            SetControlsVisibility(EditMode == ScaleLengthType.Dual, lblBass, lblMultiScaleRatio, lblParallelFret, mtbBassLength, nubMultiScaleRatio, cboParallelFret);
 
-            lblTreble.Visible = (EditMode != ScaleLengthType.Individual);
-            mtbTrebleLength.Visible = (EditMode != ScaleLengthType.Individual);
-            dgvScaleLengths.Visible = (EditMode == ScaleLengthType.Individual);
+            lblTreble.Visible = (EditMode != ScaleLengthType.Multiple);
+            mtbTrebleLength.Visible = (EditMode != ScaleLengthType.Multiple);
+            dgvScaleLengths.Visible = (EditMode == ScaleLengthType.Multiple);
             
             SetSelectedEditMode(EditMode);
 
@@ -150,17 +150,17 @@ namespace SiGen.UI.Controls
                         mtbTrebleLength.AllowEmptyValue = false;
                         lblTreble.Text = Localizations.Words_Length;
                         break;
-                    case ScaleLengthType.Multiple:
+                    case ScaleLengthType.Dual:
                         {
-                            mtbTrebleLength.Value = CurrentLayout.MultiScaleConfig.Treble;
+                            mtbTrebleLength.Value = CurrentLayout.DualScaleConfig.Treble;
                             mtbTrebleLength.AllowEmptyValue = false;
-                            mtbBassLength.Value = CurrentLayout.MultiScaleConfig.Bass;
-                            nubMultiScaleRatio.Value = CurrentLayout.MultiScaleConfig.PerpendicularFretRatio;
-                            SelectClosestFretPosition(CurrentLayout.MultiScaleConfig.PerpendicularFretRatio);
+                            mtbBassLength.Value = CurrentLayout.DualScaleConfig.Bass;
+                            nubMultiScaleRatio.Value = CurrentLayout.DualScaleConfig.PerpendicularFretRatio;
+                            SelectClosestFretPosition(CurrentLayout.DualScaleConfig.PerpendicularFretRatio);
                             lblTreble.Text = Localizations.FingerboardSide_Treble;
                         }
                         break;
-                    case ScaleLengthType.Individual:
+                    case ScaleLengthType.Multiple:
                         dgvScaleLengths.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
                         break;
                 }
@@ -206,9 +206,9 @@ namespace SiGen.UI.Controls
             if (rbSingle.Checked)
                 return ScaleLengthType.Single;
             else if (rbDual.Checked)
-                return ScaleLengthType.Multiple;
+                return ScaleLengthType.Dual;
             else if (rbMultiple.Checked)
-                return ScaleLengthType.Individual;
+                return ScaleLengthType.Multiple;
             return ScaleLengthType.Single;
         }
 
@@ -222,10 +222,10 @@ namespace SiGen.UI.Controls
                     case ScaleLengthType.Single:
                         rbSingle.Checked = true;
                         break;
-                    case ScaleLengthType.Multiple:
+                    case ScaleLengthType.Dual:
                         rbDual.Checked = true;
                         break;
-                    case ScaleLengthType.Individual:
+                    case ScaleLengthType.Multiple:
                         rbMultiple.Checked = true;
                         break;
                 }
@@ -242,24 +242,24 @@ namespace SiGen.UI.Controls
             {
                 if (EditMode == ScaleLengthType.Single)
                     CurrentLayout.SingleScaleConfig.Length = mtbTrebleLength.Value;
-                else if (EditMode == ScaleLengthType.Multiple)
-                    CurrentLayout.MultiScaleConfig.Treble = mtbTrebleLength.Value;
+                else if (EditMode == ScaleLengthType.Dual)
+                    CurrentLayout.DualScaleConfig.Treble = mtbTrebleLength.Value;
                 CurrentLayout.RebuildLayout();
             }
         }
 
         private void mtbBassLength_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsLoading && CurrentLayout != null && EditMode == ScaleLengthType.Multiple)
+            if (!IsLoading && CurrentLayout != null && EditMode == ScaleLengthType.Dual)
             {
-                CurrentLayout.MultiScaleConfig.Bass = mtbBassLength.Value;
+                CurrentLayout.DualScaleConfig.Bass = mtbBassLength.Value;
                 CurrentLayout.RebuildLayout();
             }
         }
 
         private void nubMultiScaleRatio_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsLoading && CurrentLayout != null && EditMode == ScaleLengthType.Multiple && !FlagManager["AdjustPositionRatio"])
+            if (!IsLoading && CurrentLayout != null && EditMode == ScaleLengthType.Dual && !FlagManager["AdjustPositionRatio"])
             {
                 var closestFret = SelectClosestFretPosition(nubMultiScaleRatio.Value);
 
@@ -269,14 +269,14 @@ namespace SiGen.UI.Controls
                         nubMultiScaleRatio.Value = closestFret.PositionRatio;// Math.Round(closestFret.PositionRatio, 4);
                 }
 
-                CurrentLayout.MultiScaleConfig.PerpendicularFretRatio = nubMultiScaleRatio.Value;
+                CurrentLayout.DualScaleConfig.PerpendicularFretRatio = nubMultiScaleRatio.Value;
                 CurrentLayout.RebuildLayout();
             }
         }
 
         private void cboParallelFret_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!IsLoading && CurrentLayout != null && EditMode == ScaleLengthType.Multiple && !FlagManager["DetermineFretAlignment"])
+            if (!IsLoading && CurrentLayout != null && EditMode == ScaleLengthType.Dual && !FlagManager["DetermineFretAlignment"])
             {
                 if(cboParallelFret.SelectedItem != null)
                 {
@@ -304,7 +304,7 @@ namespace SiGen.UI.Controls
 
 		public string GetPerpendicularFretName()
 		{
-			if(EditMode == ScaleLengthType.Multiple)
+			if(EditMode == ScaleLengthType.Dual)
 			{
 				var current = cboParallelFret.SelectedItem as FretPosition;
 				return current?.Name ?? Localizations.Words_CustomRatio;

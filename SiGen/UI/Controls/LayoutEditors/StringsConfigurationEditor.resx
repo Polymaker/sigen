@@ -132,7 +132,7 @@
     <value>nbxNumberOfStrings</value>
   </data>
   <data name="&gt;&gt;nbxNumberOfStrings.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.NumericBox, SiGen, Version=1.0.0.21782, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.NumericBox, SiGen, Version=1.0.0.22347, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;nbxNumberOfStrings.Parent" xml:space="preserve">
     <value>$this</value>
@@ -207,7 +207,7 @@
     <value>nbxNumberOfFrets</value>
   </data>
   <data name="&gt;&gt;nbxNumberOfFrets.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.NumericBox, SiGen, Version=1.0.0.21782, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.NumericBox, SiGen, Version=1.0.0.22347, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;nbxNumberOfFrets.Parent" xml:space="preserve">
     <value>$this</value>
@@ -409,6 +409,6 @@
     <value>StringsConfigurationEditor</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.LayoutPropertyEditor, SiGen, Version=1.0.0.21782, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.LayoutPropertyEditor, SiGen, Version=1.0.0.22347, Culture=neutral, PublicKeyToken=null</value>
   </data>
 </root>

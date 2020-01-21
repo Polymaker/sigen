@@ -34,10 +34,15 @@ namespace SiGen.StringedInstruments.Layout
 
 		internal void SetLayout(SILayout layout)
 		{
+            var oldLayout = Layout;
 			Layout = layout;
-			if (!layout._Components.Contains(this))
-				Layout._Components.Add(this);
-		}
+
+            if (oldLayout != null && oldLayout._Components.Contains(this))
+                oldLayout._Components.Add(this);
+
+            if (layout != null && !layout._Components.Contains(this))
+                layout._Components.Add(this);
+        }
 
 		~LayoutComponent()
         {
@@ -120,12 +125,6 @@ namespace SiGen.StringedInstruments.Layout
 			}
 			return false;
 		}
-
-		protected bool SetSubPropertyValue<V,P>(P prop, Expression<Func<P,V>> subProp, V value)
-		{
-			
-			return false;
-		}
 	}
 
 	public abstract class ActivableLayoutComponent : LayoutComponent
@@ -134,6 +133,7 @@ namespace SiGen.StringedInstruments.Layout
 
 		public ActivableLayoutComponent(SILayout layout) : base(layout)
 		{
+
 		}
 
 		protected override void NotifyLayoutChanged(PropertyChange change)

@@ -177,4 +177,49 @@
   <data name="LineRenderMode_RealisticLook" xml:space="preserve">
     <value>Look réaliste</value>
   </data>
+  <data name="Words_ScaleLength" xml:space="preserve">
+    <value>Diapason</value>
+  </data>
+  <data name="ScaleLengthType_Single" xml:space="preserve">
+    <value>Simple</value>
+  </data>
+  <data name="ScaleLengthType_Dual" xml:space="preserve">
+    <value>Double</value>
+  </data>
+  <data name="ScaleLengthType_Multiple" xml:space="preserve">
+    <value>Multiple</value>
+  </data>
+  <data name="LayoutProperty_ScaleLengthMode" xml:space="preserve">
+    <value>Mode de diapason</value>
+  </data>
+  <data name="StringSpacingType_Simple" xml:space="preserve">
+    <value>Simple</value>
+  </data>
+  <data name="StringSpacingType_Manual" xml:space="preserve">
+    <value>Manuel</value>
+  </data>
+  <data name="LayoutProperty_StringSpacingMode" xml:space="preserve">
+    <value>Mode d'espacement</value>
+  </data>
+  <data name="LayoutProperty_NumberOfStrings" xml:space="preserve">
+    <value>Nombre de cordes</value>
+  </data>
+  <data name="StringSpacingProperty_BridgeAlignment" xml:space="preserve">
+    <value>Alignement du pont</value>
+  </data>
+  <data name="StringSpacingProperty_NutAlignment" xml:space="preserve">
+    <value>Alignement du sillet</value>
+  </data>
+  <data name="StringSpacingProperty_SpacingMode" xml:space="preserve">
+    <value>Mode d'espacement</value>
+  </data>
+  <data name="StringSpacingProperty_Spacing" xml:space="preserve">
+    <value>Espacement</value>
+  </data>
+  <data name="Words_PerpendicularFret" xml:space="preserve">
+    <value>Frette perpendiculaire</value>
+  </data>
+  <data name="LayoutProperty_NumberOfFrets" xml:space="preserve">
+    <value>Nombre de frettes</value>
+  </data>
 </root>

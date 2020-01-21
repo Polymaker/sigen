@@ -3,6 +3,7 @@ using SiGen.Measuring;
 using SiGen.StringedInstruments.Data;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,18 +31,25 @@ namespace SiGen.Physics
             var frettedLengths = new PreciseDouble[numberOfFrets + 1];//+1 to include nut and improve readability (e.g. frettedLengths[1] = fret #1 instead of frettedLengths[0])
             var frettedTensions = new PreciseDouble[numberOfFrets + 1];//+1 to include nut and improve readability (e.g. frettedTensions[1] = fret #1 instead of frettedTensions[0])
             var finalFretPositions = new Measure[numberOfFrets + 1];
-
+            var fretHeightIn = fretHeight[UnitOfMeasure.Inches];
             //Calculate the fret positions
             PreciseDouble flatLength = stringLength[UnitOfMeasure.Inches];
             for (int i = 1; i <= numberOfFrets; i++)//i=1 to skip the nut
             {
                 var fretRatio = (PreciseDouble)Math.Pow(2, i / 12d);
-                fretRatio = GetAdjustedFretRatio(openTuning, i, temperament);
+                //fretRatio = GetAdjustedFretRatio(openTuning, i, temperament);
                 fretPositions[i] = flatLength - (flatLength / fretRatio);
             }
 
-            var fret1Action = new Vector(fretPositions[1], actionAtFirstFret[UnitOfMeasure.Inches] + fretHeight[UnitOfMeasure.Inches]);
-            var fret12Action = new Vector(fretPositions[12], actionAtTwelfthFret[UnitOfMeasure.Inches] + fretHeight[UnitOfMeasure.Inches]);
+            var gaugeOffset = (properties.StringDiameter / 2d)[UnitOfMeasure.Inches];
+            var fret1Action = new Vector(fretPositions[1], 
+                actionAtFirstFret[UnitOfMeasure.Inches] + 
+                fretHeight[UnitOfMeasure.Inches]);
+
+            var fret12Action = new Vector(fretPositions[12], 
+                actionAtTwelfthFret[UnitOfMeasure.Inches] + 
+                fretHeight[UnitOfMeasure.Inches]);
+            
             var actionLineEq = Line.FromPoints(fret1Action, fret12Action);
             var nutPos = actionLineEq.GetPointForX(0);
             var saddlePos = actionLineEq.GetPointForX(flatLength);
@@ -66,11 +74,29 @@ namespace SiGen.Physics
 
             for (int i = 1; i <= numberOfFrets; i++)//i=1 to skip the nut
             {
-                var fretTopPos = new Vector(fretPositions[i], fretHeight[UnitOfMeasure.Inches]);
+                var fretTopPos = new Vector(fretPositions[i], fretHeightIn);
+                var prevFretPos = new Vector(fretPositions[i - 1], fretHeightIn);
+                
+                if (i == 1)
+                    prevFretPos.Y = nutPos.Y;
+
+                var fingerPressPos = new Vector();
+                fingerPressPos.X = (fretTopPos.X + prevFretPos.X) / 2d;
+                fingerPressPos.Y = 0;
+                //fingerPressPos.Y = PreciseDouble.Max(fretHeightIn - gaugeOffset, gaugeOffset);
+
                 //var fretCenterPos = new Vector(fretPositions[i - 1], i == 1 ? nutPos.Y : fretHeight[UnitOfMeasure.Inches]);
 
                 //Calculate the fretted string length : Ls(n) = The sum of the distances between the top of the fret from the nut and saddle
-                var Lsn = frettedLengths[i] = (nutPos - fretTopPos).Length + (saddlePos - fretTopPos).Length;
+                //var Lsn = frettedLengths[i] = 
+                //    (saddlePos - fretTopPos).Length +
+                //    (fretTopPos - fingerPressPos).Length +
+                //    (fingerPressPos - nutPos).Length;
+
+                var Lsn = frettedLengths[i] =
+                    (saddlePos - fretTopPos).Length +
+                    (fretTopPos - nutPos).Length;
+
                 //var Lsn = frettedLengths[i] = (nutPos - fretCenterPos).Length + (fretCenterPos - fretTopPos).Length + (fretTopPos - saddlePos).Length;
 
                 //Calculate the fretted string tension : Ts(n) = ((Lsn - Lor) / Lor) * E * A
@@ -78,8 +104,10 @@ namespace SiGen.Physics
                 //Calculate fret compensated position: Lfret(n) = SQRT((g * Tsn )/ mul ) / (2 * fn )
                 var Lfretn = MathP.Sqrt((g * Tsn) / mul) / (2 * GetPitchAtFret(openTuning, i, temperament).Frequency);
                 var pos2D = saddlePos + (saddleToNutDir * Lfretn);
+                fretPositions[i] = pos2D.X;
                 finalFretPositions[i] = Measure.Inches(pos2D.X);
             }
+
 
             return finalFretPositions;
         }

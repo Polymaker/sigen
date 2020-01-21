@@ -136,7 +136,7 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="lblBass.Location" type="System.Drawing.Point, System.Drawing">
-    <value>57, 52</value>
+    <value>67, 52</value>
   </data>
   <data name="lblBass.Size" type="System.Drawing.Size, System.Drawing">
     <value>30, 13</value>
@@ -166,7 +166,7 @@
     <value>True</value>
   </data>
   <data name="lblScaleLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>17, 5</value>
+    <value>27, 5</value>
   </data>
   <data name="lblScaleLength.Size" type="System.Drawing.Size, System.Drawing">
     <value>70, 13</value>
@@ -194,285 +194,6 @@
   </data>
   <data name="flowLayoutPanel1.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
     <value>GrowAndShrink</value>
-  </data>
-  <data name="&gt;&gt;rbSingle.Name" xml:space="preserve">
-    <value>rbSingle</value>
-  </data>
-  <data name="&gt;&gt;rbSingle.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbSingle.Parent" xml:space="preserve">
-    <value>flowLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;rbSingle.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;rbDual.Name" xml:space="preserve">
-    <value>rbDual</value>
-  </data>
-  <data name="&gt;&gt;rbDual.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbDual.Parent" xml:space="preserve">
-    <value>flowLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;rbDual.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;rbMultiple.Name" xml:space="preserve">
-    <value>rbMultiple</value>
-  </data>
-  <data name="&gt;&gt;rbMultiple.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbMultiple.Parent" xml:space="preserve">
-    <value>flowLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;rbMultiple.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="flowLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="flowLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>90, 0</value>
-  </data>
-  <data name="flowLayoutPanel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="flowLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>391, 23</value>
-  </data>
-  <data name="flowLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;flowLayoutPanel1.Name" xml:space="preserve">
-    <value>flowLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;flowLayoutPanel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.FlowLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;flowLayoutPanel1.Parent" xml:space="preserve">
-    <value>tlpLayout</value>
-  </data>
-  <data name="&gt;&gt;flowLayoutPanel1.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="mtbTrebleLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>93, 26</value>
-  </data>
-  <data name="mtbTrebleLength.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 1</value>
-  </data>
-  <data name="mtbTrebleLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 20</value>
-  </data>
-  <data name="mtbTrebleLength.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;mtbTrebleLength.Name" xml:space="preserve">
-    <value>mtbTrebleLength</value>
-  </data>
-  <data name="&gt;&gt;mtbTrebleLength.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.22165, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;mtbTrebleLength.Parent" xml:space="preserve">
-    <value>tlpLayout</value>
-  </data>
-  <data name="&gt;&gt;mtbTrebleLength.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="mtbBassLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>93, 50</value>
-  </data>
-  <data name="mtbBassLength.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 1</value>
-  </data>
-  <data name="mtbBassLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 20</value>
-  </data>
-  <data name="mtbBassLength.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;mtbBassLength.Name" xml:space="preserve">
-    <value>mtbBassLength</value>
-  </data>
-  <data name="&gt;&gt;mtbBassLength.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.22165, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;mtbBassLength.Parent" xml:space="preserve">
-    <value>tlpLayout</value>
-  </data>
-  <data name="&gt;&gt;mtbBassLength.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="lblTreble.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Right</value>
-  </data>
-  <data name="lblTreble.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lblTreble.Location" type="System.Drawing.Point, System.Drawing">
-    <value>50, 28</value>
-  </data>
-  <data name="lblTreble.Size" type="System.Drawing.Size, System.Drawing">
-    <value>37, 13</value>
-  </data>
-  <data name="lblTreble.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="lblTreble.Text" xml:space="preserve">
-    <value>Treble</value>
-  </data>
-  <data name="&gt;&gt;lblTreble.Name" xml:space="preserve">
-    <value>lblTreble</value>
-  </data>
-  <data name="&gt;&gt;lblTreble.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lblTreble.Parent" xml:space="preserve">
-    <value>tlpLayout</value>
-  </data>
-  <data name="&gt;&gt;lblTreble.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="lblMultiScaleRatio.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Right</value>
-  </data>
-  <data name="lblMultiScaleRatio.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lblMultiScaleRatio.Location" type="System.Drawing.Point, System.Drawing">
-    <value>49, 102</value>
-  </data>
-  <data name="lblMultiScaleRatio.Size" type="System.Drawing.Size, System.Drawing">
-    <value>38, 13</value>
-  </data>
-  <data name="lblMultiScaleRatio.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="lblMultiScaleRatio.Text" xml:space="preserve">
-    <value>(Ratio)</value>
-  </data>
-  <data name="&gt;&gt;lblMultiScaleRatio.Name" xml:space="preserve">
-    <value>lblMultiScaleRatio</value>
-  </data>
-  <data name="&gt;&gt;lblMultiScaleRatio.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lblMultiScaleRatio.Parent" xml:space="preserve">
-    <value>tlpLayout</value>
-  </data>
-  <data name="&gt;&gt;lblMultiScaleRatio.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="lblParallelFret.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Right</value>
-  </data>
-  <data name="lblParallelFret.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lblParallelFret.Location" type="System.Drawing.Point, System.Drawing">
-    <value>34, 77</value>
-  </data>
-  <data name="lblParallelFret.Size" type="System.Drawing.Size, System.Drawing">
-    <value>53, 13</value>
-  </data>
-  <data name="lblParallelFret.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
-  </data>
-  <data name="lblParallelFret.Text" xml:space="preserve">
-    <value>Parallel to</value>
-  </data>
-  <data name="&gt;&gt;lblParallelFret.Name" xml:space="preserve">
-    <value>lblParallelFret</value>
-  </data>
-  <data name="&gt;&gt;lblParallelFret.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lblParallelFret.Parent" xml:space="preserve">
-    <value>tlpLayout</value>
-  </data>
-  <data name="&gt;&gt;lblParallelFret.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="nubMultiScaleRatio.Location" type="System.Drawing.Point, System.Drawing">
-    <value>93, 99</value>
-  </data>
-  <data name="nubMultiScaleRatio.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 20</value>
-  </data>
-  <data name="nubMultiScaleRatio.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="nubMultiScaleRatio.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;nubMultiScaleRatio.Name" xml:space="preserve">
-    <value>nubMultiScaleRatio</value>
-  </data>
-  <data name="&gt;&gt;nubMultiScaleRatio.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.NumericBox, SiGen, Version=1.0.0.22165, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;nubMultiScaleRatio.Parent" xml:space="preserve">
-    <value>tlpLayout</value>
-  </data>
-  <data name="&gt;&gt;nubMultiScaleRatio.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="cboParallelFret.Location" type="System.Drawing.Point, System.Drawing">
-    <value>93, 74</value>
-  </data>
-  <data name="cboParallelFret.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 1</value>
-  </data>
-  <data name="cboParallelFret.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 21</value>
-  </data>
-  <data name="cboParallelFret.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="&gt;&gt;cboParallelFret.Name" xml:space="preserve">
-    <value>cboParallelFret</value>
-  </data>
-  <data name="&gt;&gt;cboParallelFret.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cboParallelFret.Parent" xml:space="preserve">
-    <value>tlpLayout</value>
-  </data>
-  <data name="&gt;&gt;cboParallelFret.ZOrder" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="tlpLayout.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="tlpLayout.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="tlpLayout.RowCount" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="tlpLayout.Size" type="System.Drawing.Size, System.Drawing">
-    <value>481, 122</value>
-  </data>
-  <data name="tlpLayout.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpLayout.Name" xml:space="preserve">
-    <value>tlpLayout</value>
-  </data>
-  <data name="&gt;&gt;tlpLayout.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpLayout.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;tlpLayout.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tlpLayout.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lblBass" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lblScaleLength" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="flowLayoutPanel1" Row="0" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="mtbTrebleLength" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="mtbBassLength" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lblTreble" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lblMultiScaleRatio" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lblParallelFret" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="nubMultiScaleRatio" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cboParallelFret" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,90,AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="rbSingle.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -554,6 +275,249 @@
   </data>
   <data name="&gt;&gt;rbMultiple.ZOrder" xml:space="preserve">
     <value>2</value>
+  </data>
+  <data name="flowLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="flowLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>100, 0</value>
+  </data>
+  <data name="flowLayoutPanel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="flowLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>381, 23</value>
+  </data>
+  <data name="flowLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanel1.Name" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.FlowLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanel1.Parent" xml:space="preserve">
+    <value>tlpLayout</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanel1.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="mtbTrebleLength.Location" type="System.Drawing.Point, System.Drawing">
+    <value>103, 26</value>
+  </data>
+  <data name="mtbTrebleLength.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 1</value>
+  </data>
+  <data name="mtbTrebleLength.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 20</value>
+  </data>
+  <data name="mtbTrebleLength.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;mtbTrebleLength.Name" xml:space="preserve">
+    <value>mtbTrebleLength</value>
+  </data>
+  <data name="&gt;&gt;mtbTrebleLength.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.21336, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;mtbTrebleLength.Parent" xml:space="preserve">
+    <value>tlpLayout</value>
+  </data>
+  <data name="&gt;&gt;mtbTrebleLength.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="mtbBassLength.Location" type="System.Drawing.Point, System.Drawing">
+    <value>103, 50</value>
+  </data>
+  <data name="mtbBassLength.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 1</value>
+  </data>
+  <data name="mtbBassLength.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 20</value>
+  </data>
+  <data name="mtbBassLength.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;mtbBassLength.Name" xml:space="preserve">
+    <value>mtbBassLength</value>
+  </data>
+  <data name="&gt;&gt;mtbBassLength.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.21336, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;mtbBassLength.Parent" xml:space="preserve">
+    <value>tlpLayout</value>
+  </data>
+  <data name="&gt;&gt;mtbBassLength.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="lblTreble.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="lblTreble.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblTreble.Location" type="System.Drawing.Point, System.Drawing">
+    <value>60, 28</value>
+  </data>
+  <data name="lblTreble.Size" type="System.Drawing.Size, System.Drawing">
+    <value>37, 13</value>
+  </data>
+  <data name="lblTreble.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="lblTreble.Text" xml:space="preserve">
+    <value>Treble</value>
+  </data>
+  <data name="&gt;&gt;lblTreble.Name" xml:space="preserve">
+    <value>lblTreble</value>
+  </data>
+  <data name="&gt;&gt;lblTreble.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTreble.Parent" xml:space="preserve">
+    <value>tlpLayout</value>
+  </data>
+  <data name="&gt;&gt;lblTreble.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="lblMultiScaleRatio.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="lblMultiScaleRatio.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblMultiScaleRatio.Location" type="System.Drawing.Point, System.Drawing">
+    <value>59, 102</value>
+  </data>
+  <data name="lblMultiScaleRatio.Size" type="System.Drawing.Size, System.Drawing">
+    <value>38, 13</value>
+  </data>
+  <data name="lblMultiScaleRatio.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="lblMultiScaleRatio.Text" xml:space="preserve">
+    <value>(Ratio)</value>
+  </data>
+  <data name="&gt;&gt;lblMultiScaleRatio.Name" xml:space="preserve">
+    <value>lblMultiScaleRatio</value>
+  </data>
+  <data name="&gt;&gt;lblMultiScaleRatio.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblMultiScaleRatio.Parent" xml:space="preserve">
+    <value>tlpLayout</value>
+  </data>
+  <data name="&gt;&gt;lblMultiScaleRatio.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="lblParallelFret.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="lblParallelFret.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblParallelFret.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 77</value>
+  </data>
+  <data name="lblParallelFret.Size" type="System.Drawing.Size, System.Drawing">
+    <value>84, 13</value>
+  </data>
+  <data name="lblParallelFret.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="lblParallelFret.Text" xml:space="preserve">
+    <value>Perpendicular at</value>
+  </data>
+  <data name="&gt;&gt;lblParallelFret.Name" xml:space="preserve">
+    <value>lblParallelFret</value>
+  </data>
+  <data name="&gt;&gt;lblParallelFret.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblParallelFret.Parent" xml:space="preserve">
+    <value>tlpLayout</value>
+  </data>
+  <data name="&gt;&gt;lblParallelFret.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="nubMultiScaleRatio.Location" type="System.Drawing.Point, System.Drawing">
+    <value>103, 99</value>
+  </data>
+  <data name="nubMultiScaleRatio.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 20</value>
+  </data>
+  <data name="nubMultiScaleRatio.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="nubMultiScaleRatio.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nubMultiScaleRatio.Name" xml:space="preserve">
+    <value>nubMultiScaleRatio</value>
+  </data>
+  <data name="&gt;&gt;nubMultiScaleRatio.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.NumericBox, SiGen, Version=1.0.0.21336, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;nubMultiScaleRatio.Parent" xml:space="preserve">
+    <value>tlpLayout</value>
+  </data>
+  <data name="&gt;&gt;nubMultiScaleRatio.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="cboParallelFret.Location" type="System.Drawing.Point, System.Drawing">
+    <value>103, 74</value>
+  </data>
+  <data name="cboParallelFret.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 1</value>
+  </data>
+  <data name="cboParallelFret.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 21</value>
+  </data>
+  <data name="cboParallelFret.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;cboParallelFret.Name" xml:space="preserve">
+    <value>cboParallelFret</value>
+  </data>
+  <data name="&gt;&gt;cboParallelFret.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cboParallelFret.Parent" xml:space="preserve">
+    <value>tlpLayout</value>
+  </data>
+  <data name="&gt;&gt;cboParallelFret.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="tlpLayout.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="tlpLayout.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpLayout.RowCount" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="tlpLayout.Size" type="System.Drawing.Size, System.Drawing">
+    <value>481, 122</value>
+  </data>
+  <data name="tlpLayout.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpLayout.Name" xml:space="preserve">
+    <value>tlpLayout</value>
+  </data>
+  <data name="&gt;&gt;tlpLayout.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpLayout.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tlpLayout.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpLayout.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lblBass" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lblScaleLength" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="flowLayoutPanel1" Row="0" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="mtbTrebleLength" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="mtbBassLength" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lblTreble" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lblMultiScaleRatio" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lblParallelFret" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="nubMultiScaleRatio" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cboParallelFret" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,100,AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="colStringNumber.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -640,6 +604,6 @@
     <value>ScaleLengthEditor</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.LayoutPropertyEditor, SiGen, Version=1.0.0.22165, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.LayoutPropertyEditor, SiGen, Version=1.0.0.21336, Culture=neutral, PublicKeyToken=null</value>
   </data>
 </root>

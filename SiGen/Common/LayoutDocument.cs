@@ -113,7 +113,7 @@ namespace SiGen.Common
         {
             var keywords = new List<string>();
             keywords.Add($"{layout.NumberOfStrings} Strings");
-            if (layout.ScaleLengthMode == ScaleLengthType.Multiple)
+            if (layout.ScaleLengthMode == ScaleLengthType.Dual)
                 keywords.Add("Multiscale");
             keywords.Add("Fingerboard");
             keywords.Add("Layout");

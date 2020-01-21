@@ -178,8 +178,8 @@ namespace SiGen.StringedInstruments.Layout
         }
 
         /// <summary>
-        /// Gets or sets the string action at the first fret, measured above the fret.
-        /// Used only for fret compensation calculation.
+        /// Gets or sets the string action at the first fret, measured from the top of the fret to the bottom of the string.
+        /// <br/>Used only for fret compensation calculation.
         /// </summary>
         public Measure ActionAtFirstFret
         {
@@ -188,8 +188,8 @@ namespace SiGen.StringedInstruments.Layout
         }
 
         /// <summary>
-        /// Gets or sets the string action at the twelfth fret, measured above the fret.
-        /// Used only for fret compensation calculation.
+        /// Gets or sets the string action at the twelfth fret, measured from the top of the fret to the bottom of the string.
+        /// <br/>Used only for fret compensation calculation.
         /// </summary>
         public Measure ActionAtTwelfthFret
         {
@@ -223,11 +223,31 @@ namespace SiGen.StringedInstruments.Layout
 
         #endregion
 
+        internal SIString() : base(null)
+        {
+            _ActionAtTwelfthFret = Measure.Empty;
+            _ActionAtFirstFret = Measure.Empty;
+            _MultiScaleRatio = 0.5;
+            _NumberOfFrets = 24;
+            RealScaleLength = Measure.Empty;
+            //_Frets = new FretManager(this);
+        }
+
+        internal SIString(SILayout layout) : base(layout)
+        {
+            _ActionAtTwelfthFret = Measure.Empty;
+            _ActionAtFirstFret = Measure.Empty;
+            _MultiScaleRatio = 0.5;
+            _NumberOfFrets = 24;
+            RealScaleLength = Measure.Empty;
+            //_Frets = new FretManager(this);
+        }
+
         public SIString(SILayout layout, int stringIndex) : base(layout)
         {
             Index = stringIndex;
             _ActionAtTwelfthFret = Measure.Empty;
-            _ActionAtFirstFret = Measure.Mm(0.5);
+            _ActionAtFirstFret = Measure.Empty;
             _MultiScaleRatio = 0.5;
             _NumberOfFrets = 24;
             RealScaleLength = Measure.Empty;
@@ -261,10 +281,10 @@ namespace SiGen.StringedInstruments.Layout
             
             var stringElem = new XElement(elemName, new XAttribute("Index", Index));
 
-            if (Layout.ScaleLengthMode == ScaleLengthType.Individual)
+            if (Layout.ScaleLengthMode == ScaleLengthType.Multiple)
                 stringElem.Add(ScaleLength.SerializeAsAttribute("ScaleLength"));
 
-            if (/*!Layout.Strings.AllEqual(s => s.MultiScaleRatio) || */Layout.ScaleLengthMode == ScaleLengthType.Individual)
+            if (/*!Layout.Strings.AllEqual(s => s.MultiScaleRatio) || */Layout.ScaleLengthMode == ScaleLengthType.Multiple)
                 stringElem.Add(new XAttribute("MultiScaleRatio", MultiScaleRatio));
 
             var fretElem = new XElement("Frets",

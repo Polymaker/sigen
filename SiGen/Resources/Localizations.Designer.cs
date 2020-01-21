@@ -97,6 +97,42 @@ namespace SiGen.Resources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Number of frets.
+        /// </summary>
+        internal static string LayoutProperty_NumberOfFrets {
+            get {
+                return ResourceManager.GetString("LayoutProperty_NumberOfFrets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Number of strings.
+        /// </summary>
+        internal static string LayoutProperty_NumberOfStrings {
+            get {
+                return ResourceManager.GetString("LayoutProperty_NumberOfStrings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Scale length mode.
+        /// </summary>
+        internal static string LayoutProperty_ScaleLengthMode {
+            get {
+                return ResourceManager.GetString("LayoutProperty_ScaleLengthMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à String spacing mode.
+        /// </summary>
+        internal static string LayoutProperty_StringSpacingMode {
+            get {
+                return ResourceManager.GetString("LayoutProperty_StringSpacingMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Simple line.
         /// </summary>
         internal static string LineRenderMode_PlainLine {
@@ -160,6 +196,33 @@ namespace SiGen.Resources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Dual.
+        /// </summary>
+        internal static string ScaleLengthType_Dual {
+            get {
+                return ResourceManager.GetString("ScaleLengthType_Dual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Multiple.
+        /// </summary>
+        internal static string ScaleLengthType_Multiple {
+            get {
+                return ResourceManager.GetString("ScaleLengthType_Multiple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Single.
+        /// </summary>
+        internal static string ScaleLengthType_Single {
+            get {
+                return ResourceManager.GetString("ScaleLengthType_Single", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Centered between fingerboard edges.
         /// </summary>
         internal static string StringSpacingAlignment_FingerboardEdges {
@@ -214,6 +277,60 @@ namespace SiGen.Resources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Bridge alignment.
+        /// </summary>
+        internal static string StringSpacingProperty_BridgeAlignment {
+            get {
+                return ResourceManager.GetString("StringSpacingProperty_BridgeAlignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Nut alignment.
+        /// </summary>
+        internal static string StringSpacingProperty_NutAlignment {
+            get {
+                return ResourceManager.GetString("StringSpacingProperty_NutAlignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Spacing.
+        /// </summary>
+        internal static string StringSpacingProperty_Spacing {
+            get {
+                return ResourceManager.GetString("StringSpacingProperty_Spacing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Spacing mode.
+        /// </summary>
+        internal static string StringSpacingProperty_SpacingMode {
+            get {
+                return ResourceManager.GetString("StringSpacingProperty_SpacingMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Manual.
+        /// </summary>
+        internal static string StringSpacingType_Manual {
+            get {
+                return ResourceManager.GetString("StringSpacingType_Manual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Simple.
+        /// </summary>
+        internal static string StringSpacingType_Simple {
+            get {
+                return ResourceManager.GetString("StringSpacingType_Simple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Custom.
         /// </summary>
         internal static string Words_CustomRatio {
@@ -237,6 +354,24 @@ namespace SiGen.Resources {
         internal static string Words_Length {
             get {
                 return ResourceManager.GetString("Words_Length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Perpendicular fret.
+        /// </summary>
+        internal static string Words_PerpendicularFret {
+            get {
+                return ResourceManager.GetString("Words_PerpendicularFret", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Scale length.
+        /// </summary>
+        internal static string Words_ScaleLength {
+            get {
+                return ResourceManager.GetString("Words_ScaleLength", resourceCulture);
             }
         }
     }

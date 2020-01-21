@@ -79,6 +79,18 @@ namespace SiGen.UI
             g.DrawLine(pen, PointToDisplay(p1), PointToDisplay(p2));
         }
 
+        private void DrawLine(Graphics g, LayoutLine line, Pen pen)
+        {
+            DrawLine(g, pen, line.P1, line.P2);
+        }
+
+        private void DrawLine(Graphics g, LayoutPolyLine line, Pen pen)
+        {
+            var linePoints = line.GetLinePoints()
+                .Select(x => PointToDisplay(x)).ToArray();
+            g.DrawCurve(pen, linePoints, 0.5f);
+        }
+
         //private GraphicsPath GetLinePath(PointM p1, PointM p2, Measure thickness)
         //{
         //    var line = Line.FromPoints(p1.ToVector(), p2.ToVector());
@@ -266,19 +278,15 @@ namespace SiGen.UI
 
                 if (DisplayConfig.Frets.DisplayAccuratePositions && fretLine.Strings.Count() > 1)
                 {
-                    g.DrawLines(nutPen, fretLine.Segments.Where(s => !s.IsVirtual).Select(s => PointToDisplay(s.PointOnString)).ToArray());
+                    g.DrawLines(nutPen, fretLine.Segments.Where(s => !s.IsVirtual)
+                        .Select(s => PointToDisplay(s.PointOnString)).ToArray());
                 }
-
-                //g.DrawLines(nutPen, fretLine.Points.Select(p => PointToDisplay(p)).ToArray());
             }
 
-            var bridgeLine = CurrentLayout.VisualElements.OfType<LayoutPolyLine>().FirstOrDefault(x => x.ElementType == VisualElementType.BridgeLine);
+            var bridgeLine = CurrentLayout.GetElement<LayoutPolyLine>(x => x.ElementType == VisualElementType.BridgeLine);
             if (bridgeLine != null)
-            {
-                var linePoints = bridgeLine.GetLinePoints()
-                            .Select(x => PointToDisplay(x)).ToArray();
-                g.DrawLines(nutPen, linePoints);
-            }
+                DrawLine(g, bridgeLine, nutPen);
+
             nutPen.Dispose();
             fretPen.Dispose();
         }

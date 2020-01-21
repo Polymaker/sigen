@@ -1,4 +1,5 @@
 ﻿using SiGen.Common;
+using SiGen.Resources;
 using SiGen.StringedInstruments.Layout;
 using SiGen.UI.Controls;
 using SiGen.UI.Windows;
@@ -48,11 +49,7 @@ namespace SiGen.UI
 		{
 			if(action is BatchChange bc)
 			{
-                if(bc.ChangedProperties.Any(p => p.Property == nameof(SILayout.NumberOfStrings)))
-                {
-                    action = bc.ChangedProperties.First(p => p.Property == nameof(SILayout.NumberOfStrings));
-                }
-				if(bc.Component != null)
+                if (bc.Component != null)
                 {
                     switch (bc.Component)
                     {
@@ -75,63 +72,131 @@ namespace SiGen.UI
                     }
                 }
 
+                switch (bc.Name)
+                {
+                    case "NumberOfFrets":
+                        {
+                            var propChange = bc.ChangedProperties
+                                .FirstOrDefault(x => x.Property == "NumberOfFrets");
+
+                            if (propChange != null && propChange.NewValue is int fretCount)
+                            {
+                                return $"{Localizations.LayoutProperty_NumberOfFrets}: {fretCount}";
+                            }
+
+                            return Localizations.LayoutProperty_NumberOfFrets;
+                        }
+                }
 			}
 
-			if(action is PropertyChange pc)
-			{
-				if(pc.Component != null)
-				{
-					switch (pc.Component)
-					{
-						case ScaleLengthManager slm:
-							{
-								var scaleEditor = GetLayoutEditor<ScaleLengthEditor>();
-								switch (pc.Property)
-								{
-									case nameof(ScaleLengthManager.SingleScale.Length):
-										return $"Scale length: {pc.NewValue}";
-									case nameof(ScaleLengthManager.MultiScale.Bass):
-									case nameof(ScaleLengthManager.MultiScale.Treble):
-										return $"{pc.Property} scale length: {pc.NewValue}";
-									case nameof(ScaleLengthManager.MultiScale.PerpendicularFretRatio):
-										return $"Perpendicular fret: {scaleEditor.GetPerpendicularFretName((double)pc.NewValue)}";
-									default:
-										return $"Scale length {pc.Property}: {pc.NewValue}";
-								}
-							}
-						case StringSpacingManager ssm:
-							{
-								switch (pc.Property)
-								{
-									default:
-										return $"String spacing {pc.Property}: {pc.NewValue}";
-								}
-							}
-						case SIString ss:
-							{
-								switch (pc.Property)
-								{
-									default:
-										return $"String {pc.Property}: {pc.NewValue}";
-								}
-							}
-					}
-				}
-				else
-				{
-					switch (pc.Property)
-					{
-						case nameof(SILayout.ScaleLengthMode):
-							return $"Scale length mode: {pc.NewValue}";
-						case nameof(SILayout.StringSpacingMode):
-							return $"String spacing mode: {pc.NewValue}";
-						case nameof(SILayout.NumberOfStrings):
-							return $"Number of strings: {pc.NewValue}";
-					}
-				}
-			}
-			return action.GetChanges()[0].Property;
+            if (action is PropertyChange pc)
+            {
+                if (pc.Component != null)
+                {
+                    switch (pc.Component)
+                    {
+                        case ScaleLengthManager slm:
+                            {
+                                var scaleEditor = GetLayoutEditor<ScaleLengthEditor>();
+                                switch (pc.Property)
+                                {
+                                    case nameof(SingleScaleManager.Length):
+                                        return $"{Localizations.Words_ScaleLength}: {pc.NewValue}";
+                                    case nameof(DualScaleManager.Bass):
+                                        return $"{Localizations.Words_ScaleLength} ({Localizations.FingerboardSide_Bass}): {pc.NewValue}";
+                                    case nameof(DualScaleManager.Treble):
+                                        return $"{Localizations.Words_ScaleLength} ({Localizations.FingerboardSide_Treble}): {pc.NewValue}";
+                                    case nameof(DualScaleManager.PerpendicularFretRatio):
+                                        return $"{Localizations.Words_PerpendicularFret}: {scaleEditor.GetPerpendicularFretName((double)pc.NewValue)}";
+                                    default:
+                                        return $"{Localizations.Words_ScaleLength} {pc.Property}: {pc.NewValue}";
+                                }
+                            }
+                        case StringSpacingManager ssm:
+                            {
+                                switch (pc.Property)
+                                {
+                                    case nameof(StringSpacingManager.BridgeAlignment):
+                                        return $"{Localizations.StringSpacingProperty_BridgeAlignment}";
+                                    case nameof(StringSpacingManager.NutAlignment):
+                                        return $"{Localizations.StringSpacingProperty_NutAlignment}";
+
+                                    case nameof(StringSpacingSimple.BridgeSpacingMode):
+                                    case nameof(StringSpacingSimple.NutSpacingMode):
+
+                                        {
+                                            string propDesc = Localizations.StringSpacingProperty_SpacingMode;
+                                            
+                                            string modeDesc = GetLocText($"StringSpacingMethod_{pc.NewValue}");
+
+                                            int charIdx = modeDesc.IndexOf('(');
+                                            if (charIdx > 0)
+                                                modeDesc = modeDesc.Substring(0, charIdx).Trim();
+
+                                            string sideDesc = pc.Property == nameof(StringSpacingSimple.BridgeSpacingMode) ?
+                                                Localizations.FingerboardEnd_Bridge : Localizations.FingerboardEnd_Nut;
+
+                                            return $"{propDesc} ({sideDesc}): {modeDesc}";
+                                        }
+
+                                    case nameof(StringSpacingSimple.StringSpacingAtBridge):
+                                    case nameof(StringSpacingSimple.StringSpacingAtNut):
+                                        {
+                                            string propDesc = Localizations.StringSpacingProperty_Spacing;
+                                            string sideDesc = pc.Property == nameof(StringSpacingSimple.StringSpacingAtBridge) ?
+                                                Localizations.FingerboardEnd_Bridge : Localizations.FingerboardEnd_Nut;
+                                            
+                                            return $"{propDesc} ({sideDesc}): {pc.NewValue}";
+                                        }
+
+                                    default:
+                                        return $"String spacing {pc.Property}: {pc.NewValue}";
+                                }
+                            }
+                        case SIString ss:
+                            {
+                                switch (pc.Property)
+                                {
+                                    default:
+                                        return $"String {pc.Property}: {pc.NewValue}";
+                                }
+                            }
+                    }
+                }
+                else
+                {
+                    switch (pc.Property)
+                    {
+                        case nameof(SILayout.ScaleLengthMode):
+                            {
+                                var modeStr = GetLocText($"ScaleLengthType_{pc.NewValue}");
+                                return $"{Localizations.LayoutProperty_ScaleLengthMode}: {modeStr}";
+                            }
+                        case nameof(SILayout.StringSpacingMode):
+                            {
+                                var modeStr = GetLocText($"StringSpacingType_{pc.NewValue}");
+                                return $"{Localizations.LayoutProperty_StringSpacingMode}: {modeStr}";
+                            }
+                        //case nameof(SILayout.NumberOfStrings):
+                        //    return $"Number of strings: {pc.NewValue}";
+                    }
+                }
+            }
+
+            if (action is CollectionChange cc)
+            {
+                var currentLayout = CurrentLayoutDocument.Layout;
+                if (cc.Collection is LayoutItemCollection<SIString> layoutStrings)
+                    return $"{Localizations.LayoutProperty_NumberOfStrings}: {cc.CollectionCount}";
+            }
+
+            return string.IsNullOrEmpty(action.Name) ? "Unnamed change" : action.Name;
 		}
+
+        private static string GetLocText(string textID)
+        {
+            return Localizations.ResourceManager.GetString(textID);
+        }
 
 		private void tssbUndo_ButtonClick(object sender, EventArgs e)
 		{

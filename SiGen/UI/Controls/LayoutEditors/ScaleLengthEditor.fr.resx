@@ -133,7 +133,7 @@
     <value>Simple</value>
   </data>
   <data name="lblParallelFret.Text" xml:space="preserve">
-    <value>Parallèle à</value>
+    <value>Perpendiculaire à</value>
   </data>
   <data name="lblTreble.Text" xml:space="preserve">
     <value>Aigus</value>

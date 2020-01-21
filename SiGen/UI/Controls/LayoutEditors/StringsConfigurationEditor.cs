@@ -101,7 +101,7 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             if (!IsLoading && CurrentLayout != null)
             {
-                CurrentLayout.StartBatchChanges();
+                CurrentLayout.StartBatchChanges("NumberOfFrets");
                 CurrentLayout.Strings.SetAll(s => s.NumberOfFrets, (int)nbxNumberOfFrets.Value);
                 CurrentLayout.FinishBatchChanges();
                 CurrentLayout.RebuildLayout();
@@ -243,7 +243,7 @@ namespace SiGen.UI.Controls.LayoutEditors
                 foreach (var field in PivotFields)
                 {
                     if (field.PropertyName == "ScaleLength" || field.PropertyName == "MultiScaleRatio")
-                        field.Visible = (CurrentLayout.ScaleLengthMode == ScaleLengthType.Individual);
+                        field.Visible = (CurrentLayout.ScaleLengthMode == ScaleLengthType.Multiple);
                     else if (field.PropertyName.Contains("PhysicalProperties"))
                         field.Visible = chkShowAdvanced.Checked;
                     else if (field.PropertyName.Contains("Tuning"))

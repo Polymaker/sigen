@@ -99,7 +99,7 @@ namespace SiGen.StringedInstruments.Layout
             {
                 ConstructString(Strings[0], nutStringPos[0], bridgeStringPos[0]);
             }
-            else if (ScaleLengthMode != ScaleLengthType.Individual)
+            else if (ScaleLengthMode != ScaleLengthType.Multiple)
             {
                 var trebleStr = ConstructString(Strings[0], nutStringPos[0], bridgeStringPos[0]);
                 var bassStr = ConstructString(Strings[NumberOfStrings - 1], nutStringPos[NumberOfStrings - 1], bridgeStringPos[NumberOfStrings - 1]);
@@ -128,8 +128,13 @@ namespace SiGen.StringedInstruments.Layout
                     var distFromNut = PointM.Distance(createdString.P1, middle);
                     var distFromBridge = PointM.Distance(createdString.P2, middle);
 
-                    if (!Measure.EqualOrClose(distFromNut, distFromBridge, Measure.Mm(0.05)))
+                    var stringCenterOffset = Measure.Abs(distFromNut - distFromBridge);
+                    
+                    if (!CompensateFretPositions && stringCenterOffset > Measure.Mm(0.05))
+                    {
+                        //adjust the end of the string so that it's center is above the 12th fret
                         createdString.P2 = createdString.P1 + (createdString.Direction * distFromNut * 2);
+                    }
 
                     Strings[i].RecalculateLengths();//store the physical length of the string
                 }
@@ -175,10 +180,10 @@ namespace SiGen.StringedInstruments.Layout
         {
             var ratio = 0.5;
 
-            if (ScaleLengthMode == ScaleLengthType.Individual)
+            if (ScaleLengthMode == ScaleLengthType.Multiple)
                 ratio = stringLine.String.MultiScaleRatio;
-            else if (ScaleLengthMode == ScaleLengthType.Multiple)
-                ratio = MultiScaleConfig.PerpendicularFretRatio;
+            else if (ScaleLengthMode == ScaleLengthType.Dual)
+                ratio = DualScaleConfig.PerpendicularFretRatio;
 
             var offsetY = (maxPerpHeight - stringLine.Bounds.Height) * (0.5 - ratio);
             stringLine.P1 += new PointM(Measure.Zero, offsetY);
@@ -546,11 +551,11 @@ namespace SiGen.StringedInstruments.Layout
             if (FretsTemperament != Temperament.Equal || CompensateFretPositions)
                 return false;
 
-            if(ScaleLengthMode == ScaleLengthType.Multiple)
+            if(ScaleLengthMode == ScaleLengthType.Dual)
             {
                 return Strings.AllEqual(s => s.MultiScaleRatio);
             }
-            else if(ScaleLengthMode == ScaleLengthType.Individual)
+            else if(ScaleLengthMode == ScaleLengthType.Multiple)
             {
                 if(Strings.AllEqual(s => s.MultiScaleRatio))
                 {
