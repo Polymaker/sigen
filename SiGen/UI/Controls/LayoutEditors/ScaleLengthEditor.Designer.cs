@@ -154,6 +154,7 @@
             this.cboParallelFret.Name = "cboParallelFret";
             this.cboParallelFret.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cboParallelFret_DrawItem);
             this.cboParallelFret.SelectedIndexChanged += new System.EventHandler(this.cboParallelFret_SelectedIndexChanged);
+            this.cboParallelFret.FontChanged += new System.EventHandler(this.cboParallelFret_FontChanged);
             // 
             // dgvScaleLengths
             // 

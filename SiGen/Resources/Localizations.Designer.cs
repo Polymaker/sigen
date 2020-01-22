@@ -61,6 +61,15 @@ namespace SiGen.Resources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à The specified file could not be found..
+        /// </summary>
+        internal static string Errors_FileNotFound {
+            get {
+                return ResourceManager.GetString("Errors_FileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Bridge.
         /// </summary>
         internal static string FingerboardEnd_Bridge {
@@ -192,6 +201,62 @@ namespace SiGen.Resources {
         internal static string Margins_NutBridge {
             get {
                 return ResourceManager.GetString("Margins_NutBridge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Error.
+        /// </summary>
+        internal static string Messages_Error {
+            get {
+                return ResourceManager.GetString("Messages_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The selected file is already open.
+        ///Do you want to reload it? 
+        ///(All changes will be lost).
+        /// </summary>
+        internal static string Messages_FileAlreadyOpen {
+            get {
+                return ResourceManager.GetString("Messages_FileAlreadyOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Do you want to save the changes made to the layout before closing?.
+        /// </summary>
+        internal static string Messages_SaveBeforeClosing {
+            get {
+                return ResourceManager.GetString("Messages_SaveBeforeClosing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Warning.
+        /// </summary>
+        internal static string Messages_Warning {
+            get {
+                return ResourceManager.GetString("Messages_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à All files.
+        /// </summary>
+        internal static string Misc_AllFilesDesc {
+            get {
+                return ResourceManager.GetString("Misc_AllFilesDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à SiGen Layout file.
+        /// </summary>
+        internal static string Misc_LayoutFileDesc {
+            get {
+                return ResourceManager.GetString("Misc_LayoutFileDesc", resourceCulture);
             }
         }
         

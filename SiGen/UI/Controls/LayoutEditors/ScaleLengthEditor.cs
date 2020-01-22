@@ -11,6 +11,7 @@ using SiGen.StringedInstruments.Layout;
 using SiGen.Measuring;
 using SiGen.Utilities;
 using SiGen.Resources;
+using System.Globalization;
 
 namespace SiGen.UI.Controls
 {
@@ -18,6 +19,8 @@ namespace SiGen.UI.Controls
     {
         private ScaleLengthType EditMode;
         private List<FretPosition> FretPositions;
+        private Font SuperscriptFont;
+        private int MaxSuperscriptWidth;
 
         class FretPosition
         {
@@ -31,6 +34,32 @@ namespace SiGen.UI.Controls
             InitializeComponent();
             FretPositions = new List<FretPosition>();
             dgvScaleLengths.AutoGenerateColumns = false;
+            InitSuperscriptFont();
+        }
+
+        private void InitSuperscriptFont()
+        {
+            SuperscriptFont = new Font(cboParallelFret.Font.FontFamily, Font.Size * 0.7f);
+
+            string maxSuffix = "";
+
+            switch (CultureInfo.CurrentUICulture.TwoLetterISOLanguageName)
+            {
+                default:
+                case "en":
+                    maxSuffix = "rd";
+                    break;
+                case "fr":
+                    maxSuffix = "ième";
+                    break;
+            }
+
+            MaxSuperscriptWidth = TextRenderer.MeasureText(maxSuffix, SuperscriptFont).Width;
+        }
+
+        private void cboParallelFret_FontChanged(object sender, EventArgs e)
+        {
+            InitSuperscriptFont();
         }
 
         private void FetchFretPositions()
@@ -426,6 +455,7 @@ namespace SiGen.UI.Controls
 
         private int MaxCboItemWidth = 0;
 
+
         private void CalculateMaxCboItemWidth()
         {
             MaxCboItemWidth = 0;
@@ -450,30 +480,63 @@ namespace SiGen.UI.Controls
             using (var textBrush = new SolidBrush(e.ForeColor))
             using (var sf = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center })
             {
-                var textBound = new Rectangle(e.Bounds.X, e.Bounds.Y, MaxCboItemWidth + 3, e.Bounds.Height);
-                var valueBound = new Rectangle(e.Bounds.Right - 30, e.Bounds.Y, 30, e.Bounds.Height);
+                sf.FormatFlags |= StringFormatFlags.NoWrap;
+
+                var fretNumBounds = new Rectangle(e.Bounds.X, e.Bounds.Y, e.Font.Height * 2, e.Bounds.Height);
+                var fretOrdinalBounds = new Rectangle(fretNumBounds.Right - 2, e.Bounds.Y,
+                    MaxSuperscriptWidth, e.Bounds.Height);
+
+                var textBounds = e.Bounds;
+                textBounds.X = fretOrdinalBounds.Right;
+                textBounds.Width = e.Bounds.Right - textBounds.Left;
+
+                var ratioBounds = new Rectangle(e.Bounds.Right - 30, e.Bounds.Y, 30, e.Bounds.Height);
                 bool isHovered = e.State.HasFlag(DrawItemState.Selected) || e.State.HasFlag(DrawItemState.HotLight);
+
                 if (e.Index >= 0)
                 {
                     var fretPos = FretPositions[e.Index];
                     var text = fretPos.Name;
 
-                    sf.Alignment = fretPos.PositionRatio % 1 == 0 ? StringAlignment.Near : StringAlignment.Far;
-                    e.Graphics.DrawString(text, e.Font, new SolidBrush(e.ForeColor), textBound, sf);
+                    if ((fretPos.PositionRatio % 1) != 0)
+                    {
+                        sf.LineAlignment = StringAlignment.Center;
+                        sf.Alignment = StringAlignment.Far;
+                        e.Graphics.DrawString(fretPos.FretNumber.ToString(), e.Font, textBrush, fretNumBounds, sf);
+
+                        if (MaxSuperscriptWidth > 0)
+                        {
+                            var suffix = NumberHelper.GetSuffix(fretPos.FretNumber, false);
+
+                            sf.LineAlignment = StringAlignment.Near;
+                            sf.Alignment = StringAlignment.Near;
+                            e.Graphics.DrawString(suffix, SuperscriptFont, textBrush, fretOrdinalBounds, sf);
+                        }
+
+                        sf.LineAlignment = StringAlignment.Center;
+                        sf.Alignment = StringAlignment.Near;
+                        e.Graphics.DrawString(Localizations.Words_Fret, e.Font, textBrush, textBounds, sf);
+                    }
+                    else
+                    {
+                        sf.LineAlignment = StringAlignment.Near;
+                        sf.Alignment = StringAlignment.Near;
+                        e.Graphics.DrawString(text, e.Font, textBrush, e.Bounds, sf);
+                    }
                     
                     if (!e.State.HasFlag(DrawItemState.ComboBoxEdit))
                     {
-                        sf.Alignment = StringAlignment.Center;
                         if ((fretPos.PositionRatio * 2) % 1 == 0)
                         {
-                            e.Graphics.DrawString(fretPos.PositionRatio.ToString(), e.Font, new SolidBrush(isHovered? e.ForeColor : Color.DarkSlateGray), valueBound, sf);
+                            sf.LineAlignment = StringAlignment.Center;
+                            sf.Alignment = StringAlignment.Center;
+
+                            e.Graphics.DrawString(fretPos.PositionRatio.ToString(), e.Font, new SolidBrush(isHovered? e.ForeColor : Color.DarkSlateGray), ratioBounds, sf);
                         }
                         else
                         {
-                            e.Graphics.DrawLine(Pens.Gray, valueBound.Left + (valueBound.Width / 2) - 1, e.Bounds.Top, valueBound.Left + (valueBound.Width / 2) - 1, e.Bounds.Bottom);
+                            e.Graphics.DrawLine(Pens.Gray, ratioBounds.Left + (ratioBounds.Width / 2) - 1, e.Bounds.Top, ratioBounds.Left + (ratioBounds.Width / 2) - 1, e.Bounds.Bottom);
                         }
-                        
-                        sf.Alignment = StringAlignment.Near;
                     }
                     
                 }
@@ -483,7 +546,5 @@ namespace SiGen.UI.Controls
                 }
             }
         }
-
-        
     }
 }

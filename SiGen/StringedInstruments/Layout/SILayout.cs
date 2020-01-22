@@ -319,8 +319,10 @@ namespace SiGen.StringedInstruments.Layout
             else
                 _Strings.Add(newString);
 
+            IsAssigningProperties = true;
             StringHelper.EstimateStringGauge(newString);
             StringHelper.EstimateStringAction(newString);
+            IsAssigningProperties = false;
         }
 
         public void RemoveString(FingerboardSide side, int numberToRemove = 1)

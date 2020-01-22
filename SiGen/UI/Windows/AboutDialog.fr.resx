@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,47 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Inherit</value>
-  </data>
-  <data name="tsbClose.Text" xml:space="preserve">
-    <value>Fermer</value>
-  </data>
-  <data name="tsbExport.Text" xml:space="preserve">
-    <value>Exporter</value>
-  </data>
-  <data name="tsbOptions.Text" xml:space="preserve">
-    <value>Options</value>
-  </data>
-  <data name="tsmiSave.Text" xml:space="preserve">
-    <value>Enregistrer</value>
-  </data>
-  <data name="tsmiSaveAs.Text" xml:space="preserve">
-    <value>Enregistrer sous…</value>
-  </data>
-  <data name="tssbOpen.Text" xml:space="preserve">
-    <value>Ouvrir</value>
-  </data>
-  <data name="tssbRedo.Text" xml:space="preserve">
-    <value>Rétablir</value>
-  </data>
-  <data name="tssbUndo.Text" xml:space="preserve">
-    <value>Annuler</value>
-  </data>
-  <data name="tssbSave.Text" xml:space="preserve">
-    <value>Enregistrer</value>
-  </data>
-  <data name="tsmiOpenFile.Text" xml:space="preserve">
-    <value>Ouvrir…</value>
-  </data>
-  <data name="tsbNew.Text" xml:space="preserve">
-    <value>Nouveau</value>
-  </data>
-  <data name="tsbNew.ToolTipText" xml:space="preserve">
-    <value>Nouveau (Ctrl+N)</value>
-  </data>
   <data name="$this.Text" xml:space="preserve">
+    <value>À propos de SiGen</value>
+  </data>
+  <data name="AppDescLabel.Text" xml:space="preserve">
     <value>Générateur de plan d'instruments à cordes</value>
   </data>
 </root>

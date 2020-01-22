@@ -319,7 +319,7 @@
     <value>mtbTrebleLength</value>
   </data>
   <data name="&gt;&gt;mtbTrebleLength.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.21336, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.17808, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;mtbTrebleLength.Parent" xml:space="preserve">
     <value>tlpLayout</value>
@@ -343,7 +343,7 @@
     <value>mtbBassLength</value>
   </data>
   <data name="&gt;&gt;mtbBassLength.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.21336, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.17808, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;mtbBassLength.Parent" xml:space="preserve">
     <value>tlpLayout</value>
@@ -457,7 +457,7 @@
     <value>nubMultiScaleRatio</value>
   </data>
   <data name="&gt;&gt;nubMultiScaleRatio.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.NumericBox, SiGen, Version=1.0.0.21336, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.NumericBox, SiGen, Version=1.0.0.17808, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;nubMultiScaleRatio.Parent" xml:space="preserve">
     <value>tlpLayout</value>
@@ -604,6 +604,6 @@
     <value>ScaleLengthEditor</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.LayoutPropertyEditor, SiGen, Version=1.0.0.21336, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.LayoutPropertyEditor, SiGen, Version=1.0.0.17808, Culture=neutral, PublicKeyToken=null</value>
   </data>
 </root>

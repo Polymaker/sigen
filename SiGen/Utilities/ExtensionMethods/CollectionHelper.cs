@@ -163,5 +163,20 @@ namespace System.Collections.Generic
             else
                 throw new NotSupportedException("The type does not support comparison.");
         }
+
+        public static Type GetCollectionElementType(this Type type)
+        {
+            if (type.IsArray)
+                return type.GetElementType();
+
+            var genericArgs = type.GetGenericArguments();
+
+            return genericArgs.Length > 0 ? genericArgs[0] : null;
+        }
+
+        public static Type GetElementType(this IList list)
+        {
+            return GetCollectionElementType(list.GetType());
+        }
     }
 }

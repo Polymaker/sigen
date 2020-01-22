@@ -121,13 +121,13 @@
     <value>17, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="toolStripLabel1.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+  <data name="AboutAppButton.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
   </data>
-  <data name="toolStripLabel1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="AboutAppButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>69, 51</value>
   </data>
-  <data name="toolStripLabel1.Text" xml:space="preserve">
+  <data name="AboutAppButton.Text" xml:space="preserve">
     <value>SiGen</value>
   </data>
   <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
@@ -426,18 +426,6 @@
   <data name="&gt;&gt;statusStrip1.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <metadata name="localizableStringList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>122, 17</value>
-  </metadata>
-  <data name="MSG_FileAlreadyOpen.Text" xml:space="preserve">
-    <value>The file is already open. do you want to reaload it?</value>
-  </data>
-  <data name="MSG_SaveBeforeClose.Text" xml:space="preserve">
-    <value>Do you want to save the changes made to the layout before closing?</value>
-  </data>
-  <data name="LBL_Warning.Text" xml:space="preserve">
-    <value>Warning</value>
-  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -459,10 +447,10 @@
   <data name="$this.Text" xml:space="preserve">
     <value>Stringed Instrument Layout Generator</value>
   </data>
-  <data name="&gt;&gt;toolStripLabel1.Name" xml:space="preserve">
-    <value>toolStripLabel1</value>
+  <data name="&gt;&gt;AboutAppButton.Name" xml:space="preserve">
+    <value>AboutAppButton</value>
   </data>
-  <data name="&gt;&gt;toolStripLabel1.Type" xml:space="preserve">
+  <data name="&gt;&gt;AboutAppButton.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator2.Name" xml:space="preserve">
@@ -566,30 +554,6 @@
   </data>
   <data name="&gt;&gt;tsbOptions.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;localizableStringList1.Name" xml:space="preserve">
-    <value>localizableStringList1</value>
-  </data>
-  <data name="&gt;&gt;localizableStringList1.Type" xml:space="preserve">
-    <value>SiGen.Localization.LocalizableStringList, SiGen, Version=1.0.0.21236, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;MSG_FileAlreadyOpen.Name" xml:space="preserve">
-    <value>MSG_FileAlreadyOpen</value>
-  </data>
-  <data name="&gt;&gt;MSG_FileAlreadyOpen.Type" xml:space="preserve">
-    <value>SiGen.Localization.LocalizableString, SiGen, Version=1.0.0.21236, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;MSG_SaveBeforeClose.Name" xml:space="preserve">
-    <value>MSG_SaveBeforeClose</value>
-  </data>
-  <data name="&gt;&gt;MSG_SaveBeforeClose.Type" xml:space="preserve">
-    <value>SiGen.Localization.LocalizableString, SiGen, Version=1.0.0.21236, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;LBL_Warning.Name" xml:space="preserve">
-    <value>LBL_Warning</value>
-  </data>
-  <data name="&gt;&gt;LBL_Warning.Type" xml:space="preserve">
-    <value>SiGen.Localization.LocalizableString, SiGen, Version=1.0.0.21236, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>LayoutEditorWindow</value>

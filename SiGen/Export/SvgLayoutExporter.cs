@@ -110,7 +110,7 @@ namespace SiGen.Export
                         }
                         break;
                     }
-
+                
                 case VisualElementType.FingerboardEdge:
                 case VisualElementType.FingerboardMargin:
                 case VisualElementType.FingerboardContinuation:
@@ -158,6 +158,12 @@ namespace SiGen.Export
                                 svgLine.CustomAttributes.Add("Fret", fretLine.FretIndex.ToString());
                         }
                         
+                        break;
+                    }
+                case VisualElementType.BridgeLine:
+                    {
+                        var svgLine = CreateSvgPolyLine(GetLayer("Frets"), line, lineConfig);
+                        svgLine.CustomAttributes.Add("Fret", "Bridge");
                         break;
                     }
                 case VisualElementType.FingerboardEdge:

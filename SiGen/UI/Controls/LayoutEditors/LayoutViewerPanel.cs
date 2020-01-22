@@ -79,11 +79,11 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         private void Layout_NumberOfStringsChanged(object sender, EventArgs e)
         {
-            if (CurrentDocument.IsNew)
-            {
-                Text = $"New {CurrentLayout.NumberOfStrings} Strings Layout";
-                CurrentLayout.LayoutName = LayoutDocument.GenerateLayoutName(CurrentLayout);
-            }
+            //if (CurrentDocument.IsNew)
+            //{
+            //    Text = $"New {CurrentLayout.NumberOfStrings} Strings Layout";
+            //    CurrentLayout.LayoutName = LayoutDocument.GenerateLayoutName(CurrentLayout);
+            //}
         }
 
         private void toolStripStatusLabel1_Click(object sender, EventArgs e)

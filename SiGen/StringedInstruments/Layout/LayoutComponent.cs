@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SiGen.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -125,6 +126,23 @@ namespace SiGen.StringedInstruments.Layout
 			}
 			return false;
 		}
+
+		protected void StartBatchChanges(string name = null)
+		{
+			Layout?.StartBatchChanges(name);
+		}
+
+		protected void FinishBatchChanges()
+		{
+			Layout?.FinishBatchChanges();
+		}
+
+		//protected IDisposable OpenBatchTrans(string name = null)
+		//{
+		//	return new TemporaryObject(
+		//		() => StartBatchChanges(name), 
+		//		() => FinishBatchChanges());
+		//}
 	}
 
 	public abstract class ActivableLayoutComponent : LayoutComponent

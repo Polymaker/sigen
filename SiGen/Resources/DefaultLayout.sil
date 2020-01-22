@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Layout Name="6 Strings Fingerboard Layout">
+<Layout>
   <!--Temperaments: Equal, Just, ThidellFormula, DieWohltemperirte-->
   <Temperament Value="Equal" />
   <LeftHanded Value="false" />

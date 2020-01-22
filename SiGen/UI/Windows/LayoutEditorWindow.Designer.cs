@@ -28,10 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LayoutEditorWindow));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.AboutAppButton = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbNew = new System.Windows.Forms.ToolStripButton();
             this.tssbOpen = new System.Windows.Forms.ToolStripSplitButton();
@@ -56,10 +55,6 @@
             this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.localizableStringList1 = new SiGen.Localization.LocalizableStringList(this.components);
-            this.MSG_FileAlreadyOpen = new SiGen.Localization.LocalizableString(this.components);
-            this.MSG_SaveBeforeClose = new SiGen.Localization.LocalizableString(this.components);
-            this.LBL_Warning = new SiGen.Localization.LocalizableString(this.components);
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,7 +63,7 @@
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripLabel1,
+            this.AboutAppButton,
             this.toolStripSeparator2,
             this.tsbNew,
             this.tssbOpen,
@@ -84,12 +79,13 @@
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Stretch = true;
             // 
-            // toolStripLabel1
+            // AboutAppButton
             // 
-            this.toolStripLabel1.Image = global::SiGen.Properties.Resources.SiGenIcon_x32;
-            resources.ApplyResources(this.toolStripLabel1, "toolStripLabel1");
-            this.toolStripLabel1.Margin = new System.Windows.Forms.Padding(6, 1, 0, 2);
-            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.AboutAppButton.Image = global::SiGen.Properties.Resources.SiGenIcon_x32;
+            resources.ApplyResources(this.AboutAppButton, "AboutAppButton");
+            this.AboutAppButton.Margin = new System.Windows.Forms.Padding(6, 1, 0, 2);
+            this.AboutAppButton.Name = "AboutAppButton";
+            this.AboutAppButton.Click += new System.EventHandler(this.AboutAppButton_Click);
             // 
             // toolStripSeparator2
             // 
@@ -252,24 +248,6 @@
             resources.ApplyResources(this.statusStrip1, "statusStrip1");
             this.statusStrip1.Name = "statusStrip1";
             // 
-            // localizableStringList1
-            // 
-            this.localizableStringList1.Items.Add(this.MSG_FileAlreadyOpen);
-            this.localizableStringList1.Items.Add(this.MSG_SaveBeforeClose);
-            this.localizableStringList1.Items.Add(this.LBL_Warning);
-            // 
-            // MSG_FileAlreadyOpen
-            // 
-            resources.ApplyResources(this.MSG_FileAlreadyOpen, "MSG_FileAlreadyOpen");
-            // 
-            // MSG_SaveBeforeClose
-            // 
-            resources.ApplyResources(this.MSG_SaveBeforeClose, "MSG_SaveBeforeClose");
-            // 
-            // LBL_Warning
-            // 
-            resources.ApplyResources(this.LBL_Warning, "LBL_Warning");
-            // 
             // LayoutEditorWindow
             // 
             resources.ApplyResources(this, "$this");
@@ -300,12 +278,8 @@
         private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel1;
         private System.Windows.Forms.ToolStripButton tsbOptions;
         private System.Windows.Forms.ToolStripButton tsbExport;
-        private Localization.LocalizableStringList localizableStringList1;
-        private Localization.LocalizableString MSG_FileAlreadyOpen;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private Localization.LocalizableString MSG_SaveBeforeClose;
-        private Localization.LocalizableString LBL_Warning;
 		private System.Windows.Forms.ToolStripSplitButton tssbUndo;
 		private System.Windows.Forms.ToolStripSplitButton tssbRedo;
         private System.Windows.Forms.ToolStripPanel BottomToolStripPanel;
@@ -315,7 +289,7 @@
         private System.Windows.Forms.ToolStripContentPanel ContentPanel;
         private System.Windows.Forms.ToolStripButton tsbClose;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripLabel AboutAppButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }

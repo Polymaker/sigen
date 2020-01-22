@@ -145,6 +145,7 @@
     <Compile Include="Configuration\Export\LayoutExportConfig.cs" />
     <Compile Include="Configuration\Export\LineExportConfig.cs" />
     <Compile Include="Export\SvgLayoutExporter.cs" />
+    <Compile Include="Localization\LayoutChangeTranslator.cs" />
     <Compile Include="Localization\LocalizableString.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -197,6 +198,7 @@
     <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardMargin.cs" />
     <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardSide.cs" />
     <Compile Include="StringedInstruments\Layout\Fingerboard\FretInterpolationMethod.cs" />
+    <Compile Include="StringedInstruments\Layout\Frets\FretHelper.cs" />
     <Compile Include="StringedInstruments\Layout\Frets\FretPosition.cs" />
     <Compile Include="StringedInstruments\Layout\Frets\FretPositionCollection.cs" />
     <Compile Include="StringedInstruments\Layout\Edit\PropertyChange.cs" />
@@ -321,6 +323,12 @@
     </Compile>
     <Compile Include="UI\Controls\ValueEditors\MeasureEditor.cs" />
     <Compile Include="UI\Controls\ValueEditors\UnitOfMeasureEditor.cs" />
+    <Compile Include="UI\Windows\AboutDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Windows\AboutDialog.Designer.cs">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Windows\AppPreferencesWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -429,6 +437,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\ValueEditors\MeasureTextbox.fr.resx">
       <DependentUpon>MeasureTextbox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Windows\AboutDialog.fr.resx">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Windows\AboutDialog.resx">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\AppPreferencesWindow.resx">
       <DependentUpon>AppPreferencesWindow.cs</DependentUpon>

@@ -45,7 +45,7 @@ namespace SiGen
             {
                 if (value == 1)
                     return male ? "er" : "re";
-                return "e";
+                return "ième";
             }
 
             string number = value.ToString();

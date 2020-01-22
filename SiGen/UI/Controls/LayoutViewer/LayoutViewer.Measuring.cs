@@ -844,7 +844,7 @@ namespace SiGen.UI
             var boxBounds = box.DisplayBounds;
 
             var finalSize = new Size(boxBounds.Width - 2, measureEditor.ValueTextbox.PreferredHeight);
-            var screenPos = PointToScreen(boxBounds.Location);
+            //var screenPos = PointToScreen(boxBounds.Location);
 
             //screenPos.Y += (int)Math.Round((boxBounds.Height - (double)finalSize.Height) / 2d);
             //screenPos.X += (int)Math.Round((boxBounds.Width - (double)finalSize.Width) / 2d);

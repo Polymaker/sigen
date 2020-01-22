@@ -1,6 +1,7 @@
 ﻿using SiGen.StringedInstruments.Layout;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,14 +11,20 @@ namespace SiGen.Common
     public class LayoutDocument
     {
         public bool HasChanged { get; set; }
+
         public SILayout Layout { get; private set; }
+
         public string FileName { get; set; }
 
         public bool IsNew => string.IsNullOrEmpty(FileName);
 
 		public List<ILayoutChange> ModificationList { get; } = new List<ILayoutChange>();
+
 		public int CurrentActionIndex { get; private set; }
+
 		private bool IsUndoing { get; set; }
+
+		public string DocumentName { get; set; }
 
         public event EventHandler LayoutChanged;
 
@@ -98,15 +105,16 @@ namespace SiGen.Common
         {
             var layout = SILayout.Load(filename);
             var file = new LayoutDocument(layout);
-            if (!asTemplate)
-                file.FileName = filename;
-            return file;
-        }
 
-        public static LayoutDocument OpenTemplate(string filename)
-        {
-            var layout = SILayout.Load(filename);
-            return new LayoutDocument(layout) { FileName = string.Empty };
+			if (!asTemplate)
+			{
+				file.FileName = filename;
+				file.DocumentName = Path.GetFileNameWithoutExtension(filename);
+			}
+			else if (!string.IsNullOrEmpty(layout.LayoutName))
+				file.DocumentName = layout.LayoutName;
+
+			return file;
         }
 
         public static string GenerateLayoutName(SILayout layout)

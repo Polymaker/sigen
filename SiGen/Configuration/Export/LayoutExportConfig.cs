@@ -73,6 +73,9 @@ namespace SiGen.Export
         }
 
         [JsonIgnore]
+        public bool ExportBridgeLine { get; set; }
+
+        [JsonIgnore]
         public bool ExtendFretSlots => Frets.ExtendFretSlots;
 
         [JsonProperty]

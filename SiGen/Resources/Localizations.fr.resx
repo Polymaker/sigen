@@ -222,4 +222,27 @@
   <data name="LayoutProperty_NumberOfFrets" xml:space="preserve">
     <value>Nombre de frettes</value>
   </data>
+  <data name="Misc_LayoutFileDesc" xml:space="preserve">
+    <value>Fichier de plan SiGen</value>
+  </data>
+  <data name="Errors_FileNotFound" xml:space="preserve">
+    <value>Le fichier spécifié est introuvable.</value>
+  </data>
+  <data name="Misc_AllFilesDesc" xml:space="preserve">
+    <value>Tous les fichiers</value>
+  </data>
+  <data name="Messages_FileAlreadyOpen" xml:space="preserve">
+    <value>Le fichier sélectionné est déjà ouvert.
+Voulez-vous le recharger?
+(Toutes les modifications seront perdues)</value>
+  </data>
+  <data name="Messages_Warning" xml:space="preserve">
+    <value>Attention</value>
+  </data>
+  <data name="Messages_Error" xml:space="preserve">
+    <value>Erreur</value>
+  </data>
+  <data name="Messages_SaveBeforeClosing" xml:space="preserve">
+    <value>Voulez-vous enregistrer les modifications apportées au plan avant de fermer?</value>
+  </data>
 </root>

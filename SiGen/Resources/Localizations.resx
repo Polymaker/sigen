@@ -202,4 +202,27 @@
   <data name="LayoutProperty_NumberOfFrets" xml:space="preserve">
     <value>Number of frets</value>
   </data>
+  <data name="Misc_LayoutFileDesc" xml:space="preserve">
+    <value>SiGen Layout file</value>
+  </data>
+  <data name="Errors_FileNotFound" xml:space="preserve">
+    <value>The specified file could not be found.</value>
+  </data>
+  <data name="Misc_AllFilesDesc" xml:space="preserve">
+    <value>All files</value>
+  </data>
+  <data name="Messages_FileAlreadyOpen" xml:space="preserve">
+    <value>The selected file is already open.
+Do you want to reload it? 
+(All changes will be lost)</value>
+  </data>
+  <data name="Messages_Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="Messages_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Messages_SaveBeforeClosing" xml:space="preserve">
+    <value>Do you want to save the changes made to the layout before closing?</value>
+  </data>
 </root>

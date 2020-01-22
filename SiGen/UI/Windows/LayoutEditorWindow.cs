@@ -3,6 +3,7 @@ using SiGen.Configuration;
 using SiGen.Export;
 using SiGen.Measuring;
 using SiGen.Physics;
+using SiGen.Resources;
 using SiGen.StringedInstruments.Data;
 using SiGen.StringedInstruments.Layout;
 using SiGen.UI.Controls;
@@ -44,13 +45,23 @@ namespace SiGen.UI
 
         public LayoutDocument CurrentLayoutDocument => ActiveDocument?.CurrentDocument;
 
-        private IEnumerable<LayoutViewerPanel> OpenDocuments
+        private IEnumerable<LayoutViewerPanel> OpenDocumentPanels
         {
             get
             {
                 return dockPanel1.Documents.OfType<LayoutViewerPanel>();
             }
         }
+
+        private IEnumerable<LayoutDocument> OpenDocuments => OpenDocumentPanels.Select(x => x.CurrentDocument);
+
+        //private IEnumerable<LayoutViewerPanel> OpenDocumentPanels
+        //{
+        //    get
+        //    {
+        //        return dockPanel1.Documents.OfType<LayoutViewerPanel>();
+        //    }
+        //}
 
         public LayoutEditorWindow()
         {
@@ -130,6 +141,13 @@ namespace SiGen.UI
                 SetEditorsActiveLayout(null);
             }
 
+            if (CurrentLayoutDocument != null)
+            {
+                Text = "SiGen: " + CurrentLayoutDocument.DocumentName;
+            }
+            else
+                Text = "SiGen";
+
             RefreshToolbarButtonStates();
             RebuildUndoRedoMenus();
 
@@ -175,28 +193,25 @@ namespace SiGen.UI
 			return default(T);
 		}
 
+        private void OpenLayoutAndActivate(LayoutDocument layout)
+        {
+            var documentPanel = CreateDocumentPanel(layout);
+            documentPanel.Show(dockPanel1, DockState.Document);
+        }
+
         private DockContent CreateDocumentPanel(LayoutDocument layoutFile)
         {
             var documentPanel = new LayoutViewerPanel(this);
 
-            if (string.IsNullOrEmpty(layoutFile.FileName))
+            if (string.IsNullOrEmpty(layoutFile.DocumentName))
             {
-                documentPanel.Text = $"New {layoutFile.Layout.NumberOfStrings} Strings Layout";
+                layoutFile.DocumentName = "New layout";
             }
-            else if (!string.IsNullOrEmpty(layoutFile.Layout.LayoutName))
-                documentPanel.Text = layoutFile.Layout.LayoutName;
-            else
-                documentPanel.Text = Path.GetFileNameWithoutExtension(layoutFile.FileName);
 
-            int num = 0;
-            string origName = documentPanel.Text;
-            foreach (DockContent otherDoc in dockPanel1.Documents)
-            {
-                if (otherDoc.Text == documentPanel.Text)
-                {
-                    documentPanel.Text = origName + " " + (++num);
-                }
-            }
+            if (layoutFile.IsNew)
+                layoutFile.DocumentName = GetUniqueDocumentName(layoutFile.DocumentName);
+
+            documentPanel.Text = layoutFile.DocumentName;
 
             if (!string.IsNullOrEmpty(layoutFile.FileName))
                 documentPanel.ToolTipText = layoutFile.FileName;
@@ -218,6 +233,19 @@ namespace SiGen.UI
             return documentPanel;
         }
 
+        private string GetUniqueDocumentName(string name)
+        {
+            int count = 1;
+            string finalName = name;
+
+            while (OpenDocuments.Any(x => x.IsNew && x.DocumentName == finalName))
+            {
+                finalName = $"{name} {count++}";
+            }
+
+            return finalName;
+        }
+
         private void DocumentPanel_FormClosed(object sender, FormClosedEventArgs e)
         {
             var documentFile = ((LayoutViewerPanel)sender).CurrentDocument;
@@ -232,7 +260,13 @@ namespace SiGen.UI
             if (documentFile.HasChanged)
             {
                 panel.Activate();
-                var result = MessageBox.Show(MSG_SaveBeforeClose, LBL_Warning, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3);
+
+                var result = MessageBox.Show(
+                    Localizations.Messages_SaveBeforeClosing, 
+                    Localizations.Messages_Warning, 
+                    MessageBoxButtons.YesNoCancel, 
+                    MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3);
+
                 switch (result)
                 {
                     case DialogResult.Yes:
@@ -249,8 +283,18 @@ namespace SiGen.UI
                 CleanupEditorsLayoutCache(documentFile.Layout);
         }
 
+        public LayoutViewerPanel GetDocumentPanel(LayoutDocument document)
+        {
+            foreach (var docPanel in dockPanel1.Documents.OfType<LayoutViewerPanel>())
+            {
+                if (docPanel.CurrentDocument == document)
+                    return docPanel;
+            }
+            return null;
+        }
+
         #endregion
-        
+
         #region Save
 
         public bool SaveLayout(LayoutDocument file, bool selectPath = false)
@@ -274,7 +318,7 @@ namespace SiGen.UI
                     else
                         sfd.FileName = LayoutDocument.GenerateLayoutName(file.Layout) + ".sil";
 
-                    sfd.Filter = "SI Layout Files|*.sil|All Files|*.*";
+                    sfd.Filter = $"{Localizations.Misc_LayoutFileDesc}|*.sil|{Localizations.Misc_AllFilesDesc}|*.*";
                     sfd.DefaultExt = ".sil";
 
                     if (sfd.ShowDialog() == DialogResult.OK)
@@ -289,10 +333,12 @@ namespace SiGen.UI
 
             file.Layout.Save(file.FileName);
             file.HasChanged = false;
-            var documentTab = OpenDocuments.FirstOrDefault(d => d.CurrentDocument == file);
+
+            var documentTab = GetDocumentPanel(file);
+
             if (documentTab != null)
             {
-                documentTab.TabText = string.IsNullOrEmpty(file.Layout.LayoutName ) ? Path.GetFileNameWithoutExtension(file.FileName) : file.Layout.LayoutName;
+                documentTab.TabText = string.IsNullOrEmpty(file.Layout.LayoutName) ? Path.GetFileNameWithoutExtension(file.FileName) : file.Layout.LayoutName;
                 documentTab.ToolTipText = file.FileName;
             }
 
@@ -305,24 +351,6 @@ namespace SiGen.UI
             return true;
         }
 
-        private void tssbSave_ButtonClick(object sender, EventArgs e)
-        {
-            if (CurrentLayoutDocument != null)
-                SaveLayout(CurrentLayoutDocument, string.IsNullOrEmpty(CurrentLayoutDocument.FileName));
-        }
-
-        private void tsmiSave_Click(object sender, EventArgs e)
-        {
-            if (CurrentLayoutDocument != null)
-                SaveLayout(CurrentLayoutDocument, string.IsNullOrEmpty(CurrentLayoutDocument.FileName));
-        }
-
-        private void tsmiSaveAs_Click(object sender, EventArgs e)
-        {
-            if (CurrentLayoutDocument != null)
-                SaveLayout(CurrentLayoutDocument, true);
-        }
-
         #endregion
 
         #region Open
@@ -331,7 +359,7 @@ namespace SiGen.UI
         {
             var defaultLayout = SILayout.GenerateDefaultLayout();
             var layoutDoc = new LayoutDocument(defaultLayout);
-            LoadLayout(layoutDoc);
+            OpenLayoutAndActivate(layoutDoc);
             //OpenLayoutFile("DefaultLayout.sil", true);
         }
 
@@ -339,39 +367,44 @@ namespace SiGen.UI
         {
             if (!File.Exists(filename))
             {
-                MessageBox.Show("Error", "The file does not exist.");
+                MessageBox.Show(Localizations.Errors_FileNotFound, Localizations.Messages_Error);
                 return;
+            }
+
+            if (!asTemplate)
+            {
+                var existingDocument = OpenDocuments.FirstOrDefault(x => x.FileName == filename);
+
+                if (existingDocument != null)
+                {
+                    var documentPanel = GetDocumentPanel(existingDocument);
+                    documentPanel.Activate();
+
+                    var result = MessageBox.Show(Localizations.Messages_FileAlreadyOpen, "", MessageBoxButtons.YesNo);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        try
+                        {
+                            var layout = LayoutDocument.Open(filename, false);
+                            layout.Layout.RebuildLayout();
+                            documentPanel.CurrentDocument = layout;
+                            SetEditorsActiveLayout(layout.Layout);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("There was an error while opening the file: " + ex.ToString(), Localizations.Messages_Error);
+                        }
+                    }
+
+                    return;
+                }
             }
 
             try
             {
-                bool cancelOpen = false;
-                if (!asTemplate)
-                {
-                    foreach(var doc in dockPanel1.Documents)
-                    {
-                        if((doc as LayoutViewerPanel).CurrentDocument.FileName == filename)
-                        {
-                            (doc as LayoutViewerPanel).Activate();
-                            var result = MessageBox.Show(MSG_FileAlreadyOpen, "", MessageBoxButtons.YesNo);
-                            if (result == DialogResult.Yes)
-                            {
-                                var layout = LayoutDocument.Open(filename, false);
-                                layout.Layout.RebuildLayout();
-                                (doc as LayoutViewerPanel).CurrentDocument = layout;
-                                SetEditorsActiveLayout(layout.Layout);
-                            }
-                            cancelOpen = true;
-                            break;
-                        }
-                    }
-                }
-
-                if(!cancelOpen)
-                {
-                    var loadedLayout = LayoutDocument.Open(filename, asTemplate);
-                    LoadLayout(loadedLayout);
-                }
+                var loadedLayout = LayoutDocument.Open(filename, asTemplate);
+                OpenLayoutAndActivate(loadedLayout);
 
                 if (!asTemplate)
                 {
@@ -381,7 +414,7 @@ namespace SiGen.UI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("There was an error while opening the file: " + ex.ToString(), "Error");
+                MessageBox.Show("There was an error while opening the file: " + ex.ToString(), Localizations.Messages_Error);
             }
         }
 
@@ -391,11 +424,7 @@ namespace SiGen.UI
             //tssbOpen.ShowDropDown();
         }
 
-        private void LoadLayout(LayoutDocument layout)
-        {
-            var documentPanel = CreateDocumentPanel(layout);
-            documentPanel.Show(dockPanel1, DockState.Document);
-        }
+        
 
         private void RebuildRecentFilesMenu()
         {
@@ -459,6 +488,12 @@ namespace SiGen.UI
                 }
             }
             base.WndProc(ref m);
+        }
+
+        private void AboutAppButton_Click(object sender, EventArgs e)
+        {
+            using (var dlg = new AboutDialog())
+                dlg.ShowDialog(this);
         }
     }
 }

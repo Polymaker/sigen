@@ -14,6 +14,8 @@ namespace SiGen.StringedInstruments.Layout
 
         public IList Collection { get; }
 
+        public Type ElementType { get; }
+
         public LayoutComponent Component => (Collection is ILayoutItemCollection itemCollection ? 
             itemCollection.ParentComponent : null);
 
@@ -30,6 +32,7 @@ namespace SiGen.StringedInstruments.Layout
         {
             Collection = collection;
             CollectionCount = collection.Count;
+            ElementType = collection.GetElementType();
             Action = action;
             ChangedItems = changedItems;
             AffectsLayout = affectsLayout;
