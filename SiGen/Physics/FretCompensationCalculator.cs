@@ -74,6 +74,7 @@ namespace SiGen.Physics
 
             for (int i = 1; i <= numberOfFrets; i++)//i=1 to skip the nut
             {
+                var fretFreq = GetPitchAtFret(openTuning, i, temperament).Frequency;
                 var fretTopPos = new Vector(fretPositions[i], fretHeightIn);
                 var prevFretPos = new Vector(fretPositions[i - 1], fretHeightIn);
                 
@@ -81,14 +82,16 @@ namespace SiGen.Physics
                     prevFretPos.Y = nutPos.Y;
 
                 var fingerPressPos = new Vector();
-                fingerPressPos.X = (fretTopPos.X + prevFretPos.X) / 2d;
-                fingerPressPos.Y = 0;
+                fingerPressPos.X = prevFretPos.X;// (fretTopPos.X + prevFretPos.X) / 2d;
+                if (i == 1)
+                    fingerPressPos.X = (fretTopPos.X + prevFretPos.X) / 2d;
+                fingerPressPos.Y = fretHeightIn;
                 //fingerPressPos.Y = PreciseDouble.Max(fretHeightIn - gaugeOffset, gaugeOffset);
 
                 //var fretCenterPos = new Vector(fretPositions[i - 1], i == 1 ? nutPos.Y : fretHeight[UnitOfMeasure.Inches]);
 
                 //Calculate the fretted string length : Ls(n) = The sum of the distances between the top of the fret from the nut and saddle
-                //var Lsn = frettedLengths[i] = 
+                //var Lsn = frettedLengths[i] =
                 //    (saddlePos - fretTopPos).Length +
                 //    (fretTopPos - fingerPressPos).Length +
                 //    (fingerPressPos - nutPos).Length;
@@ -102,10 +105,18 @@ namespace SiGen.Physics
                 //Calculate the fretted string tension : Ts(n) = ((Lsn - Lor) / Lor) * E * A
                 var Tsn = frettedTensions[i] = ((Lsn - Lor) / Lor) * E * A;
                 //Calculate fret compensated position: Lfret(n) = SQRT((g * Tsn )/ mul ) / (2 * fn )
-                var Lfretn = MathP.Sqrt((g * Tsn) / mul) / (2 * GetPitchAtFret(openTuning, i, temperament).Frequency);
-                var pos2D = saddlePos + (saddleToNutDir * Lfretn);
-                fretPositions[i] = pos2D.X;
-                finalFretPositions[i] = Measure.Inches(pos2D.X);
+
+                var Lfretn = MathP.Sqrt((g * Tsn) / mul) / (2d * fretFreq);
+
+                //var opp = saddlePos.Y - fretHeightIn;
+                //var theta = MathP.Asin(opp / Lfretn);
+                //var fretDist = MathP.Cos(theta) * Lfretn;
+                //var pos2D = saddlePos + (saddleToNutDir * Lfretn);
+                //var testPos = flatLength - fretDist;
+
+                var finalPos = flatLength - Lfretn;
+                fretPositions[i] = finalPos;
+                finalFretPositions[i] = Measure.Inches(finalPos);
             }
 
 
@@ -120,9 +131,6 @@ namespace SiGen.Physics
             var fretNote = openStringNote.AddSteps(fret);
 
             double fretCents = fretNote.Pitch.Cents;
-
-            ////consider (or not?) the open string pitch offset 
-            //fretCents += openStringPitch.Cents - openStringNote.Pitch.Cents;
 
             if (fret != 0)
             {

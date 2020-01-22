@@ -28,11 +28,10 @@ namespace SiGen.UI
         private static Color SteelWoundFill = Color.Silver;
         private static Color SteelWoundOutline = Color.Gray;
 
-        private static Color BronzeWoundFill = Color.FromArgb(184, 127, 13);
+        private static Color BronzeWoundFill = Color.FromArgb(194, 137, 33);
         private static Color BronzeWoundOutline = Color.FromArgb(169, 91, 14);
 
         #endregion
-
 
         #region Graphics Extentions
 
@@ -374,7 +373,6 @@ namespace SiGen.UI
                     break;
             }
         }
-
 
         private void RenderMeasureTool(Graphics g)
         {
