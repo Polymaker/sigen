@@ -9,9 +9,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SiGen.Export;
 using SiGen.Measuring;
+using System.Windows.Forms.Design;
+using System.Collections;
+using SiGen.Utilities;
+using System.Windows.Forms.Design.Behavior;
 
 namespace SiGen.UI.Controls.ValueEditors
 {
+    [Designer(typeof(LineThicknessEditorDesigner))]
+    [DefaultEvent("ThicknessChanged")]
     public partial class LineThicknessEditor : UserControl
     {
         private LineUnit _SelectedUnit;
@@ -33,7 +39,7 @@ namespace SiGen.UI.Controls.ValueEditors
             set => SetSelectedThickness(value);
         }
 
-        public event EventHandler ConfigurationChanged;
+        public event EventHandler ThicknessChanged;
 
         public LineThicknessEditor()
         {
@@ -68,11 +74,18 @@ namespace SiGen.UI.Controls.ValueEditors
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            txtMeasure.Left = cboUnitType.Right + 2;
+            txtMeasure.Width = Width - txtMeasure.Left;
+        }
+
         public void SetValues(double thickness, LineUnit unit)
         {
             SetSelectedUnit(unit, false);
             SetSelectedThickness(thickness, null, false);
-            OnConfigurationChanged(this, EventArgs.Empty);
+            OnThicknessChanged(EventArgs.Empty);
         }
 
         private void SetSelectedUnit(LineUnit unit, bool raiseEvent = true)
@@ -105,7 +118,7 @@ namespace SiGen.UI.Controls.ValueEditors
                 
 
                 if (raiseEvent)
-                    OnConfigurationChanged(this, EventArgs.Empty);
+                    OnThicknessChanged(EventArgs.Empty);
             }
         }
 
@@ -129,7 +142,7 @@ namespace SiGen.UI.Controls.ValueEditors
                 }
                 
                 if (raiseEvent)
-                    OnConfigurationChanged(this, EventArgs.Empty);
+                    OnThicknessChanged(EventArgs.Empty);
             }
         }
 
@@ -183,7 +196,7 @@ namespace SiGen.UI.Controls.ValueEditors
                 UpdateEditorsVisibility();
 
                 if (!IsLoading && !SettingValue)
-                    OnConfigurationChanged(this, EventArgs.Empty);
+                    OnThicknessChanged(EventArgs.Empty);
             }
         }
 
@@ -206,9 +219,46 @@ namespace SiGen.UI.Controls.ValueEditors
                 SetSelectedThickness(txtNumber.Value, txtNumber);
         }
 
-        protected virtual void OnConfigurationChanged(object sender, EventArgs e)
+        protected virtual void OnThicknessChanged(EventArgs e)
         {
-            ConfigurationChanged?.Invoke(sender, e);
+            ThicknessChanged?.Invoke(this, e);
+        }
+
+        internal TextBox GetTextBox()
+        {
+            return txtNumber;
+        }
+    }
+
+    class LineThicknessEditorDesigner : ControlDesigner
+    {
+
+        public override IList SnapLines
+        {
+            get
+            {
+                ArrayList arrayList = base.SnapLines as ArrayList;
+
+                var editor = Control as LineThicknessEditor;
+                var editorTxt = editor.GetTextBox();
+
+                int textBaseline = ControlHelper.GetTextBaseline(editorTxt ?? Control, ContentAlignment.TopLeft);
+                BorderStyle borderStyle = editorTxt?.BorderStyle ?? BorderStyle.Fixed3D;
+
+                switch (borderStyle)
+                {
+                    case BorderStyle.None:
+                        break;
+                    case BorderStyle.FixedSingle:
+                        textBaseline += 2;
+                        break;
+                    case BorderStyle.Fixed3D:
+                        textBaseline += 3;
+                        break;
+                }
+                arrayList.Add(new SnapLine(SnapLineType.Baseline, textBaseline, SnapLinePriority.Medium));
+                return arrayList;
+            }
         }
     }
 }

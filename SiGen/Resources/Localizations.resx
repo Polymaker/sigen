@@ -225,4 +225,7 @@ Do you want to reload it?
   <data name="Messages_SaveBeforeClosing" xml:space="preserve">
     <value>Do you want to save the changes made to the layout before closing?</value>
   </data>
+  <data name="Misc_NewLayout" xml:space="preserve">
+    <value>New layout</value>
+  </data>
 </root>

@@ -35,7 +35,7 @@
             this.colorSelectButton2 = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.colorSelectButton1 = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
-            this.SaveDisplayConfigButton = new System.Windows.Forms.Button();
+            this.Display_SaveButton = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.StringCentersExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
@@ -45,7 +45,9 @@
             this.MarginsExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
             this.FingerboardExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
             this.FretsExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
-            this.SaveExportConfigButton = new System.Windows.Forms.Button();
+            this.Export_SaveButton = new System.Windows.Forms.Button();
+            this.Display_CancelButton = new System.Windows.Forms.Button();
+            this.Export_CancelButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -66,8 +68,9 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.Display_CancelButton);
             this.tabPage1.Controls.Add(this.panel2);
-            this.tabPage1.Controls.Add(this.SaveDisplayConfigButton);
+            this.tabPage1.Controls.Add(this.Display_SaveButton);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -88,7 +91,7 @@
             this.panel2.Controls.Add(this.colorSelectButton1);
             this.panel2.Location = new System.Drawing.Point(0, 3);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(610, 339);
+            this.panel2.Size = new System.Drawing.Size(609, 339);
             this.panel2.TabIndex = 1;
             // 
             // checkBox2
@@ -129,20 +132,21 @@
             this.colorSelectButton1.TabIndex = 1;
             this.colorSelectButton1.Value = System.Drawing.Color.Red;
             // 
-            // SaveDisplayConfigButton
+            // Display_SaveButton
             // 
-            this.SaveDisplayConfigButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.SaveDisplayConfigButton.Location = new System.Drawing.Point(532, 348);
-            this.SaveDisplayConfigButton.Name = "SaveDisplayConfigButton";
-            this.SaveDisplayConfigButton.Size = new System.Drawing.Size(75, 23);
-            this.SaveDisplayConfigButton.TabIndex = 0;
-            this.SaveDisplayConfigButton.Text = "Save";
-            this.SaveDisplayConfigButton.UseVisualStyleBackColor = true;
+            this.Display_SaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Display_SaveButton.Location = new System.Drawing.Point(458, 348);
+            this.Display_SaveButton.Name = "Display_SaveButton";
+            this.Display_SaveButton.Size = new System.Drawing.Size(75, 23);
+            this.Display_SaveButton.TabIndex = 0;
+            this.Display_SaveButton.Text = "Save";
+            this.Display_SaveButton.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.Export_CancelButton);
             this.tabPage2.Controls.Add(this.panel1);
-            this.tabPage2.Controls.Add(this.SaveExportConfigButton);
+            this.tabPage2.Controls.Add(this.Export_SaveButton);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -166,7 +170,7 @@
             this.panel1.Controls.Add(this.FretsExportCfg);
             this.panel1.Location = new System.Drawing.Point(0, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(610, 339);
+            this.panel1.Size = new System.Drawing.Size(609, 339);
             this.panel1.TabIndex = 3;
             // 
             // StringCentersExportCfg
@@ -246,16 +250,37 @@
             this.FretsExportCfg.Size = new System.Drawing.Size(346, 78);
             this.FretsExportCfg.TabIndex = 0;
             // 
-            // SaveExportConfigButton
+            // Export_SaveButton
             // 
-            this.SaveExportConfigButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.SaveExportConfigButton.Location = new System.Drawing.Point(532, 348);
-            this.SaveExportConfigButton.Name = "SaveExportConfigButton";
-            this.SaveExportConfigButton.Size = new System.Drawing.Size(75, 23);
-            this.SaveExportConfigButton.TabIndex = 2;
-            this.SaveExportConfigButton.Text = "Save";
-            this.SaveExportConfigButton.UseVisualStyleBackColor = true;
-            this.SaveExportConfigButton.Click += new System.EventHandler(this.SaveExportConfigButton_Click);
+            this.Export_SaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Export_SaveButton.Location = new System.Drawing.Point(458, 348);
+            this.Export_SaveButton.Name = "Export_SaveButton";
+            this.Export_SaveButton.Size = new System.Drawing.Size(75, 23);
+            this.Export_SaveButton.TabIndex = 2;
+            this.Export_SaveButton.Text = "Save";
+            this.Export_SaveButton.UseVisualStyleBackColor = true;
+            this.Export_SaveButton.Click += new System.EventHandler(this.SaveExportConfigButton_Click);
+            // 
+            // Display_CancelButton
+            // 
+            this.Display_CancelButton.Location = new System.Drawing.Point(535, 348);
+            this.Display_CancelButton.Name = "Display_CancelButton";
+            this.Display_CancelButton.Size = new System.Drawing.Size(75, 23);
+            this.Display_CancelButton.TabIndex = 2;
+            this.Display_CancelButton.Text = "Cancel";
+            this.Display_CancelButton.UseVisualStyleBackColor = true;
+            this.Display_CancelButton.Click += new System.EventHandler(this.Display_CancelButton_Click);
+            // 
+            // Export_CancelButton
+            // 
+            this.Export_CancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Export_CancelButton.Location = new System.Drawing.Point(535, 348);
+            this.Export_CancelButton.Name = "Export_CancelButton";
+            this.Export_CancelButton.Size = new System.Drawing.Size(75, 23);
+            this.Export_CancelButton.TabIndex = 4;
+            this.Export_CancelButton.Text = "Cancel";
+            this.Export_CancelButton.UseVisualStyleBackColor = true;
+            this.Export_CancelButton.Click += new System.EventHandler(this.Export_CancelButton_Click);
             // 
             // AppPreferencesWindow
             // 
@@ -281,7 +306,7 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Button SaveExportConfigButton;
+        private System.Windows.Forms.Button Export_SaveButton;
         private System.Windows.Forms.Panel panel1;
         private Controls.Preferences.LineExportConfigEdit CenterLineExportCfg;
         private Controls.Preferences.LineExportConfigEdit MarginsExportCfg;
@@ -290,11 +315,13 @@
         private Controls.Preferences.LineExportConfigEdit StringsExportCfg;
         private Controls.Preferences.LineExportConfigEdit StringCentersExportCfg;
         private Controls.Preferences.LineExportConfigEdit GuideExportCfg;
-        private System.Windows.Forms.Button SaveDisplayConfigButton;
+        private System.Windows.Forms.Button Display_SaveButton;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.CheckBox checkBox2;
         private Controls.ValueEditors.ColorSelectButton colorSelectButton2;
         private System.Windows.Forms.CheckBox checkBox1;
         private Controls.ValueEditors.ColorSelectButton colorSelectButton1;
+        private System.Windows.Forms.Button Display_CancelButton;
+        private System.Windows.Forms.Button Export_CancelButton;
     }
 }

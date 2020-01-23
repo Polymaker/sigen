@@ -124,8 +124,10 @@ namespace SiGen.Export
                 Layer = GetLayer(layerName),
                 Color = GetColor(lineConfig.Color)
             };
+
             if (lineConfig.IsDashed)
                 dxfLine.Linetype = Linetype.Dashed;
+
             Document.AddEntity(dxfLine);
             return dxfLine;
         }

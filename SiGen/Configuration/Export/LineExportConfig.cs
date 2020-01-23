@@ -19,7 +19,11 @@ namespace SiGen.Export
         public bool Enabled { get => _Enabled; set { if (value != _Enabled) { _Enabled = value; OnPropertyChanged(nameof(Enabled)); } } }
         
         [JsonProperty, JsonConverter(typeof(ColorJsonConverter))]
-        public Color Color { get => _Color; set { if (value != _Color) { _Color = value; OnPropertyChanged(nameof(Color)); } } }
+        public Color Color
+        {
+            get => _Color;
+            set => SetPropertyValue(ref _Color, value);
+        }
         
         [JsonProperty, JsonConverter(typeof(LineUnitConverter))]
         public LineUnit LineUnit { get => _LineUnit; set { if (value != _LineUnit) { _LineUnit = value; OnPropertyChanged(nameof(LineUnit)); } } }

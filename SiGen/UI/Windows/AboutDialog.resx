@@ -148,7 +148,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;button1.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="pictureBox1.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 6</value>
@@ -175,7 +175,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;pictureBox1.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="AppTitleLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -184,7 +184,7 @@
     <value>Segoe UI, 14.25pt, style=Bold</value>
   </data>
   <data name="AppTitleLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>54, 6</value>
+    <value>54, 3</value>
   </data>
   <data name="AppTitleLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>64, 25</value>
@@ -205,13 +205,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;AppTitleLabel.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="AppDescLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="AppDescLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>56, 31</value>
+    <value>56, 27</value>
   </data>
   <data name="AppDescLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>227, 17</value>
@@ -232,37 +232,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;AppDescLabel.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="AppInfoTextbox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
-  </data>
-  <data name="AppInfoTextbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 72</value>
-  </data>
-  <data name="AppInfoTextbox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="AppInfoTextbox.ScrollBars" type="System.Windows.Forms.ScrollBars, System.Windows.Forms">
-    <value>Vertical</value>
-  </data>
-  <data name="AppInfoTextbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>371, 128</value>
-  </data>
-  <data name="AppInfoTextbox.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;AppInfoTextbox.Name" xml:space="preserve">
-    <value>AppInfoTextbox</value>
-  </data>
-  <data name="&gt;&gt;AppInfoTextbox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;AppInfoTextbox.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;AppInfoTextbox.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
   </data>
   <data name="AppVersionLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -271,7 +241,7 @@
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
   <data name="AppVersionLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>124, 12</value>
+    <value>124, 9</value>
   </data>
   <data name="AppVersionLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>55, 17</value>
@@ -292,6 +262,63 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;AppVersionLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="ExternalInfoTextbox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="ExternalInfoTextbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 65</value>
+  </data>
+  <data name="ExternalInfoTextbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>372, 136</value>
+  </data>
+  <data name="ExternalInfoTextbox.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="ExternalInfoTextbox.WordWrap" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;ExternalInfoTextbox.Name" xml:space="preserve">
+    <value>ExternalInfoTextbox</value>
+  </data>
+  <data name="&gt;&gt;ExternalInfoTextbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ExternalInfoTextbox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;ExternalInfoTextbox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="CopyrightLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="CopyrightLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
+  <data name="CopyrightLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>56, 46</value>
+  </data>
+  <data name="CopyrightLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 15</value>
+  </data>
+  <data name="CopyrightLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="CopyrightLabel.Text" xml:space="preserve">
+    <value>Copyright ©</value>
+  </data>
+  <data name="&gt;&gt;CopyrightLabel.Name" xml:space="preserve">
+    <value>CopyrightLabel</value>
+  </data>
+  <data name="&gt;&gt;CopyrightLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;CopyrightLabel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;CopyrightLabel.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

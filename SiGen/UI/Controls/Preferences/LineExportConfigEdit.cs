@@ -52,7 +52,6 @@ namespace SiGen.UI.Controls.Preferences
             FlagManager = new FlagList();
             EnableExportChecbox.Text = _ConfigName ?? "[Config Name]";
             //UseStringGaugeCheckbox.Visible = false;
-
             SetControlsFont();
         }
 
@@ -61,6 +60,7 @@ namespace SiGen.UI.Controls.Preferences
             base.OnFontChanged(e);
             SetControlsFont();
         }
+
 
         private void SetControlsFont()
         {
@@ -84,7 +84,7 @@ namespace SiGen.UI.Controls.Preferences
                 LineThicknessEditor.SelectedThickness = LineConfig?.LineThickness ?? 1d;
             }
         }
-
+        
         private void EnableExportChecbox_CheckedChanged(object sender, EventArgs e)
         {
             if (!FlagManager.IsSet("LoadConfig") && LineConfig != null)

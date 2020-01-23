@@ -103,7 +103,7 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             tsmiCloseOthers.Enabled = DockPanel.DocumentsCount > 1;
             tsmiCloseRight.Enabled = GetTabIndex() < DockPanel.DocumentsCount - 1;
-            tsmiOpenFileDirectory.Enabled = !string.IsNullOrEmpty(CurrentDocument.FileName);
+            tsmiOpenFileDirectory.Enabled = !string.IsNullOrEmpty(CurrentDocument.FilePath);
         }
 
         private void tsmiCloseLayout_Click(object sender, EventArgs e)
@@ -145,7 +145,7 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         private void tsmiOpenFileDirectory_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", $"/select, \"{CurrentDocument.FileName}\"");
+            Process.Start("explorer.exe", $"/select, \"{CurrentDocument.FilePath}\"");
         }
        
 

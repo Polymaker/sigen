@@ -14,9 +14,11 @@ namespace SiGen.Common
 
         public SILayout Layout { get; private set; }
 
-        public string FileName { get; set; }
+        public string FilePath { get; set; }
 
-        public bool IsNew => string.IsNullOrEmpty(FileName);
+		public string DocumentName { get; set; }
+
+		public bool IsNew => string.IsNullOrEmpty(FilePath);
 
 		public List<ILayoutChange> ModificationList { get; } = new List<ILayoutChange>();
 
@@ -24,14 +26,12 @@ namespace SiGen.Common
 
 		private bool IsUndoing { get; set; }
 
-		public string DocumentName { get; set; }
-
         public event EventHandler LayoutChanged;
 
         public LayoutDocument(SILayout layout)
         {
             Layout = layout;
-            FileName = string.Empty;
+            FilePath = string.Empty;
 			Layout.LayoutChanged += Layout_LayoutChanged;
 			CurrentActionIndex = -1;
 		}
@@ -108,7 +108,7 @@ namespace SiGen.Common
 
 			if (!asTemplate)
 			{
-				file.FileName = filename;
+				file.FilePath = filename;
 				file.DocumentName = Path.GetFileNameWithoutExtension(filename);
 			}
 			else if (!string.IsNullOrEmpty(layout.LayoutName))
@@ -116,6 +116,14 @@ namespace SiGen.Common
 
 			return file;
         }
+
+		public void Save(string filepath)
+		{
+			Layout.Save(filepath);
+			FilePath = filepath;
+			HasChanged = false;
+			DocumentName = Path.GetFileNameWithoutExtension(filepath);
+		}
 
         public static string GenerateLayoutName(SILayout layout)
         {

@@ -33,8 +33,9 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.AppTitleLabel = new System.Windows.Forms.Label();
             this.AppDescLabel = new System.Windows.Forms.Label();
-            this.AppInfoTextbox = new System.Windows.Forms.TextBox();
             this.AppVersionLabel = new System.Windows.Forms.Label();
+            this.ExternalInfoTextbox = new System.Windows.Forms.RichTextBox();
+            this.CopyrightLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -61,29 +62,39 @@
             resources.ApplyResources(this.AppDescLabel, "AppDescLabel");
             this.AppDescLabel.Name = "AppDescLabel";
             // 
-            // AppInfoTextbox
-            // 
-            resources.ApplyResources(this.AppInfoTextbox, "AppInfoTextbox");
-            this.AppInfoTextbox.Name = "AppInfoTextbox";
-            this.AppInfoTextbox.ReadOnly = true;
-            // 
             // AppVersionLabel
             // 
             resources.ApplyResources(this.AppVersionLabel, "AppVersionLabel");
             this.AppVersionLabel.Name = "AppVersionLabel";
+            // 
+            // ExternalInfoTextbox
+            // 
+            resources.ApplyResources(this.ExternalInfoTextbox, "ExternalInfoTextbox");
+            this.ExternalInfoTextbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ExternalInfoTextbox.Name = "ExternalInfoTextbox";
+            this.ExternalInfoTextbox.ReadOnly = true;
+            this.ExternalInfoTextbox.HScroll += new System.EventHandler(this.ExternalInfoTextbox_HScroll);
+            this.ExternalInfoTextbox.VScroll += new System.EventHandler(this.ExternalInfoTextbox_VScroll);
+            this.ExternalInfoTextbox.SizeChanged += new System.EventHandler(this.ExternalInfoTextbox_SizeChanged);
+            // 
+            // CopyrightLabel
+            // 
+            resources.ApplyResources(this.CopyrightLabel, "CopyrightLabel");
+            this.CopyrightLabel.Name = "CopyrightLabel";
             // 
             // AboutDialog
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
+            this.Controls.Add(this.CopyrightLabel);
+            this.Controls.Add(this.ExternalInfoTextbox);
             this.Controls.Add(this.AppVersionLabel);
-            this.Controls.Add(this.AppInfoTextbox);
             this.Controls.Add(this.AppDescLabel);
             this.Controls.Add(this.AppTitleLabel);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AboutDialog";
@@ -99,7 +110,8 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label AppTitleLabel;
         private System.Windows.Forms.Label AppDescLabel;
-        private System.Windows.Forms.TextBox AppInfoTextbox;
         private System.Windows.Forms.Label AppVersionLabel;
+        private System.Windows.Forms.RichTextBox ExternalInfoTextbox;
+        private System.Windows.Forms.Label CopyrightLabel;
     }
 }

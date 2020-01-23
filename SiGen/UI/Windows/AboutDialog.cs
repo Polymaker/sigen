@@ -17,16 +17,18 @@ namespace SiGen.UI.Windows
         public AboutDialog()
         {
             InitializeComponent();
-            AppVersionLabel.Text = $"v{Application.ProductVersion}";
-
-            //var myAssem = Assembly.GetExecutingAssembly();
-            //var copyrightAttr = myAssem.GetCustomAttribute<AssemblyCopyrightAttribute>();
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            GetExternalLibraries();
+
+            FillExternalLibraries();
+
+            var myAssem = Assembly.GetExecutingAssembly();
+            var copyrightAttr = myAssem.GetCustomAttribute<AssemblyCopyrightAttribute>();
+            CopyrightLabel.Text = copyrightAttr.Copyright;
+            AppVersionLabel.Text = $"v{Application.ProductVersion}";
         }
 
         class LibInfo
@@ -37,42 +39,72 @@ namespace SiGen.UI.Windows
             public string Version { get; set; }
             public string Copyright { get; set; }
             public string License { get; set; }
+            public string Websiste { get; set; }
         }
 
-        private void GetExternalLibraries()
+        private void FillExternalLibraries()
         {
             var libraries = new List<LibInfo>();
 
+            libraries.Add(GetLibInfo(typeof(Newtonsoft.Json.JsonConverter).Assembly, 
+                "MIT", "https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md"));
 
-            libraries.Add(GetLibInfo(typeof(netDxf.DxfDocument).Assembly, "LGPL"));
+            libraries.Add(GetLibInfo(typeof(netDxf.DxfDocument).Assembly, 
+                "GNU LGPL", "https://github.com/haplokuon/netDxf/blob/master/LICENSE"));
 
-            libraries.Add(GetLibInfo(typeof(Svg.SvgDocument).Assembly, "MS-PL"));
+            libraries.Add(GetLibInfo(typeof(Svg.SvgDocument).Assembly, 
+                "MS-PL", "https://github.com/vvvv/SVG/blob/master/license.txt"));
 
-            libraries.Add(GetLibInfo(typeof(WeifenLuo.WinFormsUI.Docking.DockPanel).Assembly, "MITL"));
+            libraries.Add(GetLibInfo(typeof(WeifenLuo.WinFormsUI.Docking.DockPanel).Assembly, 
+                "MIT", "https://github.com/dockpanelsuite/dockpanelsuite/blob/master/license.txt"));
 
             foreach (var libInfo in libraries)
             {
-                AppInfoTextbox.AppendText($"{libInfo.Name}: {libInfo.Title}\r\n");
+                ExternalInfoTextbox.AppendText($"{libInfo.Title} version {libInfo.Version}\r\n");
 
-                if (!string.IsNullOrEmpty(libInfo.Description))
-                    AppInfoTextbox.AppendText($"{libInfo.Description}\r\n");
+                //if (!string.IsNullOrEmpty(libInfo.Description))
+                //    ExternalInfoTextbox.AppendText($"{libInfo.Description}\r\n");
+                //else if (!string.IsNullOrEmpty(libInfo.Title) && libInfo.Title.Length > 3)
+                //    ExternalInfoTextbox.AppendText($"{libInfo.Title}\r\n");
 
                 if (!string.IsNullOrEmpty(libInfo.Copyright))
-                    AppInfoTextbox.AppendText($"{libInfo.Copyright}\r\n");
+                    ExternalInfoTextbox.AppendText($"{libInfo.Copyright}\r\n");
 
                 if (!string.IsNullOrEmpty(libInfo.License))
-                    AppInfoTextbox.AppendText($"Licensed under {libInfo.License}\r\n");
+                {
+                    //ExternalInfoTextbox.AppendText($"Licensed under {libInfo.License}\r\n");
+                    ExternalInfoTextbox.AppendText($"Licensed under ");
 
-                AppInfoTextbox.AppendText("\r\n");
+                    var licenseLink = new LinkLabel()
+                    {
+                        Text = libInfo.License,
+                        AutoSize = true
+                    };
+                    licenseLink.Links.Add(new LinkLabel.Link() { LinkData = libInfo.Websiste });
+
+                    licenseLink.Location = ExternalInfoTextbox.GetPositionFromCharIndex(ExternalInfoTextbox.TextLength);
+                    licenseLink.Tag = ExternalInfoTextbox.TextLength;
+                    licenseLink.LinkClicked += LicenseLink_LinkClicked;
+
+                    ExternalInfoTextbox.Controls.Add(licenseLink);
+                    ExternalInfoTextbox.AppendText("\r\n");
+                }
+
+                ExternalInfoTextbox.AppendText("\r\n");
             }
         }
 
-        private LibInfo GetLibInfo(Assembly assembly, string license = null)
+        private void LicenseLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(e.Link.LinkData.ToString());
+        }
+
+        private LibInfo GetLibInfo(Assembly assembly, string license = null, string website = null)
         {
             var titleAttr = assembly.GetCustomAttribute<AssemblyTitleAttribute>();
             var descAttr = assembly.GetCustomAttribute<AssemblyDescriptionAttribute>();
             var copyrightAttr = assembly.GetCustomAttribute<AssemblyCopyrightAttribute>();
-            var versionAttr = assembly.GetCustomAttribute<AssemblyVersionAttribute>();
+            //var versionAttr = assembly.GetCustomAttribute<AssemblyVersionAttribute>();
             var assemName = assembly.GetName();
             
             var info = new LibInfo()
@@ -82,7 +114,8 @@ namespace SiGen.UI.Windows
                 Copyright = copyrightAttr?.Copyright,
                 Description = descAttr?.Description,
                 Version = assemName.Version.ToString(),
-                License = license ?? string.Empty
+                License = license,
+                Websiste = website
             };
 
             if (!string.IsNullOrEmpty(info.Copyright) && 
@@ -100,5 +133,37 @@ namespace SiGen.UI.Windows
                 return str2;
             return str1;
         }
+
+        private void ExternalInfoTextbox_VScroll(object sender, EventArgs e)
+        {
+            AdjustLinkLabels();
+        }
+
+        private void ExternalInfoTextbox_HScroll(object sender, EventArgs e)
+        {
+            AdjustLinkLabels();
+        }
+
+        private void ExternalInfoTextbox_SizeChanged(object sender, EventArgs e)
+        {
+            AdjustLinkLabels();
+        }
+
+        private void AdjustLinkLabels()
+        {
+            //var scrollOffset = ExternalInfoTextbox.GetPositionFromCharIndex(0);
+
+            foreach (var linkLabel in ExternalInfoTextbox.Controls.OfType<LinkLabel>())
+            {
+                int charPos = (int)linkLabel.Tag;
+                linkLabel.Location = ExternalInfoTextbox.GetPositionFromCharIndex(charPos);
+                //var origPos = (Point)linkLabel.Tag;
+                //origPos.X += scrollOffset.X;
+                //origPos.Y += scrollOffset.Y;
+                //linkLabel.Location = origPos;
+            }
+        }
+
+        
     }
 }

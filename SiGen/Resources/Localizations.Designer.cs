@@ -261,6 +261,15 @@ namespace SiGen.Resources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à New layout.
+        /// </summary>
+        internal static string Misc_NewLayout {
+            get {
+                return ResourceManager.GetString("Misc_NewLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Dual.
         /// </summary>
         internal static string ScaleLengthType_Dual {

@@ -55,6 +55,7 @@ namespace SiGen.UI.Windows
             GuideExportCfg.LineConfig = ExportConfig.GuideLines;
         }
 
+
         private void SaveExportConfigButton_Click(object sender, EventArgs e)
         {
             AppConfig.Current.ExportConfig = ExportConfig;
@@ -62,50 +63,14 @@ namespace SiGen.UI.Windows
             DialogResult = DialogResult.OK;
         }
 
+        private void Display_CancelButton_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+        }
 
-
-        //private void CreateExportConfigControls()
-        //{
-        //    var titleFont = new Font(Font.FontFamily, Font.Size * 1.5f);
-
-        //    void AddTitle(string caption)
-        //    {
-        //        if (flowLayoutPanel1.Controls.Count > 0)
-        //        {
-        //            var lastCtrl = flowLayoutPanel1.Controls[flowLayoutPanel1.Controls.Count - 1];
-        //            flowLayoutPanel1.SetFlowBreak(lastCtrl, true);
-        //        }
-        //        var titleLabel = new Label()
-        //        {
-        //            Text = caption,
-        //            Font = titleFont
-        //        };
-        //        flowLayoutPanel1.Controls.Add(titleLabel);
-        //        var dummyLabel = new Label()
-        //        {
-        //            Size = new Size(0,0),
-        //            Padding = new Padding(0)
-        //        };
-        //        flowLayoutPanel1.Controls.Add(dummyLabel);
-        //        flowLayoutPanel1.SetFlowBreak(dummyLabel, true);
-        //    }
-        //    void AddLineEdit(LayoutLineExportConfig lineConfig, string title)
-        //    {
-        //        var lineEdit = new LineExportConfigEdit();
-        //        lineEdit.ConfigName = title;
-        //        //lineEdit.LineConfig = lineConfig;
-        //        flowLayoutPanel1.Controls.Add(lineEdit);
-        //    }
-
-        //    AddTitle("Frets");
-        //    AddLineEdit(null, "Export frets");
-
-        //    AddTitle("Strings");
-        //    AddLineEdit(null, "Export strings");
-
-        //    AddTitle("Fingerboard");
-        //    AddLineEdit(null, "Fingerboard edges");
-        //    AddLineEdit(null, "Fingerboard margins");
-        //}
+        private void Export_CancelButton_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+        }
     }
 }

@@ -96,6 +96,14 @@ namespace SiGen.UI
             RebuildRecentFilesMenu();
         }
 
+        private void UpdateWindowTitle()
+        {
+            if (CurrentLayoutDocument != null)
+                Text = "SiGen: " + CurrentLayoutDocument.DocumentName;
+            else
+                Text = "SiGen";
+        }
+
         #region Document Management
 
         private void InitializeEditingPanels()
@@ -141,13 +149,7 @@ namespace SiGen.UI
                 SetEditorsActiveLayout(null);
             }
 
-            if (CurrentLayoutDocument != null)
-            {
-                Text = "SiGen: " + CurrentLayoutDocument.DocumentName;
-            }
-            else
-                Text = "SiGen";
-
+            UpdateWindowTitle();
             RefreshToolbarButtonStates();
             RebuildUndoRedoMenus();
 
@@ -204,17 +206,15 @@ namespace SiGen.UI
             var documentPanel = new LayoutViewerPanel(this);
 
             if (string.IsNullOrEmpty(layoutFile.DocumentName))
-            {
-                layoutFile.DocumentName = "New layout";
-            }
+                layoutFile.DocumentName = Localizations.Misc_NewLayout;
 
             if (layoutFile.IsNew)
                 layoutFile.DocumentName = GetUniqueDocumentName(layoutFile.DocumentName);
 
             documentPanel.Text = layoutFile.DocumentName;
 
-            if (!string.IsNullOrEmpty(layoutFile.FileName))
-                documentPanel.ToolTipText = layoutFile.FileName;
+            if (!string.IsNullOrEmpty(layoutFile.FilePath))
+                documentPanel.ToolTipText = layoutFile.FilePath;
 
             documentPanel.DockAreas = DockAreas.Document;// | DockAreas.Float;
 
@@ -299,21 +299,18 @@ namespace SiGen.UI
 
         public bool SaveLayout(LayoutDocument file, bool selectPath = false)
         {
-            bool isNew = string.IsNullOrEmpty(file.FileName);
+            bool isNew = string.IsNullOrEmpty(file.FilePath);
 
-            if (string.IsNullOrEmpty(file.Layout.LayoutName))
-            {
-                file.Layout.LayoutName = LayoutDocument.GenerateLayoutName(file.Layout);
-            }
+            string targetPath = file.FilePath ?? string.Empty;
 
             if (selectPath || isNew)
             {
                 using (var sfd = new SaveFileDialog())
                 {
-                    if(!string.IsNullOrEmpty(file.FileName))
+                    if(!string.IsNullOrEmpty(file.FilePath))
                     {
-                        sfd.InitialDirectory = Path.GetDirectoryName(file.FileName);
-                        sfd.FileName = Path.GetFileName(file.FileName);
+                        sfd.InitialDirectory = Path.GetDirectoryName(file.FilePath);
+                        sfd.FileName = Path.GetFileName(file.FilePath);
                     }
                     else
                         sfd.FileName = LayoutDocument.GenerateLayoutName(file.Layout) + ".sil";
@@ -322,29 +319,26 @@ namespace SiGen.UI
                     sfd.DefaultExt = ".sil";
 
                     if (sfd.ShowDialog() == DialogResult.OK)
-                        file.FileName = sfd.FileName;
+                        targetPath = sfd.FileName;
                     else
                         return false;
                 }
             }
-            
-            //if (string.IsNullOrEmpty(file.Layout.LayoutName))
-            //    file.Layout.LayoutName = Path.GetFileNameWithoutExtension(file.FileName);
 
-            file.Layout.Save(file.FileName);
-            file.HasChanged = false;
+            file.Save(targetPath);
 
             var documentTab = GetDocumentPanel(file);
-
             if (documentTab != null)
             {
-                documentTab.TabText = string.IsNullOrEmpty(file.Layout.LayoutName) ? Path.GetFileNameWithoutExtension(file.FileName) : file.Layout.LayoutName;
-                documentTab.ToolTipText = file.FileName;
+                documentTab.TabText = file.DocumentName;
+                documentTab.ToolTipText = file.FilePath;
             }
+
+            UpdateWindowTitle();
 
             if (isNew)
             {
-                AppConfigManager.AddRecentFile(file.FileName);
+                AppConfigManager.AddRecentFile(file.FilePath);
                 RebuildRecentFilesMenu();
             }
 
@@ -373,7 +367,7 @@ namespace SiGen.UI
 
             if (!asTemplate)
             {
-                var existingDocument = OpenDocuments.FirstOrDefault(x => x.FileName == filename);
+                var existingDocument = OpenDocuments.FirstOrDefault(x => x.FilePath == filename);
 
                 if (existingDocument != null)
                 {
@@ -490,10 +484,6 @@ namespace SiGen.UI
             base.WndProc(ref m);
         }
 
-        private void AboutAppButton_Click(object sender, EventArgs e)
-        {
-            using (var dlg = new AboutDialog())
-                dlg.ShowDialog(this);
-        }
+        
     }
 }

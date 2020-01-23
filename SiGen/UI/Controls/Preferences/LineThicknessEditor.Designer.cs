@@ -50,8 +50,6 @@
             // 
             // txtMeasure
             // 
-            this.txtMeasure.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtMeasure.Location = new System.Drawing.Point(66, 0);
             this.txtMeasure.Name = "txtMeasure";
             this.txtMeasure.Size = new System.Drawing.Size(84, 21);
@@ -88,14 +86,14 @@
             // 
             this.ExportUnitMeasure.Text = "Measure";
             // 
-            // ExportLineThicknessEditor
+            // LineThicknessEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.txtMeasure);
             this.Controls.Add(this.txtNumber);
             this.Controls.Add(this.cboUnitType);
-            this.Name = "ExportLineThicknessEditor";
+            this.Name = "LineThicknessEditor";
             this.Size = new System.Drawing.Size(150, 28);
             this.ResumeLayout(false);
 

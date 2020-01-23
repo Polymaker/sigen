@@ -1,4 +1,5 @@
 ﻿using SiGen.Common;
+using SiGen.Configuration;
 using SiGen.Localization;
 using SiGen.Resources;
 using SiGen.StringedInstruments.Layout;
@@ -99,10 +100,15 @@ namespace SiGen.UI
 			}
 		}
 
-        #endregion
+		#endregion
 
+		private void AboutAppButton_Click(object sender, EventArgs e)
+		{
+			using (var dlg = new AboutDialog())
+				dlg.ShowDialog(this);
+		}
 
-        private void tsbNew_Click(object sender, EventArgs e)
+		private void tsbNew_Click(object sender, EventArgs e)
         {
             OpenDefaultLayout();
         }
@@ -128,13 +134,13 @@ namespace SiGen.UI
 		private void tssbSave_ButtonClick(object sender, EventArgs e)
 		{
 			if (CurrentLayoutDocument != null)
-				SaveLayout(CurrentLayoutDocument, string.IsNullOrEmpty(CurrentLayoutDocument.FileName));
+				SaveLayout(CurrentLayoutDocument, string.IsNullOrEmpty(CurrentLayoutDocument.FilePath));
 		}
 
 		private void tsmiSave_Click(object sender, EventArgs e)
 		{
 			if (CurrentLayoutDocument != null)
-				SaveLayout(CurrentLayoutDocument, string.IsNullOrEmpty(CurrentLayoutDocument.FileName));
+				SaveLayout(CurrentLayoutDocument, string.IsNullOrEmpty(CurrentLayoutDocument.FilePath));
 		}
 
 		private void tsmiSaveAs_Click(object sender, EventArgs e)
@@ -152,7 +158,14 @@ namespace SiGen.UI
         private void tsbOptions_Click(object sender, EventArgs e)
         {
             using (var dlg = new AppPreferencesWindow())
-                dlg.ShowDialog();
+            {
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+					var curDisplayCfg = AppConfig.Current.DisplayConfig;
+					foreach(var layoutPanel in OpenDocumentPanels)
+						layoutPanel.Viewer.SetDisplayColors(curDisplayCfg);
+				}
+            }
         }
 
         private void tsbClose_Click(object sender, EventArgs e)

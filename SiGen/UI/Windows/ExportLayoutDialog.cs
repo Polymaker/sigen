@@ -53,6 +53,14 @@ namespace SiGen.UI.Windows
 
             if (LayoutToExport != null)
                 layoutPreview.CurrentLayout = LayoutToExport.Layout;
+
+            ExportOptions.AttachPropertyChangedEvent();
+            ExportOptions.PropertyChanged += ExportOptions_PropertyChanged;
+        }
+
+        private void ExportOptions_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            UpdatePreview();
         }
 
         private void LoadOptions()
@@ -60,11 +68,15 @@ namespace SiGen.UI.Windows
             isLoading = true;
 
             chkExtendFretSlots.Checked = ExportOptions.ExtendFretSlots;
-            chkExportFrets.Checked = ExportOptions.ExportFrets;
-            chkExportStrings.Checked = ExportOptions.ExportStrings;
-            chkExportStringCenters.Checked = ExportOptions.ExportMidlines;
+            ExportFretsPanel.Checked = ExportOptions.ExportFrets;
+            ExportStringsPanel.Checked = ExportOptions.ExportStrings;
+            ExportMidlinesPanel.Checked = ExportOptions.ExportMidlines;
             chkExportCenterLine.Checked = ExportOptions.ExportCenterLine;
-            chkExportFingerboard.Checked = ExportOptions.ExportFingerboardEdges;
+            ExportFingerboardPanel.Checked = ExportOptions.ExportFingerboardEdges;
+            
+            FretboardCfgEdit.LineConfig = ExportOptions.FingerboardEdges;
+            FretLinesCfgEdit.LineConfig = ExportOptions.Frets;
+            StringLinesCfgEdit.LineConfig = ExportOptions.Strings;
 
             if (ExportOptions.ExtendFretSlots)
             {
@@ -196,7 +208,7 @@ namespace SiGen.UI.Windows
                     mtbFretExtendAmount_ValueChanged(mtbFretExtendAmount, EventArgs.Empty);
                 else
                     ExportOptions.Frets.ExtensionAmount = Measure.Empty;
-                UpdatePreview();
+                //UpdatePreview();
             }
         }
 
@@ -210,7 +222,7 @@ namespace SiGen.UI.Windows
                     if (rbExtendInward.Checked)
                         amount = amount * -1;
                     ExportOptions.Frets.ExtensionAmount = amount;
-                    UpdatePreview();
+                    //UpdatePreview();
                 }
             }
         }
@@ -251,46 +263,41 @@ namespace SiGen.UI.Windows
             }
         }
 
-        private void chkExportFrets_CheckedChanged(object sender, EventArgs e)
+        private void ExportFretsPanel_CheckedChanged(object sender, EventArgs e)
         {
             if (!isLoading && HasInitialized)
-                ExportOptions.ExportFrets = chkExportFrets.Checked;
-            UpdatePreview();
+                ExportOptions.ExportFrets = ExportFretsPanel.Checked;
+            //UpdatePreview();
         }
 
-        private void chkExportStrings_CheckedChanged(object sender, EventArgs e)
+        private void ExportStringsPanel_CheckedChanged(object sender, EventArgs e)
         {
             if (!isLoading && HasInitialized)
-                ExportOptions.ExportStrings = chkExportStrings.Checked;
-            UpdatePreview(); 
+                ExportOptions.ExportStrings = ExportStringsPanel.Checked;
         }
 
-        private void chkExportStringCenters_CheckedChanged(object sender, EventArgs e)
+        private void ExportMidlinesPanel_CheckedChanged(object sender, EventArgs e)
         {
             if (!isLoading && HasInitialized)
-                ExportOptions.ExportMidlines = chkExportStringCenters.Checked;
-            UpdatePreview();
+                ExportOptions.ExportMidlines = ExportMidlinesPanel.Checked;
         }
 
         private void chkExportCenterLine_CheckedChanged(object sender, EventArgs e)
         {
             if (!isLoading && HasInitialized)
                 ExportOptions.ExportCenterLine = chkExportCenterLine.Checked;
-            UpdatePreview();
         }
 
         private void chkExportMargins_CheckedChanged(object sender, EventArgs e)
         {
             if (!isLoading && HasInitialized)
                 ExportOptions.ExportFingerboardMargins = chkExportMargins.Checked;
-            UpdatePreview();
         }
 
-        private void chkExportFingerboard_CheckedChanged(object sender, EventArgs e)
+        private void ExportFingerboardPanel_CheckedChanged(object sender, EventArgs e)
         {
             if (!isLoading && HasInitialized)
-                ExportOptions.ExportFingerboardEdges = chkExportFingerboard.Checked;
-            UpdatePreview();
+                ExportOptions.ExportFingerboardEdges = ExportFingerboardPanel.Checked;
         }
 
         private void btnPickFretColor_Click(object sender, EventArgs e)
@@ -305,7 +312,6 @@ namespace SiGen.UI.Windows
                 {
                     ExportOptions.Frets.Color = dlg.Color;
                     pbxFretColor.BackColor = dlg.Color;
-                    UpdatePreview();
                 }
             }
         }

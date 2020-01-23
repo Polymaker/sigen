@@ -130,6 +130,20 @@ namespace SiGen.UI
                 Invalidate();
         }
 
+        public void SetDisplayColors(ViewerDisplayConfig config)
+        {
+            _DisplayConfig.PropertyChanged -= DisplayConfigChanged;
+
+            for (int i = 0; i < config.LineConfigs.Length; i++)
+            {
+                _DisplayConfig.LineConfigs[i].Color = config.LineConfigs[i].Color;
+            }
+
+            _DisplayConfig.PropertyChanged += DisplayConfigChanged;
+            if (IsHandleCreated)
+                Invalidate();
+        }
+
         private void SetLayout(SILayout layout)
         {
             if(_CurrentLayout != null)

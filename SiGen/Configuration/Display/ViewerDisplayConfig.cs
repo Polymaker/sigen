@@ -147,6 +147,18 @@ namespace SiGen.UI
             set => SetPropertyValue(ref _DefaultDisplayUnit, value);
         }
 
+        [Browsable(false), JsonIgnore]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public LineDisplayConfig[] LineConfigs => new LineDisplayConfig[]
+        {
+            Strings,
+            Frets,
+            Fingerboard,
+            Margins,
+            Midlines,
+            CenterLine
+        };
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ViewerDisplayConfig()

@@ -94,7 +94,7 @@
             // 
             this.LineColorSelector.Location = new System.Drawing.Point(104, 28);
             this.LineColorSelector.Name = "LineColorSelector";
-            this.LineColorSelector.Size = new System.Drawing.Size(103, 20);
+            this.LineColorSelector.Size = new System.Drawing.Size(115, 20);
             this.LineColorSelector.TabIndex = 10;
             this.LineColorSelector.Value = System.Drawing.Color.Red;
             this.LineColorSelector.ValueChanged += new System.EventHandler(this.LineColorSelector_ValueChanged);
@@ -105,9 +105,9 @@
             this.LineThicknessEditor.Name = "LineThicknessEditor";
             this.LineThicknessEditor.SelectedThickness = 1D;
             this.LineThicknessEditor.SelectedUnit = SiGen.Export.LineUnit.Pixels;
-            this.LineThicknessEditor.Size = new System.Drawing.Size(120, 21);
+            this.LineThicknessEditor.Size = new System.Drawing.Size(115, 21);
             this.LineThicknessEditor.TabIndex = 11;
-            this.LineThicknessEditor.ConfigurationChanged += new System.EventHandler(this.LineThicknessEditor_ConfigurationChanged);
+            this.LineThicknessEditor.ThicknessChanged += new System.EventHandler(this.LineThicknessEditor_ConfigurationChanged);
             // 
             // LineExportConfigEdit
             // 
