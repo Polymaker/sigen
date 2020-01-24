@@ -27,10 +27,16 @@ namespace SiGen.UI
         private SILayout _CurrentLayout;
         private const int PADDING_BORDER = 6;
         private List<LayoutIntersection> LayoutIntersections;
+        private const int MIN_ZOOM = 6;
+        private const int MAX_ZOOM = 250;
 
         #endregion
 
         #region Properties
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        public override string Text { get => base.Text; set => base.Text = value; }
 
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SILayout CurrentLayout
@@ -156,70 +162,6 @@ namespace SiGen.UI
             CalculateIntersections();
         }
 
-        #region Drawing
-
-        protected override void OnPaint(PaintEventArgs pe)
-        {
-            base.OnPaint(pe);
-
-            pe.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-
-            var center = new PointF(Width / 2f, Height / 2f);
-            pe.Graphics.TranslateTransform(center.X, center.Y);
-            pe.Graphics.ScaleTransform((float)_Zoom, (float)_Zoom);
-            pe.Graphics.TranslateTransform((float)cameraPosition.X * -1, (float)cameraPosition.Y);
-
-            if(CurrentLayout != null)
-            {
-                RenderFingerboard(pe.Graphics);
-                RenderGuideLines(pe.Graphics);
-
-                RenderFrets(pe.Graphics);
-                if(DisplayConfig.ShowStrings)
-                    RenderStrings(pe.Graphics);
-            }
-
-            pe.Graphics.ResetTransform();
-
-            if (EnableMeasureTool)
-                RenderMeasureTool(pe.Graphics);
-        }
-
-        private void InvalidateWorldRegion(int bleedSize, params Vector[] points)
-        {
-            Vector minPos = Vector.Empty;
-            Vector maxPos = Vector.Empty;
-
-            for (int i = 0; i < points.Length; i++)
-            {
-                if (!points[i].IsEmpty)
-                {
-                    if (minPos.IsEmpty)
-                    {
-                        minPos = points[i];
-                        maxPos = points[i];
-                    }
-                    else
-                    {
-                        minPos = Vector.Min(minPos, points[i]);
-                        maxPos = Vector.Max(maxPos, points[i]);
-                    }
-                }
-            }
-
-            if(!minPos.IsEmpty)
-            {
-                var minPt = WorldToDisplay(minPos, _Zoom, true);
-                var maxPt = WorldToDisplay(maxPos, _Zoom, true);
-                var updateBounds = Rectangle.FromLTRB((int)minPt.X - bleedSize, (int)minPt.Y - bleedSize, (int)maxPt.X + bleedSize, (int)maxPt.Y + bleedSize);
-                Invalidate(updateBounds);
-            }
-        }
-
-        #endregion
-
         #region Change events
 
         private void DisplayConfigChanged(object sender, PropertyChangedEventArgs e)
@@ -320,6 +262,9 @@ namespace SiGen.UI
                     {
                         _Zoom = (Height - (PADDING_BORDER * 2f)) / (float)layoutBounds.Height.NormalizedValue;
                     }
+
+                    _Zoom = Math.Max(MIN_ZOOM, Math.Min(_Zoom, MAX_ZOOM));
+
                     var centerY = layoutBounds.Center.Y.NormalizedValue;
                     cameraPosition = Vector.Zero;
                     if (DisplayConfig.FingerboardOrientation == Orientation.Vertical)
@@ -343,7 +288,7 @@ namespace SiGen.UI
             else
                 _Zoom *= 0.90909090909090909090909090909091;
 
-            _Zoom = Math.Max(8, Math.Min(200, _Zoom));
+            _Zoom = Math.Max(MIN_ZOOM, Math.Min(MAX_ZOOM, _Zoom));
 
             if (oldZoom != _Zoom)
             {

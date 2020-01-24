@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,110 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="menuMeasureBox.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="menuItemDisplayMeasureMM.Size" type="System.Drawing.Size, System.Drawing">
-    <value>192, 22</value>
-  </data>
-  <data name="menuItemDisplayMeasureMM.Text" xml:space="preserve">
-    <value>Display in Millimeters</value>
-  </data>
-  <data name="menuItemDisplayMeasureCM.Size" type="System.Drawing.Size, System.Drawing">
-    <value>192, 22</value>
+  <data name="menuItemDisplayMeasureClearMeasure.Text" xml:space="preserve">
+    <value>Effacer la mesure</value>
   </data>
   <data name="menuItemDisplayMeasureCM.Text" xml:space="preserve">
-    <value>Display in Centimeters</value>
-  </data>
-  <data name="menuItemDisplayMeasureIN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>192, 22</value>
-  </data>
-  <data name="menuItemDisplayMeasureIN.Text" xml:space="preserve">
-    <value>Display in Inches</value>
-  </data>
-  <data name="menuItemDisplayMeasureFT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>192, 22</value>
+    <value>Afficher en centimètres</value>
   </data>
   <data name="menuItemDisplayMeasureFT.Text" xml:space="preserve">
-    <value>Display in Feets</value>
+    <value>Afficher en pieds</value>
   </data>
-  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>189, 6</value>
+  <data name="menuItemDisplayMeasureIN.Text" xml:space="preserve">
+    <value>Afficher en pouces</value>
   </data>
-  <data name="menuItemDisplayMeasureShowDecimals.Size" type="System.Drawing.Size, System.Drawing">
-    <value>192, 22</value>
+  <data name="menuItemDisplayMeasureMM.Text" xml:space="preserve">
+    <value>Afficher en millimètres</value>
   </data>
   <data name="menuItemDisplayMeasureShowDecimals.Text" xml:space="preserve">
-    <value>Show Exact Value</value>
-  </data>
-  <data name="menuItemDisplayMeasureClearMeasure.Size" type="System.Drawing.Size, System.Drawing">
-    <value>192, 22</value>
-  </data>
-  <data name="menuItemDisplayMeasureClearMeasure.Text" xml:space="preserve">
-    <value>Clear Measure</value>
-  </data>
-  <data name="menuMeasureBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>193, 142</value>
-  </data>
-  <data name="&gt;&gt;menuMeasureBox.Name" xml:space="preserve">
-    <value>menuMeasureBox</value>
-  </data>
-  <data name="&gt;&gt;menuMeasureBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
-  </metadata>
-  <data name="&gt;&gt;menuItemDisplayMeasureMM.Name" xml:space="preserve">
-    <value>menuItemDisplayMeasureMM</value>
-  </data>
-  <data name="&gt;&gt;menuItemDisplayMeasureMM.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;menuItemDisplayMeasureCM.Name" xml:space="preserve">
-    <value>menuItemDisplayMeasureCM</value>
-  </data>
-  <data name="&gt;&gt;menuItemDisplayMeasureCM.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;menuItemDisplayMeasureIN.Name" xml:space="preserve">
-    <value>menuItemDisplayMeasureIN</value>
-  </data>
-  <data name="&gt;&gt;menuItemDisplayMeasureIN.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;menuItemDisplayMeasureFT.Name" xml:space="preserve">
-    <value>menuItemDisplayMeasureFT</value>
-  </data>
-  <data name="&gt;&gt;menuItemDisplayMeasureFT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
-    <value>toolStripSeparator1</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;menuItemDisplayMeasureShowDecimals.Name" xml:space="preserve">
-    <value>menuItemDisplayMeasureShowDecimals</value>
-  </data>
-  <data name="&gt;&gt;menuItemDisplayMeasureShowDecimals.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;menuItemDisplayMeasureClearMeasure.Name" xml:space="preserve">
-    <value>menuItemDisplayMeasureClearMeasure</value>
-  </data>
-  <data name="&gt;&gt;menuItemDisplayMeasureClearMeasure.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>LayoutViewer</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Control, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>Afficher la valeur exacte</value>
   </data>
 </root>

@@ -72,7 +72,7 @@ namespace SiGen.StringedInstruments.Layout
             var elem = base.Serialize(elemName);
             elem.Add(Treble.SerializeAsAttribute("Treble"));
             elem.Add(Bass.SerializeAsAttribute("Bass"));
-            //if (Layout.Strings.AllEqual(s => s.MultiScaleRatio))
+            
             elem.Add(new XAttribute("MultiScaleRatio", PerpendicularFretRatio.ToString(NumberFormatInfo.InvariantInfo)));
             return elem;
         }
@@ -82,12 +82,11 @@ namespace SiGen.StringedInstruments.Layout
             base.Deserialize(elem);
             Treble = Measure.ParseInvariant(elem.Attribute("Treble").Value);
             Bass = Measure.ParseInvariant(elem.Attribute("Bass").Value);
+
             if (elem.ContainsAttribute("MultiScaleRatio"))
                 PerpendicularFretRatio = double.Parse(elem.Attribute("MultiScaleRatio").Value, NumberFormatInfo.InvariantInfo);
             else
                 PerpendicularFretRatio = 0.5;
-            //else if (Layout.Strings.AllEqual(s => s.MultiScaleRatio))
-            //    _PerpendicularFretRatio = Layout.Strings[0].MultiScaleRatio;
         }
     }
 }

@@ -12,7 +12,6 @@ using System.Windows.Forms.Design;
 using System.Collections;
 using SiGen.Utilities;
 using System.Windows.Forms.Design.Behavior;
-
 namespace SiGen.UI.Controls.ValueEditors
 {
     [Designer(typeof(ColorSelectButtonDesigner))]
@@ -35,8 +34,6 @@ namespace SiGen.UI.Controls.ValueEditors
         public ColorSelectButton()
         {
             InitializeComponent();
-            btnPickColor.Top = 0;
-            btnPickColor.Left = Width - btnPickColor.Width;
             _Value = Color.Red;
             //HexTexbox.Text = "FF0000";
         }
@@ -44,8 +41,6 @@ namespace SiGen.UI.Controls.ValueEditors
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            PositionControls();
-
             SetColor(_Value, false);
         }
 
@@ -56,6 +51,23 @@ namespace SiGen.UI.Controls.ValueEditors
 
         #region Size & Layout
 
+        private int ColorPreviewWidth;
+        private int MinimumBoxWidth;
+        private int ButtonWidth;
+
+        private void CalculateSizes()
+        {
+            ColorPreviewWidth = (int)Math.Round(HexTexbox.Height * 1.61803398875f);
+            MinimumBoxWidth = MeasureStringWidth("FF33AA");
+            ButtonWidth = btnPickColor.Width - 1;
+        }
+
+        private int MeasureStringWidth(string text)
+        {
+            return TextRenderer.MeasureText(text, Font,
+                    new Size(9999, 9999), TextFormatFlags.TextBoxControl).Width;
+        }
+
         private int GetColorPreviewSize()
         {
             return (int)(HexTexbox.Height * 1.61803398875f);
@@ -63,34 +75,46 @@ namespace SiGen.UI.Controls.ValueEditors
 
         private void PositionControls()
         {
-            HexTexbox.Left = GetColorPreviewSize() - 1;
-            btnPickColor.Left = HexTexbox.Right - 2;
+            HexTexbox.Left = ColorPreviewWidth - 1;
+            HexTexbox.Width = (Width - ButtonWidth - HexTexbox.Left) + 2;
+            btnPickColor.Left = Width - ButtonWidth;
             btnPickColor.Top = -1;
-            Height = HexTexbox.Height;
             btnPickColor.Height = HexTexbox.Height + 2;
+            
+            if (Height != HexTexbox.Height)
+                Height = HexTexbox.Height;
         }
 
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             if (HexTexbox.IsHandleCreated)
             {
-                int ctrlSize = btnPickColor.Right - HexTexbox.Left;
-                width = ctrlSize + GetColorPreviewSize() - 1;
+                //int ctrlSize = btnPickColor.Right - HexTexbox.Left;
+                width = Math.Max(width, ColorPreviewWidth + MinimumBoxWidth + ButtonWidth);
                 specified |= BoundsSpecified.Height;
                 height = HexTexbox.Height;
             }
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
-        protected override void OnParentFontChanged(EventArgs e)
+        private void ColorSelectButton_SizeChanged(object sender, EventArgs e)
         {
-            base.OnParentFontChanged(e);
+            PositionControls();
+        }
+
+        #endregion
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            CalculateSizes();
             PositionControls();
         }
 
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
+            CalculateSizes();
             PositionControls();
         }
 
@@ -99,8 +123,7 @@ namespace SiGen.UI.Controls.ValueEditors
             PositionControls();
         }
 
-
-        #endregion
+        
 
         private void SetColor(Color value, bool fireEvent = true)
         {
@@ -189,6 +212,8 @@ namespace SiGen.UI.Controls.ValueEditors
                 
             }
         }
+
+        
     }
 
     class ColorSelectButtonDesigner : ControlDesigner
@@ -218,6 +243,17 @@ namespace SiGen.UI.Controls.ValueEditors
                 }
                 arrayList.Add(new SnapLine(SnapLineType.Baseline, textBaseline, SnapLinePriority.Medium));
                 return arrayList;
+            }
+        }
+
+        public override SelectionRules SelectionRules
+        {
+            get
+            {
+                var baseRules = base.SelectionRules;
+                baseRules = baseRules & (~SelectionRules.BottomSizeable);
+                baseRules = baseRules & (~SelectionRules.TopSizeable);
+                return baseRules;
             }
         }
     }

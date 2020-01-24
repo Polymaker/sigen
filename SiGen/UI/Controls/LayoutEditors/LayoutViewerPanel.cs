@@ -147,7 +147,6 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             Process.Start("explorer.exe", $"/select, \"{CurrentDocument.FilePath}\"");
         }
-       
 
         private void ResetCameraButton_Click(object sender, EventArgs e)
         {
@@ -206,6 +205,9 @@ namespace SiGen.UI.Controls.LayoutEditors
             Viewer.EnableMeasureTool = tsbMeasureTool.Checked;
         }
 
-        
+        private void tsmiRename_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

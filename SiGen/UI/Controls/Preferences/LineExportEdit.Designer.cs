@@ -28,60 +28,63 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LineExportEdit));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.DashedCheckbox = new System.Windows.Forms.CheckBox();
+            this.StringGaugeCheckbox = new System.Windows.Forms.CheckBox();
             this.ThicknessEditor = new SiGen.UI.Controls.ValueEditors.LineThicknessEditor();
             this.ColorSelector = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
             this.SuspendLayout();
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 6);
+            resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(54, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Line Color";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 32);
+            resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(56, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Thickness";
+            // 
+            // DashedCheckbox
+            // 
+            resources.ApplyResources(this.DashedCheckbox, "DashedCheckbox");
+            this.DashedCheckbox.Name = "DashedCheckbox";
+            this.DashedCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // StringGaugeCheckbox
+            // 
+            resources.ApplyResources(this.StringGaugeCheckbox, "StringGaugeCheckbox");
+            this.StringGaugeCheckbox.Name = "StringGaugeCheckbox";
+            this.StringGaugeCheckbox.UseVisualStyleBackColor = true;
+            this.StringGaugeCheckbox.CheckedChanged += new System.EventHandler(this.StringGaugeCheckbox_CheckedChanged);
             // 
             // ThicknessEditor
             // 
-            this.ThicknessEditor.Location = new System.Drawing.Point(68, 29);
+            resources.ApplyResources(this.ThicknessEditor, "ThicknessEditor");
             this.ThicknessEditor.Name = "ThicknessEditor";
             this.ThicknessEditor.SelectedThickness = 1D;
-            this.ThicknessEditor.Size = new System.Drawing.Size(115, 21);
-            this.ThicknessEditor.TabIndex = 1;
             this.ThicknessEditor.ThicknessChanged += new System.EventHandler(this.ThicknessEditor_ThicknessChanged);
             // 
             // ColorSelector
             // 
-            this.ColorSelector.Location = new System.Drawing.Point(68, 3);
+            resources.ApplyResources(this.ColorSelector, "ColorSelector");
             this.ColorSelector.Name = "ColorSelector";
-            this.ColorSelector.Size = new System.Drawing.Size(115, 20);
-            this.ColorSelector.TabIndex = 0;
             this.ColorSelector.Value = System.Drawing.Color.Red;
             this.ColorSelector.ValueChanged += new System.EventHandler(this.ColorSelector_ValueChanged);
             // 
             // LineExportEdit
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Controls.Add(this.StringGaugeCheckbox);
+            this.Controls.Add(this.DashedCheckbox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ThicknessEditor);
             this.Controls.Add(this.ColorSelector);
             this.Name = "LineExportEdit";
-            this.Size = new System.Drawing.Size(186, 53);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -93,5 +96,7 @@
         private ValueEditors.LineThicknessEditor ThicknessEditor;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox DashedCheckbox;
+        private System.Windows.Forms.CheckBox StringGaugeCheckbox;
     }
 }

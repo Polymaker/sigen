@@ -659,6 +659,16 @@ namespace SiGen.StringedInstruments.Layout
             return VisualElements.OfType<T>().FirstOrDefault(x => predicate(x));
         }
 
+        public IEnumerable<T> GetElements<T>(Predicate<T> predicate) where T : VisualElement
+        {
+            return VisualElements.OfType<T>().Where(x => predicate(x));
+        }
+
+        public IEnumerable<T> GetElements<T>() where T : VisualElement
+        {
+            return VisualElements.OfType<T>();
+        }
+
         #region XML serialization
 
         public void Save(string path)

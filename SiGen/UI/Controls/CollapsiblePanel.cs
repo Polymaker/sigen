@@ -154,6 +154,7 @@ namespace SiGen.UI.Controls
         protected Rectangle ArrowBounds { get; private set; }
         protected Rectangle CheckBoxBounds { get; private set; }
         protected Rectangle CaptionBounds { get; private set; }
+
         private Size CaptionSize;
 
         #endregion
@@ -162,15 +163,18 @@ namespace SiGen.UI.Controls
 
         public CollapsiblePanel()
         {
-            //InitializeComponent();
-            //_DisplayStyle = HeaderDisplayStyle.Label;
             ContentPanel = new CollapsiblePanelContainer();
             Controls.Add(ContentPanel);
+
             ContentPanel.Dock = DockStyle.Fill;
+
             _HeaderHeight = -1;
             _PanelHeight = ContentPanel.Height;
             _ArrowAlignment = LeftRightAlignment.Right;
-            SetStyle(ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer, true);
+
+            SetStyle(ControlStyles.ResizeRedraw | 
+                ControlStyles.OptimizedDoubleBuffer | 
+                ControlStyles.AllPaintingInWmPaint, true);
         }
 
         #endregion
@@ -187,6 +191,9 @@ namespace SiGen.UI.Controls
             HasInitialized = true;
 
             AdjustPanelSize();
+
+            if(!Collapsed)
+                ContentPanel.PerformLayout();
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -195,6 +202,7 @@ namespace SiGen.UI.Controls
 
             CalculateCaptionSize();
             CalculateHeaderHeight();
+
             AdjustPanelSize();
         }
 
@@ -372,6 +380,7 @@ namespace SiGen.UI.Controls
         private void CalculateCheckboxBounds()
         {
             int checkboxSize = 20;
+
             switch (CheckBoxAlignment)
             {
                 case HorizontalAlignment.Left:
@@ -400,9 +409,11 @@ namespace SiGen.UI.Controls
                     }
                 case HorizontalAlignment.Center:
                     CheckBoxBounds = Rectangle.FromLTRB(
-                        CaptionBounds.Left + CaptionSize.Width, CaptionBounds.Top,
-                        CaptionBounds.Left + CaptionSize.Width + checkboxSize, CaptionBounds.Bottom
-                        );
+                        CaptionBounds.Left + 3 + CaptionSize.Width, 
+                        CaptionBounds.Top,
+                        CaptionBounds.Left + 3 + CaptionSize.Width + checkboxSize, 
+                        CaptionBounds.Bottom
+                    );
                     break;
             }
         }
@@ -417,13 +428,16 @@ namespace SiGen.UI.Controls
 
         internal void AdjustPanelSize()
         {
+            if (!HasInitialized)
+                return;
+
             InternalSetHeight = true;
+
             if (!Collapsed)
             {
                 int headerHeight = GetHeaderHeight();
-                Height = PanelHeight + headerHeight + Padding.Vertical;
-                ContentPanel.Top = headerHeight + Padding.Top;
-                ContentPanel.PerformLayout();
+                int newHeight = PanelHeight + headerHeight + Padding.Vertical;
+                Height = newHeight;
             }
             else
             {
@@ -433,16 +447,6 @@ namespace SiGen.UI.Controls
             InternalSetHeight = false;
         }
 
-        internal void AdjustPanelToContent()
-        {
-            if (!Collapsed && AutoSizeHeight)
-            {
-                InternalSetHeight = true;
-                Height = CalculateHeight();
-                InternalSetHeight = false;
-            }
-        }
-
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             if (specified.HasFlag(BoundsSpecified.Height))
@@ -450,12 +454,20 @@ namespace SiGen.UI.Controls
                 if (height == 0)
                     height = Height;
 
-                if (AutoSizeHeight)
-                    height = CalculateHeight();
-                if (!Collapsed && !InternalSetHeight)
-                    _PanelHeight = Math.Max(height - GetHeaderHeight() - Padding.Vertical, 6);
-                else if (Collapsed)
-                    height = GetHeaderHeight();
+                if (!InternalSetHeight)
+                {
+                    if (!Collapsed)
+                    {
+                        if (AutoSizeHeight)
+                            height = CalculateAutoHeight();
+                        else if (HasInitialized)
+                            _PanelHeight = Math.Max(height - GetHeaderHeight() - Padding.Vertical, 6);
+                        //else
+                        //    height = PanelHeight + GetHeaderHeight() + Padding.Vertical;
+                    }
+                    else if (Collapsed)
+                        height = GetHeaderHeight();
+                }
             }
 
             base.SetBoundsCore(x, y, width, height, specified);
@@ -467,22 +479,33 @@ namespace SiGen.UI.Controls
 
             if (AutoSizeHeight && !Collapsed)
             {
-                int newHeight = CalculateHeight();
+                int newHeight = CalculateAutoHeight();
                 if (newHeight != Height)
                     UpdateBounds(Left, Top, Width, newHeight);
             }
         }
 
-        public int CalculateHeight()
+        public int CalculateAutoHeight()
         {
             var prefSize = ContentPanel.GetPreferredSize(DisplayRectangle.Size);
-            return GetHeaderHeight() + Padding.Vertical + prefSize.Height;
+            int totalHeight = GetHeaderHeight() + Padding.Vertical + prefSize.Height;
+            _PanelHeight = prefSize.Height;
+            return totalHeight;
         }
 
-        private void CalculateHeaderHeight(bool performLayout = false)
+        private void CalculateHeaderHeight()
         {
+            if (VisualStyleRenderer.IsSupported)
+            {
+                string headerText = "Wasd123_!";
+                if (!string.IsNullOrEmpty(Text))
+                    headerText += Text;
 
-            if (IsHandleCreated)
+                ComputedHeaderHeight = TextRenderer.MeasureText(headerText, Font).Height + 6;
+
+                ComputedHeaderHeight += 4; //button style padding
+            }
+            else if (IsHandleCreated)
             {
                 string headerText = "Wasd123_!";
                 if (!string.IsNullOrEmpty(Text))
@@ -490,14 +513,11 @@ namespace SiGen.UI.Controls
 
                 using (var g = CreateGraphics())
                     ComputedHeaderHeight = (int)g.MeasureString(headerText, Font).Height + 6;
-                //if (DisplayStyle == HeaderDisplayStyle.Button)
-                ComputedHeaderHeight += 4;
+
+                ComputedHeaderHeight += 4; //button style padding
             }
             else
                 ComputedHeaderHeight = Font.Height + 6;
-
-            if (HeaderHeight == -1 && performLayout)
-                PerformLayout();
 
             if (HeaderHeight == -1)
                 RecalculateBounds();
@@ -605,10 +625,13 @@ namespace SiGen.UI.Controls
                 ContentPanel.Dock = AutoSizeHeight ? DockStyle.Top : DockStyle.Fill;
                 ContentPanel.AutoSize = AutoSizeHeight;
                 ContentPanel.AutoSizeMode = AutoSizeHeight ? AutoSizeMode.GrowAndShrink : AutoSizeMode.GrowOnly;
+
                 if (AutoSizeHeight)
                 {
                     ContentPanel.PerformLayout();
-                    Height = CalculateHeight();
+                    InternalSetHeight = true;
+                    Height = CalculateAutoHeight();
+                    InternalSetHeight = false;
                 }
             }
         }
@@ -646,6 +669,7 @@ namespace SiGen.UI.Controls
         {
             var headerRect = e.ClipRectangle;
 
+            if (VisualStyleRenderer.IsSupported)
             {
                 var elemStyle = VisualStyleElement.Button.PushButton.Normal;
                 if (IsOverHeader)
@@ -653,7 +677,10 @@ namespace SiGen.UI.Controls
                 var vsr = new VisualStyleRenderer(elemStyle);
                 vsr.DrawBackground(e.Graphics, headerRect);
             }
-            
+            else
+            {
+
+            }
 
             var glyph = GetArrowGlyph();
 
@@ -731,7 +758,7 @@ namespace SiGen.UI.Controls
                 base.OnLayout(levent);
                 if (Visible && ParentPanel.AutoSizeHeight)
                 {
-                    int newHeight = ParentPanel.CalculateHeight();
+                    int newHeight = ParentPanel.CalculateAutoHeight();
                     ParentPanel.Height = newHeight;
                 }
             }

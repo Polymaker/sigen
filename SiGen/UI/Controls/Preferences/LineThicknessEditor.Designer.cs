@@ -58,8 +58,6 @@
             // 
             // txtNumber
             // 
-            this.txtNumber.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNumber.AutoSize = false;
             this.txtNumber.Location = new System.Drawing.Point(66, 0);
             this.txtNumber.Name = "txtNumber";

@@ -1,4 +1,5 @@
-﻿using SiGen.StringedInstruments.Layout;
+﻿using SiGen.Measuring;
+using SiGen.StringedInstruments.Layout;
 using SiGen.StringedInstruments.Layout.Visual;
 using System;
 using System.Collections.Generic;
@@ -112,10 +113,33 @@ namespace SiGen.Export
 
             foreach (var fingerboardEdge in Layout.VisualElements.OfType<FingerboardEdge>())
             {
-                if (fingerboardEdge.Spline != null)
+                if (fingerboardEdge.Points.Count == 2)
+                {
+                    var layoutLine = new LayoutLine(fingerboardEdge.Points.First(), fingerboardEdge.Points.Last());
+                    AddLayoutLine(layoutLine, VisualElementType.FingerboardEdge, Options.FingerboardEdges);
+                }
+                else if (fingerboardEdge.Spline != null)
                     AddLayoutSpline(fingerboardEdge, VisualElementType.FingerboardEdge, Options.FingerboardEdges);
                 else
                     AddLayoutPolyLine(fingerboardEdge, VisualElementType.FingerboardEdge, Options.FingerboardEdges);
+            }
+
+            if (!Options.ExportFrets)
+            {
+                var nutLines = Layout.GetElements<FretLine>(x => x.IsNut);
+
+                foreach (var line in nutLines)
+                {
+                    if (line.IsStraight)
+                    {
+                        var layoutLine = new LayoutLine(line.Points.First(), line.Points.Last());
+                        AddLayoutLine(layoutLine, VisualElementType.FingerboardEdge, Options.FingerboardEdges);
+                    }
+                    else if (line.Spline != null)
+                        AddLayoutSpline(line, VisualElementType.FingerboardEdge, Options.FingerboardEdges);
+                    else
+                        AddLayoutPolyLine(line, VisualElementType.FingerboardEdge, Options.FingerboardEdges);
+                }
             }
         }
 
@@ -145,42 +169,52 @@ namespace SiGen.Export
 
             if (Options.ExportMidlines)
             {
-                foreach (var stringCenter in Layout.VisualElements.OfType<StringCenter>())
+                foreach (var stringCenter in Layout.GetElements<StringCenter>())
                     AddLayoutLine(stringCenter, VisualElementType.StringMidline, Options.Midlines);
             }
 
             if (!Options.ExportStrings && Options.ExportFingerboardMargins)//export first & last string to show fingerboard margin
             {
-                var margins = Layout.VisualElements.OfType<LayoutLine>().Where(x => x.ElementType == VisualElementType.FingerboardMargin);
+                var margins = Layout.GetElements<LayoutLine>(x => x.ElementType == VisualElementType.FingerboardMargin);
 
                 if (margins.Any())
                 {
                     foreach(var marginLine in margins)
                         AddLayoutLine(marginLine, VisualElementType.FingerboardMargin, Options.FingerboardMargins);
                 }
-                else
-                {
-                    var firstString = Layout.FirstString.LayoutLine;
-                    var lastString = Layout.LastString.LayoutLine;
-                    var trebleEdge = Layout.GetStringBoundaryLine(Layout.FirstString, FingerboardSide.Treble);
-                    var bassEdge = Layout.GetStringBoundaryLine(Layout.LastString, FingerboardSide.Bass);
+                //else
+                //{
+                //    var firstString = Layout.FirstString.LayoutLine;
+                //    var lastString = Layout.LastString.LayoutLine;
+                //    var trebleEdge = Layout.GetStringBoundaryLine(Layout.FirstString, FingerboardSide.Treble);
+                //    var bassEdge = Layout.GetStringBoundaryLine(Layout.LastString, FingerboardSide.Bass);
 
-                    var trebleMargin = new LayoutLine(firstString.P1, firstString.SnapToLine(trebleEdge.P2, LineSnapDirection.Horizontal));
-                    AddLayoutLine(trebleMargin, VisualElementType.FingerboardMargin, Options.FingerboardMargins);
+                //    var trebleMargin = new LayoutLine(firstString.P1, firstString.SnapToLine(trebleEdge.P2, LineSnapDirection.Horizontal));
+                //    AddLayoutLine(trebleMargin, VisualElementType.FingerboardMargin, Options.FingerboardMargins);
 
-                    if (firstString != lastString)
-                    {
-                        var bassMargin = new LayoutLine(lastString.P1, lastString.SnapToLine(bassEdge.P2, LineSnapDirection.Horizontal));
-                        AddLayoutLine(bassMargin, VisualElementType.FingerboardMargin, Options.FingerboardMargins);
-                    }
-                }
+                //    if (firstString != lastString)
+                //    {
+                //        var bassMargin = new LayoutLine(lastString.P1, lastString.SnapToLine(bassEdge.P2, LineSnapDirection.Horizontal));
+                //        AddLayoutLine(bassMargin, VisualElementType.FingerboardMargin, Options.FingerboardMargins);
+                //    }
+                //}
             }
 
             if (Options.ExportFingerboardEdges && Options.FingerboardEdges.ContinueLines)
             {
-                foreach (var guideLine in Layout.VisualElements.OfType<LayoutLine>()
-                    .Where(l => l.ElementType == VisualElementType.FingerboardContinuation))
+                var endPoints = new List<PointM>();
+
+                foreach (var guideLine in Layout.GetElements<LayoutLine>(l =>
+                    l.ElementType == VisualElementType.FingerboardContinuation))
+                {
+                    endPoints.Add(guideLine.P2);
                     AddLayoutLine(guideLine, VisualElementType.FingerboardContinuation, Options.GuideLines);
+                }
+
+                var pt1 = endPoints.OrderBy(pt => pt.X).First();
+                var pt2 = endPoints.OrderByDescending(pt => pt.X).First();
+                var bridgeLine = new LayoutLine(pt1, pt2);
+                AddLayoutLine(bridgeLine, VisualElementType.FingerboardContinuation, Options.GuideLines);
             }
         }
 

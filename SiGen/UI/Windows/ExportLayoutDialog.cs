@@ -5,6 +5,7 @@ using SiGen.Configuration.Display;
 using SiGen.Export;
 using SiGen.Measuring;
 using SiGen.StringedInstruments.Layout;
+using SiGen.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -56,6 +57,11 @@ namespace SiGen.UI.Windows
 
             ExportOptions.AttachPropertyChangedEvent();
             ExportOptions.PropertyChanged += ExportOptions_PropertyChanged;
+
+            foreach(var panel in splitContainer1.Panel1.Controls.OfType<CollapsiblePanel>())
+            {
+                Console.WriteLine(panel.PanelHeight);
+            }
         }
 
         private void ExportOptions_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -67,16 +73,22 @@ namespace SiGen.UI.Windows
         {
             isLoading = true;
 
-            chkExtendFretSlots.Checked = ExportOptions.ExtendFretSlots;
+            ExtendFretsPanel.Checked = ExportOptions.ExtendFretSlots;
             ExportFretsPanel.Checked = ExportOptions.ExportFrets;
             ExportStringsPanel.Checked = ExportOptions.ExportStrings;
             ExportMidlinesPanel.Checked = ExportOptions.ExportMidlines;
-            chkExportCenterLine.Checked = ExportOptions.ExportCenterLine;
+            ExportCenterLinePanel.Checked = ExportOptions.ExportCenterLine;
             ExportFingerboardPanel.Checked = ExportOptions.ExportFingerboardEdges;
-            
+            ExportMarginsPanel.Checked = ExportOptions.ExportFingerboardMargins;
+
             FretboardCfgEdit.LineConfig = ExportOptions.FingerboardEdges;
             FretLinesCfgEdit.LineConfig = ExportOptions.Frets;
             StringLinesCfgEdit.LineConfig = ExportOptions.Strings;
+            CenterLineCfgEdit.LineConfig = ExportOptions.CenterLine;
+            MidlinesCfgEdit.LineConfig = ExportOptions.Midlines;
+            MarginsCfgEdit.LineConfig = ExportOptions.FingerboardMargins;
+
+            ContinueEdgesCheckbox.Checked = ExportOptions.FingerboardEdges.ContinueLines;
 
             if (ExportOptions.ExtendFretSlots)
             {
@@ -92,21 +104,6 @@ namespace SiGen.UI.Windows
                 rbExtendInward.Checked = true;
                 mtbFretExtendAmount.Value = Measure.Mm(2);
             }
-
-            chkFretThickness.Checked = (ExportOptions.Frets.LineUnit >= LineUnit.Millimeters);
-            if (chkFretThickness.Checked)
-            {
-                if (ExportOptions.Frets.LineUnit == LineUnit.Millimeters)
-                    mtbFretThickness.Value = new Measure(ExportOptions.Frets.LineThickness, UnitOfMeasure.Mm);
-                else
-                    mtbFretThickness.Value = new Measure(ExportOptions.Frets.LineThickness, UnitOfMeasure.In);
-            }
-            else
-            {
-                mtbFretThickness.Value = Measure.Mm(0.5);
-            }
-
-            pbxFretColor.BackColor = ExportOptions.Frets.Color;
 
             isLoading = false;
         }
@@ -130,6 +127,7 @@ namespace SiGen.UI.Windows
 
             layoutCfg.Fingerboard.Color = exportCfg.FingerboardEdges.Color;
             layoutCfg.Fingerboard.Visible = exportCfg.ExportFingerboardEdges;
+            layoutCfg.Fingerboard.ContinueLines = exportCfg.FingerboardEdges.ContinueLines;
 
             layoutCfg.Frets.Visible = exportCfg.Frets.Enabled;
             layoutCfg.Frets.Color = exportCfg.Frets.Color;
@@ -197,18 +195,14 @@ namespace SiGen.UI.Windows
                 mtbFretExtendAmount_ValueChanged(mtbFretExtendAmount, EventArgs.Empty);
         }
 
-        private void chkExtendFretSlots_CheckedChanged(object sender, EventArgs e)
+        private void ExtendFretsPanel_CheckedChanged(object sender, EventArgs e)
         {
-            flpExtendDirection.Enabled = chkExtendFretSlots.Checked;
-            mtbFretExtendAmount.Enabled = chkExtendFretSlots.Checked;
-
             if (!isLoading && HasInitialized)
             {
-                if (chkExtendFretSlots.Checked)
+                if (ExtendFretsPanel.Checked)
                     mtbFretExtendAmount_ValueChanged(mtbFretExtendAmount, EventArgs.Empty);
                 else
                     ExportOptions.Frets.ExtensionAmount = Measure.Empty;
-                //UpdatePreview();
             }
         }
 
@@ -222,43 +216,6 @@ namespace SiGen.UI.Windows
                     if (rbExtendInward.Checked)
                         amount = amount * -1;
                     ExportOptions.Frets.ExtensionAmount = amount;
-                    //UpdatePreview();
-                }
-            }
-        }
-
-        private void chkFretThickness_CheckedChanged(object sender, EventArgs e)
-        {
-            mtbFretThickness.Enabled = chkFretThickness.Checked;
-
-            if (!isLoading && HasInitialized)
-            {
-                if (chkExtendFretSlots.Checked)
-                    mtbFretThickness_ValueChanged(mtbFretThickness, EventArgs.Empty);
-                else
-                {
-                    ExportOptions.Frets.LineThickness = 1d;
-                    ExportOptions.Frets.LineUnit = LineUnit.Points;
-                }
-            }
-        }
-
-        private void mtbFretThickness_ValueChanged(object sender, EventArgs e)
-        {
-            if (!isLoading && HasInitialized)
-            {
-                if (!mtbFretThickness.Value.IsEmpty && mtbFretThickness.Value != Measure.Zero)
-                {
-                    if (mtbFretThickness.Value.Unit.IsMetric)
-                    {
-                        ExportOptions.Frets.LineThickness = (double)mtbFretThickness.Value[UnitOfMeasure.Mm];
-                        ExportOptions.Frets.LineUnit = LineUnit.Millimeters;
-                    }
-                    else
-                    {
-                        ExportOptions.Frets.LineThickness = (double)mtbFretThickness.Value[UnitOfMeasure.In];
-                        ExportOptions.Frets.LineUnit = LineUnit.Inches;
-                    }
                 }
             }
         }
@@ -267,7 +224,6 @@ namespace SiGen.UI.Windows
         {
             if (!isLoading && HasInitialized)
                 ExportOptions.ExportFrets = ExportFretsPanel.Checked;
-            //UpdatePreview();
         }
 
         private void ExportStringsPanel_CheckedChanged(object sender, EventArgs e)
@@ -282,16 +238,16 @@ namespace SiGen.UI.Windows
                 ExportOptions.ExportMidlines = ExportMidlinesPanel.Checked;
         }
 
-        private void chkExportCenterLine_CheckedChanged(object sender, EventArgs e)
+        private void ExportCenterLinePanel_CheckedChanged(object sender, EventArgs e)
         {
             if (!isLoading && HasInitialized)
-                ExportOptions.ExportCenterLine = chkExportCenterLine.Checked;
+                ExportOptions.ExportCenterLine = ExportCenterLinePanel.Checked;
         }
 
-        private void chkExportMargins_CheckedChanged(object sender, EventArgs e)
+        private void ExportMarginsPanel_CheckedChanged(object sender, EventArgs e)
         {
             if (!isLoading && HasInitialized)
-                ExportOptions.ExportFingerboardMargins = chkExportMargins.Checked;
+                ExportOptions.ExportFingerboardMargins = ExportMarginsPanel.Checked;
         }
 
         private void ExportFingerboardPanel_CheckedChanged(object sender, EventArgs e)
@@ -300,20 +256,10 @@ namespace SiGen.UI.Windows
                 ExportOptions.ExportFingerboardEdges = ExportFingerboardPanel.Checked;
         }
 
-        private void btnPickFretColor_Click(object sender, EventArgs e)
+        private void ContinueEdgesCheckbox_CheckedChanged(object sender, EventArgs e)
         {
-            if (!HasInitialized)
-                return;
-
-            using (var dlg = new ColorDialog())
-            {
-                dlg.Color = ExportOptions.Frets.Color;
-                if(dlg.ShowDialog() == DialogResult.OK)
-                {
-                    ExportOptions.Frets.Color = dlg.Color;
-                    pbxFretColor.BackColor = dlg.Color;
-                }
-            }
+            if (!isLoading && HasInitialized)
+                ExportOptions.FingerboardEdges.ContinueLines = ContinueEdgesCheckbox.Checked;
         }
     }
 }

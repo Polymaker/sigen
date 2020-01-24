@@ -76,7 +76,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
             isDirty = true;
         }
 
-        private void UpdateInfos()
+        public void UpdateInfos()
         {
             _Length = Measure.Zero;
             for (int i = 0; i < Points.Count - 1; i++)

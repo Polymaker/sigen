@@ -27,6 +27,8 @@ namespace SiGen.UI.Controls.Preferences
         {
             InitializeComponent();
             FlagManager = new FlagList();
+            StringGaugeCheckbox.Visible = false;
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
 
         private void BindExportConfig(LineExportConfig exportConfig)
@@ -47,10 +49,21 @@ namespace SiGen.UI.Controls.Preferences
             using (FlagManager.UseFlag("LoadConfig"))
             {
                 ColorSelector.Value = LineConfig?.Color ?? Color.Black;
+
                 if (LineConfig != null)
                     ThicknessEditor.SetValues(LineConfig.LineThickness, LineConfig.LineUnit);
                 else
                     ThicknessEditor.SetValues(1f, LineUnit.Points);
+
+                DashedCheckbox.Checked = LineConfig?.IsDashed ?? false;
+
+                if (LineConfig is StringsExportConfig stringsCfg)
+                {
+                    StringGaugeCheckbox.Visible = true;
+                    StringGaugeCheckbox.Checked = stringsCfg.Enabled;
+                }
+                else
+                    StringGaugeCheckbox.Visible = false;
             }
         }
 
@@ -71,6 +84,15 @@ namespace SiGen.UI.Controls.Preferences
             {
                 LineConfig.LineThickness = ThicknessEditor.SelectedThickness;
                 LineConfig.LineUnit = ThicknessEditor.SelectedUnit;
+            }
+        }
+
+        private void StringGaugeCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!FlagManager.IsSet("LoadConfig") && 
+                LineConfig is StringsExportConfig stringsCfg)
+            {
+                stringsCfg.UseStringGauge = StringGaugeCheckbox.Checked;
             }
         }
     }

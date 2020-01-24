@@ -23,7 +23,7 @@ namespace SiGen.UI
         private Measure _FretExtensionAmount;
         private StringsDisplayConfig _Strings;
         private FretsDisplayConfigs _Frets;
-        private LineDisplayConfig _Fingerboard;
+        private FingerboardDisplayConfig _Fingerboard;
         private LineDisplayConfig _CenterLine;
         private LineDisplayConfig _Midlines;
         private LineDisplayConfig _Margins;
@@ -60,7 +60,7 @@ namespace SiGen.UI
 
         [JsonProperty]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content), TypeConverter(typeof(ExpandableObjectConverter))]
-        public LineDisplayConfig Fingerboard
+        public FingerboardDisplayConfig Fingerboard
         {
             get => _Fingerboard;
             set => SetPropertyValue(ref _Fingerboard, value);
@@ -178,10 +178,11 @@ namespace SiGen.UI
                 RenderWidth = Measure.Mm(2.6)
             };
 
-            _Fingerboard = new LineDisplayConfig()
+            _Fingerboard = new FingerboardDisplayConfig()
             {
                 Visible = true,
-                Color = Color.Blue
+                Color = Color.Blue,
+                ContinueLines = true
             };
 
             _Margins = new LineDisplayConfig()
@@ -241,10 +242,11 @@ namespace SiGen.UI
                     RenderMode = LineRenderMode.PlainLine,
                     RenderWidth = Measure.Mm(2.6)
                 },
-                Fingerboard = new LineDisplayConfig()
+                Fingerboard = new FingerboardDisplayConfig()
                 {
                     Visible = true,
-                    Color = Color.Blue
+                    Color = Color.Blue,
+                    ContinueLines = true
                 },
                 Margins = new LineDisplayConfig()
                 {

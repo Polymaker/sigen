@@ -136,6 +136,83 @@ namespace SiGen.UI
 
         #endregion
 
+        protected override void OnPaint(PaintEventArgs pe)
+        {
+            base.OnPaint(pe);
+
+            pe.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+
+            var center = new PointF(Width / 2f, Height / 2f);
+            pe.Graphics.TranslateTransform(center.X, center.Y);
+            pe.Graphics.ScaleTransform((float)_Zoom, (float)_Zoom);
+            pe.Graphics.TranslateTransform((float)cameraPosition.X * -1, (float)cameraPosition.Y);
+
+
+            //var topLeftPt = new Point(0, 0);
+            //var botRightPt = new Point(Width, Height);
+
+            //if (!pe.ClipRectangle.IsEmpty)
+            //{
+            //    topLeftPt = pe.ClipRectangle.Location;
+            //    botRightPt = new Point(pe.ClipRectangle.Right, pe.ClipRectangle.Bottom);
+            //}
+
+            //var topLeftM = new PointM(DisplayToWorld(topLeftPt), UnitOfMeasure.Mm);
+            //var botRightM = new PointM(DisplayToWorld(botRightPt), UnitOfMeasure.Mm);
+            //var clipBounds = RectangleM.FromLTRB(topLeftM.X, botRightM.Y, botRightM.X, topLeftM.Y);
+
+            if (CurrentLayout != null)
+            {
+                RenderFingerboard(pe.Graphics);
+                RenderGuideLines(pe.Graphics);
+
+                if (DisplayConfig.ShowFrets)
+                    RenderFrets(pe.Graphics, RectangleM.Empty);
+
+                if (DisplayConfig.ShowStrings)
+                    RenderStrings(pe.Graphics);
+            }
+
+            pe.Graphics.ResetTransform();
+
+            if (EnableMeasureTool)
+                RenderMeasureTool(pe.Graphics);
+        }
+
+        private void InvalidateWorldRegion(int bleedSize, params Vector[] points)
+        {
+            Vector minPos = Vector.Empty;
+            Vector maxPos = Vector.Empty;
+
+            for (int i = 0; i < points.Length; i++)
+            {
+                if (!points[i].IsEmpty)
+                {
+                    if (minPos.IsEmpty)
+                    {
+                        minPos = points[i];
+                        maxPos = points[i];
+                    }
+                    else
+                    {
+                        minPos = Vector.Min(minPos, points[i]);
+                        maxPos = Vector.Max(maxPos, points[i]);
+                    }
+                }
+            }
+
+            if (!minPos.IsEmpty)
+            {
+                var minPt = WorldToDisplay(minPos, _Zoom, true);
+                var maxPt = WorldToDisplay(maxPos, _Zoom, true);
+                var updateBounds = Rectangle.FromLTRB((int)minPt.X - bleedSize, (int)minPt.Y - bleedSize, (int)maxPt.X + bleedSize, (int)maxPt.Y + bleedSize);
+                Invalidate(updateBounds);
+            }
+        }
+
+
         public bool IsElementVisible(VisualElement element)
         {
             switch (element.ElementType)
@@ -169,7 +246,6 @@ namespace SiGen.UI
         {
             if (DisplayConfig.ShowCenterLine)
             {
-                //var layoutBounds = CurrentLayout.GetLayoutBounds();
                 var centerLine = CurrentLayout.VisualElements.OfType<LayoutLine>()
                     .FirstOrDefault(x => x.ElementType == VisualElementType.CenterLine);
 
@@ -182,9 +258,11 @@ namespace SiGen.UI
                 using (var guidePen = GetPen(DisplayConfig.Midlines.Color, 1))
                 {
                     guidePen.DashPattern = new float[] { 6, 4, 2, 4 };
-                    foreach (var stringCenter in CurrentLayout.VisualElements.OfType<StringCenter>())
+
+                    foreach (var stringCenter in CurrentLayout.GetElements<StringCenter>())
                     {
-                        if(!DisplayConfig.ShowCenterLine || !(stringCenter.Equation.IsVertical && stringCenter.Equation.X == 0))
+                        bool isExactCenter = stringCenter.Equation.IsVertical && stringCenter.Equation.X == 0;
+                        if (!DisplayConfig.ShowCenterLine || !isExactCenter)
                             DrawLine(g, guidePen, stringCenter.P1, stringCenter.P2);
                     }
                 }
@@ -214,6 +292,13 @@ namespace SiGen.UI
 
                     foreach (var edge in CurrentLayout.VisualElements.OfType<FingerboardSideEdge>())
                         DrawLine(g, edgePen, edge.P1, edge.P2);
+
+                    if (!DisplayConfig.ShowFrets)
+                    {
+                        var nutLines = CurrentLayout.GetElements<FretLine>(x => x.IsNut);
+                        foreach (var line in nutLines)
+                            DrawLine(g, line, edgePen);
+                    }
                 }
             }
         }
@@ -224,20 +309,31 @@ namespace SiGen.UI
             {
                 guidePen.DashPattern = new float[] { 6, 4, 2, 4 };
 
-                if (DisplayConfig.ShowFingerboard)
+                if (DisplayConfig.ShowFingerboard && DisplayConfig.Fingerboard.ContinueLines)
                 {
-                    foreach (var line in CurrentLayout.VisualElements.OfType<LayoutLine>()
-                        .Where(l => l.ElementType == VisualElementType.FingerboardContinuation))
-                        DrawLine(g, guidePen, line.P1, line.P2);
+                    var endPoints = new List<PointM>();
+
+                    foreach (var line in CurrentLayout.GetElements<LayoutLine>(l => 
+                        l.ElementType == VisualElementType.FingerboardContinuation))
+                    {
+                        DrawLine(g, line, guidePen);
+                        endPoints.Add(line.P2);
+                    }
+
+                    var pt1 = endPoints.OrderBy(pt => pt.X).First();
+                    var pt2 = endPoints.OrderByDescending(pt => pt.X).First();
+                    DrawLine(g, guidePen, pt1, pt2);
                 }
 
-                foreach (var line in CurrentLayout.VisualElements.OfType<LayoutLine>()
-                    .Where(l => l.ElementType == VisualElementType.GuideLine))
-                    DrawLine(g, guidePen, line.P1, line.P2);
+                foreach (var line in CurrentLayout.GetElements<LayoutLine>(l => 
+                    l.ElementType == VisualElementType.GuideLine))
+                {
+                    DrawLine(g, line, guidePen);
+                }
             }
         }
 
-        private void RenderFrets(Graphics g)
+        private void RenderFrets(Graphics g, RectangleM clipRect)
         {
             Pen fretPen = null;
             Pen nutPen = GetPen(DisplayConfig.Frets.Color, 1);
@@ -258,22 +354,25 @@ namespace SiGen.UI
 
             foreach (var fretLine in CurrentLayout.VisualElements.OfType<FretLine>())
             {
-                if (DisplayConfig.Frets.Visible)
+                if (!clipRect.IsEmpty && !clipRect.IntersectsWith(fretLine.Bounds))
                 {
-                    var penToUse = fretLine.IsNut ? nutPen : fretPen;
-                    var fretPoints = fretLine.Points.Select(p => PointToDisplay(p)).ToArray();
-
-                    if (DisplayConfig.ExtendFrets && fretLine.Tag is ILayoutLine layoutLine)
-                    {
-                        fretPoints = layoutLine.GetLinePoints()
-                            .Select(x => PointToDisplay(x)).ToArray();
-                    }
-
-                    if (fretLine.IsStraight || CurrentLayout.FretInterpolation == FretInterpolationMethod.Linear)
-                        g.DrawLines(penToUse, fretPoints);
-                    else
-                        g.DrawCurve(penToUse, fretPoints, 0.5f);
+                    Console.WriteLine($"{fretLine.FretIndex} out of bounds");
+                    continue;
                 }
+
+                var penToUse = fretLine.IsNut ? nutPen : fretPen;
+                var fretPoints = fretLine.Points.Select(p => PointToDisplay(p)).ToArray();
+
+                if (DisplayConfig.ExtendFrets && fretLine.Tag is ILayoutLine layoutLine)
+                {
+                    fretPoints = layoutLine.GetLinePoints()
+                        .Select(x => PointToDisplay(x)).ToArray();
+                }
+
+                if (fretLine.IsStraight || CurrentLayout.FretInterpolation == FretInterpolationMethod.Linear)
+                    g.DrawLines(penToUse, fretPoints);
+                else
+                    g.DrawCurve(penToUse, fretPoints, 0.5f);
 
                 if (DisplayConfig.Frets.DisplayAccuratePositions && fretLine.Strings.Count() > 1)
                 {
@@ -283,8 +382,11 @@ namespace SiGen.UI
             }
 
             var bridgeLine = CurrentLayout.GetElement<LayoutPolyLine>(x => x.ElementType == VisualElementType.BridgeLine);
-            if (bridgeLine != null)
-                DrawLine(g, bridgeLine, nutPen);
+            if (bridgeLine != null )
+            {
+                if (clipRect.IsEmpty || clipRect.IntersectsWith(bridgeLine.Bounds))
+                    DrawLine(g, bridgeLine, nutPen);
+            }
 
             nutPen.Dispose();
             fretPen.Dispose();

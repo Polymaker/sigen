@@ -34,9 +34,9 @@
             // 
             // btnPickColor
             // 
-            this.btnPickColor.Location = new System.Drawing.Point(78, -1);
+            this.btnPickColor.Location = new System.Drawing.Point(84, -1);
             this.btnPickColor.Name = "btnPickColor";
-            this.btnPickColor.Size = new System.Drawing.Size(26, 22);
+            this.btnPickColor.Size = new System.Drawing.Size(26, 21);
             this.btnPickColor.TabIndex = 0;
             this.btnPickColor.Text = "...";
             this.btnPickColor.UseVisualStyleBackColor = true;
@@ -62,6 +62,7 @@
             this.Controls.Add(this.btnPickColor);
             this.Name = "ColorSelectButton";
             this.Size = new System.Drawing.Size(109, 20);
+            this.SizeChanged += new System.EventHandler(this.ColorSelectButton_SizeChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 

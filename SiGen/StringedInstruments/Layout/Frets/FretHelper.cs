@@ -13,7 +13,7 @@ namespace SiGen.StringedInstruments.Layout
             if ((ratio % 1) == 0)
                 return (int)ratio;
 
-            for (int i = 1; i < 30; i++)
+            for (int i = 1; i <= 30; i++)
             {
                 var fretRatio = (PreciseDouble)Math.Pow(2, i / 12d);
                 if (fretRatio.EqualOrClose(ratio, 0.0005))

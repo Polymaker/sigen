@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LayoutViewer));
             this.menuMeasureBox = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuItemDisplayMeasureMM = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemDisplayMeasureCM = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,51 +52,45 @@
             this.menuItemDisplayMeasureShowDecimals,
             this.menuItemDisplayMeasureClearMeasure});
             this.menuMeasureBox.Name = "menuMeasureBox";
-            this.menuMeasureBox.Size = new System.Drawing.Size(193, 142);
+            resources.ApplyResources(this.menuMeasureBox, "menuMeasureBox");
             // 
             // menuItemDisplayMeasureMM
             // 
             this.menuItemDisplayMeasureMM.Checked = true;
             this.menuItemDisplayMeasureMM.CheckState = System.Windows.Forms.CheckState.Checked;
             this.menuItemDisplayMeasureMM.Name = "menuItemDisplayMeasureMM";
-            this.menuItemDisplayMeasureMM.Size = new System.Drawing.Size(192, 22);
-            this.menuItemDisplayMeasureMM.Text = "Display in Milimeters";
+            resources.ApplyResources(this.menuItemDisplayMeasureMM, "menuItemDisplayMeasureMM");
             // 
             // menuItemDisplayMeasureCM
             // 
             this.menuItemDisplayMeasureCM.Name = "menuItemDisplayMeasureCM";
-            this.menuItemDisplayMeasureCM.Size = new System.Drawing.Size(192, 22);
-            this.menuItemDisplayMeasureCM.Text = "Display in Centimeters";
+            resources.ApplyResources(this.menuItemDisplayMeasureCM, "menuItemDisplayMeasureCM");
             // 
             // menuItemDisplayMeasureIN
             // 
             this.menuItemDisplayMeasureIN.Name = "menuItemDisplayMeasureIN";
-            this.menuItemDisplayMeasureIN.Size = new System.Drawing.Size(192, 22);
-            this.menuItemDisplayMeasureIN.Text = "Display in Inches";
+            resources.ApplyResources(this.menuItemDisplayMeasureIN, "menuItemDisplayMeasureIN");
             // 
             // menuItemDisplayMeasureFT
             // 
             this.menuItemDisplayMeasureFT.Name = "menuItemDisplayMeasureFT";
-            this.menuItemDisplayMeasureFT.Size = new System.Drawing.Size(192, 22);
-            this.menuItemDisplayMeasureFT.Text = "Display in Feets";
+            resources.ApplyResources(this.menuItemDisplayMeasureFT, "menuItemDisplayMeasureFT");
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(189, 6);
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             // 
             // menuItemDisplayMeasureShowDecimals
             // 
             this.menuItemDisplayMeasureShowDecimals.CheckOnClick = true;
             this.menuItemDisplayMeasureShowDecimals.Name = "menuItemDisplayMeasureShowDecimals";
-            this.menuItemDisplayMeasureShowDecimals.Size = new System.Drawing.Size(192, 22);
-            this.menuItemDisplayMeasureShowDecimals.Text = "Show Exact Value";
+            resources.ApplyResources(this.menuItemDisplayMeasureShowDecimals, "menuItemDisplayMeasureShowDecimals");
             // 
             // menuItemDisplayMeasureClearMeasure
             // 
             this.menuItemDisplayMeasureClearMeasure.Name = "menuItemDisplayMeasureClearMeasure";
-            this.menuItemDisplayMeasureClearMeasure.Size = new System.Drawing.Size(192, 22);
-            this.menuItemDisplayMeasureClearMeasure.Text = "Clear Measure";
+            resources.ApplyResources(this.menuItemDisplayMeasureClearMeasure, "menuItemDisplayMeasureClearMeasure");
             this.menuMeasureBox.ResumeLayout(false);
             this.ResumeLayout(false);
 

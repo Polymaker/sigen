@@ -104,7 +104,11 @@ namespace SiGen.StringedInstruments.Layout.Visual
         {
             _Direction = ((Vector)P2 - (Vector)P1).Normalized;
             _Equation = Line.FromPoints((Vector)P1, (Vector)P2);
-            _Bounds = RectangleM.FromLTRB(Measure.Min(P1.X, P2.X), Measure.Max(P1.Y, P2.Y), Measure.Max(P1.X, P2.X), Measure.Min(P1.Y, P2.Y));
+            _Bounds = RectangleM.FromLTRB(
+                Measure.Min(P1.X, P2.X), 
+                Measure.Max(P1.Y, P2.Y), 
+                Measure.Max(P1.X, P2.X), 
+                Measure.Min(P1.Y, P2.Y));
             _Length = Measure.FromNormalizedValue(((Vector)P2 - (Vector)P1).Length, P1.Unit ?? P2.Unit);
             isDirty = false;
         }

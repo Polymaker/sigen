@@ -130,6 +130,7 @@
     <Compile Include="Configuration\ConfigObjectBase.cs" />
     <Compile Include="Configuration\Converters\ColorJsonConverter.cs" />
     <Compile Include="Configuration\Converters\MeasureJsonConverter.cs" />
+    <Compile Include="Configuration\Display\FingerboardDisplayConfig.cs" />
     <Compile Include="Configuration\Display\FretsDisplayConfigs.cs" />
     <Compile Include="Configuration\Display\LineDisplayConfig.cs" />
     <Compile Include="Configuration\Display\LineRenderMode.cs" />
@@ -392,7 +393,9 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Localizations.fr.resx" />
+    <EmbeddedResource Include="Resources\Localizations.fr.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Localizations.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Localizations.Designer.cs</LastGenOutput>
@@ -408,6 +411,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\LayoutProperties.resx">
       <DependentUpon>LayoutProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\LayoutViewerPanel.fr.resx">
+      <DependentUpon>LayoutViewerPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\LayoutViewerPanel.resx">
       <DependentUpon>LayoutViewerPanel.cs</DependentUpon>
@@ -433,11 +439,17 @@
     <EmbeddedResource Include="UI\Controls\LayoutEditors\StringSpacingEditor.resx">
       <DependentUpon>StringSpacingEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutViewer\LayoutViewer.fr.resx">
+      <DependentUpon>LayoutViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutViewer\LayoutViewer.resx">
       <DependentUpon>LayoutViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\Preferences\LineExportConfigEdit.resx">
       <DependentUpon>LineExportConfigEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\Preferences\LineExportEdit.fr.resx">
+      <DependentUpon>LineExportEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\Preferences\LineExportEdit.resx">
       <DependentUpon>LineExportEdit.cs</DependentUpon>
@@ -459,6 +471,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\AppPreferencesWindow.resx">
       <DependentUpon>AppPreferencesWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Windows\ExportLayoutDialog.fr.resx">
+      <DependentUpon>ExportLayoutDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\LayoutEditorWindow.fr.resx">
       <DependentUpon>LayoutEditorWindow.cs</DependentUpon>

@@ -49,9 +49,12 @@ namespace SiGen.UI.Controls.ValueEditors
             IsLoading = true;
         }
 
+        
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            PositionControls();
 
             IsLoading = true;
 
@@ -64,21 +67,36 @@ namespace SiGen.UI.Controls.ValueEditors
 
             SetSelectedUnit();
             UpdateEditorsVisibility();
+
             IsLoading = false;
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            PositionControls();
+        }
+
+        private void PositionControls()
+        {
+            txtMeasure.Left = cboUnitType.Right + 2;
+            txtMeasure.Width = Width - txtMeasure.Left;
+            txtNumber.Left = cboUnitType.Right + 2;
+            txtNumber.Width = Width - txtNumber.Left;
         }
 
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             if (cboUnitType.IsHandleCreated)
                 height = Math.Max(cboUnitType.Height, txtMeasure.Height);
+            
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
-            txtMeasure.Left = cboUnitType.Right + 2;
-            txtMeasure.Width = Width - txtMeasure.Left;
+            PositionControls();
         }
 
         public void SetValues(double thickness, LineUnit unit)
@@ -258,6 +276,17 @@ namespace SiGen.UI.Controls.ValueEditors
                 }
                 arrayList.Add(new SnapLine(SnapLineType.Baseline, textBaseline, SnapLinePriority.Medium));
                 return arrayList;
+            }
+        }
+
+        public override SelectionRules SelectionRules
+        {
+            get
+            {
+                var baseRules = base.SelectionRules;
+                baseRules = baseRules & (~SelectionRules.BottomSizeable);
+                baseRules = baseRules & (~SelectionRules.TopSizeable);
+                return baseRules;
             }
         }
     }
