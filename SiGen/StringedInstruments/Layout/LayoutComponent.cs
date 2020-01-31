@@ -61,12 +61,22 @@ namespace SiGen.StringedInstruments.Layout
 			}
         }
 
-        void ILayoutComponent.OnStringConfigurationChanged()
+		void ILayoutComponent.BeforeChangingStrings()
+		{
+			BeforeChangingStrings();
+		}
+
+		void ILayoutComponent.OnStringsChanged()
         {
-            OnStringConfigurationChanged();
+            OnStringsChanged();
         }
 
-        protected virtual void OnStringConfigurationChanged()
+		protected virtual void BeforeChangingStrings()
+		{
+
+		}
+
+        protected virtual void OnStringsChanged()
         {
 
         }
@@ -125,6 +135,11 @@ namespace SiGen.StringedInstruments.Layout
 				return true;
 			}
 			return false;
+		}
+
+		internal virtual void OnSetFieldValue(string fieldName, object field, int? index, object value)
+		{
+
 		}
 
 		protected void StartBatchChanges(string name = null)

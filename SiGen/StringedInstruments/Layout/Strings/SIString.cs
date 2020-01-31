@@ -230,17 +230,6 @@ namespace SiGen.StringedInstruments.Layout
             _MultiScaleRatio = 0.5;
             _NumberOfFrets = 24;
             RealScaleLength = Measure.Empty;
-            //_Frets = new FretManager(this);
-        }
-
-        internal SIString(SILayout layout) : base(layout)
-        {
-            _ActionAtTwelfthFret = Measure.Empty;
-            _ActionAtFirstFret = Measure.Empty;
-            _MultiScaleRatio = 0.5;
-            _NumberOfFrets = 24;
-            RealScaleLength = Measure.Empty;
-            //_Frets = new FretManager(this);
         }
 
         public SIString(SILayout layout, int stringIndex) : base(layout)
@@ -251,7 +240,6 @@ namespace SiGen.StringedInstruments.Layout
             _MultiScaleRatio = 0.5;
             _NumberOfFrets = 24;
             RealScaleLength = Measure.Empty;
-            //_Frets = new FretManager(this);
         }
 
         public bool HasFret(int fretNo)
@@ -261,11 +249,17 @@ namespace SiGen.StringedInstruments.Layout
 
         internal void RecalculateLengths()
         {
-            StringLength = LayoutLine.Length;
-            if (LayoutLine.FretZero != PointM.Empty && LayoutLine.FretZero != LayoutLine.P1)
-                RealScaleLength = PointM.Distance(LayoutLine.FretZero, LayoutLine.P2);
-            else
-                RealScaleLength = StringLength;
+            if (LayoutLine != null)
+            {
+                StringLength = LayoutLine.Length.Convert(ScaleLength.Unit);
+
+                if (LayoutLine.FretZero != PointM.Empty && LayoutLine.FretZero != LayoutLine.P1)
+                    RealScaleLength = PointM.Distance(LayoutLine.FretZero, LayoutLine.P2);
+                else
+                    RealScaleLength = StringLength;
+
+                RealScaleLength = RealScaleLength.Convert(ScaleLength.Unit);
+            }
         }
 
         internal void ClearLayoutData()
@@ -282,10 +276,10 @@ namespace SiGen.StringedInstruments.Layout
             var stringElem = new XElement(elemName, new XAttribute("Index", Index));
 
             if (Layout.ScaleLengthMode == ScaleLengthType.Multiple)
+            {
                 stringElem.Add(ScaleLength.SerializeAsAttribute("ScaleLength"));
-
-            if (/*!Layout.Strings.AllEqual(s => s.MultiScaleRatio) || */Layout.ScaleLengthMode == ScaleLengthType.Multiple)
                 stringElem.Add(new XAttribute("MultiScaleRatio", MultiScaleRatio));
+            }
 
             var fretElem = new XElement("Frets",
                     new XAttribute("StartingFret", StartingFret),

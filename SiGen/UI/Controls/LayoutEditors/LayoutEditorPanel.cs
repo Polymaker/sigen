@@ -61,17 +61,5 @@ namespace SiGen.UI.Controls.LayoutEditors
             else if(DockState != DockState.Float && Text.Contains(" & "))
                 Text = Text.Replace(" & ", " && ");
         }
-
-        private void InitializeComponent()
-        {
-            this.SuspendLayout();
-            // 
-            // LayoutEditorPanel
-            // 
-            this.ClientSize = new System.Drawing.Size(284, 261);
-            this.Name = "LayoutEditorPanel";
-            this.ResumeLayout(false);
-
-        }
     }
 }

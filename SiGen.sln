@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiGen", "SiGen.csproj", "{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiGen", "SiGen\SiGen.csproj", "{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SiGen.Setup", "..\SiGen.Setup\SiGen.Setup.wixproj", "{C58AA230-0F37-425E-9B72-39583A35028E}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SiGen.Setup", "SiGen.Setup\SiGen.Setup.wixproj", "{C58AA230-0F37-425E-9B72-39583A35028E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

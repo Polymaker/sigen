@@ -14,6 +14,7 @@ namespace SiGen.StringedInstruments.Layout
         SILayout Layout { get; }
         LayoutComponent ParentComponent { get; }
     }
+
     public class LayoutItemCollection<T> : IList<T>, IList, ILayoutItemCollection
     {
         private SILayout _Layout;

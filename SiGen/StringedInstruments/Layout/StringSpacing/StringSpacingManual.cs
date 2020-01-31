@@ -25,7 +25,7 @@ namespace SiGen.StringedInstruments.Layout
 
         }
 
-        protected override void OnStringConfigurationChanged()
+        protected override void OnStringsChanged()
         {
             if (_NutSpacing != null && _NutSpacing.Length > 0)
             {

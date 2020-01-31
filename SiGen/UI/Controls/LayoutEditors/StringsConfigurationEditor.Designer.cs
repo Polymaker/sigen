@@ -45,8 +45,10 @@
             this.tsmiConvertToCM = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiConvertToIN = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiConvertToFT = new System.Windows.Forms.ToolStripMenuItem();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStrings)).BeginInit();
             this.cmsMesureCellMenu.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // nbxNumberOfStrings
@@ -91,8 +93,9 @@
             this.dgvStrings.AllowUserToAddRows = false;
             this.dgvStrings.AllowUserToDeleteRows = false;
             this.dgvStrings.AllowUserToResizeRows = false;
-            resources.ApplyResources(this.dgvStrings, "dgvStrings");
             this.dgvStrings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.tableLayoutPanel1.SetColumnSpan(this.dgvStrings, 3);
+            resources.ApplyResources(this.dgvStrings, "dgvStrings");
             this.dgvStrings.MultiSelect = false;
             this.dgvStrings.Name = "dgvStrings";
             this.dgvStrings.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvStrings_CellClick);
@@ -164,22 +167,29 @@
             resources.ApplyResources(this.tsmiConvertToFT, "tsmiConvertToFT");
             this.tsmiConvertToFT.Click += new System.EventHandler(this.tsmiConvertToFT_Click);
             // 
+            // tableLayoutPanel1
+            // 
+            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.dgvStrings, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.chkShowAdvanced, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.nbxNumberOfStrings, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.nbxNumberOfFrets, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.chkLeftHanded, 2, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            // 
             // StringsConfigurationEditor
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.chkShowAdvanced);
-            this.Controls.Add(this.dgvStrings);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.nbxNumberOfFrets);
-            this.Controls.Add(this.chkLeftHanded);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.nbxNumberOfStrings);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "StringsConfigurationEditor";
             ((System.ComponentModel.ISupportInitialize)(this.dgvStrings)).EndInit();
             this.cmsMesureCellMenu.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -200,5 +210,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiConvertToCM;
         private System.Windows.Forms.ToolStripMenuItem tsmiConvertToIN;
         private System.Windows.Forms.ToolStripMenuItem tsmiConvertToFT;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }

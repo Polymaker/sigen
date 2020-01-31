@@ -61,6 +61,15 @@ namespace SiGen.UI.Controls.LayoutEditors
             UpdateGridValues();
         }
 
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            if (dgvStrings.Right > Width)
+            {
+
+            }
+        }
+
         protected override void OnCurrentLayoutChanged()
         {
             base.OnCurrentLayoutChanged();

@@ -286,6 +286,7 @@ namespace SiGen.StringedInstruments.Layout
             PreventStringChange = true;
 
             StartBatchChanges("AddStrings");
+            NotifyStringsChanging();
 
             for (int i = 0; i < numberToAdd; i++)
                 AddStringCore(side);
@@ -333,6 +334,7 @@ namespace SiGen.StringedInstruments.Layout
             PreventStringChange = true;
 
             StartBatchChanges("RemoveStrings");
+            NotifyStringsChanging();
 
             numberToRemove = Math.Min(numberToRemove, _Strings.Count - 1);
 
@@ -360,10 +362,16 @@ namespace SiGen.StringedInstruments.Layout
             PreventStringChange = false;
         }
 
+        private void NotifyStringsChanging()
+        {
+            foreach (var comp in _Components)
+                (comp as ILayoutComponent).BeforeChangingStrings();
+        }
+
         private void RebuildComponentStringData()
         {
             foreach (var comp in _Components)
-                (comp as ILayoutComponent).OnStringConfigurationChanged();
+                (comp as ILayoutComponent).OnStringsChanged();
         }
 
         public void ChangeNumberOfString(int numberOfStrings, FingerboardSide sideToChange = FingerboardSide.Bass)
@@ -386,7 +394,6 @@ namespace SiGen.StringedInstruments.Layout
         }
 
         #endregion
-
 
         public void AdjustStringsTuning()
         {
@@ -534,6 +541,7 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
+        //TODO: move code into each Change type class and clean-up the structure
         private void ApplyPropertyChange(PropertyChange propChange, bool setNewValue)
         {
             var ownerType = propChange.Component?.GetType() ?? GetType();
@@ -547,11 +555,16 @@ namespace SiGen.StringedInstruments.Layout
 
                 if (propChange.Index.HasValue)
                 {
-                    var arrayValue = (IList)fi.GetValue((object)propChange.Component ?? this);
+                    var arrayValue = (IList)fi.GetValue(ownerObject);
                     arrayValue[propChange.Index.Value] = valueToSet;
                 }
                 else
                     fi.SetValue(ownerObject, valueToSet);
+
+                if (ownerObject is LayoutComponent component)
+                {
+                    component.OnSetFieldValue(propChange.Name, fi.GetValue(ownerObject), propChange.Index, valueToSet);
+                }
 
                 NotifyLayoutChanged(new PropertyChange(propChange.Component, propChange.Property,
                             setNewValue ? propChange.OldValue : propChange.NewValue,

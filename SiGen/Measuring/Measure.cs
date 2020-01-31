@@ -270,6 +270,11 @@ namespace SiGen.Measuring
 
         #region Functions
 
+        public Measure Convert(UnitOfMeasure unitOfMeasure)
+        {
+            return FromNormalizedValue(normalizedValue, unitOfMeasure);
+        }
+
         public static Measure Abs(Measure value)
         {
             value.EnsureIsNotNaN();
