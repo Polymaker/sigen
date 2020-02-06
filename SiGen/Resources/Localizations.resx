@@ -228,4 +228,10 @@ Do you want to reload it?
   <data name="Misc_NewLayout" xml:space="preserve">
     <value>New layout</value>
   </data>
+  <data name="Errors_OpeningFile" xml:space="preserve">
+    <value>There was an error while opening the file:</value>
+  </data>
+  <data name="Messages_OpeningFile" xml:space="preserve">
+    <value>Opening file</value>
+  </data>
 </root>

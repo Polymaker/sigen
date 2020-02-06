@@ -87,8 +87,6 @@ namespace System
             return false;
         }
 
-
-
         public static string[] GetEnumDescriptions(Type enumType)
         {
             var enumNames = Enum.GetNames(enumType);

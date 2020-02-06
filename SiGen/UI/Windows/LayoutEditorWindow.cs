@@ -374,7 +374,7 @@ namespace SiGen.UI
                     var documentPanel = GetDocumentPanel(existingDocument);
                     documentPanel.Activate();
 
-                    var result = MessageBox.Show(Localizations.Messages_FileAlreadyOpen, "", MessageBoxButtons.YesNo);
+                    var result = MessageBox.Show(Localizations.Messages_FileAlreadyOpen, Localizations.Messages_OpeningFile, MessageBoxButtons.YesNo);
 
                     if (result == DialogResult.Yes)
                     {
@@ -387,7 +387,7 @@ namespace SiGen.UI
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("There was an error while opening the file: " + ex.ToString(), Localizations.Messages_Error);
+                            MessageBox.Show(Localizations.Errors_OpeningFile + Environment.NewLine + ex.ToString(), Localizations.Messages_Error);
                         }
                     }
 
@@ -408,7 +408,7 @@ namespace SiGen.UI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("There was an error while opening the file: " + ex.ToString(), Localizations.Messages_Error);
+                MessageBox.Show(Localizations.Errors_OpeningFile + Environment.NewLine + ex.ToString(), Localizations.Messages_Error);
             }
         }
 
@@ -418,13 +418,21 @@ namespace SiGen.UI
             //tssbOpen.ShowDropDown();
         }
 
-        
+        class RecentFileInfo
+        {
+            public string FilePath { get; set; }
+
+            public RecentFileInfo(string filePath)
+            {
+                FilePath = filePath;
+            }
+        }
 
         private void RebuildRecentFilesMenu()
         {
             for (int i = tssbOpen.DropDownItems.Count - 1; i >= 0; i--)
             {
-                if (tssbOpen.DropDownItems[i].Tag is RecentFile)
+                if (tssbOpen.DropDownItems[i].Tag is RecentFileInfo)
                 {
                     tssbOpen.DropDownItems[i].Click -= RecentFileMenu_Click;
                     tssbOpen.DropDownItems.RemoveAt(i);
@@ -435,8 +443,8 @@ namespace SiGen.UI
 
             foreach (var filename in AppConfigManager.Current.RecentFiles)
             {
-                var fileMenu = tssbOpen.DropDownItems.Add(string.Format("{0}: {1}", ++counter, filename.Filename));
-                fileMenu.Tag = filename;
+                var fileMenu = tssbOpen.DropDownItems.Add(string.Format("{0}: {1}", ++counter, filename));
+                fileMenu.Tag = new RecentFileInfo(filename);
                 fileMenu.Click += RecentFileMenu_Click;
             }
 
@@ -445,7 +453,8 @@ namespace SiGen.UI
 
         private void RecentFileMenu_Click(object sender, EventArgs e)
         {
-            OpenLayoutFile(((sender as ToolStripItem).Tag as RecentFile).Filename);
+            if (sender is ToolStripItem tsi && tsi.Tag is RecentFileInfo rfi)
+                OpenLayoutFile(rfi.FilePath);
         }
 
         #endregion

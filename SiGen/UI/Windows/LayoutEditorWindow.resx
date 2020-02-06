@@ -130,6 +130,9 @@
   <data name="AboutAppButton.Text" xml:space="preserve">
     <value>SiGen</value>
   </data>
+  <data name="AboutAppButton.ToolTipText" xml:space="preserve">
+    <value>About...</value>
+  </data>
   <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
     <value>6, 54</value>
   </data>

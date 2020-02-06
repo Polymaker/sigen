@@ -158,10 +158,10 @@ namespace SiGen.Configuration
             _Current = LoadAppConfig();
         }
 
-        public static void AddRecentFile(string filename, string layoutName = null)
+        public static void AddRecentFile(string filename)
         {
-            Current.RecentFiles.RemoveAll(f => f.Filename == filename);
-            Current.RecentFiles.Insert(0, new RecentFile(filename, layoutName));
+            Current.RecentFiles.RemoveAll(f => f == filename);
+            Current.RecentFiles.Insert(0, filename);
 
             while (Current.RecentFiles.Count > Current.MaxRecentFileHistory)
                 Current.RecentFiles.RemoveAt(Current.RecentFiles.Count - 1);
@@ -172,11 +172,11 @@ namespace SiGen.Configuration
         {
             bool changed = false;
 
-            foreach (var file in Current.RecentFiles.ToArray())
+            foreach (var filePath in Current.RecentFiles.ToArray())
             {
-                if (!File.Exists(file.Filename))
+                if (!File.Exists(filePath))
                 {
-                    Current.RecentFiles.Remove(file);
+                    Current.RecentFiles.Remove(filePath);
                     changed = true;
                 }
             }

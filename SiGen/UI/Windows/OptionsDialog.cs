@@ -13,17 +13,17 @@ using System.Windows.Forms;
 
 namespace SiGen.UI.Windows
 {
-    public partial class AppPreferencesWindow : Form
+    public partial class OptionsDialog : Form
     {
 
         private LayoutExportConfig ExportConfig { get; set; }
 
         private ViewerDisplayConfig DisplayConfig { get; set; }
 
-        public AppPreferencesWindow()
+        public OptionsDialog()
         {
             InitializeComponent();
-            //CreateExportConfigControls();
+            Icon = Properties.Resources.SiGenIcon;
         }
 
         protected override void OnLoad(EventArgs e)

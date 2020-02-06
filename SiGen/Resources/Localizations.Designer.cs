@@ -70,6 +70,15 @@ namespace SiGen.Resources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à There was an error while opening the file:.
+        /// </summary>
+        internal static string Errors_OpeningFile {
+            get {
+                return ResourceManager.GetString("Errors_OpeningFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Bridge.
         /// </summary>
         internal static string FingerboardEnd_Bridge {
@@ -221,6 +230,15 @@ namespace SiGen.Resources {
         internal static string Messages_FileAlreadyOpen {
             get {
                 return ResourceManager.GetString("Messages_FileAlreadyOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Opening file.
+        /// </summary>
+        internal static string Messages_OpeningFile {
+            get {
+                return ResourceManager.GetString("Messages_OpeningFile", resourceCulture);
             }
         }
         

@@ -25,7 +25,6 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             base.OnLoad(e);
             UpdateComboboxes();
-            OptimizeLayout();
         }
 
         private void UpdateComboboxes(bool preserveValues = false)
@@ -91,19 +90,6 @@ namespace SiGen.UI.Controls.LayoutEditors
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
-            //OptimizeLayout();
-        }
-
-        private void OptimizeLayout()
-        {
-            if(Width > 500 && tlpNutSpacingAuto.Dock == DockStyle.Top)
-            {
-
-            }
-            else if(tlpNutSpacingAuto.Dock != DockStyle.Top)
-            {
-
-            }
         }
 
         protected override void ReadLayoutProperties()
@@ -151,6 +137,7 @@ namespace SiGen.UI.Controls.LayoutEditors
         protected override void OnNumberOfStringsChanged()
         {
             base.OnNumberOfStringsChanged();
+
             using (FlagManager.UseFlag("UpdateSpacing"))
             {
                 UpdateComboboxes(true);

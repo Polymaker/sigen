@@ -30,6 +30,7 @@
     <MediaTemplate EmbedCab="yes"/>
     
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)LICENSE.rtf" />
     <UIRef Id="WixUI_InstallDir" />
 	</Product>
 
@@ -63,13 +64,14 @@
       </Component>
       
       <Component Id="References" Guid="851D08CB-91C1-4D62-802D-88FF6FB85F75">
-        <File Id="Svg.dll" Name="Svg.dll" Source="$(var.SiGen_TargetDir)Svg.dll" />
+        <File Id="Svg.dll" Name="Svg.dll" Source="$(var.SiGen.TargetDir)Svg.dll" />
         <File Id="netDxf.dll" Name="netDxf.dll" Source="$(var.SiGen.TargetDir)netDxf.dll" />
         <File Id="Newtonsoft.Json.dll" Name="Newtonsoft.Json.dll" Source="$(var.SiGen.TargetDir)Newtonsoft.Json.dll" />
         <File Id="WeifenLuo.WinFormsUI.Docking.dll" Name="WeifenLuo.WinFormsUI.Docking.dll" Source="$(var.SiGen.TargetDir)WeifenLuo.WinFormsUI.Docking.dll" />
       </Component>
       
       <Component Id="Resources" Guid="3e5ae673-406d-4ad8-abb6-cb5e567bfb3b">
+        <File Id="Resources_License.ico" Name="LICENSE.txt" Source="$(var.SolutionDir)LICENSE.txt" />
         <File Id="Resources_SigenIcon.ico" Name="SigenIcon.ico" Source="$(var.SiGen.ProjectDir)Resources\Icons\SiGenIcon.ico" />
         <File Id="Resources_LayoutFileIcon.ico" Name="LayoutFileIcon.ico" Source="$(var.SiGen.ProjectDir)Resources\Icons\LayoutFileIcon.ico" />
       </Component>

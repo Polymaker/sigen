@@ -138,7 +138,6 @@
     <Compile Include="Configuration\Export\FingerboardExportConfig.cs" />
     <Compile Include="Configuration\Export\FretsExportConfig.cs" />
     <Compile Include="Configuration\Export\StringsExportConfig.cs" />
-    <Compile Include="Configuration\RecentFile.cs" />
     <Compile Include="Configuration\Converters\ShouldSerializeContractResolver.cs" />
     <Compile Include="Export\DxfLayoutExporter.cs" />
     <Compile Include="Export\LineUnit.cs" />
@@ -339,11 +338,11 @@
     <Compile Include="UI\Windows\AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Windows\AppPreferencesWindow.cs">
+    <Compile Include="UI\Windows\OptionsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Windows\AppPreferencesWindow.Designer.cs">
-      <DependentUpon>AppPreferencesWindow.cs</DependentUpon>
+    <Compile Include="UI\Windows\OptionsDialog.Designer.cs">
+      <DependentUpon>OptionsDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Windows\LayoutEditorWindow.cs">
       <SubType>Form</SubType>
@@ -469,8 +468,11 @@
     <EmbeddedResource Include="UI\Windows\AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Windows\AppPreferencesWindow.resx">
-      <DependentUpon>AppPreferencesWindow.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Windows\OptionsDialog.fr.resx">
+      <DependentUpon>OptionsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Windows\OptionsDialog.resx">
+      <DependentUpon>OptionsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\ExportLayoutDialog.fr.resx">
       <DependentUpon>ExportLayoutDialog.cs</DependentUpon>

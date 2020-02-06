@@ -248,4 +248,10 @@ Voulez-vous le recharger?
   <data name="Misc_NewLayout" xml:space="preserve">
     <value>Nouveau plan</value>
   </data>
+  <data name="Errors_OpeningFile" xml:space="preserve">
+    <value>Une erreur s'est produite lors de l'ouverture du fichier:</value>
+  </data>
+  <data name="Messages_OpeningFile" xml:space="preserve">
+    <value>Ouverture du fichier</value>
+  </data>
 </root>

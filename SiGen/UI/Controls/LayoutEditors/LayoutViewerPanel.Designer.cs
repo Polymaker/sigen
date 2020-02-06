@@ -41,7 +41,6 @@
             this.DisplayCenterLineMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ResetCameraButton = new System.Windows.Forms.ToolStripButton();
             this.ZoomToolstripLabel = new System.Windows.Forms.ToolStripLabel();
-            this.tsbDisplayOptions = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbMeasureTool = new System.Windows.Forms.ToolStripButton();
             this.layoutViewer1 = new SiGen.UI.LayoutViewer();
@@ -84,7 +83,6 @@
             this.DisplayOptionsDropDown,
             this.ResetCameraButton,
             this.ZoomToolstripLabel,
-            this.tsbDisplayOptions,
             this.toolStripSeparator3,
             this.tsbMeasureTool});
             this.ToolStripDisplayOptions.Name = "ToolStripDisplayOptions";
@@ -169,13 +167,6 @@
             this.ZoomToolstripLabel.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.ZoomToolstripLabel.Name = "ZoomToolstripLabel";
             resources.ApplyResources(this.ZoomToolstripLabel, "ZoomToolstripLabel");
-            // 
-            // tsbDisplayOptions
-            // 
-            this.tsbDisplayOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbDisplayOptions.Image = global::SiGen.Properties.Resources.Settings_x32;
-            resources.ApplyResources(this.tsbDisplayOptions, "tsbDisplayOptions");
-            this.tsbDisplayOptions.Name = "tsbDisplayOptions";
             // 
             // toolStripSeparator3
             // 
@@ -318,7 +309,6 @@
         private System.Windows.Forms.ToolStripMenuItem DisplayMarginsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem DisplayFingerboardMenuItem;
         private System.Windows.Forms.ToolStripMenuItem DisplayCenterLineMenuItem;
-        private System.Windows.Forms.ToolStripButton tsbDisplayOptions;
         private System.Windows.Forms.ToolStripButton tsbMeasureTool;
     }
 }

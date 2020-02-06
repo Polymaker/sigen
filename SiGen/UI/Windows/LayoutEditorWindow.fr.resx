@@ -160,4 +160,7 @@
   <data name="$this.Text" xml:space="preserve">
     <value>Générateur de plan d'instruments à cordes</value>
   </data>
+  <data name="AboutAppButton.ToolTipText" xml:space="preserve">
+    <value>À propos...</value>
+  </data>
 </root>

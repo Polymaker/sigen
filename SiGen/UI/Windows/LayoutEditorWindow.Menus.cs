@@ -157,7 +157,7 @@ namespace SiGen.UI
 
         private void tsbOptions_Click(object sender, EventArgs e)
         {
-            using (var dlg = new AppPreferencesWindow())
+            using (var dlg = new OptionsDialog())
             {
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {

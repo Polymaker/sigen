@@ -15,10 +15,7 @@ namespace SiGen.Configuration
         public int MaxRecentFileHistory { get; set; }
 
         [JsonProperty]
-        public List<RecentFile> RecentFiles { get; set; }
-
-        //[JsonIgnore]
-        //public List<LayoutExportConfig> ExportConfigs { get; set; }
+        public List<string> RecentFiles { get; set; }
 
         [JsonProperty]
         public LayoutExportConfig ExportConfig { get; set; }
@@ -28,8 +25,7 @@ namespace SiGen.Configuration
 
         public AppConfig()
         {
-            //ExportConfigs = new List<LayoutExportConfig>();
-            RecentFiles = new List<RecentFile>();
+            RecentFiles = new List<string>();
         }
 
         public static AppConfig CreateDefault()

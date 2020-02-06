@@ -31,12 +31,14 @@ namespace SiGen.UI.Windows
         public ExportLayoutDialog()
         {
             InitializeComponent();
+            Icon = Properties.Resources.SiGenIcon;
             //ExportOptions = LayoutExportConfig.CreateDefault();
         }
 
         public ExportLayoutDialog(LayoutDocument layoutDocument)
         {
             InitializeComponent();
+            Icon = Properties.Resources.SiGenIcon;
             //ExportOptions = LayoutExportConfig.CreateDefault();
             LayoutToExport = layoutDocument;
         }
@@ -58,10 +60,6 @@ namespace SiGen.UI.Windows
             ExportOptions.AttachPropertyChangedEvent();
             ExportOptions.PropertyChanged += ExportOptions_PropertyChanged;
 
-            foreach(var panel in splitContainer1.Panel1.Controls.OfType<CollapsiblePanel>())
-            {
-                Console.WriteLine(panel.PanelHeight);
-            }
         }
 
         private void ExportOptions_PropertyChanged(object sender, PropertyChangedEventArgs e)

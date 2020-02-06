@@ -31,13 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExportLayoutDialog));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.lblExportFormat = new System.Windows.Forms.Label();
-            this.flpExportFormat = new System.Windows.Forms.FlowLayoutPanel();
-            this.rbSvgExport = new System.Windows.Forms.RadioButton();
-            this.rbDxfExport = new System.Windows.Forms.RadioButton();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnExport = new System.Windows.Forms.Button();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.ExportMidlinesPanel = new SiGen.UI.Controls.CollapsiblePanel();
             this.MidlinesCfgEdit = new SiGen.UI.Controls.Preferences.LineExportEdit();
             this.ExportStringsPanel = new SiGen.UI.Controls.CollapsiblePanel();
@@ -57,12 +50,17 @@
             this.ExportFingerboardPanel = new SiGen.UI.Controls.CollapsiblePanel();
             this.ContinueEdgesCheckbox = new System.Windows.Forms.CheckBox();
             this.FretboardCfgEdit = new SiGen.UI.Controls.Preferences.LineExportEdit();
+            this.lblExportFormat = new System.Windows.Forms.Label();
+            this.flpExportFormat = new System.Windows.Forms.FlowLayoutPanel();
+            this.rbSvgExport = new System.Windows.Forms.RadioButton();
+            this.rbDxfExport = new System.Windows.Forms.RadioButton();
             this.layoutPreview = new SiGen.UI.LayoutViewer();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.flpExportFormat.SuspendLayout();
             this.ExportMidlinesPanel.ContentPanel.SuspendLayout();
             this.ExportMidlinesPanel.SuspendLayout();
             this.ExportStringsPanel.ContentPanel.SuspendLayout();
@@ -78,6 +76,7 @@
             this.ExportMarginsPanel.SuspendLayout();
             this.ExportFingerboardPanel.ContentPanel.SuspendLayout();
             this.ExportFingerboardPanel.SuspendLayout();
+            this.flpExportFormat.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -105,46 +104,6 @@
             this.splitContainer1.Panel2.Controls.Add(this.layoutPreview);
             this.splitContainer1.Panel2.Controls.Add(this.btnCancel);
             this.splitContainer1.Panel2.Controls.Add(this.btnExport);
-            // 
-            // lblExportFormat
-            // 
-            resources.ApplyResources(this.lblExportFormat, "lblExportFormat");
-            this.lblExportFormat.Name = "lblExportFormat";
-            // 
-            // flpExportFormat
-            // 
-            resources.ApplyResources(this.flpExportFormat, "flpExportFormat");
-            this.flpExportFormat.Controls.Add(this.rbSvgExport);
-            this.flpExportFormat.Controls.Add(this.rbDxfExport);
-            this.flpExportFormat.Name = "flpExportFormat";
-            // 
-            // rbSvgExport
-            // 
-            resources.ApplyResources(this.rbSvgExport, "rbSvgExport");
-            this.rbSvgExport.Checked = true;
-            this.rbSvgExport.Name = "rbSvgExport";
-            this.rbSvgExport.TabStop = true;
-            this.rbSvgExport.UseVisualStyleBackColor = true;
-            // 
-            // rbDxfExport
-            // 
-            resources.ApplyResources(this.rbDxfExport, "rbDxfExport");
-            this.rbDxfExport.Name = "rbDxfExport";
-            this.rbDxfExport.UseVisualStyleBackColor = true;
-            // 
-            // btnCancel
-            // 
-            resources.ApplyResources(this.btnCancel, "btnCancel");
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            // 
-            // btnExport
-            // 
-            resources.ApplyResources(this.btnExport, "btnExport");
-            this.btnExport.Name = "btnExport";
-            this.btnExport.UseVisualStyleBackColor = true;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // ExportMidlinesPanel
             // 
@@ -326,6 +285,32 @@
             this.FretboardCfgEdit.LineConfig = null;
             this.FretboardCfgEdit.Name = "FretboardCfgEdit";
             // 
+            // lblExportFormat
+            // 
+            resources.ApplyResources(this.lblExportFormat, "lblExportFormat");
+            this.lblExportFormat.Name = "lblExportFormat";
+            // 
+            // flpExportFormat
+            // 
+            resources.ApplyResources(this.flpExportFormat, "flpExportFormat");
+            this.flpExportFormat.Controls.Add(this.rbSvgExport);
+            this.flpExportFormat.Controls.Add(this.rbDxfExport);
+            this.flpExportFormat.Name = "flpExportFormat";
+            // 
+            // rbSvgExport
+            // 
+            resources.ApplyResources(this.rbSvgExport, "rbSvgExport");
+            this.rbSvgExport.Checked = true;
+            this.rbSvgExport.Name = "rbSvgExport";
+            this.rbSvgExport.TabStop = true;
+            this.rbSvgExport.UseVisualStyleBackColor = true;
+            // 
+            // rbDxfExport
+            // 
+            resources.ApplyResources(this.rbDxfExport, "rbDxfExport");
+            this.rbDxfExport.Name = "rbDxfExport";
+            this.rbDxfExport.UseVisualStyleBackColor = true;
+            // 
             // layoutPreview
             // 
             resources.ApplyResources(this.layoutPreview, "layoutPreview");
@@ -339,6 +324,20 @@
             this.layoutPreview.DisplayConfig.ShowStrings = true;
             this.layoutPreview.Name = "layoutPreview";
             // 
+            // btnCancel
+            // 
+            resources.ApplyResources(this.btnCancel, "btnCancel");
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            // 
+            // btnExport
+            // 
+            resources.ApplyResources(this.btnExport, "btnExport");
+            this.btnExport.Name = "btnExport";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
             // ExportLayoutDialog
             // 
             resources.ApplyResources(this, "$this");
@@ -348,13 +347,12 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ExportLayoutDialog";
+            this.ShowIcon = false;
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.flpExportFormat.ResumeLayout(false);
-            this.flpExportFormat.PerformLayout();
             this.ExportMidlinesPanel.ContentPanel.ResumeLayout(false);
             this.ExportMidlinesPanel.ContentPanel.PerformLayout();
             this.ExportMidlinesPanel.ResumeLayout(false);
@@ -379,6 +377,8 @@
             this.ExportFingerboardPanel.ContentPanel.ResumeLayout(false);
             this.ExportFingerboardPanel.ContentPanel.PerformLayout();
             this.ExportFingerboardPanel.ResumeLayout(false);
+            this.flpExportFormat.ResumeLayout(false);
+            this.flpExportFormat.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -398,7 +398,6 @@
         private System.Windows.Forms.FlowLayoutPanel flpExportFormat;
         private SiGen.UI.Controls.MeasureTextbox mtbFretExtendAmount;
         private System.Windows.Forms.Label lblExtendAmount;
-        private System.Windows.Forms.ToolTip toolTip1;
         private Controls.CollapsiblePanel ExportFingerboardPanel;
         private Controls.CollapsiblePanel ExportFretsPanel;
         private Controls.CollapsiblePanel ExportStringsPanel;

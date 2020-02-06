@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutDialog));
-            this.button1 = new System.Windows.Forms.Button();
+            this.ReturnButton = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.AppTitleLabel = new System.Windows.Forms.Label();
             this.AppDescLabel = new System.Windows.Forms.Label();
@@ -39,11 +39,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // button1
+            // ReturnButton
             // 
-            resources.ApplyResources(this.button1, "button1");
-            this.button1.Name = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.ReturnButton, "ReturnButton");
+            this.ReturnButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.ReturnButton.Name = "ReturnButton";
+            this.ReturnButton.UseVisualStyleBackColor = true;
             // 
             // pictureBox1
             // 
@@ -93,7 +94,7 @@
             this.Controls.Add(this.AppDescLabel);
             this.Controls.Add(this.AppTitleLabel);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.ReturnButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -106,7 +107,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button ReturnButton;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label AppTitleLabel;
         private System.Windows.Forms.Label AppDescLabel;

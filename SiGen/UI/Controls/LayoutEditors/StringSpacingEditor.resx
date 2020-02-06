@@ -123,7 +123,7 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="mtbNutSpacing.Location" type="System.Drawing.Point, System.Drawing">
-    <value>93, 16</value>
+    <value>93, 22</value>
   </data>
   <data name="mtbNutSpacing.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 1</value>
@@ -139,7 +139,7 @@
     <value>mtbNutSpacing</value>
   </data>
   <data name="&gt;&gt;mtbNutSpacing.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.22454, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;mtbNutSpacing.Parent" xml:space="preserve">
     <value>tlpNutSpacingAuto</value>
@@ -151,7 +151,7 @@
     <value>Left, Right</value>
   </data>
   <data name="mtbNutSpread.Location" type="System.Drawing.Point, System.Drawing">
-    <value>221, 16</value>
+    <value>221, 22</value>
   </data>
   <data name="mtbNutSpread.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 1</value>
@@ -166,7 +166,7 @@
     <value>mtbNutSpread</value>
   </data>
   <data name="&gt;&gt;mtbNutSpread.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.22454, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;mtbNutSpread.Parent" xml:space="preserve">
     <value>tlpNutSpacingAuto</value>
@@ -178,7 +178,7 @@
     <value>Left, Right</value>
   </data>
   <data name="mtbBridgeSpacing.Location" type="System.Drawing.Point, System.Drawing">
-    <value>93, 16</value>
+    <value>93, 22</value>
   </data>
   <data name="mtbBridgeSpacing.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 1</value>
@@ -193,7 +193,7 @@
     <value>mtbBridgeSpacing</value>
   </data>
   <data name="&gt;&gt;mtbBridgeSpacing.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.22454, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;mtbBridgeSpacing.Parent" xml:space="preserve">
     <value>tlpBridgeSpacingAuto</value>
@@ -205,7 +205,7 @@
     <value>Left, Right</value>
   </data>
   <data name="mtbBridgeSpread.Location" type="System.Drawing.Point, System.Drawing">
-    <value>221, 16</value>
+    <value>221, 22</value>
   </data>
   <data name="mtbBridgeSpread.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 1</value>
@@ -220,7 +220,7 @@
     <value>mtbBridgeSpread</value>
   </data>
   <data name="&gt;&gt;mtbBridgeSpread.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.22454, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;mtbBridgeSpread.Parent" xml:space="preserve">
     <value>tlpBridgeSpacingAuto</value>
@@ -235,7 +235,10 @@
     <value>True</value>
   </data>
   <data name="lblNutStringSpacing.Location" type="System.Drawing.Point, System.Drawing">
-    <value>131, 0</value>
+    <value>131, 3</value>
+  </data>
+  <data name="lblNutStringSpacing.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
   </data>
   <data name="lblNutStringSpacing.Size" type="System.Drawing.Size, System.Drawing">
     <value>46, 13</value>
@@ -277,7 +280,7 @@
     <value>True</value>
   </data>
   <data name="lblNutSpacingMethod.Location" type="System.Drawing.Point, System.Drawing">
-    <value>44, 43</value>
+    <value>44, 49</value>
   </data>
   <data name="lblNutSpacingMethod.Size" type="System.Drawing.Size, System.Drawing">
     <value>43, 13</value>
@@ -307,7 +310,7 @@
     <value>True</value>
   </data>
   <data name="lblNutSpacing.Location" type="System.Drawing.Point, System.Drawing">
-    <value>21, 18</value>
+    <value>21, 24</value>
   </data>
   <data name="lblNutSpacing.Size" type="System.Drawing.Size, System.Drawing">
     <value>66, 13</value>
@@ -337,7 +340,10 @@
     <value>True</value>
   </data>
   <data name="lblNutTotalSpread.Location" type="System.Drawing.Point, System.Drawing">
-    <value>248, 0</value>
+    <value>248, 3</value>
+  </data>
+  <data name="lblNutTotalSpread.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
   </data>
   <data name="lblNutTotalSpread.Size" type="System.Drawing.Size, System.Drawing">
     <value>68, 13</value>
@@ -364,7 +370,7 @@
     <value>Left, Right</value>
   </data>
   <data name="cboNutSpacingAlignment.Location" type="System.Drawing.Point, System.Drawing">
-    <value>93, 65</value>
+    <value>93, 71</value>
   </data>
   <data name="cboNutSpacingAlignment.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 1</value>
@@ -394,7 +400,7 @@
     <value>True</value>
   </data>
   <data name="lblNutSpacingAlignment.Location" type="System.Drawing.Point, System.Drawing">
-    <value>34, 68</value>
+    <value>34, 74</value>
   </data>
   <data name="lblNutSpacingAlignment.Size" type="System.Drawing.Size, System.Drawing">
     <value>53, 13</value>
@@ -433,7 +439,7 @@
     <value>4</value>
   </data>
   <data name="tlpNutSpacingAuto.Size" type="System.Drawing.Size, System.Drawing">
-    <value>346, 87</value>
+    <value>346, 93</value>
   </data>
   <data name="tlpNutSpacingAuto.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -454,7 +460,7 @@
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lblNutSpacingMethod" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lblNutSpacing" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cboNutSpacingMethod" Row="2" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="mtbNutSpacing" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="mtbNutSpread" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lblNutTotalSpread" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lblNutStringSpacing" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cboNutSpacingAlignment" Row="3" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="lblNutSpacingAlignment" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,90,Percent,50,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="cboNutSpacingMethod.Location" type="System.Drawing.Point, System.Drawing">
-    <value>93, 40</value>
+    <value>93, 46</value>
   </data>
   <data name="cboNutSpacingMethod.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 1</value>
@@ -484,7 +490,10 @@
     <value>True</value>
   </data>
   <data name="lblBridgeTotalSpread.Location" type="System.Drawing.Point, System.Drawing">
-    <value>248, 0</value>
+    <value>248, 3</value>
+  </data>
+  <data name="lblBridgeTotalSpread.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
   </data>
   <data name="lblBridgeTotalSpread.Size" type="System.Drawing.Size, System.Drawing">
     <value>68, 13</value>
@@ -514,7 +523,10 @@
     <value>True</value>
   </data>
   <data name="lblBridgeStringSpacing.Location" type="System.Drawing.Point, System.Drawing">
-    <value>131, 0</value>
+    <value>131, 3</value>
+  </data>
+  <data name="lblBridgeStringSpacing.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
   </data>
   <data name="lblBridgeStringSpacing.Size" type="System.Drawing.Size, System.Drawing">
     <value>46, 13</value>
@@ -550,7 +562,7 @@
     <value>Left, Right</value>
   </data>
   <data name="cboBridgeSpacingAlignment.Location" type="System.Drawing.Point, System.Drawing">
-    <value>93, 65</value>
+    <value>93, 71</value>
   </data>
   <data name="cboBridgeSpacingAlignment.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 1</value>
@@ -577,7 +589,7 @@
     <value>Left, Right</value>
   </data>
   <data name="cboBridgeSpacingMethod.Location" type="System.Drawing.Point, System.Drawing">
-    <value>93, 40</value>
+    <value>93, 46</value>
   </data>
   <data name="cboBridgeSpacingMethod.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 1</value>
@@ -607,7 +619,7 @@
     <value>True</value>
   </data>
   <data name="lblBridgeSpacingMethod.Location" type="System.Drawing.Point, System.Drawing">
-    <value>44, 43</value>
+    <value>44, 49</value>
   </data>
   <data name="lblBridgeSpacingMethod.Size" type="System.Drawing.Size, System.Drawing">
     <value>43, 13</value>
@@ -637,7 +649,7 @@
     <value>True</value>
   </data>
   <data name="lblBridgeSpacing.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 18</value>
+    <value>8, 24</value>
   </data>
   <data name="lblBridgeSpacing.Size" type="System.Drawing.Size, System.Drawing">
     <value>79, 13</value>
@@ -667,7 +679,7 @@
     <value>True</value>
   </data>
   <data name="lblBridgeSpacingAlignment.Location" type="System.Drawing.Point, System.Drawing">
-    <value>34, 68</value>
+    <value>34, 74</value>
   </data>
   <data name="lblBridgeSpacingAlignment.Size" type="System.Drawing.Size, System.Drawing">
     <value>53, 13</value>
@@ -694,7 +706,7 @@
     <value>Top</value>
   </data>
   <data name="tlpBridgeSpacingAuto.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 87</value>
+    <value>0, 93</value>
   </data>
   <data name="tlpBridgeSpacingAuto.MaximumSize" type="System.Drawing.Size, System.Drawing">
     <value>350, 500</value>
@@ -706,7 +718,7 @@
     <value>4</value>
   </data>
   <data name="tlpBridgeSpacingAuto.Size" type="System.Drawing.Size, System.Drawing">
-    <value>346, 87</value>
+    <value>346, 93</value>
   </data>
   <data name="tlpBridgeSpacingAuto.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -757,24 +769,24 @@
     <value>LocStrings</value>
   </data>
   <data name="&gt;&gt;LocStrings.Type" xml:space="preserve">
-    <value>SiGen.Localization.LocalizableStringList, SiGen, Version=1.0.0.22454, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.Localization.LocalizableStringList, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;Text_Spacing.Name" xml:space="preserve">
     <value>Text_Spacing</value>
   </data>
   <data name="&gt;&gt;Text_Spacing.Type" xml:space="preserve">
-    <value>SiGen.Localization.LocalizableString, SiGen, Version=1.0.0.22454, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.Localization.LocalizableString, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;Text_AvgSpacing.Name" xml:space="preserve">
     <value>Text_AvgSpacing</value>
   </data>
   <data name="&gt;&gt;Text_AvgSpacing.Type" xml:space="preserve">
-    <value>SiGen.Localization.LocalizableString, SiGen, Version=1.0.0.22454, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.Localization.LocalizableString, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>StringSpacingEditor</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.LayoutPropertyEditor, SiGen, Version=1.0.0.22454, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.LayoutPropertyEditor, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
   </data>
 </root>
