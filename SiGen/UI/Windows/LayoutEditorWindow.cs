@@ -34,7 +34,7 @@ namespace SiGen.UI
         //private LayoutEditorPanel<LayoutProperties> layoutInfoPanel;
         private LayoutViewerPanel PreviousDocument;
         private string[] FilesToOpen;
-
+        
         public LayoutViewerPanel ActiveDocument
         {
             get
@@ -74,6 +74,7 @@ namespace SiGen.UI
             InitializeComponent();
             Icon = Properties.Resources.SiGenIcon;
 
+            
             if (args != null)
                 FilesToOpen = args.Where(x => File.Exists(x)).ToArray();
         }
@@ -81,6 +82,7 @@ namespace SiGen.UI
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
             InitializeEditingPanels();
 
             if(FilesToOpen != null && FilesToOpen.Length > 0)
@@ -92,6 +94,7 @@ namespace SiGen.UI
             {
                 OpenDefaultLayout();
             }
+
             AppConfigManager.ValidateRecentFiles();
             RebuildRecentFilesMenu();
         }
@@ -469,7 +472,7 @@ namespace SiGen.UI
                 if (WindowState == FormWindowState.Minimized)
                     WindowState = FormWindowState.Normal;
 
-                BringToFront();
+                
 
                 if (messageStr.StartsWith("MUTEX#"))
                     messageStr = messageStr.Substring(6);
@@ -484,15 +487,28 @@ namespace SiGen.UI
                 else
                     filesToOpen.Add(messageStr);
 
-                foreach(var fileArg in filesToOpen)
+                BeginInvoke((Action)(() =>
                 {
-                    if (File.Exists(fileArg))
-                        OpenLayoutFile(fileArg, false);
-                }
+                    ProcessStartArgs(filesToOpen.ToArray());
+                }));
+                
             }
             base.WndProc(ref m);
         }
 
+
+        private void ProcessStartArgs(string[] args)
+        {
+            Activate();
+            TopMost = true;
+            BringToFront();
+            TopMost = false;
+            foreach (var fileArg in args)
+            {
+                if (File.Exists(fileArg))
+                    OpenLayoutFile(fileArg, false);
+            }
+        }
         
     }
 }

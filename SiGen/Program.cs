@@ -40,9 +40,8 @@ namespace SiGen
 
                 foreach (var proc in procs)
                 {
-                    if (proc == myProc)
+                    if (proc.Id == myProc.Id)
                         continue;
-
                     NativeUtils.SendDataMessage(proc.MainWindowHandle, message);
                     break;
                 }

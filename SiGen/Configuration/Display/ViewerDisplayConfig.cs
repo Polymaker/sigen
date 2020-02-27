@@ -167,14 +167,14 @@ namespace SiGen.UI
             {
                 Visible = true,
                 Color = Color.Black,
-                RenderMode = LineRenderMode.PlainLine
+                RenderMode = LineRenderMode.RealisticLook
             };
 
             _Frets = new FretsDisplayConfigs()
             {
                 Visible = true,
                 Color = Color.Red,
-                RenderMode = LineRenderMode.PlainLine,
+                RenderMode = LineRenderMode.RealisticLook,
                 RenderWidth = Measure.Mm(2.6)
             };
 
@@ -233,13 +233,13 @@ namespace SiGen.UI
                 {
                     Visible = true,
                     Color = Color.Black,
-                    RenderMode = LineRenderMode.PlainLine
+                    RenderMode = LineRenderMode.RealisticLook
                 },
                 Frets = new FretsDisplayConfigs()
                 {
                     Visible = true,
                     Color = Color.Red,
-                    RenderMode = LineRenderMode.PlainLine,
+                    RenderMode = LineRenderMode.RealisticLook,
                     RenderWidth = Measure.Mm(2.6)
                 },
                 Fingerboard = new FingerboardDisplayConfig()
