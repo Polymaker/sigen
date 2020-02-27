@@ -267,6 +267,7 @@ namespace SiGen.UI
                 DefaultDisplayUnit = UnitOfMeasure.Mm,
                 FretExtensionAmount = Measure.Empty
             };
+            defaultCfg.InitDefaultDesignerValues();
             return defaultCfg;
         }
 

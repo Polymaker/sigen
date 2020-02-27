@@ -187,7 +187,7 @@
     <value>innerTextbox</value>
   </data>
   <data name="&gt;&gt;innerTextbox.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.TextBoxEx, SiGen, Version=1.0.0.23717, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.TextBoxEx, SiGen, Version=1.0.0.19714, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;innerTextbox.Parent" xml:space="preserve">
     <value>$this</value>
@@ -202,7 +202,7 @@
     <value>6, 13</value>
   </data>
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 49</value>
+    <value>100, 26</value>
   </data>
   <data name="&gt;&gt;tsmiClearValue.Name" xml:space="preserve">
     <value>tsmiClearValue</value>

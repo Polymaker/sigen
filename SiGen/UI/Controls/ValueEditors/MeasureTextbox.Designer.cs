@@ -133,6 +133,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiConvertToFT;
         private System.Windows.Forms.ToolStripMenuItem tsmiClearValue;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        protected Controls.TextBoxEx innerTextbox;
+        protected internal TextBoxEx innerTextbox;
     }
 }

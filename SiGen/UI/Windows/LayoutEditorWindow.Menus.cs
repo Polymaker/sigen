@@ -161,11 +161,15 @@ namespace SiGen.UI
             {
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
-					var curDisplayCfg = AppConfig.Current.DisplayConfig;
-					foreach(var layoutPanel in OpenDocumentPanels)
-						layoutPanel.Viewer.SetDisplayColors(curDisplayCfg);
+					//var curDisplayCfg = AppConfig.Current.DisplayConfig;
+					//foreach(var layoutPanel in OpenDocumentPanels)
+					//	layoutPanel.Viewer.SetDisplayColors(curDisplayCfg);
 				}
-            }
+
+				var curDisplayCfg = AppConfig.Current.DisplayConfig;
+				foreach (var layoutPanel in OpenDocumentPanels)
+					layoutPanel.Viewer.SetDisplayColors(curDisplayCfg);
+			}
         }
 
         private void tsbClose_Click(object sender, EventArgs e)

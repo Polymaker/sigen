@@ -119,16 +119,14 @@ namespace SiGen.UI.Controls
             }
         }
 
-        private bool _AutoSize;
-
         [Browsable(true), DefaultValue(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public override bool AutoSize { get => _AutoSize; set => base.AutoSize = _AutoSize = value; }
+        public override bool AutoSize { get => base.AutoSize; set => base.AutoSize = value; }
 
         protected bool ShouldSerializeAutoSize()
         {
             return !AutoSize;
         }
-        
+
         #endregion
 
         #region Events
@@ -144,7 +142,7 @@ namespace SiGen.UI.Controls
             InitializeComponent();
             _MaximumValue = 100;
             _AllowDecimals = true;
-            _AutoSize = true;
+            AutoSize = true;
             _MaxDisplayedDecimalPlaces = 5;
         }
 
@@ -281,6 +279,13 @@ namespace SiGen.UI.Controls
             PerformEndEdit();
         }
 
+
+        protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
+        {
+            if (width == 4)
+                return;
+            base.SetBoundsCore(x, y, width, height, specified);
+        }
         //private const int WM_PASTE = 0x0302;
 
         //protected override void WndProc(ref Message m)
@@ -295,7 +300,7 @@ namespace SiGen.UI.Controls
         //}
     }
 
-    internal class NumericBoxDesigner : ControlDesigner
+    internal class NumericBoxDesigner : TextBoxDesigner
     {
         public override SelectionRules SelectionRules
         {

@@ -234,4 +234,7 @@ Do you want to reload it?
   <data name="Messages_OpeningFile" xml:space="preserve">
     <value>Opening file</value>
   </data>
+  <data name="Messages_InvalidExportFormat" xml:space="preserve">
+    <value>Invalid export format.</value>
+  </data>
 </root>

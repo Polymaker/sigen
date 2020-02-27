@@ -117,14 +117,243 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="label3.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="label3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 125</value>
+  </data>
+  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>60, 13</value>
+  </data>
+  <data name="label3.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="label3.Text" xml:space="preserve">
+    <value>Fret width</value>
+  </data>
+  <data name="&gt;&gt;label3.Name" xml:space="preserve">
+    <value>label3</value>
+  </data>
+  <data name="&gt;&gt;label3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label3.Parent" xml:space="preserve">
+    <value>tabPage1</value>
+  </data>
+  <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="FretWidthBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>97, 122</value>
+  </data>
+  <data name="FretWidthBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>109, 22</value>
+  </data>
+  <data name="FretWidthBox.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;FretWidthBox.Name" xml:space="preserve">
+    <value>FretWidthBox</value>
+  </data>
+  <data name="&gt;&gt;FretWidthBox.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.22597, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;FretWidthBox.Parent" xml:space="preserve">
+    <value>tabPage1</value>
+  </data>
+  <data name="&gt;&gt;FretWidthBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="label2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 97</value>
+  </data>
+  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 13</value>
+  </data>
+  <data name="label2.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="label2.Text" xml:space="preserve">
+    <value>Frets color</value>
+  </data>
+  <data name="&gt;&gt;label2.Name" xml:space="preserve">
+    <value>label2</value>
+  </data>
+  <data name="&gt;&gt;label2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
+    <value>tabPage1</value>
+  </data>
+  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="FretsColorSelect.Location" type="System.Drawing.Point, System.Drawing">
+    <value>97, 94</value>
+  </data>
+  <data name="FretsColorSelect.Size" type="System.Drawing.Size, System.Drawing">
+    <value>109, 22</value>
+  </data>
+  <data name="FretsColorSelect.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;FretsColorSelect.Name" xml:space="preserve">
+    <value>FretsColorSelect</value>
+  </data>
+  <data name="&gt;&gt;FretsColorSelect.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.ValueEditors.ColorSelectButton, SiGen, Version=1.0.0.22597, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;FretsColorSelect.Parent" xml:space="preserve">
+    <value>tabPage1</value>
+  </data>
+  <data name="&gt;&gt;FretsColorSelect.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="ChkRealisticFrets.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="ChkRealisticFrets.CheckAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="ChkRealisticFrets.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9.75pt</value>
+  </data>
+  <data name="ChkRealisticFrets.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="ChkRealisticFrets.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 69</value>
+  </data>
+  <data name="ChkRealisticFrets.Size" type="System.Drawing.Size, System.Drawing">
+    <value>147, 21</value>
+  </data>
+  <data name="ChkRealisticFrets.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="ChkRealisticFrets.Text" xml:space="preserve">
+    <value>Display realistic frets</value>
+  </data>
+  <data name="&gt;&gt;ChkRealisticFrets.Name" xml:space="preserve">
+    <value>ChkRealisticFrets</value>
+  </data>
+  <data name="&gt;&gt;ChkRealisticFrets.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ChkRealisticFrets.Parent" xml:space="preserve">
+    <value>tabPage1</value>
+  </data>
+  <data name="&gt;&gt;ChkRealisticFrets.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="label1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 34</value>
+  </data>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 13</value>
+  </data>
+  <data name="label1.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Strings color</value>
+  </data>
+  <data name="&gt;&gt;label1.Name" xml:space="preserve">
+    <value>label1</value>
+  </data>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
+    <value>tabPage1</value>
+  </data>
+  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="StringsColorSelect.Location" type="System.Drawing.Point, System.Drawing">
+    <value>97, 31</value>
+  </data>
+  <data name="StringsColorSelect.Size" type="System.Drawing.Size, System.Drawing">
+    <value>109, 22</value>
+  </data>
+  <data name="StringsColorSelect.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;StringsColorSelect.Name" xml:space="preserve">
+    <value>StringsColorSelect</value>
+  </data>
+  <data name="&gt;&gt;StringsColorSelect.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.ValueEditors.ColorSelectButton, SiGen, Version=1.0.0.22597, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;StringsColorSelect.Parent" xml:space="preserve">
+    <value>tabPage1</value>
+  </data>
+  <data name="&gt;&gt;StringsColorSelect.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="ChkRealisticStrings.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="ChkRealisticStrings.CheckAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="ChkRealisticStrings.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9.75pt</value>
+  </data>
+  <data name="ChkRealisticStrings.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="ChkRealisticStrings.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 6</value>
+  </data>
+  <data name="ChkRealisticStrings.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 21</value>
+  </data>
+  <data name="ChkRealisticStrings.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="ChkRealisticStrings.Text" xml:space="preserve">
+    <value>Display realistic strings</value>
+  </data>
+  <data name="&gt;&gt;ChkRealisticStrings.Name" xml:space="preserve">
+    <value>ChkRealisticStrings</value>
+  </data>
+  <data name="&gt;&gt;ChkRealisticStrings.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ChkRealisticStrings.Parent" xml:space="preserve">
+    <value>tabPage1</value>
+  </data>
+  <data name="&gt;&gt;ChkRealisticStrings.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="Display_CancelButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="Display_CancelButton.Location" type="System.Drawing.Point, System.Drawing">
     <value>535, 348</value>
   </data>
   <data name="Display_CancelButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Display_CancelButton.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
@@ -141,140 +370,13 @@
     <value>tabPage1</value>
   </data>
   <data name="&gt;&gt;Display_CancelButton.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="panel2.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
-  </data>
-  <data name="panel2.AutoScroll" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="checkBox2.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="checkBox2.CheckAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleRight</value>
-  </data>
-  <data name="checkBox2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 32</value>
-  </data>
-  <data name="checkBox2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 17</value>
-  </data>
-  <data name="checkBox2.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="checkBox2.Text" xml:space="preserve">
-    <value>Fingerboard edges</value>
-  </data>
-  <data name="&gt;&gt;checkBox2.Name" xml:space="preserve">
-    <value>checkBox2</value>
-  </data>
-  <data name="&gt;&gt;checkBox2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;checkBox2.Parent" xml:space="preserve">
-    <value>panel2</value>
-  </data>
-  <data name="&gt;&gt;checkBox2.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="colorSelectButton2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>128, 30</value>
-  </data>
-  <data name="colorSelectButton2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>103, 20</value>
-  </data>
-  <data name="colorSelectButton2.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;colorSelectButton2.Name" xml:space="preserve">
-    <value>colorSelectButton2</value>
-  </data>
-  <data name="&gt;&gt;colorSelectButton2.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.ValueEditors.ColorSelectButton, SiGen, Version=1.0.0.18003, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;colorSelectButton2.Parent" xml:space="preserve">
-    <value>panel2</value>
-  </data>
-  <data name="&gt;&gt;colorSelectButton2.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="checkBox1.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="checkBox1.CheckAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleRight</value>
-  </data>
-  <data name="checkBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 6</value>
-  </data>
-  <data name="checkBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 17</value>
-  </data>
-  <data name="checkBox1.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="checkBox1.Text" xml:space="preserve">
-    <value>Show frets</value>
-  </data>
-  <data name="&gt;&gt;checkBox1.Name" xml:space="preserve">
-    <value>checkBox1</value>
-  </data>
-  <data name="&gt;&gt;checkBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;checkBox1.Parent" xml:space="preserve">
-    <value>panel2</value>
-  </data>
-  <data name="&gt;&gt;checkBox1.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="colorSelectButton1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>128, 4</value>
-  </data>
-  <data name="colorSelectButton1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>103, 20</value>
-  </data>
-  <data name="colorSelectButton1.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;colorSelectButton1.Name" xml:space="preserve">
-    <value>colorSelectButton1</value>
-  </data>
-  <data name="&gt;&gt;colorSelectButton1.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.ValueEditors.ColorSelectButton, SiGen, Version=1.0.0.18003, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;colorSelectButton1.Parent" xml:space="preserve">
-    <value>panel2</value>
-  </data>
-  <data name="&gt;&gt;colorSelectButton1.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="panel2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 3</value>
-  </data>
-  <data name="panel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>609, 339</value>
-  </data>
-  <data name="panel2.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;panel2.Name" xml:space="preserve">
-    <value>panel2</value>
-  </data>
-  <data name="&gt;&gt;panel2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;panel2.Parent" xml:space="preserve">
-    <value>tabPage1</value>
-  </data>
-  <data name="&gt;&gt;panel2.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>8</value>
   </data>
   <data name="Display_SaveButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
+  </data>
+  <data name="Display_SaveButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="Display_SaveButton.Location" type="System.Drawing.Point, System.Drawing">
     <value>458, 348</value>
@@ -298,7 +400,7 @@
     <value>tabPage1</value>
   </data>
   <data name="&gt;&gt;Display_SaveButton.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>9</value>
   </data>
   <data name="tabPage1.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 22</value>
@@ -329,6 +431,9 @@
   </data>
   <data name="Export_CancelButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
+  </data>
+  <data name="Export_CancelButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="Export_CancelButton.Location" type="System.Drawing.Point, System.Drawing">
     <value>535, 348</value>
@@ -373,7 +478,7 @@
     <value>3, 423</value>
   </data>
   <data name="StringCentersExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>346, 78</value>
+    <value>352, 78</value>
   </data>
   <data name="StringCentersExportCfg.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -382,7 +487,7 @@
     <value>StringCentersExportCfg</value>
   </data>
   <data name="&gt;&gt;StringCentersExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.18003, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.22597, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;StringCentersExportCfg.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -403,7 +508,7 @@
     <value>3, 507</value>
   </data>
   <data name="GuideExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>346, 78</value>
+    <value>352, 78</value>
   </data>
   <data name="GuideExportCfg.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -412,7 +517,7 @@
     <value>GuideExportCfg</value>
   </data>
   <data name="&gt;&gt;GuideExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.18003, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.22597, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;GuideExportCfg.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -433,7 +538,7 @@
     <value>3, 339</value>
   </data>
   <data name="StringsExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>346, 78</value>
+    <value>352, 78</value>
   </data>
   <data name="StringsExportCfg.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -442,7 +547,7 @@
     <value>StringsExportCfg</value>
   </data>
   <data name="&gt;&gt;StringsExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.18003, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.22597, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;StringsExportCfg.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -463,7 +568,7 @@
     <value>3, 255</value>
   </data>
   <data name="CenterLineExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>346, 78</value>
+    <value>352, 78</value>
   </data>
   <data name="CenterLineExportCfg.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -472,7 +577,7 @@
     <value>CenterLineExportCfg</value>
   </data>
   <data name="&gt;&gt;CenterLineExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.18003, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.22597, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;CenterLineExportCfg.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -493,7 +598,7 @@
     <value>3, 171</value>
   </data>
   <data name="MarginsExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>346, 78</value>
+    <value>352, 78</value>
   </data>
   <data name="MarginsExportCfg.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -502,7 +607,7 @@
     <value>MarginsExportCfg</value>
   </data>
   <data name="&gt;&gt;MarginsExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.18003, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.22597, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;MarginsExportCfg.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -523,7 +628,7 @@
     <value>3, 87</value>
   </data>
   <data name="FingerboardExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>346, 78</value>
+    <value>352, 78</value>
   </data>
   <data name="FingerboardExportCfg.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -532,7 +637,7 @@
     <value>FingerboardExportCfg</value>
   </data>
   <data name="&gt;&gt;FingerboardExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.18003, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.22597, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;FingerboardExportCfg.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -553,7 +658,7 @@
     <value>3, 3</value>
   </data>
   <data name="FretsExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>346, 78</value>
+    <value>352, 78</value>
   </data>
   <data name="FretsExportCfg.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -562,7 +667,7 @@
     <value>FretsExportCfg</value>
   </data>
   <data name="&gt;&gt;FretsExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.18003, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.22597, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;FretsExportCfg.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -593,6 +698,9 @@
   </data>
   <data name="Export_SaveButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
+  </data>
+  <data name="Export_SaveButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="Export_SaveButton.Location" type="System.Drawing.Point, System.Drawing">
     <value>458, 348</value>
@@ -678,6 +786,9 @@
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>621, 403</value>
   </data>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 8.25pt</value>
+  </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterParent</value>
   </data>
@@ -685,7 +796,7 @@
     <value>Options</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>AppPreferencesWindow</value>
+    <value>OptionsDialog</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

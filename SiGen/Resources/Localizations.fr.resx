@@ -254,4 +254,7 @@ Voulez-vous le recharger?
   <data name="Messages_OpeningFile" xml:space="preserve">
     <value>Ouverture du fichier</value>
   </data>
+  <data name="Messages_InvalidExportFormat" xml:space="preserve">
+    <value>Format d'exportation non valide.</value>
+  </data>
 </root>

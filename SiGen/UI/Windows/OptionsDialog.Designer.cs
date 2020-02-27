@@ -28,15 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OptionsDialog));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.FretWidthBox = new SiGen.UI.Controls.MeasureTextbox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.FretsColorSelect = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
+            this.ChkRealisticFrets = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.StringsColorSelect = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
+            this.ChkRealisticStrings = new System.Windows.Forms.CheckBox();
             this.Display_CancelButton = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.colorSelectButton2 = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.colorSelectButton1 = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
             this.Display_SaveButton = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.Export_CancelButton = new System.Windows.Forms.Button();
@@ -51,7 +55,6 @@
             this.Export_SaveButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -66,12 +69,64 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label3);
+            this.tabPage1.Controls.Add(this.FretWidthBox);
+            this.tabPage1.Controls.Add(this.label2);
+            this.tabPage1.Controls.Add(this.FretsColorSelect);
+            this.tabPage1.Controls.Add(this.ChkRealisticFrets);
+            this.tabPage1.Controls.Add(this.label1);
+            this.tabPage1.Controls.Add(this.StringsColorSelect);
+            this.tabPage1.Controls.Add(this.ChkRealisticStrings);
             this.tabPage1.Controls.Add(this.Display_CancelButton);
-            this.tabPage1.Controls.Add(this.panel2);
             this.tabPage1.Controls.Add(this.Display_SaveButton);
             resources.ApplyResources(this.tabPage1, "tabPage1");
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            resources.ApplyResources(this.label3, "label3");
+            this.label3.Name = "label3";
+            // 
+            // FretWidthBox
+            // 
+            resources.ApplyResources(this.FretWidthBox, "FretWidthBox");
+            this.FretWidthBox.Name = "FretWidthBox";
+            // 
+            // label2
+            // 
+            resources.ApplyResources(this.label2, "label2");
+            this.label2.Name = "label2";
+            // 
+            // FretsColorSelect
+            // 
+            resources.ApplyResources(this.FretsColorSelect, "FretsColorSelect");
+            this.FretsColorSelect.Name = "FretsColorSelect";
+            this.FretsColorSelect.Value = System.Drawing.Color.Red;
+            // 
+            // ChkRealisticFrets
+            // 
+            resources.ApplyResources(this.ChkRealisticFrets, "ChkRealisticFrets");
+            this.ChkRealisticFrets.Name = "ChkRealisticFrets";
+            this.ChkRealisticFrets.UseVisualStyleBackColor = true;
+            this.ChkRealisticFrets.CheckedChanged += new System.EventHandler(this.ChkRealisticFrets_CheckedChanged);
+            // 
+            // label1
+            // 
+            resources.ApplyResources(this.label1, "label1");
+            this.label1.Name = "label1";
+            // 
+            // StringsColorSelect
+            // 
+            resources.ApplyResources(this.StringsColorSelect, "StringsColorSelect");
+            this.StringsColorSelect.Name = "StringsColorSelect";
+            this.StringsColorSelect.Value = System.Drawing.Color.Red;
+            // 
+            // ChkRealisticStrings
+            // 
+            resources.ApplyResources(this.ChkRealisticStrings, "ChkRealisticStrings");
+            this.ChkRealisticStrings.Name = "ChkRealisticStrings";
+            this.ChkRealisticStrings.UseVisualStyleBackColor = true;
             // 
             // Display_CancelButton
             // 
@@ -80,44 +135,12 @@
             this.Display_CancelButton.UseVisualStyleBackColor = true;
             this.Display_CancelButton.Click += new System.EventHandler(this.Display_CancelButton_Click);
             // 
-            // panel2
-            // 
-            resources.ApplyResources(this.panel2, "panel2");
-            this.panel2.Controls.Add(this.checkBox2);
-            this.panel2.Controls.Add(this.colorSelectButton2);
-            this.panel2.Controls.Add(this.checkBox1);
-            this.panel2.Controls.Add(this.colorSelectButton1);
-            this.panel2.Name = "panel2";
-            // 
-            // checkBox2
-            // 
-            resources.ApplyResources(this.checkBox2, "checkBox2");
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            // 
-            // colorSelectButton2
-            // 
-            resources.ApplyResources(this.colorSelectButton2, "colorSelectButton2");
-            this.colorSelectButton2.Name = "colorSelectButton2";
-            this.colorSelectButton2.Value = System.Drawing.Color.Red;
-            // 
-            // checkBox1
-            // 
-            resources.ApplyResources(this.checkBox1, "checkBox1");
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // colorSelectButton1
-            // 
-            resources.ApplyResources(this.colorSelectButton1, "colorSelectButton1");
-            this.colorSelectButton1.Name = "colorSelectButton1";
-            this.colorSelectButton1.Value = System.Drawing.Color.Red;
-            // 
             // Display_SaveButton
             // 
             resources.ApplyResources(this.Display_SaveButton, "Display_SaveButton");
             this.Display_SaveButton.Name = "Display_SaveButton";
             this.Display_SaveButton.UseVisualStyleBackColor = true;
+            this.Display_SaveButton.Click += new System.EventHandler(this.Display_SaveButton_Click);
             // 
             // tabPage2
             // 
@@ -194,19 +217,18 @@
             resources.ApplyResources(this.Export_SaveButton, "Export_SaveButton");
             this.Export_SaveButton.Name = "Export_SaveButton";
             this.Export_SaveButton.UseVisualStyleBackColor = true;
-            this.Export_SaveButton.Click += new System.EventHandler(this.SaveExportConfigButton_Click);
+            this.Export_SaveButton.Click += new System.EventHandler(this.Export_SaveButton_Click);
             // 
-            // AppPreferencesWindow
+            // OptionsDialog
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl1);
-            this.Name = "AppPreferencesWindow";
+            this.Name = "OptionsDialog";
             this.ShowIcon = false;
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
+            this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -228,12 +250,15 @@
         private Controls.Preferences.LineExportConfigEdit StringCentersExportCfg;
         private Controls.Preferences.LineExportConfigEdit GuideExportCfg;
         private System.Windows.Forms.Button Display_SaveButton;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private Controls.ValueEditors.ColorSelectButton colorSelectButton2;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private Controls.ValueEditors.ColorSelectButton colorSelectButton1;
         private System.Windows.Forms.Button Display_CancelButton;
         private System.Windows.Forms.Button Export_CancelButton;
+        private System.Windows.Forms.Label label2;
+        private Controls.ValueEditors.ColorSelectButton FretsColorSelect;
+        private System.Windows.Forms.CheckBox ChkRealisticFrets;
+        private System.Windows.Forms.Label label1;
+        private Controls.ValueEditors.ColorSelectButton StringsColorSelect;
+        private System.Windows.Forms.CheckBox ChkRealisticStrings;
+        private System.Windows.Forms.Label label3;
+        private Controls.MeasureTextbox FretWidthBox;
     }
 }

@@ -234,6 +234,15 @@ namespace SiGen.Resources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid export format..
+        /// </summary>
+        internal static string Messages_InvalidExportFormat {
+            get {
+                return ResourceManager.GetString("Messages_InvalidExportFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Opening file.
         /// </summary>
         internal static string Messages_OpeningFile {

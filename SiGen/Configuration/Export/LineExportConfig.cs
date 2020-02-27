@@ -42,10 +42,6 @@ namespace SiGen.Export
             _Color = Color.Black;
         }
 
-
-        
-
-
         class LineUnitConverter : JsonConverter
         {
             public override bool CanConvert(Type objectType)

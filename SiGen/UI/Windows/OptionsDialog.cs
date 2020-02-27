@@ -30,18 +30,31 @@ namespace SiGen.UI.Windows
         {
             base.OnLoad(e);
 
-            var currentSettings = AppConfig.Current.Clone();
-            ExportConfig = currentSettings.ExportConfig;
-            DisplayConfig = currentSettings.DisplayConfig;
+            Task.Factory.StartNew(() =>
+            {
+                var currentSettings = AppConfig.Current.Clone();
+                ExportConfig = currentSettings.ExportConfig;
+                DisplayConfig = currentSettings.DisplayConfig;
+                BeginInvoke(new MethodInvoker(LoadConfigValues));
+            });
+        }
 
+        private void LoadConfigValues()
+        {
             LoadDisplayConfigs();
             LoadExportConfigs();
         }
 
         private void LoadDisplayConfigs()
         {
-            checkBox1.Checked = DisplayConfig.Frets.Visible;
-            colorSelectButton1.Value = DisplayConfig.Frets.Color;
+            ChkRealisticStrings.Checked = DisplayConfig.Strings.RenderMode == Configuration.Display.LineRenderMode.RealisticLook;
+            StringsColorSelect.Value = DisplayConfig.Strings.Color;
+
+            ChkRealisticFrets.Checked = DisplayConfig.Frets.RenderMode != Configuration.Display.LineRenderMode.PlainLine;
+            FretsColorSelect.Value = DisplayConfig.Frets.Color;
+
+            FretWidthBox.Enabled = ChkRealisticFrets.Checked;
+            FretWidthBox.Value = DisplayConfig.Frets.RenderWidth;
         }
 
         private void LoadExportConfigs()
@@ -56,9 +69,29 @@ namespace SiGen.UI.Windows
         }
 
 
-        private void SaveExportConfigButton_Click(object sender, EventArgs e)
+        private void Export_SaveButton_Click(object sender, EventArgs e)
         {
             AppConfig.Current.ExportConfig = ExportConfig;
+            AppConfigManager.Save();
+            DialogResult = DialogResult.OK;
+            
+        }
+
+        private void Display_SaveButton_Click(object sender, EventArgs e)
+        {
+            DisplayConfig.Strings.RenderMode = ChkRealisticStrings.Checked ? 
+                Configuration.Display.LineRenderMode.RealisticLook : 
+                Configuration.Display.LineRenderMode.PlainLine;
+
+            DisplayConfig.Strings.Color = StringsColorSelect.Value;
+
+            DisplayConfig.Frets.RenderMode = ChkRealisticFrets.Checked ?
+                Configuration.Display.LineRenderMode.RealisticLook :
+                Configuration.Display.LineRenderMode.PlainLine;
+
+            DisplayConfig.Frets.Color = FretsColorSelect.Value;
+
+            AppConfig.Current.DisplayConfig = DisplayConfig;
             AppConfigManager.Save();
             DialogResult = DialogResult.OK;
         }
@@ -71,6 +104,11 @@ namespace SiGen.UI.Windows
         private void Export_CancelButton_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
+        }
+
+        private void ChkRealisticFrets_CheckedChanged(object sender, EventArgs e)
+        {
+            FretWidthBox.Enabled = ChkRealisticFrets.Checked;
         }
     }
 }

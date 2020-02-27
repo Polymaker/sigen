@@ -1,4 +1,5 @@
-﻿using SiGen.Maths;
+﻿using SiGen.Configuration.Display;
+using SiGen.Maths;
 using SiGen.Measuring;
 using SiGen.StringedInstruments.Layout;
 using SiGen.StringedInstruments.Layout.Visual;
@@ -117,21 +118,32 @@ namespace SiGen.UI
             LayoutIntersections = new List<LayoutIntersection>();
 
             _DisplayConfig = ViewerDisplayConfig.CreateDefault();
-            _DisplayConfig.InitDefaultDesignerValues();
             _DisplayConfig.AttachPropertyChangedEvent();
             _DisplayConfig.PropertyChanged += DisplayConfigChanged;
             
         }
 
-        public void SetDisplayConfig(ViewerDisplayConfig config)
+        public void SetDisplayConfig(ViewerDisplayConfig config, bool keepVisibility = true)
         {
+            var configVisible = new List<bool>();
             if (_DisplayConfig != null)
+            {
                 _DisplayConfig.PropertyChanged -= DisplayConfigChanged;
+                foreach (var cfg in _DisplayConfig.LineConfigs)
+                    configVisible.Add(cfg.Visible);
+            }
 
             _DisplayConfig = config ?? new ViewerDisplayConfig();
-            _DisplayConfig.InitDefaultDesignerValues();
+
+            if (configVisible.Count > 0)
+            {
+                for (int i = 0; i < configVisible.Count; i++)
+                    _DisplayConfig.LineConfigs[i].Visible = configVisible[i];
+            }
+
             _DisplayConfig.AttachPropertyChangedEvent();
             _DisplayConfig.PropertyChanged += DisplayConfigChanged;
+
             if (IsHandleCreated)
                 Invalidate();
         }
@@ -143,6 +155,15 @@ namespace SiGen.UI
             for (int i = 0; i < config.LineConfigs.Length; i++)
             {
                 _DisplayConfig.LineConfigs[i].Color = config.LineConfigs[i].Color;
+
+                if (_DisplayConfig.LineConfigs[i] is StringsDisplayConfig stringsDisplay)
+                    stringsDisplay.RenderMode = (config.LineConfigs[i] as StringsDisplayConfig).RenderMode;
+
+                if (_DisplayConfig.LineConfigs[i] is FretsDisplayConfigs fretsDisplay)
+                {
+                    fretsDisplay.RenderMode = (config.LineConfigs[i] as FretsDisplayConfigs).RenderMode;
+                    fretsDisplay.RenderWidth = (config.LineConfigs[i] as FretsDisplayConfigs).RenderWidth;
+                }
             }
 
             _DisplayConfig.PropertyChanged += DisplayConfigChanged;

@@ -11,6 +11,8 @@ using SiGen.Measuring;
 using SiGen.Utilities;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Forms.Design;
+using System.Collections;
+using System.Windows.Forms.Design.Behavior;
 
 namespace SiGen.UI.Controls
 {
@@ -112,6 +114,16 @@ namespace SiGen.UI.Controls
             get { return _IsEditing; }
         }
 
+        private bool _AutoSize;
+
+        [Browsable(true), DefaultValue(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public override bool AutoSize { get => _AutoSize; set => _AutoSize = value; }
+
+        protected bool ShouldSerializeAutoSize()
+        {
+            return !_AutoSize;
+        }
+
         #region Events
 
         public event EventHandler BeginEdit;
@@ -124,12 +136,19 @@ namespace SiGen.UI.Controls
         public MeasureTextbox()
         {
             InitializeComponent();
+
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer | ControlStyles.Selectable, true);
+            
             _Value = Measure.Mm(0);
             measureBounds = Rectangle.Empty;
             _TextAlign = HorizontalAlignment.Center;
             innerTextbox.Visible = false;
             base.BackColor = Color.Empty;
+
+            int defaultHeight = GetPreferredSize(new Size(200,200)).Height;
+
+            _AutoSize = true;
+            SetBounds(0, 0, 0, defaultHeight, BoundsSpecified.Height);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -300,10 +319,11 @@ namespace SiGen.UI.Controls
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-            if (!HideBorders)
-                Height = FontHeight + (SystemInformation.BorderSize.Height * 4) + 3;
-            else
-                Height = FontHeight + 3;
+            //if (!HideBorders)
+            //    Height = FontHeight + (SystemInformation.BorderSize.Height * 4) + 3;
+            //else
+            //    Height = FontHeight + 3;
+            SetBounds(0, 0, 0, 0, BoundsSpecified.Height);
             UpdateMeasureBounds();
         }
 
@@ -385,29 +405,58 @@ namespace SiGen.UI.Controls
 
         public override Size GetPreferredSize(Size proposedSize)
         {
-            if (innerTextbox != null)
+
+            TextFormatFlags textFormatFlags = TextFormatFlags.NoPrefix | TextFormatFlags.TextBoxControl;
+
+            Size sz = TextRenderer.MeasureText(Text, Font, proposedSize, textFormatFlags);
+            sz.Height = Math.Max(sz.Height, base.FontHeight);
+            if (!HideBorders)
             {
-                var baseSize = innerTextbox.GetPreferredSize(proposedSize);
-                if (!HideBorders)
-                {
-                    baseSize.Width += SystemInformation.BorderSize.Width * 4;
-                    baseSize.Height += SystemInformation.BorderSize.Height * 4;
-                    return baseSize;
-                }
+                sz.Width += SystemInformation.BorderSize.Width * 4;
+                sz.Height += SystemInformation.BorderSize.Height * 4;
+                sz.Height += 3;
             }
-            return base.GetPreferredSize(proposedSize);
+
+            
+            return sz;
+            //if (innerTextbox != null)
+            //{
+            //    var baseSize = innerTextbox.GetPreferredSize(proposedSize);
+            //    if (!HideBorders)
+            //    {
+            //        baseSize.Width += SystemInformation.BorderSize.Width * 4;
+            //        baseSize.Height += SystemInformation.BorderSize.Height * 4;
+            //        return baseSize;
+            //    }
+            //}
+            //else
+            //{
+            //    var baseSize = base.GetPreferredSize(proposedSize);
+            //    baseSize.Height = Font.Height;
+            //    if (!HideBorders)
+            //    {
+            //        baseSize.Width += SystemInformation.BorderSize.Width * 4;
+            //        baseSize.Height += SystemInformation.BorderSize.Height * 4;
+            //    }
+            //}
+            //return base.GetPreferredSize(proposedSize);
         }
 
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
+            if (width <= 4 && specified.HasFlag(BoundsSpecified.Width))
+                return;
+
             if (AutoSize)
             {
-                if (!HideBorders)
-                    height = FontHeight + (SystemInformation.BorderSize.Height * 4) + 3;
-                else
-                    height = FontHeight + 3;
+                var defaultSize = GetPreferredSize(new Size(200, 200));
+                height = defaultSize.Height;
             }
-            
+            else
+            {
+                height = Math.Max(innerTextbox.Height, height);
+            }
+
             base.SetBoundsCore(x, y, width, height, specified);
             RepositionTextbox();
         }
@@ -698,7 +747,6 @@ namespace SiGen.UI.Controls
                     handleMessage = false;
                 }
             }
-
             if(handleMessage)
                 base.WndProc(ref m);
         }
@@ -711,16 +759,68 @@ namespace SiGen.UI.Controls
         
     }
 
-    internal class MeasureTextboxDesigner : ControlDesigner
+    internal class MeasureTextboxDesigner : TextBoxDesigner
     {
+        //private ControlDesigner BaseDesigner;
+        //private static Type BaseDesignerType;
+
         public override SelectionRules SelectionRules
         {
             get
             {
                 SelectionRules selectionRules = base.SelectionRules;
-                selectionRules &= ~(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);
+                var txt = Control as MeasureTextbox;
+                if (txt.AutoSize)
+                    selectionRules &= ~(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);
+
                 return selectionRules;
             }
         }
+
+        public override IList SnapLines
+        {
+            get
+            {
+                var txt = Control as MeasureTextbox;
+                if (txt.AutoSize)
+                    return base.SnapLines;
+
+                var lines = new List<SnapLine>();
+                int offset = (Control as MeasureTextbox)?.innerTextbox.Top ?? 0;
+                foreach (SnapLine line in base.SnapLines)
+                {
+                    if (line.SnapLineType == SnapLineType.Baseline)
+                        lines.Add(new SnapLine(line.SnapLineType, line.Offset + offset - 3, line.Priority));
+                    else
+                        lines.Add(line);
+                }
+                return lines;
+            }
+        }
+
+        //public override IList SnapLines
+        //{
+        //    get
+        //    {
+        //        return BaseDesigner.SnapLines;
+        //        //var lines = new List<SnapLine>();
+        //        //int offset = (Control as MeasureTextbox)?.Top ?? 0;
+
+        //        //foreach (SnapLine line in BaseDesigner.SnapLines)
+        //        //{
+        //        //    lines.Add(new SnapLine(line.SnapLineType, line.Offset, line.Priority));
+        //        //}
+        //        //return lines;
+        //    }
+        //}
+
+        protected override void PreFilterProperties(IDictionary properties)
+        {
+            properties.Remove("AutoSizeMode");
+            properties.Remove("BorderStyle");
+            base.PreFilterProperties(properties);
+        }
+
+         
     }
 }

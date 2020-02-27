@@ -4,6 +4,7 @@ using SiGen.Configuration;
 using SiGen.Configuration.Display;
 using SiGen.Export;
 using SiGen.Measuring;
+using SiGen.Resources;
 using SiGen.StringedInstruments.Layout;
 using SiGen.UI.Controls;
 using System;
@@ -153,7 +154,7 @@ namespace SiGen.UI.Windows
                     sfd.FileName = "layout";
 
 
-                sfd.Filter = "Scalable Vector Graphics File|*.svg|Drawing Interchange Format File|*.dxf|All files|*.*";
+                sfd.Filter = $"Scalable Vector Graphics File|*.svg|Drawing Interchange Format File|*.dxf|{Localizations.Misc_AllFilesDesc}|*.*";
                 
                 if (rbDxfExport.Checked)
                     sfd.FilterIndex = 2;
@@ -179,7 +180,7 @@ namespace SiGen.UI.Windows
                                 DxfLayoutExporter.ExportLayout(sfd.FileName, layoutPreview.CurrentLayout, ExportOptions);
                                 break;
                             default:
-                                MessageBox.Show("todo");
+                                MessageBox.Show(Localizations.Messages_InvalidExportFormat, Localizations.Messages_Warning);
                                 break;
                         }
                     }
