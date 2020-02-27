@@ -15,6 +15,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -48,7 +49,7 @@ namespace SiGen.UI.Windows
         {
             base.OnLoad(e);
             
-            ExportOptions = AppConfig.Current.ExportConfig;
+            ExportOptions = AppConfig.Current.ExportConfig.Clone();
             HasInitialized = true;
 
             LoadOptions();
@@ -62,6 +63,7 @@ namespace SiGen.UI.Windows
             ExportOptions.PropertyChanged += ExportOptions_PropertyChanged;
 
         }
+
 
         private void ExportOptions_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -190,7 +192,7 @@ namespace SiGen.UI.Windows
 
         private void rbExtendInward_CheckedChanged(object sender, EventArgs e)
         {
-            if (!isLoading && HasInitialized)
+            if (!isLoading && HasInitialized && ExtendFretsPanel.Checked)
                 mtbFretExtendAmount_ValueChanged(mtbFretExtendAmount, EventArgs.Empty);
         }
 
@@ -207,7 +209,7 @@ namespace SiGen.UI.Windows
 
         private void mtbFretExtendAmount_ValueChanged(object sender, EventArgs e)
         {
-            if (!isLoading && HasInitialized)
+            if (!isLoading && HasInitialized && ExtendFretsPanel.Checked)
             {
                 if (!mtbFretExtendAmount.Value.IsEmpty && mtbFretExtendAmount.Value != Measure.Zero)
                 {

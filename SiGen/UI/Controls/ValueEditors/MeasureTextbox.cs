@@ -21,7 +21,6 @@ namespace SiGen.UI.Controls
     {
         private Measure _Value;
         private bool internalChange;
-        private bool _IsEditing;
         private bool _AllowEmptyValue;
         private bool isMouseOver;
         private bool _HideBorders;
@@ -57,7 +56,7 @@ namespace SiGen.UI.Controls
                 {
                     _HideBorders = value;
                     SetBounds(0, 0, 0, 0, BoundsSpecified.Height);
-                    Invalidate();
+                    //Invalidate();
                 }
             }
         }
@@ -70,7 +69,7 @@ namespace SiGen.UI.Controls
             {
                 if (value != _Value || value.Unit != _Value.Unit)
                 {
-                    if (_IsEditing)
+                    if (IsEditing)
                         CancelEdit();
                     _Value = value;
                     SynchronizeValueToTextbox();
@@ -109,10 +108,7 @@ namespace SiGen.UI.Controls
         }
 
         [Browsable(false)]
-        public bool IsEditing
-        {
-            get { return _IsEditing; }
-        }
+        public bool IsEditing { get; private set; }
 
         private bool _AutoSize;
 
@@ -140,7 +136,6 @@ namespace SiGen.UI.Controls
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer | ControlStyles.Selectable, true);
             
             _Value = Measure.Mm(0);
-            measureBounds = Rectangle.Empty;
             _TextAlign = HorizontalAlignment.Center;
             innerTextbox.Visible = false;
             base.BackColor = Color.Empty;
@@ -154,7 +149,7 @@ namespace SiGen.UI.Controls
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            UpdateMeasureBounds();
+            RepositionTextbox();
             SynchronizeValueToTextbox();
             //if (ReadOnly)
             //    ShowTextBox();
@@ -174,7 +169,6 @@ namespace SiGen.UI.Controls
 
             if (IsHandleCreated)
                 Invalidate();
-            UpdateMeasureBounds();
         }
 
 
@@ -209,7 +203,7 @@ namespace SiGen.UI.Controls
             if (VisualStyleRenderer.IsSupported)
             {
                 TextRenderer.DrawText(pe.Graphics, _Value.ToString(), Font, innerTextbox.Bounds, textColor,
-                    GetTextFormatFlagsAlignment() | TextFormatFlags.Bottom | TextFormatFlags.NoPadding);
+                    GetTextFormatFlagsAlignment() | TextFormatFlags.Top | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine | TextFormatFlags.TextBoxControl);
             }
             else
             {
@@ -307,9 +301,9 @@ namespace SiGen.UI.Controls
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            if (!innerTextbox.Visible && measureBounds != Rectangle.Empty)
+            if (!innerTextbox.Visible)
             {
-                if (measureBounds.Contains(e.Location))
+                if (innerTextbox.Bounds.Contains(e.Location))
                     Cursor = Cursors.IBeam;
                 else
                     Cursor = Cursors.Default;
@@ -319,12 +313,7 @@ namespace SiGen.UI.Controls
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-            //if (!HideBorders)
-            //    Height = FontHeight + (SystemInformation.BorderSize.Height * 4) + 3;
-            //else
-            //    Height = FontHeight + 3;
             SetBounds(0, 0, 0, 0, BoundsSpecified.Height);
-            UpdateMeasureBounds();
         }
 
         protected override void OnForeColorChanged(EventArgs e)
@@ -333,11 +322,6 @@ namespace SiGen.UI.Controls
             innerTextbox.ForeColor = ForeColor;
         }
 
-        protected override void OnSizeChanged(EventArgs e)
-        {
-            base.OnSizeChanged(e);
-            UpdateMeasureBounds();
-        }
 
         private bool preventFocus;
 
@@ -458,6 +442,7 @@ namespace SiGen.UI.Controls
             }
 
             base.SetBoundsCore(x, y, width, height, specified);
+
             RepositionTextbox();
         }
 
@@ -465,12 +450,10 @@ namespace SiGen.UI.Controls
         {
             if (IsHandleCreated)
             {
-                using (var g = CreateGraphics())
-                {
-                    
-                    var textSize = g.MeasureString(_Value.ToString(), Font);
-                    measureBounds = new Rectangle((int)((Width - textSize.Width) / 2), (int)((Height - textSize.Height) / 2), (int)textSize.Width, (int)textSize.Height);
-                }
+                var textFormatFlags = TextFormatFlags.NoPrefix | TextFormatFlags.TextBoxControl | TextFormatFlags.SingleLine;
+                Size textSize = TextRenderer.MeasureText(_Value.ToString(), Font, Size, textFormatFlags);
+
+                measureBounds = new Rectangle((int)((Width - textSize.Width) / 2), (int)((Height - textSize.Height) / 2), (int)textSize.Width, (int)textSize.Height);
             }
         }
 
@@ -554,9 +537,9 @@ namespace SiGen.UI.Controls
         {
             if (!internalChange)
             {
-                if (!_IsEditing)
+                if (!IsEditing)
                 {
-                    _IsEditing = true;
+                    IsEditing = true;
                     OnBeginEdit(EventArgs.Empty);
                 }
             }
@@ -564,7 +547,7 @@ namespace SiGen.UI.Controls
 
         public void PerformEndEdit(bool keepTextBoxVisible = false)
         {
-            if (_IsEditing)
+            if (IsEditing)
             {
                 Measure newValue = Measure.Empty;
                 bool validValue = true;
@@ -584,7 +567,7 @@ namespace SiGen.UI.Controls
 
                 if (!vcArgs.Cancel)
                 {
-                    _IsEditing = false;
+                    IsEditing = false;
                     if (!keepTextBoxVisible)
                         innerTextbox.Visible = false;
 
@@ -603,9 +586,9 @@ namespace SiGen.UI.Controls
 
         public void CancelEdit()
         {
-            if (_IsEditing)
+            if (IsEditing)
             {
-                _IsEditing = false;
+                IsEditing = false;
                 innerTextbox.Visible = false;
                 SynchronizeValueToTextbox();
                 OnEndEdit(EventArgs.Empty);
@@ -637,7 +620,7 @@ namespace SiGen.UI.Controls
 
         private void innerTextbox_Validating(object sender, CancelEventArgs e)
         {
-            if (!internalChange && _IsEditing)
+            if (!internalChange && IsEditing)
             {
                 Measure value = Measure.Empty;
 
@@ -713,20 +696,16 @@ namespace SiGen.UI.Controls
 
         public class ValueChangingEventArgs : EventArgs
         {
-            private readonly Measure _PreviousValue;
-            private readonly Measure _NewValue;
-            private readonly bool _UserChange;
-
-            public Measure PreviousValue { get { return _PreviousValue; } }
-            public Measure NewValue { get { return _NewValue; } }
-            public bool UserChange { get { return _UserChange; } }
+            public Measure PreviousValue { get; }
+            public Measure NewValue { get; }
+            public bool UserChange { get; }
             public bool Cancel { get; set; }
 
             public ValueChangingEventArgs(Measure prevValue, Measure newValue, bool byUser)
             {
-                _PreviousValue = prevValue;
-                _NewValue = newValue;
-                _UserChange = byUser;
+                PreviousValue = prevValue;
+                NewValue = newValue;
+                UserChange = byUser;
             }
         }
 
@@ -761,9 +740,6 @@ namespace SiGen.UI.Controls
 
     internal class MeasureTextboxDesigner : TextBoxDesigner
     {
-        //private ControlDesigner BaseDesigner;
-        //private static Type BaseDesignerType;
-
         public override SelectionRules SelectionRules
         {
             get
@@ -797,22 +773,6 @@ namespace SiGen.UI.Controls
                 return lines;
             }
         }
-
-        //public override IList SnapLines
-        //{
-        //    get
-        //    {
-        //        return BaseDesigner.SnapLines;
-        //        //var lines = new List<SnapLine>();
-        //        //int offset = (Control as MeasureTextbox)?.Top ?? 0;
-
-        //        //foreach (SnapLine line in BaseDesigner.SnapLines)
-        //        //{
-        //        //    lines.Add(new SnapLine(line.SnapLineType, line.Offset, line.Priority));
-        //        //}
-        //        //return lines;
-        //    }
-        //}
 
         protected override void PreFilterProperties(IDictionary properties)
         {

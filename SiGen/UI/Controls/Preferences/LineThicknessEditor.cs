@@ -49,8 +49,6 @@ namespace SiGen.UI.Controls.ValueEditors
             IsLoading = true;
         }
 
-        
-
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -77,19 +75,33 @@ namespace SiGen.UI.Controls.ValueEditors
             PositionControls();
         }
 
+
+        //private int CalculateComboBoxWidth()
+        //{
+            
+        //    return 0;
+        //}
+
         private void PositionControls()
         {
             txtMeasure.Left = cboUnitType.Right + 2;
             txtMeasure.Width = Width - txtMeasure.Left;
+            txtMeasure.Height = cboUnitType.Height;
             txtNumber.Left = cboUnitType.Right + 2;
             txtNumber.Width = Width - txtNumber.Left;
+            txtNumber.Height = cboUnitType.Height;
+        }
+
+        protected override void OnFontChanged(EventArgs e)
+        {
+            base.OnFontChanged(e);
+            SetBounds(0, 0, 0, 0, BoundsSpecified.Height);
         }
 
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            if (cboUnitType.IsHandleCreated)
-                height = Math.Max(cboUnitType.Height, txtMeasure.Height);
-            
+            //height = Math.Max(cboUnitType.Height, txtMeasure.Height);
+            height = Math.Max(cboUnitType.Height, txtNumber.Height);
             base.SetBoundsCore(x, y, width, height, specified);
         }
 

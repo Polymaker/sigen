@@ -69,19 +69,10 @@ namespace SiGen.UI.Controls.Preferences
 
         private void UpdateControls()
         {
-            
             using (FlagManager.UseFlag("LoadConfig"))
             {
                 EnableExportChecbox.Checked = LineConfig?.Enabled ?? false;
-
-                UseStringGaugeCheckbox.Visible = (LineConfig is StringsExportConfig);
-                UseStringGaugeCheckbox.Checked = (LineConfig is StringsExportConfig sc && sc.UseStringGauge);
-                
-                DashedCheckbox.Checked = LineConfig?.IsDashed ?? false;
-
-                LineColorSelector.Value = LineConfig?.Color ?? Color.Black;
-                LineThicknessEditor.SelectedUnit = LineConfig?.LineUnit ?? LineUnit.Points;
-                LineThicknessEditor.SelectedThickness = LineConfig?.LineThickness ?? 1d;
+                lineExportEdit1.LineConfig = LineConfig;
             }
         }
         
@@ -89,33 +80,6 @@ namespace SiGen.UI.Controls.Preferences
         {
             if (!FlagManager.IsSet("LoadConfig") && LineConfig != null)
                 LineConfig.Enabled = EnableExportChecbox.Checked;
-        }
-
-        private void LineColorSelector_ValueChanged(object sender, EventArgs e)
-        {
-            if (!FlagManager.IsSet("LoadConfig") && LineConfig != null)
-                LineConfig.Color = LineColorSelector.Value;
-        }
-
-        private void LineThicknessEditor_ConfigurationChanged(object sender, EventArgs e)
-        {
-            if (!FlagManager.IsSet("LoadConfig") && LineConfig != null)
-            {
-                LineConfig.LineThickness = LineThicknessEditor.SelectedThickness;
-                LineConfig.LineUnit = LineThicknessEditor.SelectedUnit;
-            }
-        }
-
-        private void DashedCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!FlagManager.IsSet("LoadConfig") && LineConfig != null)
-                LineConfig.IsDashed = DashedCheckbox.Checked;
-        }
-
-        private void UseStringGaugeCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!FlagManager.IsSet("LoadConfig") && LineConfig is StringsExportConfig stringsExport)
-                stringsExport.UseStringGauge = UseStringGaugeCheckbox.Checked;
         }
     }
 

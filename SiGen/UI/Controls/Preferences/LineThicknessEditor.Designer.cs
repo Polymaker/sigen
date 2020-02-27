@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LineThicknessEditor));
             this.cboUnitType = new System.Windows.Forms.ComboBox();
             this.txtMeasure = new SiGen.UI.Controls.MeasureTextbox();
             this.txtNumber = new SiGen.UI.Controls.NumericBox();
@@ -42,28 +43,20 @@
             // 
             this.cboUnitType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboUnitType.FormattingEnabled = true;
-            this.cboUnitType.Location = new System.Drawing.Point(0, 0);
+            resources.ApplyResources(this.cboUnitType, "cboUnitType");
             this.cboUnitType.Name = "cboUnitType";
-            this.cboUnitType.Size = new System.Drawing.Size(64, 21);
-            this.cboUnitType.TabIndex = 0;
             this.cboUnitType.SelectedIndexChanged += new System.EventHandler(this.CboUnitType_SelectedIndexChanged);
             // 
             // txtMeasure
             // 
-            this.txtMeasure.Location = new System.Drawing.Point(66, 0);
+            resources.ApplyResources(this.txtMeasure, "txtMeasure");
             this.txtMeasure.Name = "txtMeasure";
-            this.txtMeasure.Size = new System.Drawing.Size(84, 21);
-            this.txtMeasure.TabIndex = 2;
             this.txtMeasure.ValueChanged += new System.EventHandler(this.TxtMeasure_ValueChanged);
             // 
             // txtNumber
             // 
-            this.txtNumber.AutoSize = false;
-            this.txtNumber.Location = new System.Drawing.Point(66, 0);
+            resources.ApplyResources(this.txtNumber, "txtNumber");
             this.txtNumber.Name = "txtNumber";
-            this.txtNumber.Size = new System.Drawing.Size(84, 21);
-            this.txtNumber.TabIndex = 1;
-            this.txtNumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtNumber.ValueChanged += new System.EventHandler(this.TxtNumber_ValueChanged);
             // 
             // localizableStrings
@@ -74,25 +67,24 @@
             // 
             // ExportUnitPixels
             // 
-            this.ExportUnitPixels.Text = "Pixels";
+            resources.ApplyResources(this.ExportUnitPixels, "ExportUnitPixels");
             // 
             // ExportUnitPoints
             // 
-            this.ExportUnitPoints.Text = "Points";
+            resources.ApplyResources(this.ExportUnitPoints, "ExportUnitPoints");
             // 
             // ExportUnitMeasure
             // 
-            this.ExportUnitMeasure.Text = "Measure";
+            resources.ApplyResources(this.ExportUnitMeasure, "ExportUnitMeasure");
             // 
             // LineThicknessEditor
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.txtMeasure);
             this.Controls.Add(this.txtNumber);
             this.Controls.Add(this.cboUnitType);
             this.Name = "LineThicknessEditor";
-            this.Size = new System.Drawing.Size(150, 28);
             this.ResumeLayout(false);
 
         }

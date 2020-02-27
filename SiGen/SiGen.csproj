@@ -445,6 +445,9 @@
     <EmbeddedResource Include="UI\Controls\LayoutViewer\LayoutViewer.resx">
       <DependentUpon>LayoutViewer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\Preferences\LineExportConfigEdit.fr.resx">
+      <DependentUpon>LineExportConfigEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\Preferences\LineExportConfigEdit.resx">
       <DependentUpon>LineExportConfigEdit.cs</DependentUpon>
     </EmbeddedResource>
@@ -453,6 +456,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\Preferences\LineExportEdit.resx">
       <DependentUpon>LineExportEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\Preferences\LineThicknessEditor.fr.resx">
+      <DependentUpon>LineThicknessEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\ValueEditors\ColorSelectButton.resx">
       <DependentUpon>ColorSelectButton.cs</DependentUpon>

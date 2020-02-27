@@ -57,10 +57,13 @@ namespace SiGen.UI.Controls.Preferences
 
                 DashedCheckbox.Checked = LineConfig?.IsDashed ?? false;
 
+                ThicknessEditor.Enabled = true;
+
                 if (LineConfig is StringsExportConfig stringsCfg)
                 {
                     StringGaugeCheckbox.Visible = true;
-                    StringGaugeCheckbox.Checked = stringsCfg.Enabled;
+                    ThicknessEditor.Enabled = !stringsCfg.UseStringGauge;
+                    StringGaugeCheckbox.Checked = stringsCfg.UseStringGauge;
                 }
                 else
                     StringGaugeCheckbox.Visible = false;
@@ -93,6 +96,7 @@ namespace SiGen.UI.Controls.Preferences
                 LineConfig is StringsExportConfig stringsCfg)
             {
                 stringsCfg.UseStringGauge = StringGaugeCheckbox.Checked;
+                ThicknessEditor.Enabled = !StringGaugeCheckbox.Checked;
             }
         }
     }

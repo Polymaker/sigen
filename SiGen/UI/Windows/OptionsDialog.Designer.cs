@@ -32,19 +32,21 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OptionsDialog));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.label3 = new System.Windows.Forms.Label();
-            this.FretWidthBox = new SiGen.UI.Controls.MeasureTextbox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.FretsColorSelect = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
+            this.ResetDisplayButton = new System.Windows.Forms.Button();
+            this.FretWidthLabel = new System.Windows.Forms.Label();
+            this.FretsColorLabel = new System.Windows.Forms.Label();
             this.ChkRealisticFrets = new System.Windows.Forms.CheckBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.StringsColorSelect = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
+            this.StringsColorLabel = new System.Windows.Forms.Label();
             this.ChkRealisticStrings = new System.Windows.Forms.CheckBox();
             this.Display_CancelButton = new System.Windows.Forms.Button();
             this.Display_SaveButton = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.Export_CancelButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.Export_SaveButton = new System.Windows.Forms.Button();
+            this.FretWidthBox = new SiGen.UI.Controls.MeasureTextbox();
+            this.FretsColorSelect = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
+            this.StringsColorSelect = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
             this.StringCentersExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
             this.GuideExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
             this.StringsExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
@@ -52,7 +54,6 @@
             this.MarginsExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
             this.FingerboardExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
             this.FretsExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
-            this.Export_SaveButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -69,12 +70,13 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.label3);
+            this.tabPage1.Controls.Add(this.ResetDisplayButton);
+            this.tabPage1.Controls.Add(this.FretWidthLabel);
             this.tabPage1.Controls.Add(this.FretWidthBox);
-            this.tabPage1.Controls.Add(this.label2);
+            this.tabPage1.Controls.Add(this.FretsColorLabel);
             this.tabPage1.Controls.Add(this.FretsColorSelect);
             this.tabPage1.Controls.Add(this.ChkRealisticFrets);
-            this.tabPage1.Controls.Add(this.label1);
+            this.tabPage1.Controls.Add(this.StringsColorLabel);
             this.tabPage1.Controls.Add(this.StringsColorSelect);
             this.tabPage1.Controls.Add(this.ChkRealisticStrings);
             this.tabPage1.Controls.Add(this.Display_CancelButton);
@@ -83,26 +85,22 @@
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // label3
+            // ResetDisplayButton
             // 
-            resources.ApplyResources(this.label3, "label3");
-            this.label3.Name = "label3";
+            resources.ApplyResources(this.ResetDisplayButton, "ResetDisplayButton");
+            this.ResetDisplayButton.Name = "ResetDisplayButton";
+            this.ResetDisplayButton.UseVisualStyleBackColor = true;
+            this.ResetDisplayButton.Click += new System.EventHandler(this.ResetDisplayButton_Click);
             // 
-            // FretWidthBox
+            // FretWidthLabel
             // 
-            resources.ApplyResources(this.FretWidthBox, "FretWidthBox");
-            this.FretWidthBox.Name = "FretWidthBox";
+            resources.ApplyResources(this.FretWidthLabel, "FretWidthLabel");
+            this.FretWidthLabel.Name = "FretWidthLabel";
             // 
-            // label2
+            // FretsColorLabel
             // 
-            resources.ApplyResources(this.label2, "label2");
-            this.label2.Name = "label2";
-            // 
-            // FretsColorSelect
-            // 
-            resources.ApplyResources(this.FretsColorSelect, "FretsColorSelect");
-            this.FretsColorSelect.Name = "FretsColorSelect";
-            this.FretsColorSelect.Value = System.Drawing.Color.Red;
+            resources.ApplyResources(this.FretsColorLabel, "FretsColorLabel");
+            this.FretsColorLabel.Name = "FretsColorLabel";
             // 
             // ChkRealisticFrets
             // 
@@ -111,16 +109,10 @@
             this.ChkRealisticFrets.UseVisualStyleBackColor = true;
             this.ChkRealisticFrets.CheckedChanged += new System.EventHandler(this.ChkRealisticFrets_CheckedChanged);
             // 
-            // label1
+            // StringsColorLabel
             // 
-            resources.ApplyResources(this.label1, "label1");
-            this.label1.Name = "label1";
-            // 
-            // StringsColorSelect
-            // 
-            resources.ApplyResources(this.StringsColorSelect, "StringsColorSelect");
-            this.StringsColorSelect.Name = "StringsColorSelect";
-            this.StringsColorSelect.Value = System.Drawing.Color.Red;
+            resources.ApplyResources(this.StringsColorLabel, "StringsColorLabel");
+            this.StringsColorLabel.Name = "StringsColorLabel";
             // 
             // ChkRealisticStrings
             // 
@@ -170,6 +162,30 @@
             this.panel1.Controls.Add(this.FretsExportCfg);
             this.panel1.Name = "panel1";
             // 
+            // Export_SaveButton
+            // 
+            resources.ApplyResources(this.Export_SaveButton, "Export_SaveButton");
+            this.Export_SaveButton.Name = "Export_SaveButton";
+            this.Export_SaveButton.UseVisualStyleBackColor = true;
+            this.Export_SaveButton.Click += new System.EventHandler(this.Export_SaveButton_Click);
+            // 
+            // FretWidthBox
+            // 
+            resources.ApplyResources(this.FretWidthBox, "FretWidthBox");
+            this.FretWidthBox.Name = "FretWidthBox";
+            // 
+            // FretsColorSelect
+            // 
+            resources.ApplyResources(this.FretsColorSelect, "FretsColorSelect");
+            this.FretsColorSelect.Name = "FretsColorSelect";
+            this.FretsColorSelect.Value = System.Drawing.Color.Red;
+            // 
+            // StringsColorSelect
+            // 
+            resources.ApplyResources(this.StringsColorSelect, "StringsColorSelect");
+            this.StringsColorSelect.Name = "StringsColorSelect";
+            this.StringsColorSelect.Value = System.Drawing.Color.Red;
+            // 
             // StringCentersExportCfg
             // 
             resources.ApplyResources(this.StringCentersExportCfg, "StringCentersExportCfg");
@@ -212,13 +228,6 @@
             this.FretsExportCfg.LineConfig = null;
             this.FretsExportCfg.Name = "FretsExportCfg";
             // 
-            // Export_SaveButton
-            // 
-            resources.ApplyResources(this.Export_SaveButton, "Export_SaveButton");
-            this.Export_SaveButton.Name = "Export_SaveButton";
-            this.Export_SaveButton.UseVisualStyleBackColor = true;
-            this.Export_SaveButton.Click += new System.EventHandler(this.Export_SaveButton_Click);
-            // 
             // OptionsDialog
             // 
             resources.ApplyResources(this, "$this");
@@ -252,13 +261,14 @@
         private System.Windows.Forms.Button Display_SaveButton;
         private System.Windows.Forms.Button Display_CancelButton;
         private System.Windows.Forms.Button Export_CancelButton;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label FretsColorLabel;
         private Controls.ValueEditors.ColorSelectButton FretsColorSelect;
         private System.Windows.Forms.CheckBox ChkRealisticFrets;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label StringsColorLabel;
         private Controls.ValueEditors.ColorSelectButton StringsColorSelect;
         private System.Windows.Forms.CheckBox ChkRealisticStrings;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label FretWidthLabel;
         private Controls.MeasureTextbox FretWidthBox;
+        private System.Windows.Forms.Button ResetDisplayButton;
     }
 }

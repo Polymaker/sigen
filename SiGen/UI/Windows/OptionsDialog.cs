@@ -90,6 +90,7 @@ namespace SiGen.UI.Windows
                 Configuration.Display.LineRenderMode.PlainLine;
 
             DisplayConfig.Frets.Color = FretsColorSelect.Value;
+            DisplayConfig.Frets.RenderWidth = FretWidthBox.Value;
 
             AppConfig.Current.DisplayConfig = DisplayConfig;
             AppConfigManager.Save();
@@ -109,6 +110,12 @@ namespace SiGen.UI.Windows
         private void ChkRealisticFrets_CheckedChanged(object sender, EventArgs e)
         {
             FretWidthBox.Enabled = ChkRealisticFrets.Checked;
+        }
+
+        private void ResetDisplayButton_Click(object sender, EventArgs e)
+        {
+            DisplayConfig = ViewerDisplayConfig.CreateDefault();
+            LoadDisplayConfigs();
         }
     }
 }

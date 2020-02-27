@@ -132,4 +132,49 @@
   <data name="Export_CancelButton.Text" xml:space="preserve">
     <value>Annuler</value>
   </data>
+  <data name="StringsExportCfg.ConfigName" xml:space="preserve">
+    <value>Exporter les cordes</value>
+  </data>
+  <data name="CenterLineExportCfg.ConfigName" xml:space="preserve">
+    <value>Exporter la ligne centrale</value>
+  </data>
+  <data name="StringCentersExportCfg.ConfigName" xml:space="preserve">
+    <value>Exporter les médianes</value>
+  </data>
+  <data name="MarginsExportCfg.ConfigName" xml:space="preserve">
+    <value>Exporter les marges</value>
+  </data>
+  <data name="FretsExportCfg.ConfigName" xml:space="preserve">
+    <value>Exporter les frettes</value>
+  </data>
+  <data name="FingerboardExportCfg.ConfigName" xml:space="preserve">
+    <value>Exporter les bords de la touche</value>
+  </data>
+  <data name="tabPage2.Text" xml:space="preserve">
+    <value>Paramètres d'exportation</value>
+  </data>
+  <data name="tabPage1.Text" xml:space="preserve">
+    <value>Paramètres d'affichage</value>
+  </data>
+  <data name="ResetDisplayButton.Text" xml:space="preserve">
+    <value>Valeurs par défaut</value>
+  </data>
+  <data name="StringsColorLabel.Text" xml:space="preserve">
+    <value>Couleur</value>
+  </data>
+  <data name="FretsColorLabel.Text" xml:space="preserve">
+    <value>Couleur</value>
+  </data>
+  <data name="FretWidthLabel.Text" xml:space="preserve">
+    <value>Largeur</value>
+  </data>
+  <data name="GuideExportCfg.ConfigName" xml:space="preserve">
+    <value>Guides</value>
+  </data>
+  <data name="ChkRealisticFrets.Text" xml:space="preserve">
+    <value>Affichage réaliste des cordes</value>
+  </data>
+  <data name="ChkRealisticStrings.Text" xml:space="preserve">
+    <value>Affichage réaliste des frettes</value>
+  </data>
 </root>

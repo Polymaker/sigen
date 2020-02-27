@@ -148,6 +148,10 @@ namespace SiGen.UI.Controls.ValueEditors
             return $"{Value.R:X2}{Value.G:X2}{Value.B:X2}";
         }
 
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            //base.OnPaintBackground(e);
+        }
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -156,7 +160,7 @@ namespace SiGen.UI.Controls.ValueEditors
             using (var brush = new SolidBrush(_Value))
                 e.Graphics.FillRectangle(brush, 0, 0, colorPreviewWidth, Height);
             using(var pen = new Pen(Color.FromArgb(122,122,122)))
-                e.Graphics.DrawRectangle(pen, 0, 0, colorPreviewWidth - 1, Height - 1);
+                e.Graphics.DrawRectangle(pen, 0, 0, colorPreviewWidth, Height - 1);
         }
 
         protected virtual void OnValueChanged(object sender, EventArgs e)

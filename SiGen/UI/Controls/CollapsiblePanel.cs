@@ -136,6 +136,8 @@ namespace SiGen.UI.Controls
 
         #region Events
 
+        public event EventHandler CollapsedChanging;
+
         public event EventHandler CollapsedChanged;
 
         public event EventHandler AfterCollapse;
@@ -573,6 +575,7 @@ namespace SiGen.UI.Controls
         {
             if (_Collapsed != collapsed)
             {
+                CollapsedChanging?.Invoke(this, EventArgs.Empty);
 
                 _Collapsed = collapsed;
 
@@ -656,10 +659,15 @@ namespace SiGen.UI.Controls
             return ArrowGlyph;
         }
 
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            //base.OnPaintBackground(e);
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
-
+            //base.OnPaint(e);
+            e.Graphics.Clear(BackColor);
             var headerRect = GetHeaderRectangle();
             var headerArgs = new PaintEventArgs(e.Graphics, headerRect);
             OnDrawHeader(headerArgs);
@@ -761,6 +769,12 @@ namespace SiGen.UI.Controls
                     int newHeight = ParentPanel.CalculateAutoHeight();
                     ParentPanel.Height = newHeight;
                 }
+            }
+
+            protected override void OnPaintBackground(PaintEventArgs e)
+            {
+                base.OnPaintBackground(e);
+
             }
 
             protected override void OnPaint(PaintEventArgs e)
