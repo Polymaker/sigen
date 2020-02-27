@@ -1,4 +1,5 @@
 ﻿using SiGen.Resources;
+using SiGen.StringedInstruments.Data;
 using SiGen.StringedInstruments.Layout;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,12 @@ namespace SiGen.Localization
                 if (!string.IsNullOrEmpty(changeDesc))
                     return changeDesc;
             }
-
+            else if (change is CollectionChange collection)
+            {
+                changeDesc = GetCollectionDescription(layout, collection);
+                if (!string.IsNullOrEmpty(changeDesc))
+                    return changeDesc;
+            }
             return "Unnamed Change";
         }
 
@@ -63,24 +69,9 @@ namespace SiGen.Localization
 
             if (batchChange.Component != null)
             {
-                switch (batchChange.Component)
-                {
-                    case FingerboardMargin fm:
-                        switch (batchChange.Name)
-                        {
-                            case nameof(FingerboardMargin.Bass):
-                                return $"Bass margin: {batchChange.ChangedProperties.First().NewValue}";
-                            case nameof(FingerboardMargin.Treble):
-                                return $"Treble margin: {batchChange.ChangedProperties.First().NewValue}";
-                            case nameof(FingerboardMargin.MarginAtNut):
-                                return $"Margin at nut: {batchChange.ChangedProperties.First().NewValue}";
-                            case nameof(FingerboardMargin.MarginAtBridge):
-                                return $"Margin at bridge: {batchChange.ChangedProperties.First().NewValue}";
-                            case nameof(FingerboardMargin.Edges):
-                                return $"Edges margin: {batchChange.ChangedProperties.First().NewValue}";
-                        }
-                        break;
-                }
+                var marginChange = batchChange.ChangedProperties.FirstOrDefault(x => x.Component is FingerboardMargin);
+                if (marginChange != null)
+                    return GetFingerboardMarginDescription(layout, batchChange.Name, marginChange);
             }
 
             return null;
@@ -92,7 +83,7 @@ namespace SiGen.Localization
             {
                 switch (propChange.Component)
                 {
-                    case ScaleLengthManager slm:
+                    case ScaleLengthManager _:
                         {
                             switch (propChange.Property)
                             {
@@ -128,7 +119,7 @@ namespace SiGen.Localization
                             }
                         }
 
-                    case StringSpacingManager ssm:
+                    case StringSpacingManager _:
                         {
                             switch (propChange.Property)
                             {
@@ -169,6 +160,33 @@ namespace SiGen.Localization
                                     return $"String spacing {propChange.Property}: {propChange.NewValue}";
                             }
                         }
+                    
+                    case FingerboardMargin _:
+                        return GetFingerboardMarginDescription(layout, propChange.Name, propChange);
+
+                    case SIString str:
+                        {
+                            
+
+                            switch (propChange.Property)
+                            {
+                                case nameof(SIString.Gauge):
+                                case nameof(SIString.PhysicalProperties) + "." + nameof(StringProperties.StringDiameter):
+                                    return $"{Localizations.StringProperty_Gauge} ({Localizations.Words_String} {str.Index + 1}): {propChange.NewValue}";
+                                case nameof(SIString.StartingFret):
+                                    return $"{Localizations.StringProperty_StartingFret} ({Localizations.Words_String} {str.Index + 1}): {propChange.NewValue}";
+                                case nameof(SIString.ScaleLength):
+                                    return $"{Localizations.Words_ScaleLength} ({Localizations.Words_String} {str.Index + 1}): {propChange.NewValue}";
+                                case nameof(SIString.NumberOfFrets):
+                                    return $"{Localizations.LayoutProperty_NumberOfFrets} ({Localizations.Words_String} {str.Index + 1}): {propChange.NewValue}";
+                            }
+
+                            if (propChange.Property.StartsWith(nameof(SIString.PhysicalProperties)))
+                            {
+                                return Localizations.StringProperties;
+                            }
+                            break;
+                        }
                 }
 
             }
@@ -186,12 +204,52 @@ namespace SiGen.Localization
                             var modeStr = GetLocText($"StringSpacingType_{propChange.NewValue}");
                             return $"{Localizations.LayoutProperty_StringSpacingMode}: {modeStr}";
                         }
+                    case nameof(SILayout.LeftHanded):
+                        {
+                            return Localizations.Layout_LeftHanded;
+                        }
                         //case nameof(SILayout.NumberOfStrings):
                         //    return $"Number of strings: {pc.NewValue}";
                 }
             }
 
             return null;
+        }
+
+        private static string GetCollectionDescription(SILayout layout, CollectionChange colChange)
+        {
+            if (colChange.ElementType == typeof(SIString))
+            {
+                return $"{Localizations.LayoutProperty_NumberOfStrings}: {colChange.CollectionCount}";
+            }
+
+            return null;
+        }
+
+        private static string GetFingerboardMarginDescription(SILayout layout, string changeName, PropertyChange propChange)
+        {
+            string specifedSide = string.Empty;
+
+            switch (changeName)
+            {
+                case nameof(FingerboardMargin.LastFret):
+                    return $"{Localizations.Words_Margins} ({Localizations.FingerboardMarginProperty_LastFret}): {propChange.NewValue}";
+                case nameof(FingerboardMargin.Bass):
+                    specifedSide = Localizations.FingerboardSide_Bass; break;
+                case nameof(FingerboardMargin.Treble):
+                    specifedSide = Localizations.FingerboardSide_Treble; break;
+                case nameof(FingerboardMargin.MarginAtNut):
+                    specifedSide = Localizations.FingerboardEnd_Nut; break;
+                case nameof(FingerboardMargin.MarginAtBridge):
+                    specifedSide = Localizations.FingerboardEnd_Bridge; break;
+                case nameof(FingerboardMargin.Edges):
+                    specifedSide = Localizations.Margins_Edges; break;
+            }
+
+            if (!string.IsNullOrEmpty(specifedSide))
+                return $"{Localizations.Words_Margins} ({specifedSide}): {propChange.NewValue}";
+
+            return $"{Localizations.Words_Margins}: {propChange.NewValue}";
         }
 
         private static string GetLocText(string textID)

@@ -136,7 +136,7 @@
     <value>nbxNumberOfStrings</value>
   </data>
   <data name="&gt;&gt;nbxNumberOfStrings.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.NumericBox, SiGen, Version=1.0.0.14065, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.NumericBox, SiGen, Version=1.0.0.32025, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;nbxNumberOfStrings.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -220,7 +220,7 @@
     <value>nbxNumberOfFrets</value>
   </data>
   <data name="&gt;&gt;nbxNumberOfFrets.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.NumericBox, SiGen, Version=1.0.0.14065, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.NumericBox, SiGen, Version=1.0.0.32025, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;nbxNumberOfFrets.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -279,6 +279,9 @@
   <data name="chkShowAdvanced.Text" xml:space="preserve">
     <value>Show Advanced Config.</value>
   </data>
+  <data name="chkShowAdvanced.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="&gt;&gt;chkShowAdvanced.Name" xml:space="preserve">
     <value>chkShowAdvanced</value>
   </data>
@@ -316,10 +319,10 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanel1.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label2" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="dgvStrings" Row="2" RowSpan="1" Column="0" ColumnSpan="3" /&gt;&lt;Control Name="chkShowAdvanced" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="nbxNumberOfStrings" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="nbxNumberOfFrets" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="chkLeftHanded" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,33,33333,AutoSize,33,33333,Percent,33,33333" /&gt;&lt;Rows Styles="AutoSize,43,AutoSize,57,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label2" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="dgvStrings" Row="2" RowSpan="1" Column="0" ColumnSpan="3" /&gt;&lt;Control Name="chkShowAdvanced" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="nbxNumberOfStrings" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="nbxNumberOfFrets" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="chkLeftHanded" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,33.33333,AutoSize,33.33333,Percent,33.33333" /&gt;&lt;Rows Styles="AutoSize,43,AutoSize,57,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="dgvStrings.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -460,6 +463,6 @@
     <value>StringsConfigurationEditor</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.LayoutPropertyEditor, SiGen, Version=1.0.0.14065, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.LayoutPropertyEditor, SiGen, Version=1.0.0.32025, Culture=neutral, PublicKeyToken=null</value>
   </data>
 </root>

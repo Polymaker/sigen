@@ -207,7 +207,18 @@ namespace SiGen.UI
             {
                 var minPt = WorldToDisplay(minPos, _Zoom, true);
                 var maxPt = WorldToDisplay(maxPos, _Zoom, true);
+
+                if (IsFlipHorizontal)
+                {
+                    var tmp1 = minPt;
+                    var tmp2 = maxPt;
+                    minPt = new PointF(Math.Min(tmp1.X, tmp2.X), Math.Min(tmp1.Y, tmp2.Y));
+                    maxPt = new PointF(Math.Max(tmp1.X, tmp2.X), Math.Max(tmp1.Y, tmp2.Y));
+                }
+
                 var updateBounds = Rectangle.FromLTRB((int)minPt.X - bleedSize, (int)minPt.Y - bleedSize, (int)maxPt.X + bleedSize, (int)maxPt.Y + bleedSize);
+
+                
                 Invalidate(updateBounds);
             }
         }

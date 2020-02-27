@@ -444,9 +444,9 @@ namespace SiGen.UI
                     var maxX = (int)Math.Max(pt1.X, e.X);
                     var minY = (int)Math.Min(pt1.Y, e.Y);
                     var maxY = (int)Math.Max(pt1.Y, e.Y);
-
+                    
                     var updateBounds = Rectangle.FromLTRB(minX, minY, maxX, maxY);
-                    updateBounds.Inflate(20, 20);
+                    updateBounds.Inflate(30, 30);
                     Invalidate(updateBounds);
                 }
             }

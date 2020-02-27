@@ -257,4 +257,25 @@ Voulez-vous le recharger?
   <data name="Messages_InvalidExportFormat" xml:space="preserve">
     <value>Format d'exportation non valide.</value>
   </data>
+  <data name="FingerboardMarginProperty_LastFret" xml:space="preserve">
+    <value>Dernière frette</value>
+  </data>
+  <data name="Words_Margins" xml:space="preserve">
+    <value>Marges</value>
+  </data>
+  <data name="Words_String" xml:space="preserve">
+    <value>Corde</value>
+  </data>
+  <data name="StringProperty_StartingFret" xml:space="preserve">
+    <value>Frette de départ</value>
+  </data>
+  <data name="StringProperty_Gauge" xml:space="preserve">
+    <value>Taille</value>
+  </data>
+  <data name="StringProperties" xml:space="preserve">
+    <value>Propriétés de corde</value>
+  </data>
+  <data name="Layout_LeftHanded" xml:space="preserve">
+    <value>Gaucher</value>
+  </data>
 </root>

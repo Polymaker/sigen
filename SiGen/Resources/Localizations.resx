@@ -237,4 +237,25 @@ Do you want to reload it?
   <data name="Messages_InvalidExportFormat" xml:space="preserve">
     <value>Invalid export format.</value>
   </data>
+  <data name="FingerboardMarginProperty_LastFret" xml:space="preserve">
+    <value>Last fret</value>
+  </data>
+  <data name="Words_Margins" xml:space="preserve">
+    <value>Margins</value>
+  </data>
+  <data name="Words_String" xml:space="preserve">
+    <value>String</value>
+  </data>
+  <data name="StringProperty_StartingFret" xml:space="preserve">
+    <value>Starting fret</value>
+  </data>
+  <data name="StringProperty_Gauge" xml:space="preserve">
+    <value>Gauge</value>
+  </data>
+  <data name="StringProperties" xml:space="preserve">
+    <value>String properties</value>
+  </data>
+  <data name="Layout_LeftHanded" xml:space="preserve">
+    <value>Left handed</value>
+  </data>
 </root>
