@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.Design;
 
-namespace SiGen.UI.Designers
+namespace SiGen.UI.Controls.Designers
 {
     public class MeasureEditor : UITypeEditor
     {

@@ -8,6 +8,9 @@ namespace SiGen.StringedInstruments.Layout
 {
 	public interface ILayoutChange
 	{
-		PropertyChange[] GetChanges();
-	}
+        string Name { get; }
+        LayoutComponent Component { get; }
+        bool AffectsLayout { get; }
+
+    }
 }

@@ -9,7 +9,17 @@ namespace SiGen
 {
     public static class NumberHelper
     {
-        public static bool EqualOrClose(this double n1, double n2)
+		public static bool EqualOrClose(this PreciseDouble n1, PreciseDouble n2)
+		{
+			return EqualOrClose(n1, n2, double.Epsilon);
+		}
+
+		public static bool EqualOrClose(this PreciseDouble n1, PreciseDouble n2, PreciseDouble tolerence)
+		{
+			return MathP.Abs(n1 - n2) <= tolerence;
+		}
+
+		public static bool EqualOrClose(this double n1, double n2)
         {
             return EqualOrClose(n1, n2, double.Epsilon);
         }
@@ -24,12 +34,22 @@ namespace SiGen
             return Math.Round(value / step) * step;
         }
 
-        public static string GetSuffix(this int value)
+        public static string GetSuffix(this int value, bool male = true)
         {
             if (value <= 0)
                 return string.Empty;
 
+            var languageID = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpper();
+
+            if (languageID == "FR")
+            {
+                if (value == 1)
+                    return male ? "er" : "re";
+                return "ième";
+            }
+
             string number = value.ToString();
+            
             if(number.Length >= 2 && number[number.Length - 2] == '1' && value % 10 <= 3 && value % 10 > 0)
                 return "th";
 

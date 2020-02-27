@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiGen", "SiGen\SiGen.csproj", "{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SiGen.Setup", "SiGen.Setup\SiGen.Setup.wixproj", "{C58AA230-0F37-425E-9B72-39583A35028E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+		Wix Prep|Any CPU = Wix Prep|Any CPU
+		Wix Prep|x64 = Wix Prep|x64
+		Wix Prep|x86 = Wix Prep|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Debug|x64.ActiveCfg = Debug|x64
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Debug|x64.Build.0 = Debug|x64
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Debug|x86.ActiveCfg = Debug|x86
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Debug|x86.Build.0 = Debug|x86
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Release|x64.ActiveCfg = Release|x64
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Release|x64.Build.0 = Release|x64
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Release|x86.ActiveCfg = Release|Any CPU
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Release|x86.Build.0 = Release|Any CPU
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Wix Prep|Any CPU.ActiveCfg = Wix Prep|Any CPU
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Wix Prep|Any CPU.Build.0 = Wix Prep|Any CPU
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Wix Prep|x64.ActiveCfg = Wix Prep|x64
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Wix Prep|x64.Build.0 = Wix Prep|x64
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Wix Prep|x86.ActiveCfg = Wix Prep|x86
+		{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}.Wix Prep|x86.Build.0 = Wix Prep|x86
+		{C58AA230-0F37-425E-9B72-39583A35028E}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{C58AA230-0F37-425E-9B72-39583A35028E}.Debug|x64.ActiveCfg = Debug|x86
+		{C58AA230-0F37-425E-9B72-39583A35028E}.Debug|x86.ActiveCfg = Debug|x86
+		{C58AA230-0F37-425E-9B72-39583A35028E}.Debug|x86.Build.0 = Debug|x86
+		{C58AA230-0F37-425E-9B72-39583A35028E}.Release|Any CPU.ActiveCfg = Release|x86
+		{C58AA230-0F37-425E-9B72-39583A35028E}.Release|x64.ActiveCfg = Release|x86
+		{C58AA230-0F37-425E-9B72-39583A35028E}.Release|x86.ActiveCfg = Release|x86
+		{C58AA230-0F37-425E-9B72-39583A35028E}.Release|x86.Build.0 = Release|x86
+		{C58AA230-0F37-425E-9B72-39583A35028E}.Wix Prep|Any CPU.ActiveCfg = Release|x86
+		{C58AA230-0F37-425E-9B72-39583A35028E}.Wix Prep|Any CPU.Build.0 = Release|x86
+		{C58AA230-0F37-425E-9B72-39583A35028E}.Wix Prep|x64.ActiveCfg = Wix Prep|x64
+		{C58AA230-0F37-425E-9B72-39583A35028E}.Wix Prep|x64.Build.0 = Wix Prep|x64
+		{C58AA230-0F37-425E-9B72-39583A35028E}.Wix Prep|x86.ActiveCfg = Wix Prep|x86
+		{C58AA230-0F37-425E-9B72-39583A35028E}.Wix Prep|x86.Build.0 = Wix Prep|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		RESX_SaveFilesImmediatelyUponChange = False
+		SolutionGuid = {10366DA2-F209-453C-9ED8-563304F56BDF}
+	EndGlobalSection
+EndGlobal

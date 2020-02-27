@@ -19,13 +19,13 @@ namespace SiGen.Measuring
         #region Static Consts
 
         public static readonly Measure Zero;
-        public static readonly Measure Empty = new Measure(double.NaN, null);
+        public static readonly Measure Empty = new Measure(PreciseDouble.NaN, null);
 
         #endregion
 
         #region Fields
 
-        private double normalizedValue;
+        private PreciseDouble normalizedValue;
         private UnitOfMeasure _Unit;
 
         #endregion
@@ -40,7 +40,7 @@ namespace SiGen.Measuring
         public UnitOfMeasure Unit { get { return _Unit; } set { _Unit = value; } }
 
         [XmlIgnore]
-        public double Value
+        public PreciseDouble Value
         {
             get
             {
@@ -61,10 +61,10 @@ namespace SiGen.Measuring
         /// The value in centimeters
         /// </summary>
         [XmlIgnore]
-        public double NormalizedValue { get { return normalizedValue; } }
+        public PreciseDouble NormalizedValue { get { return normalizedValue; } }
 
         [XmlIgnore]
-        public double this[UnitOfMeasure unit]
+        public PreciseDouble this[UnitOfMeasure unit]
         {
             get
             {
@@ -79,20 +79,20 @@ namespace SiGen.Measuring
         //[XmlIgnore, Obsolete("Use IsEmpty")]
         //public bool IsNaN
         //{
-        //    get { return double.IsNaN(normalizedValue); }
+        //    get { return PreciseDouble.IsNaN(normalizedValue); }
         //}
 
         [XmlIgnore]
         public bool IsEmpty
         {
-            get { return double.IsNaN(normalizedValue); }
+            get { return PreciseDouble.IsNaN(normalizedValue); }
         }
 
         #endregion
 
         #region Ctors
 
-        public Measure(double value, UnitOfMeasure unit)
+        public Measure(PreciseDouble value, UnitOfMeasure unit)
         {
             if (unit != null)
                 normalizedValue = value * unit.ConversionFactor;
@@ -105,18 +105,18 @@ namespace SiGen.Measuring
 
         #region Static Ctors
 
-        public static Measure FromNormalizedValue(double value, UnitOfMeasure displayUnit)
+        public static Measure FromNormalizedValue(PreciseDouble value, UnitOfMeasure displayUnit)
         {
             return new Measure() { Unit = displayUnit, normalizedValue = value };
         }
 
-        public static Measure Cm(double value) { return new Measure(value, UnitOfMeasure.Cm); }
+        public static Measure Cm(PreciseDouble value) { return new Measure(value, UnitOfMeasure.Cm); }
 
-        public static Measure Mm(double value) { return new Measure(value, UnitOfMeasure.Mm); }
+        public static Measure Mm(PreciseDouble value) { return new Measure(value, UnitOfMeasure.Mm); }
 
-        public static Measure Inches(double value) { return new Measure(value, UnitOfMeasure.Inches); }
+        public static Measure Inches(PreciseDouble value) { return new Measure(value, UnitOfMeasure.Inches); }
 
-        public static Measure Feets(double value) { return new Measure(value, UnitOfMeasure.Feets); }
+        public static Measure Feets(PreciseDouble value) { return new Measure(value, UnitOfMeasure.Feets); }
 
         #endregion
 
@@ -161,21 +161,29 @@ namespace SiGen.Measuring
 
         public static bool operator >(Measure m1, Measure m2)
         {
+            if (m1.IsEmpty || m2.IsEmpty)
+                return false;
             return m1.NormalizedValue > m2.NormalizedValue;
         }
 
         public static bool operator <(Measure m1, Measure m2)
         {
+            if (m1.IsEmpty || m2.IsEmpty)
+                return false;
             return m1.NormalizedValue < m2.NormalizedValue;
         }
 
         public static bool operator >=(Measure m1, Measure m2)
         {
+            if (m1.IsEmpty || m2.IsEmpty)
+                return false;
             return m1.NormalizedValue >= m2.NormalizedValue;
         }
 
         public static bool operator <=(Measure m1, Measure m2)
         {
+            if (m1.IsEmpty || m2.IsEmpty)
+                return false;
             return m1.NormalizedValue <= m2.NormalizedValue;
         }
 
@@ -207,13 +215,13 @@ namespace SiGen.Measuring
 
         #region Arithmetic operators
 
-        public static Measure operator *(Measure m1, double value)
+        public static Measure operator *(Measure m1, PreciseDouble value)
         {
             m1.EnsureIsNotNaN();
             return new Measure(m1.Value * value, m1.Unit);
         }
 
-        public static Measure operator *(double value, Measure m1)
+        public static Measure operator *(PreciseDouble value, Measure m1)
         {
             m1.EnsureIsNotNaN();
             return new Measure(m1.Value * value, m1.Unit);
@@ -225,20 +233,20 @@ namespace SiGen.Measuring
             return new PointM(m * value.X, m * value.Y);
         }
 
-        public static Measure operator /(Measure m1, double value)
+        public static Measure operator /(Measure m1, PreciseDouble value)
         {
             m1.EnsureIsNotNaN();
             return new Measure(m1.Value / value, m1.Unit);
         }
 
-        public static double operator /(Measure m1, Measure m2)
+        public static PreciseDouble operator /(Measure m1, Measure m2)
         {
             m1.EnsureIsNotNaN();
             m2.EnsureIsNotNaN();
             return m1.normalizedValue / m2.normalizedValue;
         }
 
-        //public static Measure operator /(double value, Measure m1)
+        //public static Measure operator /(PreciseDouble value, Measure m1)
         //{
         //    m1.EnsureIsNotNaN();
         //    return new Measure(m1.Value / value, m1.Unit);
@@ -262,10 +270,15 @@ namespace SiGen.Measuring
 
         #region Functions
 
+        public Measure Convert(UnitOfMeasure unitOfMeasure)
+        {
+            return FromNormalizedValue(normalizedValue, unitOfMeasure);
+        }
+
         public static Measure Abs(Measure value)
         {
             value.EnsureIsNotNaN();
-            return FromNormalizedValue(Math.Abs(value.normalizedValue), value.Unit);
+            return FromNormalizedValue(Math.Abs(value.normalizedValue.DoubleValue), value.Unit);
         }
 
         public static Measure Avg(Measure value1, Measure value2)
@@ -293,29 +306,29 @@ namespace SiGen.Measuring
             return value1 > value2 ? value1 : value2;
         }
 
-        public static double SmartConvert(double value, double conv, bool mult)
-        {
-            double res1 = mult ? value * conv : value / conv;
-            double res2 = (double)(mult ? (decimal)value * (decimal)conv : (decimal)value / (decimal)conv);
-            var res1Str = res1.ToString();
-            var res2Str = res2.ToString();
-            if (res1Str.Contains("."))
-                res1Str = res1Str.Substring(res1Str.IndexOf(".") + 1);
-            else
-                res1Str = string.Empty;
-            if (res2Str.Contains("."))
-                res2Str = res2Str.Substring(res2Str.IndexOf(".") + 1);
-            else
-                res2Str = string.Empty;
-            if (res1Str.Length < res2Str.Length)
-                return res1;
-            else
-                return res2;
-        }
+        //public static double SmartConvert(double value, double conv, bool mult)
+        //{
+        //    double res1 = mult ? value * conv : value / conv;
+        //    double res2 = (double)(mult ? (decimal)value * (decimal)conv : (decimal)value / (decimal)conv);
+        //    var res1Str = res1.ToString();
+        //    var res2Str = res2.ToString();
+        //    if (res1Str.Contains("."))
+        //        res1Str = res1Str.Substring(res1Str.IndexOf(".") + 1);
+        //    else
+        //        res1Str = string.Empty;
+        //    if (res2Str.Contains("."))
+        //        res2Str = res2Str.Substring(res2Str.IndexOf(".") + 1);
+        //    else
+        //        res2Str = string.Empty;
+        //    if (res1Str.Length < res2Str.Length)
+        //        return res1;
+        //    else
+        //        return res2;
+        //}
 
         public static Measure Round(Measure value)
         {
-            return new Measure(Math.Round(value.Value), value.Unit);
+            return new Measure(Math.Round((double)value.Value), value.Unit);
         }
 
         public static Measure Round(Measure value, double step)
@@ -411,9 +424,9 @@ namespace SiGen.Measuring
 
             if (usedUnit == UnitOfMeasure.Inches && format.ShowFractions)
             {
-                double value = this[usedUnit];
-                int whole = (int)Math.Floor(value);
-                double remain = value - whole;
+                var value = this[usedUnit];
+                int whole = (int)MathP.Floor(value);
+                var remain = value - whole;
 
                 if (remain >= sixtyfourth && remain + sixtyfourth < 1d)
                 {
@@ -443,9 +456,9 @@ namespace SiGen.Measuring
             }
             else if (usedUnit == UnitOfMeasure.Feets && format.ShowFractions)
             {
-                double value = this[usedUnit];
-                int whole = (int)Math.Floor(value);
-                double remain = value - whole;
+                var value = this[usedUnit];
+                int whole = (int)MathP.Floor(value);
+                var remain = value - whole;
                 if (remain >= sixtyfourth / 12d && format.ShowUnitOfMeasure)
                     return string.Format("{0}{1} {2}", whole, usedUnit.Symbol, Inches(remain * 12d).ToString(format.Clone()));
                 else if (whole > 0 && remain > 0 && remain < sixtyfourth / 12d && format.AllowApproximation)
@@ -505,7 +518,7 @@ namespace SiGen.Measuring
         {
             if(IsEmpty)
                 return new System.Xml.Linq.XAttribute(name, "N/A");
-            return new System.Xml.Linq.XAttribute(name, string.Format(NumberFormatInfo.InvariantInfo, "{0}{1}", Value, Unit != null ? Unit.Abreviation : string.Empty));
+            return new System.Xml.Linq.XAttribute(name, string.Format(NumberFormatInfo.InvariantInfo, "{0}{1}", Value, Unit != null ? Unit.Abbreviation : string.Empty));
         }
 
         public static Measure Parse(string value)

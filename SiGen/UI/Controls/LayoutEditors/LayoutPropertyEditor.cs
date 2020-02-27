@@ -32,7 +32,12 @@ namespace SiGen.UI.Controls
             set { BindLayout(value); }
         }
 
+        [Localizable(true)]
+        public string Title { get; set; }
+
         protected bool IsLoading { get { return _IsLoading; /* FlagManager["ReloadPropertyValues"] */} }
+
+        protected bool IsLayoutFirstLoad => CurrentLayout != null && !CachedLayoutData.ContainsKey(CurrentLayout);
 
         public LayoutPropertyEditor()
         {
@@ -69,6 +74,12 @@ namespace SiGen.UI.Controls
                 else if (CachedLayoutData.ContainsKey(layout))
                     RestoreCachedLayoutValues();
             }
+        }
+
+        internal void LayoutClosed(SILayout layout)
+        {
+            if (CachedLayoutData.ContainsKey(layout))
+                CachedLayoutData.Remove(layout);
         }
 
         private void CurrentLayout_NumberOfStringsChanged(object sender, EventArgs e)

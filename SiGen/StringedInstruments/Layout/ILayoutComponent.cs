@@ -9,6 +9,7 @@ namespace SiGen.StringedInstruments.Layout
     public interface ILayoutComponent
     {
         SILayout Layout { get; }
-        void OnStringConfigurationChanged();
+        void BeforeChangingStrings();
+        void OnStringsChanged();
     }
 }

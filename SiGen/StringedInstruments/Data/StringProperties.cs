@@ -26,8 +26,8 @@ namespace SiGen.StringedInstruments.Data
         [XmlAttribute("UW")]
         public double UnitWeight { get; set; }
         /// <summary>
-        /// The modulus of elasticity of the string's material (core wire for wound strings; if defined).
-        /// Used for fret compensation calculations.
+        /// The modulus of elasticity of the string's core material (in GPa).
+        /// <br/>Used for fret compensation calculations.
         /// </summary>
         [XmlAttribute("MOE")]
         public double ModulusOfElasticity { get; set; }
@@ -37,6 +37,7 @@ namespace SiGen.StringedInstruments.Data
         /// </summary>
         [XmlAttribute("Material")]
         public string Material { get; set; }
+
         /// <summary>
         /// Gets the area of the core wire in inch².
         /// Used for fret compensation calculations.
@@ -66,7 +67,7 @@ namespace SiGen.StringedInstruments.Data
 
         public bool CanCalculateCompensation
         {
-            get { return (CoreWireArea != 0 || StringArea != 0) && ModulusOfElasticity > 0 && UnitWeight > 0; }
+            get { return (/*CoreWireArea != 0 || */StringArea != 0) && ModulusOfElasticity > 0 && UnitWeight > 0; }
         }
 
         public StringProperties()

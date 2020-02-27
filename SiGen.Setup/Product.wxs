@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?define SiGen_TargetDir=$(var.SiGen.TargetDir)?>
+  <?include $(sys.CURRENTDIR)\Variables.wxi?>
+  
+	<Product Id="*" Name="$(var.ProductName)" Language="1033" 
+           Version="1.0.0.0" Manufacturer="Polymaker" 
+           UpgradeCode="fb896ebb-bff3-480a-b28a-313237f1b5e9">
+    
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Manufacturer="Polymaker" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+    <Icon Id="icon.ico" SourceFile="$(var.SiGen.ProjectDir)Resources\Icons\SiGenIcon.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+    
+		<Feature Id="ProductFeature" Title="SiGen.Setup" Level="1" Absent="disallow">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentGroupRef Id="Localizations" />
+      <ComponentRef Id="ApplicationShortcut" />
+      <ComponentRef Id="DesktopShortcut" />
+      <!--
+      <Feature Id="DesktopShortcutFeature" Title="Desktop Shortcut" Absent="allow">
+        <ComponentRef Id="DesktopShortcut" />
+      </Feature>
+      -->
+    </Feature>
+    
+    <MediaTemplate EmbedCab="yes"/>
+    
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)LICENSE.rtf" />
+    <UIRef Id="WixUI_InstallDir" />
+	</Product>
+
+	<Fragment>
+    
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="$(var.PlatformProgramFilesFolder)">
+				<Directory Id="INSTALLFOLDER" Name="SiGen">
+				  <Directory Id="ResourcesFR" Name="fr" />
+				</Directory>
+			</Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="SiGen"/>
+      </Directory>
+      <Directory Id="DesktopFolder" Name="Desktop" />
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="Binaries" Guid="7fcfa6c8-a5c9-448d-9c97-3d736df74a9b">
+        <File Id="SiGen.exe" Name="SiGen.exe" Source="$(var.SiGen.TargetDir)SiGen.exe" />
+        <File Id="SiGen.exe.config" Name="SiGen.exe.config" Source="$(var.SiGen.TargetDir)SiGen.exe.config" />
+        
+        <ProgId Id="SiGen.silfile" Description="SiGen Layout File" Icon="Resources_LayoutFileIcon.ico">
+          <Extension Id="sil" ContentType="application/sil">
+            <Verb Id="open" Command="Open" TargetFile="SiGen.exe" Argument="&quot;%1&quot;" />
+          </Extension>
+        </ProgId>
+        
+      </Component>
+      
+      <Component Id="References" Guid="851D08CB-91C1-4D62-802D-88FF6FB85F75">
+        <File Id="Svg.dll" Name="Svg.dll" Source="$(var.SiGen.TargetDir)Svg.dll" />
+        <File Id="netDxf.dll" Name="netDxf.dll" Source="$(var.SiGen.TargetDir)netDxf.dll" />
+        <File Id="Newtonsoft.Json.dll" Name="Newtonsoft.Json.dll" Source="$(var.SiGen.TargetDir)Newtonsoft.Json.dll" />
+        <File Id="WeifenLuo.WinFormsUI.Docking.dll" Name="WeifenLuo.WinFormsUI.Docking.dll" Source="$(var.SiGen.TargetDir)WeifenLuo.WinFormsUI.Docking.dll" />
+      </Component>
+      
+      <Component Id="Resources" Guid="3e5ae673-406d-4ad8-abb6-cb5e567bfb3b">
+        <File Id="Resources_License.ico" Name="LICENSE.txt" Source="$(var.SolutionDir)LICENSE.txt" />
+        <File Id="Resources_SigenIcon.ico" Name="SigenIcon.ico" Source="$(var.SiGen.ProjectDir)Resources\Icons\SiGenIcon.ico" />
+        <File Id="Resources_LayoutFileIcon.ico" Name="LayoutFileIcon.ico" Source="$(var.SiGen.ProjectDir)Resources\Icons\LayoutFileIcon.ico" />
+      </Component>
+      
+		</ComponentGroup>
+	</Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Localizations">
+      <Component Id="LocalizationsFR" Guid="b8ecd449-32ff-41d7-9cb2-9be5588bca94" Directory="ResourcesFR">
+        <File Id="fr_SiGen.resources.dll" Name="SiGen.resources.dll" Source="$(var.SiGen.TargetDir)fr\SiGen.resources.dll" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <DirectoryRef Id="ApplicationProgramsFolder">
+      <Component Id="ApplicationShortcut" Guid="630F9094-3E4C-4F8A-B63D-9F42768E52E0">
+        <Shortcut Id="ApplicationStartMenuShortcut"
+                  Name="SiGen" Description="SiGen" Target="[INSTALLFOLDER]SiGen.exe"
+                  WorkingDirectory="INSTALLFOLDER"/>
+        <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\SiGen" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="DesktopShortcut" Guid="0F599848-5D22-413B-8673-7A394802FF8A">
+        <Shortcut Id="ApplicationDesktopShortcut" Directory="DesktopFolder"
+             Name="SiGen" Description="SiGen" Target="[INSTALLFOLDER]SiGen.exe" WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU" Key="Software\SiGen" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

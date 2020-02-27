@@ -8,20 +8,33 @@ namespace SiGen.StringedInstruments.Layout
 {
 	public class BatchChange : ILayoutChange
 	{
-		private List<PropertyChange> _ChangedProperties;
+        private List<ILayoutChange> _LayoutChanges;
 
-		public IList<PropertyChange> ChangedProperties => _ChangedProperties.AsReadOnly();
+        public string Name { get; }
 
-		public IEnumerable<LayoutComponent> ChangedComponents => _ChangedProperties.Select(p => p.Component).Distinct();
+        public IList<ILayoutChange> LayoutChanges => _LayoutChanges.AsReadOnly();
 
-		public BatchChange(List<PropertyChange> changedProperties)
-		{
-			_ChangedProperties = changedProperties;
-		}
+        public IEnumerable<PropertyChange> ChangedProperties => LayoutChanges.OfType<PropertyChange>();
 
-		public PropertyChange[] GetChanges()
-		{
-			return _ChangedProperties.ToArray();
-		}
+		public IEnumerable<LayoutComponent> ChangedComponents => LayoutChanges.Select(p => p.Component).Distinct();
+
+        public bool AffectsLayout => ChangedProperties.Any(x => x.AffectsLayout);
+
+        public LayoutComponent Component { get; }
+
+        public BatchChange(IEnumerable<ILayoutChange> layoutChanges)
+        {
+            Name = string.Empty;
+            _LayoutChanges = layoutChanges.ToList();
+            Component = ChangedComponents.FirstOrDefault();
+        }
+
+
+        public BatchChange(string name, IEnumerable<ILayoutChange> layoutChanges)
+        {
+            Name = name;
+            _LayoutChanges = layoutChanges.ToList();
+            Component = ChangedComponents.FirstOrDefault();
+        }
 	}
 }

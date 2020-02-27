@@ -10,32 +10,24 @@ namespace SiGen.StringedInstruments.Layout.Visual
 {
     public class StringCenter : LayoutLine, IStringBoundary
     {
-        private StringLine _Left;
-        private StringLine _Right;
 
         /// <summary>
         /// Towwards Bass
         /// </summary>
-        public StringLine Left { get { return _Left; } }
+        public StringLine Left { get; }
         /// <summary>
         /// Towards Treble
         /// </summary>
-        public StringLine Right { get { return _Right; } }
+        public StringLine Right { get; }
 
-        public override VisualElementType ElementType
-        {
-            get
-            {
-                return  VisualElementType.StringCenter;
-            }
-        }
+        public override VisualElementType ElementType => VisualElementType.StringMidline;
 
         public PointM P0 { get; private set; }
 
         public StringCenter(StringLine left, StringLine right)
         {
-            _Left = left;
-            _Right = right;
+            Left = left;
+            Right = right;
             P1 = PointM.Average(left.P1, right.P1);
             P2 = PointM.Average(left.P2, right.P2);
             P0 = PointM.Average(left.FretZero, right.FretZero);

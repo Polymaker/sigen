@@ -29,398 +29,354 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.btnCancel = new System.Windows.Forms.Button();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExportLayoutDialog));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.layoutPreview = new SiGen.UI.LayoutViewer();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.chkExportCenterLine = new System.Windows.Forms.CheckBox();
-            this.cboExportConfig = new System.Windows.Forms.ComboBox();
-            this.chkExportStringCenters = new System.Windows.Forms.CheckBox();
-            this.gbxFretsOptions = new System.Windows.Forms.GroupBox();
-            this.pbxFretColor = new System.Windows.Forms.PictureBox();
-            this.btnPickFretColor = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.mtbFretThickness = new SiGen.UI.MeasureTextbox();
-            this.chkFretThickness = new System.Windows.Forms.CheckBox();
+            this.ExportMidlinesPanel = new SiGen.UI.Controls.CollapsiblePanel();
+            this.MidlinesCfgEdit = new SiGen.UI.Controls.Preferences.LineExportEdit();
+            this.ExportStringsPanel = new SiGen.UI.Controls.CollapsiblePanel();
+            this.StringLinesCfgEdit = new SiGen.UI.Controls.Preferences.LineExportEdit();
+            this.ExportCenterLinePanel = new SiGen.UI.Controls.CollapsiblePanel();
+            this.CenterLineCfgEdit = new SiGen.UI.Controls.Preferences.LineExportEdit();
+            this.ExtendFretsPanel = new SiGen.UI.Controls.CollapsiblePanel();
             this.lblExtendAmount = new System.Windows.Forms.Label();
-            this.mtbFretExtendAmount = new SiGen.UI.MeasureTextbox();
-            this.chkExportFrets = new System.Windows.Forms.CheckBox();
             this.flpExtendDirection = new System.Windows.Forms.FlowLayoutPanel();
             this.rbExtendInward = new System.Windows.Forms.RadioButton();
             this.rbExtendOutward = new System.Windows.Forms.RadioButton();
-            this.chkExtendFretSlots = new System.Windows.Forms.CheckBox();
-            this.chkExportStrings = new System.Windows.Forms.CheckBox();
-            this.flpExportFormat = new System.Windows.Forms.FlowLayoutPanel();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.chkExportFingerboard = new System.Windows.Forms.CheckBox();
-            this.btnExport = new System.Windows.Forms.Button();
+            this.mtbFretExtendAmount = new SiGen.UI.Controls.MeasureTextbox();
+            this.ExportFretsPanel = new SiGen.UI.Controls.CollapsiblePanel();
+            this.FretLinesCfgEdit = new SiGen.UI.Controls.Preferences.LineExportEdit();
+            this.ExportMarginsPanel = new SiGen.UI.Controls.CollapsiblePanel();
+            this.MarginsCfgEdit = new SiGen.UI.Controls.Preferences.LineExportEdit();
+            this.ExportFingerboardPanel = new SiGen.UI.Controls.CollapsiblePanel();
+            this.ContinueEdgesCheckbox = new System.Windows.Forms.CheckBox();
+            this.FretboardCfgEdit = new SiGen.UI.Controls.Preferences.LineExportEdit();
             this.lblExportFormat = new System.Windows.Forms.Label();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.chkExportMargins = new System.Windows.Forms.CheckBox();
+            this.flpExportFormat = new System.Windows.Forms.FlowLayoutPanel();
+            this.rbSvgExport = new System.Windows.Forms.RadioButton();
+            this.rbDxfExport = new System.Windows.Forms.RadioButton();
+            this.layoutPreview = new SiGen.UI.LayoutViewer();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.gbxFretsOptions.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxFretColor)).BeginInit();
+            this.ExportMidlinesPanel.ContentPanel.SuspendLayout();
+            this.ExportMidlinesPanel.SuspendLayout();
+            this.ExportStringsPanel.ContentPanel.SuspendLayout();
+            this.ExportStringsPanel.SuspendLayout();
+            this.ExportCenterLinePanel.ContentPanel.SuspendLayout();
+            this.ExportCenterLinePanel.SuspendLayout();
+            this.ExtendFretsPanel.ContentPanel.SuspendLayout();
+            this.ExtendFretsPanel.SuspendLayout();
             this.flpExtendDirection.SuspendLayout();
+            this.ExportFretsPanel.ContentPanel.SuspendLayout();
+            this.ExportFretsPanel.SuspendLayout();
+            this.ExportMarginsPanel.ContentPanel.SuspendLayout();
+            this.ExportMarginsPanel.SuspendLayout();
+            this.ExportFingerboardPanel.ContentPanel.SuspendLayout();
+            this.ExportFingerboardPanel.SuspendLayout();
             this.flpExportFormat.SuspendLayout();
             this.SuspendLayout();
             // 
-            // btnCancel
-            // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(536, 143);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 5;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            // 
             // splitContainer1
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.splitContainer1, "splitContainer1");
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.layoutPreview);
+            resources.ApplyResources(this.splitContainer1.Panel1, "splitContainer1.Panel1");
+            this.splitContainer1.Panel1.Controls.Add(this.ExportMidlinesPanel);
+            this.splitContainer1.Panel1.Controls.Add(this.ExportStringsPanel);
+            this.splitContainer1.Panel1.Controls.Add(this.ExportCenterLinePanel);
+            this.splitContainer1.Panel1.Controls.Add(this.ExtendFretsPanel);
+            this.splitContainer1.Panel1.Controls.Add(this.ExportFretsPanel);
+            this.splitContainer1.Panel1.Controls.Add(this.ExportMarginsPanel);
+            this.splitContainer1.Panel1.Controls.Add(this.ExportFingerboardPanel);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.groupBox1);
-            this.splitContainer1.Size = new System.Drawing.Size(617, 415);
-            this.splitContainer1.SplitterDistance = 239;
-            this.splitContainer1.TabIndex = 0;
+            this.splitContainer1.Panel2.Controls.Add(this.lblExportFormat);
+            this.splitContainer1.Panel2.Controls.Add(this.flpExportFormat);
+            this.splitContainer1.Panel2.Controls.Add(this.layoutPreview);
+            this.splitContainer1.Panel2.Controls.Add(this.btnCancel);
+            this.splitContainer1.Panel2.Controls.Add(this.btnExport);
             // 
-            // layoutPreview
+            // ExportMidlinesPanel
             // 
-            this.layoutPreview.BackColor = System.Drawing.SystemColors.Window;
-            this.layoutPreview.DisplayConfig.RenderRealFrets = false;
-            this.layoutPreview.DisplayConfig.ShowMidlines = false;
-            this.layoutPreview.DisplayConfig.ShowStrings = false;
-            this.layoutPreview.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layoutPreview.Location = new System.Drawing.Point(0, 0);
-            this.layoutPreview.Name = "layoutPreview";
-            this.layoutPreview.Size = new System.Drawing.Size(617, 239);
-            this.layoutPreview.TabIndex = 0;
-            this.layoutPreview.Text = "layoutViewer1";
             // 
-            // groupBox1
+            // ExportMidlinesPanel.ContentPanel
             // 
-            this.groupBox1.Controls.Add(this.chkExportMargins);
-            this.groupBox1.Controls.Add(this.chkExportCenterLine);
-            this.groupBox1.Controls.Add(this.cboExportConfig);
-            this.groupBox1.Controls.Add(this.chkExportStringCenters);
-            this.groupBox1.Controls.Add(this.gbxFretsOptions);
-            this.groupBox1.Controls.Add(this.chkExportStrings);
-            this.groupBox1.Controls.Add(this.flpExportFormat);
-            this.groupBox1.Controls.Add(this.chkExportFingerboard);
-            this.groupBox1.Controls.Add(this.btnCancel);
-            this.groupBox1.Controls.Add(this.btnExport);
-            this.groupBox1.Controls.Add(this.lblExportFormat);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(617, 172);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Export Options";
+            this.ExportMidlinesPanel.ContentPanel.Controls.Add(this.MidlinesCfgEdit);
+            resources.ApplyResources(this.ExportMidlinesPanel.ContentPanel, "ExportMidlinesPanel.ContentPanel");
+            this.ExportMidlinesPanel.ContentPanel.Name = "ContentPanel";
+            resources.ApplyResources(this.ExportMidlinesPanel, "ExportMidlinesPanel");
+            this.ExportMidlinesPanel.Name = "ExportMidlinesPanel";
+            this.ExportMidlinesPanel.PanelHeight = 56;
+            this.ExportMidlinesPanel.ShowCheckBox = true;
+            this.ExportMidlinesPanel.CheckedChanged += new System.EventHandler(this.ExportMidlinesPanel_CheckedChanged);
             // 
-            // chkExportCenterLine
+            // MidlinesCfgEdit
             // 
-            this.chkExportCenterLine.AutoSize = true;
-            this.chkExportCenterLine.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkExportCenterLine.Location = new System.Drawing.Point(11, 112);
-            this.chkExportCenterLine.Name = "chkExportCenterLine";
-            this.chkExportCenterLine.Size = new System.Drawing.Size(113, 17);
-            this.chkExportCenterLine.TabIndex = 11;
-            this.chkExportCenterLine.Text = "Export Center Line";
-            this.chkExportCenterLine.UseVisualStyleBackColor = true;
-            this.chkExportCenterLine.CheckedChanged += new System.EventHandler(this.chkExportCenterLine_CheckedChanged);
+            resources.ApplyResources(this.MidlinesCfgEdit, "MidlinesCfgEdit");
+            this.MidlinesCfgEdit.LineConfig = null;
+            this.MidlinesCfgEdit.Name = "MidlinesCfgEdit";
             // 
-            // cboExportConfig
+            // ExportStringsPanel
             // 
-            this.cboExportConfig.FormattingEnabled = true;
-            this.cboExportConfig.Location = new System.Drawing.Point(198, 18);
-            this.cboExportConfig.Name = "cboExportConfig";
-            this.cboExportConfig.Size = new System.Drawing.Size(121, 21);
-            this.cboExportConfig.TabIndex = 10;
+            this.ExportStringsPanel.AutoSizeHeight = true;
             // 
-            // chkExportStringCenters
+            // ExportStringsPanel.ContentPanel
             // 
-            this.chkExportStringCenters.AutoSize = true;
-            this.chkExportStringCenters.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkExportStringCenters.Location = new System.Drawing.Point(11, 89);
-            this.chkExportStringCenters.Name = "chkExportStringCenters";
-            this.chkExportStringCenters.Size = new System.Drawing.Size(125, 17);
-            this.chkExportStringCenters.TabIndex = 9;
-            this.chkExportStringCenters.Text = "Export String Centers";
-            this.chkExportStringCenters.UseVisualStyleBackColor = true;
-            this.chkExportStringCenters.CheckedChanged += new System.EventHandler(this.chkExportStringCenters_CheckedChanged);
+            this.ExportStringsPanel.ContentPanel.Controls.Add(this.StringLinesCfgEdit);
+            resources.ApplyResources(this.ExportStringsPanel.ContentPanel, "ExportStringsPanel.ContentPanel");
+            this.ExportStringsPanel.ContentPanel.Name = "ContentPanel";
+            resources.ApplyResources(this.ExportStringsPanel, "ExportStringsPanel");
+            this.ExportStringsPanel.Name = "ExportStringsPanel";
+            this.ExportStringsPanel.PanelHeight = 56;
+            this.ExportStringsPanel.ShowCheckBox = true;
+            this.ExportStringsPanel.CheckedChanged += new System.EventHandler(this.ExportStringsPanel_CheckedChanged);
             // 
-            // gbxFretsOptions
+            // StringLinesCfgEdit
             // 
-            this.gbxFretsOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbxFretsOptions.Controls.Add(this.pbxFretColor);
-            this.gbxFretsOptions.Controls.Add(this.btnPickFretColor);
-            this.gbxFretsOptions.Controls.Add(this.label1);
-            this.gbxFretsOptions.Controls.Add(this.mtbFretThickness);
-            this.gbxFretsOptions.Controls.Add(this.chkFretThickness);
-            this.gbxFretsOptions.Controls.Add(this.lblExtendAmount);
-            this.gbxFretsOptions.Controls.Add(this.mtbFretExtendAmount);
-            this.gbxFretsOptions.Controls.Add(this.chkExportFrets);
-            this.gbxFretsOptions.Controls.Add(this.flpExtendDirection);
-            this.gbxFretsOptions.Controls.Add(this.chkExtendFretSlots);
-            this.gbxFretsOptions.Location = new System.Drawing.Point(340, 13);
-            this.gbxFretsOptions.Name = "gbxFretsOptions";
-            this.gbxFretsOptions.Size = new System.Drawing.Size(270, 119);
-            this.gbxFretsOptions.TabIndex = 1;
-            this.gbxFretsOptions.TabStop = false;
+            resources.ApplyResources(this.StringLinesCfgEdit, "StringLinesCfgEdit");
+            this.StringLinesCfgEdit.LineConfig = null;
+            this.StringLinesCfgEdit.Name = "StringLinesCfgEdit";
             // 
-            // pbxFretColor
+            // ExportCenterLinePanel
             // 
-            this.pbxFretColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pbxFretColor.Location = new System.Drawing.Point(106, 90);
-            this.pbxFretColor.Name = "pbxFretColor";
-            this.pbxFretColor.Size = new System.Drawing.Size(21, 21);
-            this.pbxFretColor.TabIndex = 15;
-            this.pbxFretColor.TabStop = false;
+            this.ExportCenterLinePanel.Collapsed = true;
             // 
-            // btnPickFretColor
+            // ExportCenterLinePanel.ContentPanel
             // 
-            this.btnPickFretColor.Location = new System.Drawing.Point(126, 89);
-            this.btnPickFretColor.Name = "btnPickFretColor";
-            this.btnPickFretColor.Size = new System.Drawing.Size(81, 23);
-            this.btnPickFretColor.TabIndex = 16;
-            this.btnPickFretColor.Text = "Pick Color";
-            this.btnPickFretColor.UseVisualStyleBackColor = true;
-            this.btnPickFretColor.Click += new System.EventHandler(this.btnPickFretColor_Click);
+            this.ExportCenterLinePanel.ContentPanel.Controls.Add(this.CenterLineCfgEdit);
+            resources.ApplyResources(this.ExportCenterLinePanel.ContentPanel, "ExportCenterLinePanel.ContentPanel");
+            this.ExportCenterLinePanel.ContentPanel.Name = "ContentPanel";
+            resources.ApplyResources(this.ExportCenterLinePanel, "ExportCenterLinePanel");
+            this.ExportCenterLinePanel.Name = "ExportCenterLinePanel";
+            this.ExportCenterLinePanel.PanelHeight = 56;
+            this.ExportCenterLinePanel.ShowCheckBox = true;
+            this.ExportCenterLinePanel.CheckedChanged += new System.EventHandler(this.ExportCenterLinePanel_CheckedChanged);
             // 
-            // label1
+            // CenterLineCfgEdit
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(31, 94);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(68, 13);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "Display Color";
+            resources.ApplyResources(this.CenterLineCfgEdit, "CenterLineCfgEdit");
+            this.CenterLineCfgEdit.LineConfig = null;
+            this.CenterLineCfgEdit.Name = "CenterLineCfgEdit";
             // 
-            // mtbFretThickness
+            // ExtendFretsPanel
             // 
-            this.mtbFretThickness.Enabled = false;
-            this.mtbFretThickness.Location = new System.Drawing.Point(127, 66);
-            this.mtbFretThickness.Name = "mtbFretThickness";
-            this.mtbFretThickness.Size = new System.Drawing.Size(79, 20);
-            this.mtbFretThickness.TabIndex = 13;
-            this.mtbFretThickness.ValueChanged += new System.EventHandler(this.mtbFretThickness_ValueChanged);
             // 
-            // chkFretThickness
+            // ExtendFretsPanel.ContentPanel
             // 
-            this.chkFretThickness.AutoSize = true;
-            this.chkFretThickness.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkFretThickness.Location = new System.Drawing.Point(8, 69);
-            this.chkFretThickness.Name = "chkFretThickness";
-            this.chkFretThickness.Size = new System.Drawing.Size(113, 17);
-            this.chkFretThickness.TabIndex = 12;
-            this.chkFretThickness.Text = "Specify Thickness";
-            this.chkFretThickness.UseVisualStyleBackColor = true;
-            this.chkFretThickness.CheckedChanged += new System.EventHandler(this.chkFretThickness_CheckedChanged);
+            this.ExtendFretsPanel.ContentPanel.Controls.Add(this.lblExtendAmount);
+            this.ExtendFretsPanel.ContentPanel.Controls.Add(this.flpExtendDirection);
+            this.ExtendFretsPanel.ContentPanel.Controls.Add(this.mtbFretExtendAmount);
+            resources.ApplyResources(this.ExtendFretsPanel.ContentPanel, "ExtendFretsPanel.ContentPanel");
+            this.ExtendFretsPanel.ContentPanel.Name = "ContentPanel";
+            resources.ApplyResources(this.ExtendFretsPanel, "ExtendFretsPanel");
+            this.ExtendFretsPanel.Name = "ExtendFretsPanel";
+            this.ExtendFretsPanel.PanelHeight = 34;
+            this.ExtendFretsPanel.ShowCheckBox = true;
+            this.ExtendFretsPanel.CheckedChanged += new System.EventHandler(this.ExtendFretsPanel_CheckedChanged);
             // 
             // lblExtendAmount
             // 
-            this.lblExtendAmount.AutoSize = true;
-            this.lblExtendAmount.Location = new System.Drawing.Point(80, 46);
+            resources.ApplyResources(this.lblExtendAmount, "lblExtendAmount");
             this.lblExtendAmount.Name = "lblExtendAmount";
-            this.lblExtendAmount.Size = new System.Drawing.Size(43, 13);
-            this.lblExtendAmount.TabIndex = 11;
-            this.lblExtendAmount.Text = "Amount";
-            // 
-            // mtbFretExtendAmount
-            // 
-            this.mtbFretExtendAmount.Enabled = false;
-            this.mtbFretExtendAmount.Location = new System.Drawing.Point(127, 43);
-            this.mtbFretExtendAmount.Name = "mtbFretExtendAmount";
-            this.mtbFretExtendAmount.Size = new System.Drawing.Size(79, 20);
-            this.mtbFretExtendAmount.TabIndex = 10;
-            this.mtbFretExtendAmount.ValueChanged += new System.EventHandler(this.mtbFretExtendAmount_ValueChanged);
-            // 
-            // chkExportFrets
-            // 
-            this.chkExportFrets.AutoSize = true;
-            this.chkExportFrets.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkExportFrets.Location = new System.Drawing.Point(6, 0);
-            this.chkExportFrets.Name = "chkExportFrets";
-            this.chkExportFrets.Size = new System.Drawing.Size(82, 17);
-            this.chkExportFrets.TabIndex = 3;
-            this.chkExportFrets.Text = "Export Frets";
-            this.chkExportFrets.UseVisualStyleBackColor = true;
-            this.chkExportFrets.CheckedChanged += new System.EventHandler(this.chkExportFrets_CheckedChanged);
             // 
             // flpExtendDirection
             // 
-            this.flpExtendDirection.AutoSize = true;
-            this.flpExtendDirection.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            resources.ApplyResources(this.flpExtendDirection, "flpExtendDirection");
             this.flpExtendDirection.Controls.Add(this.rbExtendInward);
             this.flpExtendDirection.Controls.Add(this.rbExtendOutward);
-            this.flpExtendDirection.Enabled = false;
-            this.flpExtendDirection.Location = new System.Drawing.Point(127, 19);
             this.flpExtendDirection.Name = "flpExtendDirection";
-            this.flpExtendDirection.Size = new System.Drawing.Size(134, 23);
-            this.flpExtendDirection.TabIndex = 9;
             // 
             // rbExtendInward
             // 
-            this.rbExtendInward.AutoSize = true;
+            resources.ApplyResources(this.rbExtendInward, "rbExtendInward");
             this.rbExtendInward.Checked = true;
-            this.rbExtendInward.Location = new System.Drawing.Point(3, 3);
             this.rbExtendInward.Name = "rbExtendInward";
-            this.rbExtendInward.Size = new System.Drawing.Size(57, 17);
-            this.rbExtendInward.TabIndex = 0;
             this.rbExtendInward.TabStop = true;
-            this.rbExtendInward.Text = "Inward";
             this.rbExtendInward.UseVisualStyleBackColor = true;
             this.rbExtendInward.CheckedChanged += new System.EventHandler(this.rbExtendInward_CheckedChanged);
             // 
             // rbExtendOutward
             // 
-            this.rbExtendOutward.AutoSize = true;
-            this.rbExtendOutward.Location = new System.Drawing.Point(66, 3);
+            resources.ApplyResources(this.rbExtendOutward, "rbExtendOutward");
             this.rbExtendOutward.Name = "rbExtendOutward";
-            this.rbExtendOutward.Size = new System.Drawing.Size(65, 17);
-            this.rbExtendOutward.TabIndex = 1;
-            this.rbExtendOutward.Text = "Outward";
             this.rbExtendOutward.UseVisualStyleBackColor = true;
             // 
-            // chkExtendFretSlots
+            // mtbFretExtendAmount
             // 
-            this.chkExtendFretSlots.AutoSize = true;
-            this.chkExtendFretSlots.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkExtendFretSlots.Location = new System.Drawing.Point(15, 23);
-            this.chkExtendFretSlots.Name = "chkExtendFretSlots";
-            this.chkExtendFretSlots.Size = new System.Drawing.Size(106, 17);
-            this.chkExtendFretSlots.TabIndex = 7;
-            this.chkExtendFretSlots.Text = "Extend Fret Slots";
-            this.chkExtendFretSlots.UseVisualStyleBackColor = true;
-            this.chkExtendFretSlots.CheckedChanged += new System.EventHandler(this.chkExtendFretSlots_CheckedChanged);
+            resources.ApplyResources(this.mtbFretExtendAmount, "mtbFretExtendAmount");
+            this.mtbFretExtendAmount.Name = "mtbFretExtendAmount";
+            this.mtbFretExtendAmount.ValueChanged += new System.EventHandler(this.mtbFretExtendAmount_ValueChanged);
             // 
-            // chkExportStrings
+            // ExportFretsPanel
             // 
-            this.chkExportStrings.AutoSize = true;
-            this.chkExportStrings.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkExportStrings.Location = new System.Drawing.Point(11, 66);
-            this.chkExportStrings.Name = "chkExportStrings";
-            this.chkExportStrings.Size = new System.Drawing.Size(91, 17);
-            this.chkExportStrings.TabIndex = 0;
-            this.chkExportStrings.Text = "Export Strings";
-            this.chkExportStrings.UseVisualStyleBackColor = true;
-            this.chkExportStrings.CheckedChanged += new System.EventHandler(this.chkExportStrings_CheckedChanged);
             // 
-            // flpExportFormat
+            // ExportFretsPanel.ContentPanel
             // 
-            this.flpExportFormat.AutoSize = true;
-            this.flpExportFormat.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.flpExportFormat.Controls.Add(this.radioButton1);
-            this.flpExportFormat.Controls.Add(this.radioButton2);
-            this.flpExportFormat.Location = new System.Drawing.Point(90, 18);
-            this.flpExportFormat.Name = "flpExportFormat";
-            this.flpExportFormat.Size = new System.Drawing.Size(105, 23);
-            this.flpExportFormat.TabIndex = 8;
+            this.ExportFretsPanel.ContentPanel.Controls.Add(this.FretLinesCfgEdit);
+            resources.ApplyResources(this.ExportFretsPanel.ContentPanel, "ExportFretsPanel.ContentPanel");
+            this.ExportFretsPanel.ContentPanel.Name = "ContentPanel";
+            resources.ApplyResources(this.ExportFretsPanel, "ExportFretsPanel");
+            this.ExportFretsPanel.Name = "ExportFretsPanel";
+            this.ExportFretsPanel.PanelHeight = 56;
+            this.ExportFretsPanel.ShowCheckBox = true;
+            this.ExportFretsPanel.CheckedChanged += new System.EventHandler(this.ExportFretsPanel_CheckedChanged);
             // 
-            // radioButton1
+            // FretLinesCfgEdit
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(3, 3);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(47, 17);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "SVG";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.FretLinesCfgEdit, "FretLinesCfgEdit");
+            this.FretLinesCfgEdit.LineConfig = null;
+            this.FretLinesCfgEdit.Name = "FretLinesCfgEdit";
             // 
-            // radioButton2
+            // ExportMarginsPanel
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Enabled = false;
-            this.radioButton2.Location = new System.Drawing.Point(56, 3);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(46, 17);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.Text = "DXF";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.ExportMarginsPanel.Collapsed = true;
             // 
-            // chkExportFingerboard
+            // ExportMarginsPanel.ContentPanel
             // 
-            this.chkExportFingerboard.AutoSize = true;
-            this.chkExportFingerboard.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkExportFingerboard.Location = new System.Drawing.Point(11, 44);
-            this.chkExportFingerboard.Name = "chkExportFingerboard";
-            this.chkExportFingerboard.Size = new System.Drawing.Size(115, 17);
-            this.chkExportFingerboard.TabIndex = 6;
-            this.chkExportFingerboard.Text = "Export Fingerboard";
-            this.chkExportFingerboard.UseVisualStyleBackColor = true;
+            this.ExportMarginsPanel.ContentPanel.Controls.Add(this.MarginsCfgEdit);
+            resources.ApplyResources(this.ExportMarginsPanel.ContentPanel, "ExportMarginsPanel.ContentPanel");
+            this.ExportMarginsPanel.ContentPanel.Name = "ContentPanel";
+            resources.ApplyResources(this.ExportMarginsPanel, "ExportMarginsPanel");
+            this.ExportMarginsPanel.Name = "ExportMarginsPanel";
+            this.ExportMarginsPanel.PanelHeight = 56;
+            this.ExportMarginsPanel.ShowCheckBox = true;
+            this.ExportMarginsPanel.CheckedChanged += new System.EventHandler(this.ExportMarginsPanel_CheckedChanged);
             // 
-            // btnExport
+            // MarginsCfgEdit
             // 
-            this.btnExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExport.Location = new System.Drawing.Point(455, 143);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(75, 23);
-            this.btnExport.TabIndex = 4;
-            this.btnExport.Text = "Export";
-            this.btnExport.UseVisualStyleBackColor = true;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            resources.ApplyResources(this.MarginsCfgEdit, "MarginsCfgEdit");
+            this.MarginsCfgEdit.LineConfig = null;
+            this.MarginsCfgEdit.Name = "MarginsCfgEdit";
+            // 
+            // ExportFingerboardPanel
+            // 
+            // 
+            // ExportFingerboardPanel.ContentPanel
+            // 
+            this.ExportFingerboardPanel.ContentPanel.Controls.Add(this.ContinueEdgesCheckbox);
+            this.ExportFingerboardPanel.ContentPanel.Controls.Add(this.FretboardCfgEdit);
+            resources.ApplyResources(this.ExportFingerboardPanel.ContentPanel, "ExportFingerboardPanel.ContentPanel");
+            this.ExportFingerboardPanel.ContentPanel.Name = "ContentPanel";
+            resources.ApplyResources(this.ExportFingerboardPanel, "ExportFingerboardPanel");
+            this.ExportFingerboardPanel.Name = "ExportFingerboardPanel";
+            this.ExportFingerboardPanel.PanelHeight = 76;
+            this.ExportFingerboardPanel.ShowCheckBox = true;
+            this.ExportFingerboardPanel.CheckedChanged += new System.EventHandler(this.ExportFingerboardPanel_CheckedChanged);
+            // 
+            // ContinueEdgesCheckbox
+            // 
+            resources.ApplyResources(this.ContinueEdgesCheckbox, "ContinueEdgesCheckbox");
+            this.ContinueEdgesCheckbox.Name = "ContinueEdgesCheckbox";
+            this.ContinueEdgesCheckbox.UseVisualStyleBackColor = true;
+            this.ContinueEdgesCheckbox.CheckedChanged += new System.EventHandler(this.ContinueEdgesCheckbox_CheckedChanged);
+            // 
+            // FretboardCfgEdit
+            // 
+            resources.ApplyResources(this.FretboardCfgEdit, "FretboardCfgEdit");
+            this.FretboardCfgEdit.LineConfig = null;
+            this.FretboardCfgEdit.Name = "FretboardCfgEdit";
             // 
             // lblExportFormat
             // 
-            this.lblExportFormat.AutoSize = true;
-            this.lblExportFormat.Location = new System.Drawing.Point(12, 23);
+            resources.ApplyResources(this.lblExportFormat, "lblExportFormat");
             this.lblExportFormat.Name = "lblExportFormat";
-            this.lblExportFormat.Size = new System.Drawing.Size(72, 13);
-            this.lblExportFormat.TabIndex = 2;
-            this.lblExportFormat.Text = "Export Format";
             // 
-            // chkExportMargins
+            // flpExportFormat
             // 
-            this.chkExportMargins.AutoSize = true;
-            this.chkExportMargins.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkExportMargins.Location = new System.Drawing.Point(11, 135);
-            this.chkExportMargins.Name = "chkExportMargins";
-            this.chkExportMargins.Size = new System.Drawing.Size(155, 17);
-            this.chkExportMargins.TabIndex = 12;
-            this.chkExportMargins.Text = "Export Fingerboard Margins";
-            this.chkExportMargins.UseVisualStyleBackColor = true;
-            this.chkExportMargins.CheckedChanged += new System.EventHandler(this.chkExportMargins_CheckedChanged);
+            resources.ApplyResources(this.flpExportFormat, "flpExportFormat");
+            this.flpExportFormat.Controls.Add(this.rbSvgExport);
+            this.flpExportFormat.Controls.Add(this.rbDxfExport);
+            this.flpExportFormat.Name = "flpExportFormat";
+            // 
+            // rbSvgExport
+            // 
+            resources.ApplyResources(this.rbSvgExport, "rbSvgExport");
+            this.rbSvgExport.Checked = true;
+            this.rbSvgExport.Name = "rbSvgExport";
+            this.rbSvgExport.TabStop = true;
+            this.rbSvgExport.UseVisualStyleBackColor = true;
+            // 
+            // rbDxfExport
+            // 
+            resources.ApplyResources(this.rbDxfExport, "rbDxfExport");
+            this.rbDxfExport.Name = "rbDxfExport";
+            this.rbDxfExport.UseVisualStyleBackColor = true;
+            // 
+            // layoutPreview
+            // 
+            resources.ApplyResources(this.layoutPreview, "layoutPreview");
+            this.layoutPreview.BackColor = System.Drawing.SystemColors.Window;
+            this.layoutPreview.DisplayConfig.FingerboardOrientation = System.Windows.Forms.Orientation.Vertical;
+            this.layoutPreview.DisplayConfig.ShowCenterLine = false;
+            this.layoutPreview.DisplayConfig.ShowFingerboard = true;
+            this.layoutPreview.DisplayConfig.ShowFrets = true;
+            this.layoutPreview.DisplayConfig.ShowMargins = true;
+            this.layoutPreview.DisplayConfig.ShowMidlines = true;
+            this.layoutPreview.DisplayConfig.ShowStrings = true;
+            this.layoutPreview.Name = "layoutPreview";
+            // 
+            // btnCancel
+            // 
+            resources.ApplyResources(this.btnCancel, "btnCancel");
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            // 
+            // btnExport
+            // 
+            resources.ApplyResources(this.btnExport, "btnExport");
+            this.btnExport.Name = "btnExport";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // ExportLayoutDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(617, 415);
             this.Controls.Add(this.splitContainer1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ExportLayoutDialog";
-            this.Text = "Export Instrument Layout";
+            this.ShowIcon = false;
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.gbxFretsOptions.ResumeLayout(false);
-            this.gbxFretsOptions.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxFretColor)).EndInit();
+            this.ExportMidlinesPanel.ContentPanel.ResumeLayout(false);
+            this.ExportMidlinesPanel.ContentPanel.PerformLayout();
+            this.ExportMidlinesPanel.ResumeLayout(false);
+            this.ExportStringsPanel.ContentPanel.ResumeLayout(false);
+            this.ExportStringsPanel.ContentPanel.PerformLayout();
+            this.ExportStringsPanel.ResumeLayout(false);
+            this.ExportStringsPanel.PerformLayout();
+            this.ExportCenterLinePanel.ContentPanel.ResumeLayout(false);
+            this.ExportCenterLinePanel.ContentPanel.PerformLayout();
+            this.ExportCenterLinePanel.ResumeLayout(false);
+            this.ExtendFretsPanel.ContentPanel.ResumeLayout(false);
+            this.ExtendFretsPanel.ContentPanel.PerformLayout();
+            this.ExtendFretsPanel.ResumeLayout(false);
             this.flpExtendDirection.ResumeLayout(false);
             this.flpExtendDirection.PerformLayout();
+            this.ExportFretsPanel.ContentPanel.ResumeLayout(false);
+            this.ExportFretsPanel.ContentPanel.PerformLayout();
+            this.ExportFretsPanel.ResumeLayout(false);
+            this.ExportMarginsPanel.ContentPanel.ResumeLayout(false);
+            this.ExportMarginsPanel.ContentPanel.PerformLayout();
+            this.ExportMarginsPanel.ResumeLayout(false);
+            this.ExportFingerboardPanel.ContentPanel.ResumeLayout(false);
+            this.ExportFingerboardPanel.ContentPanel.PerformLayout();
+            this.ExportFingerboardPanel.ResumeLayout(false);
             this.flpExportFormat.ResumeLayout(false);
             this.flpExportFormat.PerformLayout();
             this.ResumeLayout(false);
@@ -431,32 +387,30 @@
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private LayoutViewer layoutPreview;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.CheckBox chkExportStrings;
-        private System.Windows.Forms.CheckBox chkExportFrets;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton rbSvgExport;
+        private System.Windows.Forms.RadioButton rbDxfExport;
         private System.Windows.Forms.Label lblExportFormat;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnExport;
-        private System.Windows.Forms.CheckBox chkExportFingerboard;
         private System.Windows.Forms.FlowLayoutPanel flpExtendDirection;
         private System.Windows.Forms.RadioButton rbExtendInward;
         private System.Windows.Forms.RadioButton rbExtendOutward;
         private System.Windows.Forms.FlowLayoutPanel flpExportFormat;
-        private System.Windows.Forms.CheckBox chkExtendFretSlots;
-        private MeasureTextbox mtbFretExtendAmount;
-        private System.Windows.Forms.GroupBox gbxFretsOptions;
+        private SiGen.UI.Controls.MeasureTextbox mtbFretExtendAmount;
         private System.Windows.Forms.Label lblExtendAmount;
-        private MeasureTextbox mtbFretThickness;
-        private System.Windows.Forms.CheckBox chkFretThickness;
-        private System.Windows.Forms.Button btnPickFretColor;
-        private System.Windows.Forms.PictureBox pbxFretColor;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckBox chkExportStringCenters;
-        private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.ComboBox cboExportConfig;
-        private System.Windows.Forms.CheckBox chkExportCenterLine;
-        private System.Windows.Forms.CheckBox chkExportMargins;
+        private Controls.CollapsiblePanel ExportFingerboardPanel;
+        private Controls.CollapsiblePanel ExportFretsPanel;
+        private Controls.CollapsiblePanel ExportStringsPanel;
+        private Controls.Preferences.LineExportEdit FretboardCfgEdit;
+        private Controls.Preferences.LineExportEdit StringLinesCfgEdit;
+        private Controls.Preferences.LineExportEdit FretLinesCfgEdit;
+        private Controls.CollapsiblePanel ExportCenterLinePanel;
+        private Controls.Preferences.LineExportEdit CenterLineCfgEdit;
+        private Controls.CollapsiblePanel ExportMidlinesPanel;
+        private Controls.Preferences.LineExportEdit MidlinesCfgEdit;
+        private System.Windows.Forms.CheckBox ContinueEdgesCheckbox;
+        private Controls.CollapsiblePanel ExtendFretsPanel;
+        private Controls.CollapsiblePanel ExportMarginsPanel;
+        private Controls.Preferences.LineExportEdit MarginsCfgEdit;
     }
 }

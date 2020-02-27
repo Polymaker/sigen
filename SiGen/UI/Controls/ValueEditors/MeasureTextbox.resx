@@ -120,4 +120,136 @@
   <metadata name="cmsConvert.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="tsmiClearValue.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 22</value>
+  </data>
+  <data name="tsmiClearValue.Text" xml:space="preserve">
+    <value>Clear Value</value>
+  </data>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>135, 6</value>
+  </data>
+  <data name="convertToToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 22</value>
+  </data>
+  <data name="convertToToolStripMenuItem.Text" xml:space="preserve">
+    <value>Convert to:</value>
+  </data>
+  <data name="tsmiConvertToMM.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 22</value>
+  </data>
+  <data name="tsmiConvertToMM.Text" xml:space="preserve">
+    <value>Millimeters</value>
+  </data>
+  <data name="tsmiConvertToCM.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 22</value>
+  </data>
+  <data name="tsmiConvertToCM.Text" xml:space="preserve">
+    <value>Centimeters</value>
+  </data>
+  <data name="tsmiConvertToIN.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 22</value>
+  </data>
+  <data name="tsmiConvertToIN.Text" xml:space="preserve">
+    <value>Inches</value>
+  </data>
+  <data name="tsmiConvertToFT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 22</value>
+  </data>
+  <data name="tsmiConvertToFT.Text" xml:space="preserve">
+    <value>Feets</value>
+  </data>
+  <data name="cmsConvert.Size" type="System.Drawing.Size, System.Drawing">
+    <value>139, 142</value>
+  </data>
+  <data name="&gt;&gt;cmsConvert.Name" xml:space="preserve">
+    <value>cmsConvert</value>
+  </data>
+  <data name="&gt;&gt;cmsConvert.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="innerTextbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>2, 0</value>
+  </data>
+  <data name="innerTextbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 13</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="innerTextbox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="innerTextbox.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;innerTextbox.Name" xml:space="preserve">
+    <value>innerTextbox</value>
+  </data>
+  <data name="&gt;&gt;innerTextbox.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.TextBoxEx, SiGen, Version=1.0.0.19714, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;innerTextbox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;innerTextbox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 26</value>
+  </data>
+  <data name="&gt;&gt;tsmiClearValue.Name" xml:space="preserve">
+    <value>tsmiClearValue</value>
+  </data>
+  <data name="&gt;&gt;tsmiClearValue.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
+    <value>toolStripSeparator1</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;convertToToolStripMenuItem.Name" xml:space="preserve">
+    <value>convertToToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;convertToToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiConvertToMM.Name" xml:space="preserve">
+    <value>tsmiConvertToMM</value>
+  </data>
+  <data name="&gt;&gt;tsmiConvertToMM.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiConvertToCM.Name" xml:space="preserve">
+    <value>tsmiConvertToCM</value>
+  </data>
+  <data name="&gt;&gt;tsmiConvertToCM.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiConvertToIN.Name" xml:space="preserve">
+    <value>tsmiConvertToIN</value>
+  </data>
+  <data name="&gt;&gt;tsmiConvertToIN.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiConvertToFT.Name" xml:space="preserve">
+    <value>tsmiConvertToFT</value>
+  </data>
+  <data name="&gt;&gt;tsmiConvertToFT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>MeasureTextbox</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.UserControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

@@ -20,16 +20,17 @@ namespace SiGen.StringedInstruments.Layout
         private int _StartingFret;
         private StringTuning _Tuning;
         private StringProperties _PhysicalProperties;
+        private Measure _ActionAtFirstFret;
         private Measure _ActionAtTwelfthFret;
         private double _MultiScaleRatio;
-        private FretManager _Frets;
+        //private FretManager _Frets;
 
 		#endregion
 
 		#region Properties
 
 		[XmlAttribute("Index")]
-		public int Index { get; }
+		public int Index { get; internal set; }
 
 		public Measure ScaleLength
         {
@@ -114,7 +115,7 @@ namespace SiGen.StringedInstruments.Layout
             get { return _MultiScaleRatio; }
             set
             {
-				SetPropertyValue(ref _MultiScaleRatio, value);
+				SetPropertyValue(ref _MultiScaleRatio, value, Layout.ScaleLengthMode != ScaleLengthType.Single);
 			}
         }
 
@@ -172,34 +173,28 @@ namespace SiGen.StringedInstruments.Layout
 
         public StringTuning Tuning
         {
-            get { return _Tuning; }
-            set
-            {
-                if (value != _Tuning)
-                {
-                    //_Tuning = SILayout.GetTuningForNote(value.Note, Layout.FretsTemperament);
-					if (Layout.FretsTemperament != Temperament.Equal || Layout.CompensateFretPositions)
-						SetPropertyValue(ref _Tuning, value);
-                    //EnsureCanStillCalculateCompentation();
-                }
-            }
+            get => _Tuning;
+            set => SetPropertyValue(ref _Tuning, value, Layout.FretsTemperament != Temperament.Equal || Layout.CompensateFretPositions);
         }
 
         /// <summary>
-        /// Gets or sets the string action at the twelfth fret, measured above the fret.
-        /// Used only for fret compensation calculation.
+        /// Gets or sets the string action at the first fret, measured from the top of the fret to the bottom of the string.
+        /// <br/>Used only for fret compensation calculation.
+        /// </summary>
+        public Measure ActionAtFirstFret
+        {
+            get { return _ActionAtFirstFret; }
+            set => SetPropertyValue(ref _ActionAtFirstFret, value, false);
+        }
+
+        /// <summary>
+        /// Gets or sets the string action at the twelfth fret, measured from the top of the fret to the bottom of the string.
+        /// <br/>Used only for fret compensation calculation.
         /// </summary>
         public Measure ActionAtTwelfthFret
         {
             get { return _ActionAtTwelfthFret; }
-            set
-            {
-                if (_ActionAtTwelfthFret != value)
-                {
-                    _ActionAtTwelfthFret = value;
-                    //EnsureCanStillCalculateCompentation();
-                }
-            }
+            set => SetPropertyValue(ref _ActionAtTwelfthFret, value, false);
         }
 
         public bool CanCalculateCompensation
@@ -207,7 +202,8 @@ namespace SiGen.StringedInstruments.Layout
             get { return Tuning != null && 
                     PhysicalProperties != null && 
                     PhysicalProperties.CanCalculateCompensation && 
-                    ActionAtTwelfthFret != Measure.Zero; }
+                    ActionAtFirstFret > Measure.Zero &&
+                    ActionAtTwelfthFret > Measure.Zero; }
         }
 
         public SIString Previous
@@ -227,14 +223,23 @@ namespace SiGen.StringedInstruments.Layout
 
         #endregion
 
+        internal SIString() : base(null)
+        {
+            _ActionAtTwelfthFret = Measure.Empty;
+            _ActionAtFirstFret = Measure.Empty;
+            _MultiScaleRatio = 0.5;
+            _NumberOfFrets = 24;
+            RealScaleLength = Measure.Empty;
+        }
+
         public SIString(SILayout layout, int stringIndex) : base(layout)
         {
             Index = stringIndex;
             _ActionAtTwelfthFret = Measure.Empty;
+            _ActionAtFirstFret = Measure.Empty;
             _MultiScaleRatio = 0.5;
             _NumberOfFrets = 24;
             RealScaleLength = Measure.Empty;
-            _Frets = new FretManager(this);
         }
 
         public bool HasFret(int fretNo)
@@ -244,11 +249,17 @@ namespace SiGen.StringedInstruments.Layout
 
         internal void RecalculateLengths()
         {
-            StringLength = LayoutLine.Length;
-            if (LayoutLine.FretZero != PointM.Empty && LayoutLine.FretZero != LayoutLine.P1)
-                RealScaleLength = PointM.Distance(LayoutLine.FretZero, LayoutLine.P2);
-            else
-                RealScaleLength = StringLength;
+            if (LayoutLine != null)
+            {
+                StringLength = LayoutLine.Length.Convert(ScaleLength.Unit);
+
+                if (LayoutLine.FretZero != PointM.Empty && LayoutLine.FretZero != LayoutLine.P1)
+                    RealScaleLength = PointM.Distance(LayoutLine.FretZero, LayoutLine.P2);
+                else
+                    RealScaleLength = StringLength;
+
+                RealScaleLength = RealScaleLength.Convert(ScaleLength.Unit);
+            }
         }
 
         internal void ClearLayoutData()
@@ -264,11 +275,11 @@ namespace SiGen.StringedInstruments.Layout
             
             var stringElem = new XElement(elemName, new XAttribute("Index", Index));
 
-            if (Layout.ScaleLengthMode == ScaleLengthType.Individual)
+            if (Layout.ScaleLengthMode == ScaleLengthType.Multiple)
+            {
                 stringElem.Add(ScaleLength.SerializeAsAttribute("ScaleLength"));
-
-            if (/*!Layout.Strings.AllEqual(s => s.MultiScaleRatio) || */Layout.ScaleLengthMode == ScaleLengthType.Individual)
                 stringElem.Add(new XAttribute("MultiScaleRatio", MultiScaleRatio));
+            }
 
             var fretElem = new XElement("Frets",
                     new XAttribute("StartingFret", StartingFret),
@@ -279,7 +290,7 @@ namespace SiGen.StringedInstruments.Layout
             if (!ActionAtTwelfthFret.IsEmpty)
             {
                 var actionElem = new XElement("Action",
-                    Measure.Empty.SerializeAsAttribute("AtFirstFret"),
+                    ActionAtFirstFret.SerializeAsAttribute("AtFirstFret"),
                     ActionAtTwelfthFret.SerializeAsAttribute("AtTwelfthFret"));
                 stringElem.Add(actionElem);
             }
@@ -312,7 +323,8 @@ namespace SiGen.StringedInstruments.Layout
             if (elem.ContainsElement("Action"))
             {
                 var actionElem = elem.Element("Action");
-                _ActionAtTwelfthFret = Measure.ParseInvariant(actionElem.Attribute("AtTwelfthFret").Value);
+                _ActionAtFirstFret = actionElem.ReadAttribute("AtFirstFret", Measure.Empty);
+                _ActionAtTwelfthFret = actionElem.ReadAttribute("AtTwelfthFret", Measure.Empty);
             }
 
             if (elem.ContainsElement("Properties"))

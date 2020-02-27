@@ -25,7 +25,7 @@ namespace SiGen.StringedInstruments.Layout
 
         }
 
-        protected override void OnStringConfigurationChanged()
+        protected override void OnStringsChanged()
         {
             if (_NutSpacing != null && _NutSpacing.Length > 0)
             {
@@ -33,6 +33,7 @@ namespace SiGen.StringedInstruments.Layout
                 var oldBridge = _BridgeSpacing;
                 _NutSpacing = new Measure[Layout.NumberOfStrings - 1];
                 _BridgeSpacing = new Measure[Layout.NumberOfStrings - 1];
+
                 for (int i = 0; i < Layout.NumberOfStrings - 1; i++)
                 {
                     if (i < oldNut.Length)

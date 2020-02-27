@@ -31,7 +31,9 @@ namespace SiGen.UI.Controls.LayoutEditors
             nbxNumberOfFrets.Enabled = (CurrentLayout != null);
             chkLeftHanded.Enabled = (CurrentLayout != null);
             chkShowAdvanced.Enabled = (CurrentLayout != null);
-            chkShowAdvanced.Checked = false;
+
+            if(IsLayoutFirstLoad)
+                chkShowAdvanced.Checked = false;
             GridColumnsSortOrder = ListSortDirection.Ascending;
 
             if (CurrentLayout != null)
@@ -57,6 +59,22 @@ namespace SiGen.UI.Controls.LayoutEditors
             UpdateFieldsVisibility();
             ApplyFieldsVisibility();
             UpdateGridValues();
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            if (dgvStrings.Right > Width)
+            {
+
+            }
+        }
+
+        protected override void OnCurrentLayoutChanged()
+        {
+            base.OnCurrentLayoutChanged();
+            //if (!CachedLayoutData.ContainsKey(CurrentLayout))
+            //    chkShowAdvanced.Checked = false;
         }
 
         protected override void OnNumberOfStringsChanged()
@@ -92,7 +110,7 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             if (!IsLoading && CurrentLayout != null)
             {
-                CurrentLayout.StartBatchChanges();
+                CurrentLayout.StartBatchChanges("NumberOfFrets");
                 CurrentLayout.Strings.SetAll(s => s.NumberOfFrets, (int)nbxNumberOfFrets.Value);
                 CurrentLayout.FinishBatchChanges();
                 CurrentLayout.RebuildLayout();
@@ -110,7 +128,7 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         private void chkShowAdvanced_CheckedChanged(object sender, EventArgs e)
         {
-            if (!IsLoading)
+            if (!IsLoading && CurrentLayout != null)
             {
                 UpdateFieldsVisibility();
                 ApplyFieldsVisibility();
@@ -151,9 +169,9 @@ namespace SiGen.UI.Controls.LayoutEditors
             PivotFields.Add(new PivotField("ScaleLength", "Scale Length") { Visible = false });
             PivotFields.Add(new PivotField("MultiScaleRatio", "Align. Ratio") { Visible = false });
             PivotFields.Add(new PivotField("Gauge", "Gauge"));
-            PivotFields.Add(new PivotField("PhysicalProperties.CoreWireDiameter", "Core Wire Diameter") { Visible = false });
+            PivotFields.Add(new PivotField("PhysicalProperties.CoreWireDiameter", "Core Wire diam.") { Visible = false });
             PivotFields.Add(new PivotField("PhysicalProperties.UnitWeight", "Unit Weight (lbs/in)") { Visible = false });
-            PivotFields.Add(new PivotField("PhysicalProperties.ModulusOfElasticity", "Elast. Modulus (psi)") { Visible = false });
+            PivotFields.Add(new PivotField("PhysicalProperties.ModulusOfElasticity", "Elast. Modulus (GPa)") { Visible = false });
             PivotFields.Add(new PivotField("Tuning.Note", "Note") { Visible = false });
 
             foreach (var field in PivotFields)
@@ -183,7 +201,8 @@ namespace SiGen.UI.Controls.LayoutEditors
                         {
                             HeaderText = (i + 1).ToString(),
                             SortMode = DataGridViewColumnSortMode.NotSortable,
-                            Tag = i
+                            Tag = i,
+                            MinimumWidth = 50
                         };
                         dgvStrings.Columns.Add(stringCol);
                     }
@@ -233,8 +252,10 @@ namespace SiGen.UI.Controls.LayoutEditors
                 foreach (var field in PivotFields)
                 {
                     if (field.PropertyName == "ScaleLength" || field.PropertyName == "MultiScaleRatio")
-                        field.Visible = (CurrentLayout.ScaleLengthMode == ScaleLengthType.Individual);
+                        field.Visible = (CurrentLayout.ScaleLengthMode == ScaleLengthType.Multiple);
                     else if (field.PropertyName.Contains("PhysicalProperties"))
+                        field.Visible = chkShowAdvanced.Checked;
+                    else if (field.PropertyName.Contains("Tuning"))
                         field.Visible = chkShowAdvanced.Checked;
                 }
             }
@@ -482,9 +503,9 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         private void dgvStrings_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Right)
+            if(e.Button == MouseButtons.Right && e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                if(dgvStrings[e.ColumnIndex,e.RowIndex].ValueType == typeof(Measure))
+                if(dgvStrings[e.ColumnIndex, e.RowIndex].ValueType == typeof(Measure))
                 {
                     //cmsMesureCellMenu.Tag = dgvStrings[e.ColumnIndex, e.RowIndex];
 

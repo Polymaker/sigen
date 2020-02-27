@@ -1,4 +1,5 @@
-﻿using SiGen.Measuring;
+﻿using SiGen.Common;
+using SiGen.Measuring;
 using SiGen.Physics;
 using SiGen.StringedInstruments.Data;
 using SiGen.StringedInstruments.Layout.Visual;
@@ -28,9 +29,10 @@ namespace SiGen.StringedInstruments.Layout
 		private bool _CompensateFretPositions;
 		private StringSpacingType _StringSpacingMode;
 		private ScaleLengthType _ScaleLengthMode;
-		private List<VisualElement> _VisualElements;
+        //private InstrumentType _InstrumentType;
         private RectangleM _CachedBounds;
         private bool isLayoutDirty;
+        private LayoutItemCollection<SIString> _Strings;
 
 		/// <summary>
 		/// Layout changes since last rebuilt
@@ -47,14 +49,24 @@ namespace SiGen.StringedInstruments.Layout
             set
             {
                 if (value != _NumberOfStrings)
-                    InitializeStrings(_NumberOfStrings, value);
+                {
+                    //InitializeStrings(_NumberOfStrings, value);
+                    ChangeNumberOfString(value);
+                }
             }
         }
 
-		/// <summary>
-		/// Strings are ordered from Treble to Bass!!!
-		/// </summary>
-		public SIString[] Strings { get; private set; }
+        //TODO: To implement to pave the way for config wizard (e.g. tuning, gauge, etc)
+        //public InstrumentType InstrumentType
+        //{
+        //    get => _InstrumentType;
+        //    set => SetPropertyValue(ref _InstrumentType, value, nameof(InstrumentType));
+        //}
+
+        /// <summary>
+        /// Strings are ordered from Treble to Bass!!!
+        /// </summary>
+        public IList<SIString> Strings => _Strings.AsReadOnly();
 
 		public string LayoutName { get; set; }
 
@@ -69,8 +81,9 @@ namespace SiGen.StringedInstruments.Layout
                 {
                     if (NumberOfStrings == 1)
                         return;
-                    if (value == ScaleLengthType.Individual)
-                        ManualScaleConfig.InitializeIfNeeded();
+
+                    if (value == ScaleLengthType.Multiple)
+                        MultiScaleConfig.InitializeIfNeeded();
 
 					SetPropertyValue(ref _ScaleLengthMode, value);
                 }
@@ -86,19 +99,19 @@ namespace SiGen.StringedInstruments.Layout
                     default:
                     case ScaleLengthType.Single:
                         return SingleScaleConfig;
+                    case ScaleLengthType.Dual:
+                        return DualScaleConfig;
                     case ScaleLengthType.Multiple:
                         return MultiScaleConfig;
-                    case ScaleLengthType.Individual:
-                        return ManualScaleConfig;
                 }
             }
         }
 
-		public ScaleLengthManager.SingleScale SingleScaleConfig { get; }
+		public SingleScaleManager SingleScaleConfig { get; }
 
-		public ScaleLengthManager.MultiScale MultiScaleConfig { get; }
+		public DualScaleManager DualScaleConfig { get; }
 
-		public ScaleLengthManager.Individual ManualScaleConfig { get; }
+		public MultipleScaleManager MultiScaleConfig { get; }
 
 		#endregion
 
@@ -141,8 +154,8 @@ namespace SiGen.StringedInstruments.Layout
             get { return _FretsTemperament; }
             set
             {
-				StartBatchChanges();
-                if (SetPropertyValue(ref _FretsTemperament, value))
+				StartBatchChanges(nameof(FretsTemperament));
+                if (SetPropertyValue(ref _FretsTemperament, value) && !IsLoading)
 					AdjustStringsTuning();
 				FinishBatchChanges();
 			}
@@ -169,7 +182,7 @@ namespace SiGen.StringedInstruments.Layout
 
                     _CompensateFretPositions = value;
 
-					StartBatchChanges();
+					StartBatchChanges(nameof(CompensateFretPositions));
                     if (value)
                         FretInterpolation = FretInterpolationMethod.NotchedSpline;
                     else
@@ -191,9 +204,9 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
-        public List<VisualElement> VisualElements { get { return _VisualElements; } }
+        public List<VisualElement> VisualElements { get; }
 
-		public bool IsLoading { get; private set; }
+        public bool IsLoading { get; private set; }
 
 		internal bool IsAssigningProperties { get; private set; }
 
@@ -211,103 +224,192 @@ namespace SiGen.StringedInstruments.Layout
         public SILayout()
         {
             _Components = new List<LayoutComponent>();
+            _Strings = new LayoutItemCollection<SIString>(this);
+            _Strings.CollectionChanged += Strings_CollectionChanged;
+
             Margins = new FingerboardMargin(this);
+
             _StringSpacingMode = StringSpacingType.Simple;
             SimpleStringSpacing = new StringSpacingSimple(this);
             ManualStringSpacing = new StringSpacingManual(this);
-            SingleScaleConfig = new ScaleLengthManager.SingleScale(this);
-            MultiScaleConfig = new ScaleLengthManager.MultiScale(this);
-            ManualScaleConfig = new ScaleLengthManager.Individual(this);
-            _VisualElements = new List<VisualElement>();
+
+            SingleScaleConfig = new SingleScaleManager(this);
+            DualScaleConfig = new DualScaleManager(this);
+            MultiScaleConfig = new MultipleScaleManager(this);
+
+            VisualElements = new List<VisualElement>();
+
             _ScaleLengthMode = ScaleLengthType.Single;
             _FretsTemperament = Temperament.Equal;
             _FretInterpolation = FretInterpolationMethod.Spline;
             _CachedBounds = RectangleM.Empty;
             LayoutName = string.Empty;
+
 			LayoutChanges = new List<ILayoutChange>();
+            //_InstrumentType = InstrumentType.Guitar;
 		}
 
-        private void InitializeStrings(int oldValue, int newValue)
+        #region Strings Management
+
+        private bool PreventStringChange;
+
+        private void Strings_CollectionChanged(object sender, CollectionChange e)
         {
-            if (newValue < 0)
+            if (!IsLoading && !PreventStringChange)
+            {
+                //re-index strings
+                for (int i = 0; i < _Strings.Count; i++)
+                    _Strings[i].Index = i;
+                _NumberOfStrings = _Strings.Count;
+                RebuildComponentStringData();
+                CheckCanCompensateFretPositions();
+                OnNumberOfStringsChanged();
+            }
+        }
+
+        public SIString GetString(int index, FingerboardSide side)
+        {
+            if (index < 0 || index >= _Strings.Count)
+                return null;
+
+            if (side == FingerboardSide.Treble)
+                return _Strings[index];
+            else
+                return _Strings[_Strings.Count - index - 1];
+        }
+
+        public void AddString(FingerboardSide side, int numberToAdd = 1)
+        {
+            if (numberToAdd <= 0)
                 return;
 
-			StartBatchChanges();
+            PreventStringChange = true;
 
-            if (newValue == 1)
-				SetPropertyValue(ref _ScaleLengthMode, ScaleLengthType.Single, nameof(ScaleLengthMode));
+            StartBatchChanges("AddStrings");
+            NotifyStringsChanging();
 
-			NotifyLayoutChanged(new PropertyChange(null, nameof(NumberOfStrings), _NumberOfStrings, newValue));
-			//NotifyLayoutChanged(new PropertyChange(null, nameof(_NumberOfStrings), null, _NumberOfStrings, newValue, true));
+            for (int i = 0; i < numberToAdd; i++)
+                AddStringCore(side);
 
-			_NumberOfStrings = newValue;
+            _NumberOfStrings = _Strings.Count;
 
-			var oldStrings = Strings;
-            Strings = new SIString[NumberOfStrings];
+            //re-index strings
+            for (int i = 0; i < _Strings.Count; i++)
+                _Strings[i].Index = i;
 
-            for(int i = 0; i < _NumberOfStrings; i++)
+            RebuildComponentStringData();
+
+            CheckCanCompensateFretPositions();
+
+            FinishBatchChanges();
+
+            OnNumberOfStringsChanged();
+
+            PreventStringChange = false;
+        }
+
+        private void AddStringCore(FingerboardSide side)
+        {
+            var newString = new SIString()
             {
-                if (oldStrings != null && i < oldStrings.Length)
-                    Strings[i] = oldStrings[i];
-                else
-                {
-                    Strings[i] = new SIString(this, i);
-                    if (i >= 2 && !Strings[i - 2].Gauge.IsEmpty && !Strings[i - 1].Gauge.IsEmpty)
-                    {
-                        var gaugeDiff = Strings[i - 1].Gauge - Strings[i - 2].Gauge;
-                        var estGauge = Strings[i - 1].Gauge * 1.3;
-                        Strings[i].Gauge = Measure.Avg(Strings[i - 1].Gauge + gaugeDiff, estGauge);
-                    }
-                    if (i >= 1 && !Strings[i - 1].Gauge.IsEmpty)
-                        Strings[i].Gauge = Strings[i - 1].Gauge * 1.3;
-                }
+                Index = side == FingerboardSide.Treble ? 0 : _Strings.Count
+            };
+
+            if (side == FingerboardSide.Treble)
+                _Strings.Insert(0, newString);
+            else
+                _Strings.Add(newString);
+
+            IsAssigningProperties = true;
+            StringHelper.EstimateStringGauge(newString);
+            StringHelper.EstimateStringAction(newString);
+            IsAssigningProperties = false;
+        }
+
+        public void RemoveString(FingerboardSide side, int numberToRemove = 1)
+        {
+            if (numberToRemove <= 0)
+                return;
+
+            PreventStringChange = true;
+
+            StartBatchChanges("RemoveStrings");
+            NotifyStringsChanging();
+
+            numberToRemove = Math.Min(numberToRemove, _Strings.Count - 1);
+
+            if (side == FingerboardSide.Treble)
+            {
+                var stringsToRemove = _Strings.Take(numberToRemove).ToList();
+                _Strings.Remove(stringsToRemove);
+            }
+            else
+            {
+                var stringsToRemove = _Strings.Reverse().Take(numberToRemove).ToList();
+                _Strings.Remove(stringsToRemove);
             }
 
+            _NumberOfStrings = _Strings.Count;
+
+            RebuildComponentStringData();
+
+            CheckCanCompensateFretPositions();
+
+            FinishBatchChanges();
+
+            OnNumberOfStringsChanged();
+
+            PreventStringChange = false;
+        }
+
+        private void NotifyStringsChanging()
+        {
             foreach (var comp in _Components)
-                (comp as ILayoutComponent).OnStringConfigurationChanged();
+                (comp as ILayoutComponent).BeforeChangingStrings();
+        }
 
-            if (CompensateFretPositions && !Strings.All(s => s.CanCalculateCompensation))
-				SetPropertyValue(ref _CompensateFretPositions, false, nameof(CompensateFretPositions));
+        private void RebuildComponentStringData()
+        {
+            foreach (var comp in _Components)
+                (comp as ILayoutComponent).OnStringsChanged();
+        }
 
-			//if (CurrentBatchChanges != null)
-			//{
-			//	CurrentBatchChanges.Insert(1, new PropertyChange(null, nameof(Strings), oldStrings, Strings));
-			//	CurrentBatchChanges.RemoveAll(c => c.Component is SIString);
-			//}
+        public void ChangeNumberOfString(int numberOfStrings, FingerboardSide sideToChange = FingerboardSide.Bass)
+        {
+            if (numberOfStrings > _NumberOfStrings)
+                AddString(sideToChange, numberOfStrings - _NumberOfStrings);
+            else if(numberOfStrings < _NumberOfStrings)
+                RemoveString(sideToChange, _NumberOfStrings - numberOfStrings);
+        }
 
-			FinishBatchChanges();
-
-			if (oldStrings != null)
-				OnNumberOfStringsChanged();
-		}
+        private void CheckCanCompensateFretPositions()
+        {
+            if (CompensateFretPositions && !_Strings.All(s => s.CanCalculateCompensation))
+                SetPropertyValue(ref _CompensateFretPositions, false, nameof(CompensateFretPositions));
+        }
 
         protected void OnNumberOfStringsChanged()
         {
-            var handler = NumberOfStringsChanged;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
+            NumberOfStringsChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public void SetStringsTuning(params MusicalNote[] tunings)
-        {
-            if (tunings.Length != NumberOfStrings)
-                throw new InvalidOperationException("Number of string mistmatch.");
-            for (int i = 0; i < NumberOfStrings; i++)
-                Strings[i].Tuning = new StringTuning(tunings[i]);
-        }
+        #endregion
 
-        private void AdjustStringsTuning()
+        public void AdjustStringsTuning()
         {
+            StartBatchChanges(nameof(AdjustStringsTuning));
             foreach (var str in Strings)
             {
                 if (str.Tuning != null)
                     str.Tuning = GetTuningForNote(str.Tuning.Note, FretsTemperament);
             }
+            FinishBatchChanges();
         }
 
         public static StringTuning GetTuningForNote(MusicalNote note, Temperament temperament)
         {
             MusicalNote newNote;
+
             switch (temperament)
             {
                 default:
@@ -318,6 +420,7 @@ namespace SiGen.StringedInstruments.Layout
                     newNote = MusicalNote.JustNote(note.NoteName, note.Octave);
                     break;
             }
+
             var offset = new PitchValue();
             if (temperament == Temperament.ThidellFormula)
             {
@@ -330,8 +433,8 @@ namespace SiGen.StringedInstruments.Layout
                 //    offset = PitchValue.FromCents(4);
                 //else if (newNote.NoteName == NoteName.B && newNote.Octave == 3)
                 //    offset = PitchValue.FromCents(-1);
-                //else if (newNote.NoteName == NoteName.E && newNote.Octave == 4)
-                //    offset = PitchValue.FromCents(-1);
+                if (newNote.NoteName == NoteName.E && newNote.Octave == 4)
+                    offset = PitchValue.FromCents(-1);
             }
             else if (temperament == Temperament.DieWohltemperirte)
             {
@@ -350,15 +453,16 @@ namespace SiGen.StringedInstruments.Layout
 
 		#region Layout Change Tracking & Notification
 
-		private List<PropertyChange> CurrentBatchChanges;
+		private List<ILayoutChange> CurrentBatchChanges;
+        private string CurrentBatchName;
 		private int NestedBatches;
 
 		internal void NotifyLayoutChanged(ILayoutChange change)
 		{
 			if (!(IsLoading || IsAssigningProperties))
 			{
-				if(change is PropertyChange propChange && CurrentBatchChanges != null)
-					CurrentBatchChanges.Add(propChange);
+				if(CurrentBatchChanges != null)
+					CurrentBatchChanges.Add(change);
 				else
 					OnLayoutChanged(new LayoutChangedEventArgs(change));
 			}
@@ -370,15 +474,17 @@ namespace SiGen.StringedInstruments.Layout
 			LayoutChanged?.Invoke(this, args);
 		}
 
-		internal void StartBatchChanges()
+		internal void StartBatchChanges(string name = null)
 		{
 			if (!(IsLoading || IsAssigningProperties))
 			{
 				if(CurrentBatchChanges == null)
-					CurrentBatchChanges = new List<PropertyChange>();
+                {
+                    CurrentBatchChanges = new List<ILayoutChange>();
+                    CurrentBatchName = name ?? string.Empty;
+                }
 				NestedBatches++;
 			}
-				
 		}
 
 		internal void FinishBatchChanges()
@@ -389,8 +495,8 @@ namespace SiGen.StringedInstruments.Layout
 				{
 					if (CurrentBatchChanges.Count == 1)
 						OnLayoutChanged(new LayoutChangedEventArgs(CurrentBatchChanges[0]));
-					else
-						OnLayoutChanged(new LayoutChangedEventArgs(new BatchChange(CurrentBatchChanges)));
+					else if (CurrentBatchChanges.Count > 1)
+                        OnLayoutChanged(new LayoutChangedEventArgs(new BatchChange(CurrentBatchName, CurrentBatchChanges)));
 					CurrentBatchChanges = null;
 				}
 			}
@@ -410,73 +516,128 @@ namespace SiGen.StringedInstruments.Layout
 
 		public void UndoChange(ILayoutChange change)
 		{
-			ApplyLayoutChange(change, false);
+            ApplyLayoutChange(change, false);
 		}
 
 		public void RedoChange(ILayoutChange change)
 		{
-			ApplyLayoutChange(change, true);
+            ApplyLayoutChange(change, true);
 		}
 
-		private void ApplyLayoutChange(ILayoutChange change, bool setNewValue)
-		{
-			//IsAssigningProperties = true;
-			try
-			{
-				var allChanges = change.GetChanges().ToList();
-				if (!setNewValue)
-					allChanges.Reverse();
+        private void ApplyLayoutChange(ILayoutChange change, bool setNewValue)
+        {
+            if (change is PropertyChange propertyChange)
+                ApplyPropertyChange(propertyChange, setNewValue);
+            else if (change is CollectionChange collectionChange)
+                ApplyCollectionChange(collectionChange, setNewValue);
+            else if (change is BatchChange batchChange)
+            {
+                var allChanges = batchChange.LayoutChanges.ToList();
+                if (!setNewValue)
+                    allChanges.Reverse();
 
-				foreach (var changedProp in allChanges)
-				{
-					if (changedProp.IsField)
-					{
-						FieldInfo fi = null;
-						if (changedProp.Component == null)
-							fi = GetType().GetField(changedProp.Property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-						else
-							fi = changedProp.Component.GetType().GetField(changedProp.Property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                foreach (var changeInfo in allChanges)
+                    ApplyLayoutChange(changeInfo, setNewValue);
+            }
+        }
 
-						if (changedProp.Index.HasValue)
-						{
-							var arrayValue = (IList)fi.GetValue((object)changedProp.Component ?? this);
-							arrayValue[changedProp.Index.Value] = setNewValue ? changedProp.NewValue : changedProp.OldValue;
-						}
-						else
-							fi.SetValue((object)changedProp.Component ?? this, setNewValue ? changedProp.NewValue : changedProp.OldValue);
-					}
-					else
-					{
-						PropertyInfo pi = null;
-						object ownerObject = (object)changedProp.Component ?? this;
+        //TODO: move code into each Change type class and clean-up the structure
+        private void ApplyPropertyChange(PropertyChange propChange, bool setNewValue)
+        {
+            var ownerType = propChange.Component?.GetType() ?? GetType();
+            var ownerObject = (object)propChange.Component ?? this;
+            var valueToSet = setNewValue ? propChange.NewValue : propChange.OldValue;
 
-						if (changedProp.Property.Contains("."))
-						{
-							string[] propNames = changedProp.Property.Split('.');
-							pi = ownerObject.GetType().GetProperty(propNames[0]);
-							ownerObject = pi.GetValue(ownerObject);
-							pi = ownerObject.GetType().GetProperty(propNames[1]);
-						}
-						else
-							pi = ownerObject.GetType().GetProperty(changedProp.Property);
+            if (propChange.IsField)
+            {
+                var fi = ownerType.GetField(propChange.Property, 
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-						pi.SetValue(ownerObject, setNewValue ? changedProp.NewValue : changedProp.OldValue);
+                if (propChange.Index.HasValue)
+                {
+                    var arrayValue = (IList)fi.GetValue(ownerObject);
+                    arrayValue[propChange.Index.Value] = valueToSet;
+                }
+                else
+                    fi.SetValue(ownerObject, valueToSet);
 
-                        if (changedProp.Property.Contains("."))
-                            NotifyLayoutChanged(new PropertyChange(changedProp.Component, changedProp.Property, changedProp.Index, changedProp.NewValue, changedProp.OldValue, changedProp.IsField));
-					}
+                if (ownerObject is LayoutComponent component)
+                {
+                    component.OnSetFieldValue(propChange.Name, fi.GetValue(ownerObject), propChange.Index, valueToSet);
+                }
 
-				}
-			}
-			finally
-			{
-				//IsAssigningProperties = false;
-			}
-		}
+                NotifyLayoutChanged(new PropertyChange(propChange.Component, propChange.Property,
+                            setNewValue ? propChange.OldValue : propChange.NewValue,
+                            setNewValue ? propChange.NewValue : propChange.OldValue,
+                            true));
+            }
+            else
+            {
+                PropertyInfo pi = null;
+                bool isSubProperty = false;
 
-		#endregion
+                if (propChange.Property.Contains("."))
+                {
+                    string[] propNames = propChange.Property.Split('.');
+                    pi = ownerType.GetProperty(propNames[0]);
+                    ownerObject = pi.GetValue(ownerObject);
+                    ownerType = ownerObject.GetType();
+                    pi = ownerType.GetProperty(propNames[1]);
+                    isSubProperty = true;
+                }
+                else
+                    pi = ownerType.GetProperty(propChange.Property);
 
-		public RectangleM GetLayoutBounds()
+                pi.SetValue(ownerObject, valueToSet);
+
+                if (isSubProperty)
+                {
+                    NotifyLayoutChanged(new PropertyChange(propChange.Component,
+                        propChange.Property, propChange.Index,
+                        propChange.NewValue, propChange.OldValue,
+                        propChange.IsField));
+                }
+            }
+        }
+
+        private void ApplyCollectionChange(CollectionChange changeData, bool setNewValue)
+        {
+            if (setNewValue) //redo
+            {
+                if (changeData.Action == System.ComponentModel.CollectionChangeAction.Remove)
+                {
+                    foreach (var item in changeData.ChangedItems)
+                        changeData.Collection.Remove(item.Item);
+                }
+                else
+                {
+                    foreach (var item in changeData.ChangedItems)
+                        changeData.Collection.Insert(item.NewIndex, item.Item);
+                }
+            }
+            else //Undo
+            {
+                if (changeData.Action == System.ComponentModel.CollectionChangeAction.Remove)
+                {
+                    foreach (var item in changeData.ChangedItems.Reverse())
+                        changeData.Collection.Insert(item.OldIndex, item.Item);
+                }
+                else
+                {
+                    foreach (var item in changeData.ChangedItems)
+                        changeData.Collection.Remove(item.Item);
+                }
+            }
+
+            if (changeData.Collection == _Strings)
+            {
+                _NumberOfStrings = _Strings.Count;
+            }
+        }
+
+        #endregion
+
+        public RectangleM GetLayoutBounds()
         {
             if (VisualElements.Count == 0)
                 return RectangleM.Empty;
@@ -504,6 +665,21 @@ namespace SiGen.StringedInstruments.Layout
             }
             _CachedBounds = RectangleM.FromLTRB(minX, maxY, maxX, minY);
             return _CachedBounds;
+        }
+
+        public T GetElement<T>(Predicate<T> predicate) where T : VisualElement
+        {
+            return VisualElements.OfType<T>().FirstOrDefault(x => predicate(x));
+        }
+
+        public IEnumerable<T> GetElements<T>(Predicate<T> predicate) where T : VisualElement
+        {
+            return VisualElements.OfType<T>().Where(x => predicate(x));
+        }
+
+        public IEnumerable<T> GetElements<T>() where T : VisualElement
+        {
+            return VisualElements.OfType<T>();
         }
 
         #region XML serialization
@@ -546,6 +722,10 @@ namespace SiGen.StringedInstruments.Layout
                     Enum.GetNames(typeof(StringSpacingAlignment)).Aggregate((i, j) => i + ", " + j)
                     )
                 ));
+                root.Add(new XComment(string.Format("StringSpacingMethod: {0}",
+                    Enum.GetNames(typeof(StringSpacingMethod)).Aggregate((i, j) => i + ", " + j)
+                    )
+                ));
                 root.Add(StringSpacing.Serialize("StringSpacings"));
             }
 
@@ -572,22 +752,31 @@ namespace SiGen.StringedInstruments.Layout
             var root = document.Root;
 
             var layout = new SILayout() { IsLoading = true };
-            layout.NumberOfStrings = root.Element("Strings").GetIntAttribute("Count");
-            layout.ScaleLengthMode = DeserializeProperty<ScaleLengthType>(root.Element("ScaleLength").Attribute("Type"));
-            layout.CurrentScaleLength.Deserialize(root.Element("ScaleLength"));
 
-            layout.Margins.Deserialize(root.Element("FingerboardMargins"));
+            layout._NumberOfStrings = root.Element("Strings").GetIntAttribute("Count");
+            for (int i = 0; i < layout.NumberOfStrings; i++)
+                layout._Strings.Add(new SIString(layout, i));
+            layout.RebuildComponentStringData();
 
             if (root.ContainsAttribute("Name"))
                 layout.LayoutName = root.Attribute("Name").Value;
 
-            if (root.ContainsElement("LeftHanded"))
-                layout.LeftHanded = DeserializeProperty<bool>(root.Element("LeftHanded"));
+            if (root.HasElement("LeftHanded", out XElement lhElem))
+                layout.LeftHanded = lhElem.ReadAttribute("Value", false);
+
+            if (root.HasElement("ScaleLength", out XElement slElem))
+            {
+                layout.ScaleLengthMode = slElem.ReadAttribute("Type", ScaleLengthType.Single);
+                layout.CurrentScaleLength.Deserialize(slElem);
+            }
+            
+
+            layout.Margins.Deserialize(root.Element("FingerboardMargins"));
 
             for (int i = 0; i < layout.NumberOfStrings; i++)
             {
                 var stringElem = root.Element("Strings").Elements("String").First(s => s.Attribute("Index").Value == i.ToString());
-                layout.Strings[i].Deserialize(stringElem);
+                layout._Strings[i].Deserialize(stringElem);
             }
 
             if (root.ContainsElement("Temperament"))
@@ -614,25 +803,25 @@ namespace SiGen.StringedInstruments.Layout
             //set default values for other scale length managers
             if (ScaleLengthMode == ScaleLengthType.Single)
             {
-                MultiScaleConfig.Treble = SingleScaleConfig.Length;
-                MultiScaleConfig.Bass = SingleScaleConfig.Length + Measure.Inches(1);
+                DualScaleConfig.Treble = SingleScaleConfig.Length;
+                DualScaleConfig.Bass = SingleScaleConfig.Length + Measure.Inches(1);
             }
-            else if (ScaleLengthMode == ScaleLengthType.Multiple)
-                SingleScaleConfig.Length = MultiScaleConfig.Treble;
+            else if (ScaleLengthMode == ScaleLengthType.Dual)
+                SingleScaleConfig.Length = DualScaleConfig.Treble;
             else
             {
-                MultiScaleConfig.Treble = ManualScaleConfig.Lengths.Min();
-                MultiScaleConfig.Treble = Measure.Round(MultiScaleConfig.Treble, GetRoundAmount(MultiScaleConfig.Treble));
+                DualScaleConfig.Treble = MultiScaleConfig.Lengths.Min();
+                DualScaleConfig.Treble = Measure.Round(DualScaleConfig.Treble, GetRoundAmount(DualScaleConfig.Treble));
 
-                MultiScaleConfig.Bass = ManualScaleConfig.Lengths.Max();
-                MultiScaleConfig.Bass = Measure.Round(MultiScaleConfig.Bass, GetRoundAmount(MultiScaleConfig.Bass));
+                DualScaleConfig.Bass = MultiScaleConfig.Lengths.Max();
+                DualScaleConfig.Bass = Measure.Round(DualScaleConfig.Bass, GetRoundAmount(DualScaleConfig.Bass));
 
-                if (MultiScaleConfig.Bass == MultiScaleConfig.Treble)
-                    MultiScaleConfig.Bass = MultiScaleConfig.Bass + Measure.Inches(1);
+                if (DualScaleConfig.Bass == DualScaleConfig.Treble)
+                    DualScaleConfig.Bass = DualScaleConfig.Bass + Measure.Inches(1);
 
-                MultiScaleConfig.PerpendicularFretRatio = Strings.Average(s => s.MultiScaleRatio);
+                DualScaleConfig.PerpendicularFretRatio = Strings.Average(s => s.MultiScaleRatio);
 
-                SingleScaleConfig.Length = ManualScaleConfig.Lengths.Average();
+                SingleScaleConfig.Length = MultiScaleConfig.Lengths.Average();
                 SingleScaleConfig.Length = Measure.Round(SingleScaleConfig.Length, GetRoundAmount(SingleScaleConfig.Length));
             }
             
@@ -651,6 +840,7 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
+        //TODO: Revise the utility of this
         private double GetRoundAmount(Measure value)
         {
             if (value.Unit == UnitOfMeasure.Cm)
@@ -658,7 +848,9 @@ namespace SiGen.StringedInstruments.Layout
             else if (value.Unit == UnitOfMeasure.Mm)
                 return 0.1;
             else if (value.Unit == UnitOfMeasure.In)
-                return 1d / 16d;
+                return 0.1;
+            else if (value.Unit == UnitOfMeasure.Feets)
+                return 1d / 12d;
             return 1d;
         }
 
@@ -687,5 +879,25 @@ namespace SiGen.StringedInstruments.Layout
 
         #endregion
 
+        public static SILayout GenerateDefaultLayout()
+        {
+            var stream = typeof(SILayout).Assembly.GetManifestResourceStream("SiGen.Resources.DefaultLayout.sil");
+            return Load(stream);
+            //var layout = new SILayout
+            //{
+            //    LayoutName = "6 Strings Fingerboard Layout",
+            //    IsLoading = true
+            //};
+
+            //layout.InitializeStrings(0, 6);
+            //layout.FretsTemperament = Temperament.Equal;
+            //layout.StringSpacingMode = StringSpacingType.Simple;
+            //layout.ScaleLengthMode = ScaleLengthType.Single;
+            //layout.SingleScaleConfig.Length = Measure.Inches(25.5);
+            //layout.SimpleStringSpacing.StringSpacingAtNut = Measure.Mm(7.3);
+            //layout.SimpleStringSpacing.StringSpreadAtBridge = Measure.Mm(10.5);
+            //layout.IsLoading = false;
+            //return layout;
+        }
     }
 }

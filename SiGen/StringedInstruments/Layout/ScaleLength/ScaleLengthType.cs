@@ -9,7 +9,9 @@ namespace SiGen.StringedInstruments.Layout
     public enum ScaleLengthType
     {
         Single,
-        Multiple,
-        Individual
+        [OldValue("Multiple")]
+        Dual,
+        [OldValue("Individual")]
+        Multiple
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SiGen.Common;
+using SiGen.Configuration;
 using SiGen.StringedInstruments.Layout;
 using System;
 using System.Collections.Generic;
@@ -22,18 +23,13 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         public LayoutViewer Viewer { get { return layoutViewer1; } }
 
-        public LayoutDocument CurrentFile
+        public LayoutDocument CurrentDocument
         {
-            get { return _CurrentFile; }
-            set
-            {
-                if(value != _CurrentFile)
-                {
-                    _CurrentFile = value;
-                    Viewer.CurrentLayout = value != null ? value.Layout : null;
-                }
-            }
+            get => _CurrentFile;
+            set => SetCurrentLayout(value);
         }
+
+        public SILayout CurrentLayout => CurrentDocument?.Layout;
 
         public LayoutEditorWindow Window { get; }
 
@@ -41,12 +37,53 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             InitializeComponent();
             Window = window;
+            DisplayOptionsDropDown.DropDown.Closing += DropDown_Closing;
+        }
+
+        private void DropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        {
+            if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
+                e.Cancel = true;
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             ScreenDPI = 109;
+            Viewer.EnableMeasureTool = true;
+            Viewer.SetDisplayConfig(AppConfig.Current.DisplayConfig);
+            //Viewer.DisplayConfig.Strings.RenderMode = Configuration.Display.LineRenderMode.RealisticLook;
+            //Viewer.DisplayConfig.Frets.RenderMode = Configuration.Display.LineRenderMode.RealisticLook;
+        }
+
+        private void SetCurrentLayout(LayoutDocument value)
+        {
+            if (value != _CurrentFile)
+            {
+                if (_CurrentFile != null)
+                {
+                    _CurrentFile.Layout.NumberOfStringsChanged -= Layout_NumberOfStringsChanged;
+                }
+
+                _CurrentFile = value;
+
+                if (_CurrentFile != null)
+                {
+                    _CurrentFile.Layout.NumberOfStringsChanged += Layout_NumberOfStringsChanged;
+                }
+
+                Viewer.CurrentLayout = value?.Layout;
+            }
+
+        }
+
+        private void Layout_NumberOfStringsChanged(object sender, EventArgs e)
+        {
+            //if (CurrentDocument.IsNew)
+            //{
+            //    Text = $"New {CurrentLayout.NumberOfStrings} Strings Layout";
+            //    CurrentLayout.LayoutName = LayoutDocument.GenerateLayoutName(CurrentLayout);
+            //}
         }
 
         private void toolStripStatusLabel1_Click(object sender, EventArgs e)
@@ -59,14 +96,14 @@ namespace SiGen.UI.Controls.LayoutEditors
             var currentZoom = Viewer.Zoom;
             var dpi = ScreenDPI == 0 ? 96 : ScreenDPI;
             
-            tsLblZoom.Text = string.Format("Zoom: {0:0.##}%", (currentZoom / (dpi / 2.54)) * 100);
+            ZoomToolstripLabel.Text = string.Format("Zoom: {0:0.##}%", (currentZoom / (dpi / 2.54)) * 100);
         }
 
         private void cmsDocumentTab_Opening(object sender, CancelEventArgs e)
         {
             tsmiCloseOthers.Enabled = DockPanel.DocumentsCount > 1;
             tsmiCloseRight.Enabled = GetTabIndex() < DockPanel.DocumentsCount - 1;
-            tsmiOpenFileDirectory.Enabled = !string.IsNullOrEmpty(CurrentFile.FileName);
+            tsmiOpenFileDirectory.Enabled = !string.IsNullOrEmpty(CurrentDocument.FilePath);
         }
 
         private void tsmiCloseLayout_Click(object sender, EventArgs e)
@@ -98,17 +135,79 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         private void tsmiSave_Click(object sender, EventArgs e)
         {
-            Window.SaveLayout(CurrentFile);
+            Window.SaveLayout(CurrentDocument);
         }
 
         private void tsmiSaveAS_Click(object sender, EventArgs e)
         {
-            Window.SaveLayout(CurrentFile, true);
+            Window.SaveLayout(CurrentDocument, true);
         }
 
         private void tsmiOpenFileDirectory_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", $"/select, \"{CurrentFile.FileName}\"");
+            Process.Start("explorer.exe", $"/select, \"{CurrentDocument.FilePath}\"");
+        }
+
+        private void ResetCameraButton_Click(object sender, EventArgs e)
+        {
+            Viewer.ResetCamera();
+        }
+
+        private bool UpdatingDisplayOptionsMenuItem;
+
+        private void DisplayOptionsDropDown_DropDownOpening(object sender, EventArgs e)
+        {
+            UpdatingDisplayOptionsMenuItem = true;
+
+            DisplayStringsMenuItem.Checked = Viewer.DisplayConfig.ShowStrings;
+            DisplayStringCentersMenuItem.Checked = Viewer.DisplayConfig.ShowMidlines;
+            DisplayFretsMenuItem.Checked = Viewer.DisplayConfig.ShowFrets;
+            DisplayMarginsMenuItem.Checked = Viewer.DisplayConfig.ShowMargins;
+            DisplayFingerboardMenuItem.Checked = Viewer.DisplayConfig.ShowFingerboard;
+            DisplayCenterLineMenuItem.Checked = Viewer.DisplayConfig.ShowCenterLine;
+
+            UpdatingDisplayOptionsMenuItem = false;
+        }
+
+        private void DisplayOptionsMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            if (UpdatingDisplayOptionsMenuItem)
+                return;
+
+            if (sender == DisplayStringsMenuItem)
+            {
+                Viewer.DisplayConfig.ShowStrings = DisplayStringsMenuItem.Checked;
+            }
+            else if (sender == DisplayStringCentersMenuItem)
+            {
+                Viewer.DisplayConfig.ShowMidlines = DisplayStringCentersMenuItem.Checked;
+            }
+            else if (sender == DisplayFretsMenuItem)
+            {
+                Viewer.DisplayConfig.ShowFrets = DisplayFretsMenuItem.Checked;
+            }
+            else if (sender == DisplayMarginsMenuItem)
+            {
+                Viewer.DisplayConfig.ShowMargins = DisplayMarginsMenuItem.Checked;
+            }
+            else if (sender == DisplayFingerboardMenuItem)
+            {
+                Viewer.DisplayConfig.ShowFingerboard= DisplayFingerboardMenuItem.Checked;
+            }
+            else if (sender == DisplayCenterLineMenuItem)
+            {
+                Viewer.DisplayConfig.ShowCenterLine = DisplayCenterLineMenuItem.Checked;
+            }
+        }
+
+        private void tsbMeasureTool_CheckedChanged(object sender, EventArgs e)
+        {
+            Viewer.EnableMeasureTool = tsbMeasureTool.Checked;
+        }
+
+        private void tsmiRename_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

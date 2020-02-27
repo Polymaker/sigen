@@ -23,21 +23,18 @@ namespace SiGen.StringedInstruments.Layout.Visual
             set { _IsSideEdge = value; }
         }
 
-        public FingerboardEdge()
-        {
-            _ElementType = VisualElementType.FingerboardEdge;
-        }
+        public override VisualElementType ElementType => VisualElementType.FingerboardEdge;
+
+        public FingerboardEdge() { }
 
         public FingerboardEdge(PointM p1, PointM p2)
         {
-            _ElementType = VisualElementType.FingerboardEdge;
             Points.Add(p1);
             Points.Add(p2);
         }
 
         public FingerboardEdge(IEnumerable<PointM> points)
         {
-            _ElementType = VisualElementType.FingerboardEdge;
             foreach (var pt in points)
                 Points.Add(pt);
         }
@@ -56,7 +53,9 @@ namespace SiGen.StringedInstruments.Layout.Visual
             get { return true; }
         }
 
-        public FingerboardSideEdge(PointM p1, PointM p2, FingerboardSide side) : base(p1, p2, VisualElementType.FingerboardEdge)
+        public override VisualElementType ElementType => VisualElementType.FingerboardEdge;
+
+        public FingerboardSideEdge(PointM p1, PointM p2, FingerboardSide side) : base(p1, p2)
         {
             _Side = side;
             RealEnd = PointM.Empty;

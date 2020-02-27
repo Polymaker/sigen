@@ -110,26 +110,26 @@ namespace SiGen.Measuring
 
         public static RectangleM BoundingRectangle(IEnumerable<PointM> points)
         {
-            Measure minX = Measure.Zero;
-            Measure maxX = Measure.Zero;
-            Measure minY = Measure.Zero;
-            Measure maxY = Measure.Zero;
+            Measure minX = Measure.Empty;
+            Measure maxX = Measure.Empty;
+            Measure minY = Measure.Empty;
+            Measure maxY = Measure.Empty;
 
             foreach (var pt in points)
             {
                 if (pt.IsEmpty)
                     continue;
-                if (pt.X < minX)
+                if (minX.IsEmpty || pt.X < minX)
                     minX = pt.X;
-                if (pt.Y < minY)
+                if (minY.IsEmpty || pt.Y < minY)
                     minY = pt.Y;
-                if (pt.X > maxX)
+                if (maxX.IsEmpty || pt.X > maxX)
                     maxX = pt.X;
-                if (pt.Y > maxY)
+                if (maxY.IsEmpty || pt.Y > maxY)
                     maxY = pt.Y;
             }
 
-            return RectangleM.FromLTRB(minX, maxY, maxX, minY);
+            return FromLTRB(minX, maxY, maxX, minY);
         }
 
         #endregion
@@ -162,5 +162,15 @@ namespace SiGen.Measuring
         }
 
         #endregion
+
+
+        public bool IntersectsWith(RectangleM rect)
+        {
+            return rect.Left < Right &&
+                Left < rect.Right &&
+                rect.Bottom < Top && 
+                Bottom < rect.Top;
+        }
+
     }
 }

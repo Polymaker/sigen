@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace SiGen.StringedInstruments.Layout
 {
     public enum FingerboardSide
     {
+        [LocDescription("FingerboardSide_Treble")]
         Treble,
+        [LocDescription("FingerboardSide_Bass")]
         Bass
     }
 }

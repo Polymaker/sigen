@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using SiGen.StringedInstruments.Layout;
 using SiGen.Measuring;
 using SiGen.Utilities;
+using SiGen.Resources;
+using System.Globalization;
 
 namespace SiGen.UI.Controls
 {
@@ -17,6 +19,8 @@ namespace SiGen.UI.Controls
     {
         private ScaleLengthType EditMode;
         private List<FretPosition> FretPositions;
+        private Font SuperscriptFont;
+        private int MaxSuperscriptWidth;
 
         class FretPosition
         {
@@ -30,6 +34,32 @@ namespace SiGen.UI.Controls
             InitializeComponent();
             FretPositions = new List<FretPosition>();
             dgvScaleLengths.AutoGenerateColumns = false;
+            InitSuperscriptFont();
+        }
+
+        private void InitSuperscriptFont()
+        {
+            SuperscriptFont = new Font(cboParallelFret.Font.FontFamily, Font.Size * 0.7f);
+
+            string maxSuffix = "";
+
+            switch (CultureInfo.CurrentUICulture.TwoLetterISOLanguageName)
+            {
+                default:
+                case "en":
+                    maxSuffix = "rd";
+                    break;
+                case "fr":
+                    maxSuffix = "ième";
+                    break;
+            }
+
+            MaxSuperscriptWidth = TextRenderer.MeasureText(maxSuffix, SuperscriptFont).Width;
+        }
+
+        private void cboParallelFret_FontChanged(object sender, EventArgs e)
+        {
+            InitSuperscriptFont();
         }
 
         private void FetchFretPositions()
@@ -43,7 +73,7 @@ namespace SiGen.UI.Controls
                 FretPositions.Add(new FretPosition()
                 {
                     FretNumber = 0,
-                    Name = "Nut",
+                    Name = Localizations.FingerboardEnd_Nut,
                     PositionRatio = 0
                 });
                 
@@ -53,7 +83,7 @@ namespace SiGen.UI.Controls
                     FretPositions.Add(new FretPosition()
                     {
                         FretNumber = i,
-                        Name = $"{i}{i.GetSuffix()} Fret",
+                        Name = $"{i}{i.GetSuffix()} {Localizations.Words_Fret}",
                         PositionRatio = ratio
                     });
                 }
@@ -61,7 +91,7 @@ namespace SiGen.UI.Controls
                 FretPositions.Add(new FretPosition()
                 {
                     FretNumber = FretPositions.Count,
-                    Name = "Bridge",
+                    Name = Localizations.FingerboardEnd_Bridge,
                     PositionRatio = 1
                 });
 
@@ -75,6 +105,8 @@ namespace SiGen.UI.Controls
                 cboParallelFret.DisplayMember = "Name";
                 cboParallelFret.ValueMember = "FretNumber";
                 cboParallelFret.DataSource = FretPositions;
+
+                CalculateMaxCboItemWidth();
             }
         }
 
@@ -130,11 +162,11 @@ namespace SiGen.UI.Controls
             mtbTrebleLength.Enabled = (CurrentLayout != null);
             mtbBassLength.Enabled = (CurrentLayout != null);
 
-            SetControlsVisibility(EditMode == ScaleLengthType.Multiple, lblBass, lblMultiScaleRatio, lblParallelFret, mtbBassLength, nubMultiScaleRatio, cboParallelFret);
+            SetControlsVisibility(EditMode == ScaleLengthType.Dual, lblBass, lblMultiScaleRatio, lblParallelFret, mtbBassLength, nubMultiScaleRatio, cboParallelFret);
 
-            lblTreble.Visible = (EditMode != ScaleLengthType.Individual);
-            mtbTrebleLength.Visible = (EditMode != ScaleLengthType.Individual);
-            dgvScaleLengths.Visible = (EditMode == ScaleLengthType.Individual);
+            lblTreble.Visible = (EditMode != ScaleLengthType.Multiple);
+            mtbTrebleLength.Visible = (EditMode != ScaleLengthType.Multiple);
+            dgvScaleLengths.Visible = (EditMode == ScaleLengthType.Multiple);
             
             SetSelectedEditMode(EditMode);
 
@@ -145,19 +177,19 @@ namespace SiGen.UI.Controls
                     case ScaleLengthType.Single:
                         mtbTrebleLength.Value = CurrentLayout.SingleScaleConfig.Length;
                         mtbTrebleLength.AllowEmptyValue = false;
-                        lblTreble.Text = "Length";
+                        lblTreble.Text = Localizations.Words_Length;
                         break;
-                    case ScaleLengthType.Multiple:
+                    case ScaleLengthType.Dual:
                         {
-                            mtbTrebleLength.Value = CurrentLayout.MultiScaleConfig.Treble;
+                            mtbTrebleLength.Value = CurrentLayout.DualScaleConfig.Treble;
                             mtbTrebleLength.AllowEmptyValue = false;
-                            mtbBassLength.Value = CurrentLayout.MultiScaleConfig.Bass;
-                            nubMultiScaleRatio.Value = CurrentLayout.MultiScaleConfig.PerpendicularFretRatio;
-                            SelectClosestFretPosition(CurrentLayout.MultiScaleConfig.PerpendicularFretRatio);
-                            lblTreble.Text = "Treble";
+                            mtbBassLength.Value = CurrentLayout.DualScaleConfig.Bass;
+                            nubMultiScaleRatio.Value = CurrentLayout.DualScaleConfig.PerpendicularFretRatio;
+                            SelectClosestFretPosition(CurrentLayout.DualScaleConfig.PerpendicularFretRatio);
+                            lblTreble.Text = Localizations.FingerboardSide_Treble;
                         }
                         break;
-                    case ScaleLengthType.Individual:
+                    case ScaleLengthType.Multiple:
                         dgvScaleLengths.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
                         break;
                 }
@@ -203,9 +235,9 @@ namespace SiGen.UI.Controls
             if (rbSingle.Checked)
                 return ScaleLengthType.Single;
             else if (rbDual.Checked)
-                return ScaleLengthType.Multiple;
+                return ScaleLengthType.Dual;
             else if (rbMultiple.Checked)
-                return ScaleLengthType.Individual;
+                return ScaleLengthType.Multiple;
             return ScaleLengthType.Single;
         }
 
@@ -219,10 +251,10 @@ namespace SiGen.UI.Controls
                     case ScaleLengthType.Single:
                         rbSingle.Checked = true;
                         break;
-                    case ScaleLengthType.Multiple:
+                    case ScaleLengthType.Dual:
                         rbDual.Checked = true;
                         break;
-                    case ScaleLengthType.Individual:
+                    case ScaleLengthType.Multiple:
                         rbMultiple.Checked = true;
                         break;
                 }
@@ -239,24 +271,24 @@ namespace SiGen.UI.Controls
             {
                 if (EditMode == ScaleLengthType.Single)
                     CurrentLayout.SingleScaleConfig.Length = mtbTrebleLength.Value;
-                else if (EditMode == ScaleLengthType.Multiple)
-                    CurrentLayout.MultiScaleConfig.Treble = mtbTrebleLength.Value;
+                else if (EditMode == ScaleLengthType.Dual)
+                    CurrentLayout.DualScaleConfig.Treble = mtbTrebleLength.Value;
                 CurrentLayout.RebuildLayout();
             }
         }
 
         private void mtbBassLength_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsLoading && CurrentLayout != null && EditMode == ScaleLengthType.Multiple)
+            if (!IsLoading && CurrentLayout != null && EditMode == ScaleLengthType.Dual)
             {
-                CurrentLayout.MultiScaleConfig.Bass = mtbBassLength.Value;
+                CurrentLayout.DualScaleConfig.Bass = mtbBassLength.Value;
                 CurrentLayout.RebuildLayout();
             }
         }
 
         private void nubMultiScaleRatio_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsLoading && CurrentLayout != null && EditMode == ScaleLengthType.Multiple && !FlagManager["AdjustPositionRatio"])
+            if (!IsLoading && CurrentLayout != null && EditMode == ScaleLengthType.Dual && !FlagManager["AdjustPositionRatio"])
             {
                 var closestFret = SelectClosestFretPosition(nubMultiScaleRatio.Value);
 
@@ -266,14 +298,14 @@ namespace SiGen.UI.Controls
                         nubMultiScaleRatio.Value = closestFret.PositionRatio;// Math.Round(closestFret.PositionRatio, 4);
                 }
 
-                CurrentLayout.MultiScaleConfig.PerpendicularFretRatio = nubMultiScaleRatio.Value;
+                CurrentLayout.DualScaleConfig.PerpendicularFretRatio = nubMultiScaleRatio.Value;
                 CurrentLayout.RebuildLayout();
             }
         }
 
         private void cboParallelFret_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!IsLoading && CurrentLayout != null && EditMode == ScaleLengthType.Multiple && !FlagManager["DetermineFretAlignment"])
+            if (!IsLoading && CurrentLayout != null && EditMode == ScaleLengthType.Dual && !FlagManager["DetermineFretAlignment"])
             {
                 if(cboParallelFret.SelectedItem != null)
                 {
@@ -286,7 +318,7 @@ namespace SiGen.UI.Controls
         #endregion
 
 
-        private FretPosition SelectClosestFretPosition(double fretRation, double tolerance = 0.0005)
+        private FretPosition SelectClosestFretPosition(double fretRatio, double tolerance = 0.0005)
         {
             var closestFretPos = FretPositions.FirstOrDefault(p => p.PositionRatio.EqualOrClose(nubMultiScaleRatio.Value, tolerance));
             using (FlagManager.UseFlag("DetermineFretAlignment"))
@@ -299,9 +331,25 @@ namespace SiGen.UI.Controls
             return closestFretPos;
         }
 
-        #region Manual Mode
+		public string GetPerpendicularFretName()
+		{
+			if(EditMode == ScaleLengthType.Dual)
+			{
+				var current = cboParallelFret.SelectedItem as FretPosition;
+				return current?.Name ?? Localizations.Words_CustomRatio;
+			}
+			return string.Empty;
+		}
 
-        private void dgvScaleLengths_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+		public string GetPerpendicularFretName(double fretRatio, double tolerance = 0.0005)
+		{
+			var closestFretPos = FretPositions.FirstOrDefault(p => p.PositionRatio.EqualOrClose(fretRatio, tolerance));
+			return closestFretPos?.Name ?? Localizations.Words_CustomRatio;
+		}
+
+		#region Manual Mode
+
+		private void dgvScaleLengths_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (!IsLoading && CurrentLayout != null && e.RowIndex >= 0)
             {
@@ -327,14 +375,10 @@ namespace SiGen.UI.Controls
 
         private void dgvScaleLengths_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
-            if (e.ColumnIndex == colScaleLength.Index)
+            if (e.ColumnIndex == colMultiScaleRatio.Index)
             {
-
-            }
-            else if (e.ColumnIndex == colMultiScaleRatio.Index)
-            {
-                double ratio = 0;
-                if (!double.TryParse((string)e.FormattedValue, out ratio) || ratio < 0 || ratio > 1)
+                if (!double.TryParse((string)e.FormattedValue, out double ratio)
+                    || ratio < 0 || ratio > 1)
                     e.Cancel = true;
             }
         }
@@ -350,6 +394,15 @@ namespace SiGen.UI.Controls
                     e.Value = newValue;
                     e.ParsingApplied = true;
                 }
+            }
+        }
+
+        private void dgvScaleLengths_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.ColumnIndex == colStringNumber.Index)
+            {
+                var rowStr = (SIString)dgvScaleLengths.Rows[e.RowIndex].DataBoundItem;
+                e.Value = rowStr.Index + 1;
             }
         }
 
@@ -400,22 +453,96 @@ namespace SiGen.UI.Controls
             return base.ScrollToControl(activeControl);
         }
 
+        private int MaxCboItemWidth = 0;
+
+
+        private void CalculateMaxCboItemWidth()
+        {
+            MaxCboItemWidth = 0;
+
+            using (var g = cboParallelFret.CreateGraphics())
+            {
+                MaxCboItemWidth = (int)g.MeasureString(Localizations.Words_CustomRatio, cboParallelFret.Font).Width;
+
+                foreach (FretPosition item in cboParallelFret.Items)
+                {
+                    var txtSize = g.MeasureString(item.Name, cboParallelFret.Font);
+                    if (txtSize.Width > MaxCboItemWidth)
+                        MaxCboItemWidth = (int)txtSize.Width;
+                }
+            }
+        }
+
         private void cboParallelFret_DrawItem(object sender, DrawItemEventArgs e)
         {
             e.DrawBackground();
 
             using (var textBrush = new SolidBrush(e.ForeColor))
-            using(var sf = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center })
+            using (var sf = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center })
             {
+                sf.FormatFlags |= StringFormatFlags.NoWrap;
+
+                var fretNumBounds = new Rectangle(e.Bounds.X, e.Bounds.Y, e.Font.Height * 2, e.Bounds.Height);
+                var fretOrdinalBounds = new Rectangle(fretNumBounds.Right - 2, e.Bounds.Y,
+                    MaxSuperscriptWidth, e.Bounds.Height);
+
+                var textBounds = e.Bounds;
+                textBounds.X = fretOrdinalBounds.Right;
+                textBounds.Width = e.Bounds.Right - textBounds.Left;
+
+                var ratioBounds = new Rectangle(e.Bounds.Right - 30, e.Bounds.Y, 30, e.Bounds.Height);
+                bool isHovered = e.State.HasFlag(DrawItemState.Selected) || e.State.HasFlag(DrawItemState.HotLight);
+
                 if (e.Index >= 0)
                 {
                     var fretPos = FretPositions[e.Index];
                     var text = fretPos.Name;
-                    e.Graphics.DrawString(text, e.Font, new SolidBrush(e.ForeColor), e.Bounds, sf);
+
+                    if ((fretPos.PositionRatio % 1) != 0)
+                    {
+                        sf.LineAlignment = StringAlignment.Center;
+                        sf.Alignment = StringAlignment.Far;
+                        e.Graphics.DrawString(fretPos.FretNumber.ToString(), e.Font, textBrush, fretNumBounds, sf);
+
+                        if (MaxSuperscriptWidth > 0)
+                        {
+                            var suffix = NumberHelper.GetSuffix(fretPos.FretNumber, false);
+
+                            sf.LineAlignment = StringAlignment.Near;
+                            sf.Alignment = StringAlignment.Near;
+                            e.Graphics.DrawString(suffix, SuperscriptFont, textBrush, fretOrdinalBounds, sf);
+                        }
+
+                        sf.LineAlignment = StringAlignment.Center;
+                        sf.Alignment = StringAlignment.Near;
+                        e.Graphics.DrawString(Localizations.Words_Fret, e.Font, textBrush, textBounds, sf);
+                    }
+                    else
+                    {
+                        sf.LineAlignment = StringAlignment.Near;
+                        sf.Alignment = StringAlignment.Near;
+                        e.Graphics.DrawString(text, e.Font, textBrush, e.Bounds, sf);
+                    }
+                    
+                    if (!e.State.HasFlag(DrawItemState.ComboBoxEdit))
+                    {
+                        if ((fretPos.PositionRatio * 2) % 1 == 0)
+                        {
+                            sf.LineAlignment = StringAlignment.Center;
+                            sf.Alignment = StringAlignment.Center;
+
+                            e.Graphics.DrawString(fretPos.PositionRatio.ToString(), e.Font, new SolidBrush(isHovered? e.ForeColor : Color.DarkSlateGray), ratioBounds, sf);
+                        }
+                        else
+                        {
+                            e.Graphics.DrawLine(Pens.Gray, ratioBounds.Left + (ratioBounds.Width / 2) - 1, e.Bounds.Top, ratioBounds.Left + (ratioBounds.Width / 2) - 1, e.Bounds.Bottom);
+                        }
+                    }
+                    
                 }
                 else
                 {
-                    e.Graphics.DrawString("Custom", e.Font, new SolidBrush(e.ForeColor), e.Bounds, sf);
+                    e.Graphics.DrawString(Localizations.Words_CustomRatio, e.Font, new SolidBrush(e.ForeColor), e.Bounds, sf);
                 }
             }
         }

@@ -12,7 +12,6 @@ namespace SiGen.StringedInstruments.Layout.Visual
     {
         private List<FretSegment> _Segments;
         private bool _IsStraight;
-        private bool _IsNut;
 
         public List<FretSegment> Segments
         {
@@ -30,15 +29,17 @@ namespace SiGen.StringedInstruments.Layout.Visual
             get { return _IsStraight; }
         }
 
-        public bool IsNut
-        {
-            get { return _IsNut; }
-        }
+        public bool IsNut { get; }
+
+        public LayoutPolyLine LeftPath { get; set; }
+        public LayoutPolyLine RightPath { get; set; }
+
+        public override VisualElementType ElementType => VisualElementType.Fret;
 
         public FretLine(IEnumerable<FretSegment> segments)
         {
             _Segments = new List<FretSegment>(segments.OrderBy(s=>s.String.Index));
-            _IsNut = Segments.All(s => s.IsNut || s.IsVirtual);
+            IsNut = Segments.All(s => s.IsNut || s.IsVirtual);
         }
 
         public void VerifyIsStraight()
@@ -78,7 +79,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
                 var curAngle = Angle.FromPoints(points[i].ToVector(), points[i + 1].ToVector()).Normalized();
                 if (!prevAngle.IsEmpty)
                 {
-                    if(Math.Abs(curAngle.Degrees - prevAngle.Degrees) > 25)
+                    if(MathP.Abs(curAngle.Degrees - prevAngle.Degrees) > 25)
                     {
                         //hard break
                         SplitFret(i - 1);
@@ -108,7 +109,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
             {
                 var curAngle = Angle.FromPoints(points.First().ToVector(), points.ElementAt(i).ToVector());
                 curAngle.Normalize();
-                var angleDiff = Math.Abs(curAngle.Degrees - avgAngle.Degrees);
+                var angleDiff = MathP.Abs(curAngle.Degrees - avgAngle.Degrees);
                 if (angleDiff > tolerance)
                     return false;
                 //if (angleDiff > maxDiff)
@@ -225,6 +226,37 @@ namespace SiGen.StringedInstruments.Layout.Visual
             TrimBetween((LayoutLine)firstBound, (LayoutLine)lastBound, true);
         }
 
+        public ILayoutLine GetExtendedFretLine(Measure amount)
+        {
+            if ((Length + (amount * 2)).NormalizedValue > 0)
+            {
+                if (IsStraight)
+                {
+                    var layoutLine = new LayoutLine(Points.First(), Points.Last());
+                    layoutLine.P2 += (layoutLine.Direction * amount);
+                    layoutLine.P1 += (layoutLine.Direction * (amount * -1));
+                    return layoutLine;
+                }
+                else
+                {
+                    RebuildSpline();
+
+                    var tmpLine = new LayoutPolyLine(Points);
+                    var bounds = GetFretBoundaries(false);
+                    var offset1 = LayoutLine.Offset(bounds.Item1, amount * -1);
+                    var offset2 = LayoutLine.Offset(bounds.Item2, amount);
+
+                    tmpLine.TrimBetween(offset1, offset2, true);
+                    if (Spline != null)
+                        tmpLine.InterpolateSpline(0.5);
+
+                    return tmpLine;
+                }
+            }
+            
+            return null;
+        }
+
         public void RebuildSpline()
         {
             if (Spline != null)
@@ -297,6 +329,12 @@ namespace SiGen.StringedInstruments.Layout.Visual
         {
             base.FlipHandedness();
             _Segments.ForEach(s => s.FlipHandedness());
+
+            if (LeftPath != null)
+            {
+                LeftPath.FlipHandedness();
+                RightPath.FlipHandedness();
+            }
         }
     }
 }

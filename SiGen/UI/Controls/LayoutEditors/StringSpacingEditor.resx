@@ -117,4 +117,676 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="mtbNutSpacing.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="mtbNutSpacing.Location" type="System.Drawing.Point, System.Drawing">
+    <value>93, 22</value>
+  </data>
+  <data name="mtbNutSpacing.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 1</value>
+  </data>
+  <data name="mtbNutSpacing.Size" type="System.Drawing.Size, System.Drawing">
+    <value>122, 20</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="mtbNutSpacing.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;mtbNutSpacing.Name" xml:space="preserve">
+    <value>mtbNutSpacing</value>
+  </data>
+  <data name="&gt;&gt;mtbNutSpacing.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;mtbNutSpacing.Parent" xml:space="preserve">
+    <value>tlpNutSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;mtbNutSpacing.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="mtbNutSpread.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="mtbNutSpread.Location" type="System.Drawing.Point, System.Drawing">
+    <value>221, 22</value>
+  </data>
+  <data name="mtbNutSpread.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 1</value>
+  </data>
+  <data name="mtbNutSpread.Size" type="System.Drawing.Size, System.Drawing">
+    <value>122, 20</value>
+  </data>
+  <data name="mtbNutSpread.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;mtbNutSpread.Name" xml:space="preserve">
+    <value>mtbNutSpread</value>
+  </data>
+  <data name="&gt;&gt;mtbNutSpread.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;mtbNutSpread.Parent" xml:space="preserve">
+    <value>tlpNutSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;mtbNutSpread.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="mtbBridgeSpacing.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="mtbBridgeSpacing.Location" type="System.Drawing.Point, System.Drawing">
+    <value>93, 22</value>
+  </data>
+  <data name="mtbBridgeSpacing.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 1</value>
+  </data>
+  <data name="mtbBridgeSpacing.Size" type="System.Drawing.Size, System.Drawing">
+    <value>122, 20</value>
+  </data>
+  <data name="mtbBridgeSpacing.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;mtbBridgeSpacing.Name" xml:space="preserve">
+    <value>mtbBridgeSpacing</value>
+  </data>
+  <data name="&gt;&gt;mtbBridgeSpacing.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;mtbBridgeSpacing.Parent" xml:space="preserve">
+    <value>tlpBridgeSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;mtbBridgeSpacing.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="mtbBridgeSpread.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="mtbBridgeSpread.Location" type="System.Drawing.Point, System.Drawing">
+    <value>221, 22</value>
+  </data>
+  <data name="mtbBridgeSpread.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 1</value>
+  </data>
+  <data name="mtbBridgeSpread.Size" type="System.Drawing.Size, System.Drawing">
+    <value>122, 20</value>
+  </data>
+  <data name="mtbBridgeSpread.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;mtbBridgeSpread.Name" xml:space="preserve">
+    <value>mtbBridgeSpread</value>
+  </data>
+  <data name="&gt;&gt;mtbBridgeSpread.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;mtbBridgeSpread.Parent" xml:space="preserve">
+    <value>tlpBridgeSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;mtbBridgeSpread.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="lblNutStringSpacing.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="lblNutStringSpacing.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblNutStringSpacing.Location" type="System.Drawing.Point, System.Drawing">
+    <value>131, 3</value>
+  </data>
+  <data name="lblNutStringSpacing.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lblNutStringSpacing.Size" type="System.Drawing.Size, System.Drawing">
+    <value>46, 13</value>
+  </data>
+  <data name="lblNutStringSpacing.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="lblNutStringSpacing.Text" xml:space="preserve">
+    <value>Spacing</value>
+  </data>
+  <data name="&gt;&gt;lblNutStringSpacing.Name" xml:space="preserve">
+    <value>lblNutStringSpacing</value>
+  </data>
+  <data name="&gt;&gt;lblNutStringSpacing.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblNutStringSpacing.Parent" xml:space="preserve">
+    <value>tlpNutSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;lblNutStringSpacing.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="cboNutSpacingMethod.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="tlpNutSpacingAuto.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="tlpNutSpacingAuto.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="tlpNutSpacingAuto.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="lblNutSpacingMethod.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="lblNutSpacingMethod.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblNutSpacingMethod.Location" type="System.Drawing.Point, System.Drawing">
+    <value>44, 49</value>
+  </data>
+  <data name="lblNutSpacingMethod.Size" type="System.Drawing.Size, System.Drawing">
+    <value>43, 13</value>
+  </data>
+  <data name="lblNutSpacingMethod.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="lblNutSpacingMethod.Text" xml:space="preserve">
+    <value>Method</value>
+  </data>
+  <data name="&gt;&gt;lblNutSpacingMethod.Name" xml:space="preserve">
+    <value>lblNutSpacingMethod</value>
+  </data>
+  <data name="&gt;&gt;lblNutSpacingMethod.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblNutSpacingMethod.Parent" xml:space="preserve">
+    <value>tlpNutSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;lblNutSpacingMethod.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lblNutSpacing.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="lblNutSpacing.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblNutSpacing.Location" type="System.Drawing.Point, System.Drawing">
+    <value>21, 24</value>
+  </data>
+  <data name="lblNutSpacing.Size" type="System.Drawing.Size, System.Drawing">
+    <value>66, 13</value>
+  </data>
+  <data name="lblNutSpacing.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="lblNutSpacing.Text" xml:space="preserve">
+    <value>Nut Spacing</value>
+  </data>
+  <data name="&gt;&gt;lblNutSpacing.Name" xml:space="preserve">
+    <value>lblNutSpacing</value>
+  </data>
+  <data name="&gt;&gt;lblNutSpacing.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblNutSpacing.Parent" xml:space="preserve">
+    <value>tlpNutSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;lblNutSpacing.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lblNutTotalSpread.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="lblNutTotalSpread.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblNutTotalSpread.Location" type="System.Drawing.Point, System.Drawing">
+    <value>248, 3</value>
+  </data>
+  <data name="lblNutTotalSpread.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lblNutTotalSpread.Size" type="System.Drawing.Size, System.Drawing">
+    <value>68, 13</value>
+  </data>
+  <data name="lblNutTotalSpread.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="lblNutTotalSpread.Text" xml:space="preserve">
+    <value>Total Spread</value>
+  </data>
+  <data name="&gt;&gt;lblNutTotalSpread.Name" xml:space="preserve">
+    <value>lblNutTotalSpread</value>
+  </data>
+  <data name="&gt;&gt;lblNutTotalSpread.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblNutTotalSpread.Parent" xml:space="preserve">
+    <value>tlpNutSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;lblNutTotalSpread.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="cboNutSpacingAlignment.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="cboNutSpacingAlignment.Location" type="System.Drawing.Point, System.Drawing">
+    <value>93, 71</value>
+  </data>
+  <data name="cboNutSpacingAlignment.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 1</value>
+  </data>
+  <data name="cboNutSpacingAlignment.Size" type="System.Drawing.Size, System.Drawing">
+    <value>250, 21</value>
+  </data>
+  <data name="cboNutSpacingAlignment.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;cboNutSpacingAlignment.Name" xml:space="preserve">
+    <value>cboNutSpacingAlignment</value>
+  </data>
+  <data name="&gt;&gt;cboNutSpacingAlignment.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cboNutSpacingAlignment.Parent" xml:space="preserve">
+    <value>tlpNutSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;cboNutSpacingAlignment.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="lblNutSpacingAlignment.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="lblNutSpacingAlignment.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblNutSpacingAlignment.Location" type="System.Drawing.Point, System.Drawing">
+    <value>34, 74</value>
+  </data>
+  <data name="lblNutSpacingAlignment.Size" type="System.Drawing.Size, System.Drawing">
+    <value>53, 13</value>
+  </data>
+  <data name="lblNutSpacingAlignment.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="lblNutSpacingAlignment.Text" xml:space="preserve">
+    <value>Alignment</value>
+  </data>
+  <data name="&gt;&gt;lblNutSpacingAlignment.Name" xml:space="preserve">
+    <value>lblNutSpacingAlignment</value>
+  </data>
+  <data name="&gt;&gt;lblNutSpacingAlignment.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblNutSpacingAlignment.Parent" xml:space="preserve">
+    <value>tlpNutSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;lblNutSpacingAlignment.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="tlpNutSpacingAuto.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="tlpNutSpacingAuto.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpNutSpacingAuto.MaximumSize" type="System.Drawing.Size, System.Drawing">
+    <value>350, 500</value>
+  </data>
+  <data name="tlpNutSpacingAuto.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>250, 0</value>
+  </data>
+  <data name="tlpNutSpacingAuto.RowCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="tlpNutSpacingAuto.Size" type="System.Drawing.Size, System.Drawing">
+    <value>346, 93</value>
+  </data>
+  <data name="tlpNutSpacingAuto.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;tlpNutSpacingAuto.Name" xml:space="preserve">
+    <value>tlpNutSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;tlpNutSpacingAuto.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpNutSpacingAuto.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tlpNutSpacingAuto.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpNutSpacingAuto.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lblNutSpacingMethod" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lblNutSpacing" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cboNutSpacingMethod" Row="2" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="mtbNutSpacing" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="mtbNutSpread" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lblNutTotalSpread" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lblNutStringSpacing" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cboNutSpacingAlignment" Row="3" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="lblNutSpacingAlignment" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,90,Percent,50,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="cboNutSpacingMethod.Location" type="System.Drawing.Point, System.Drawing">
+    <value>93, 46</value>
+  </data>
+  <data name="cboNutSpacingMethod.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 1</value>
+  </data>
+  <data name="cboNutSpacingMethod.Size" type="System.Drawing.Size, System.Drawing">
+    <value>250, 21</value>
+  </data>
+  <data name="cboNutSpacingMethod.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;cboNutSpacingMethod.Name" xml:space="preserve">
+    <value>cboNutSpacingMethod</value>
+  </data>
+  <data name="&gt;&gt;cboNutSpacingMethod.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cboNutSpacingMethod.Parent" xml:space="preserve">
+    <value>tlpNutSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;cboNutSpacingMethod.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lblBridgeTotalSpread.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="lblBridgeTotalSpread.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblBridgeTotalSpread.Location" type="System.Drawing.Point, System.Drawing">
+    <value>248, 3</value>
+  </data>
+  <data name="lblBridgeTotalSpread.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lblBridgeTotalSpread.Size" type="System.Drawing.Size, System.Drawing">
+    <value>68, 13</value>
+  </data>
+  <data name="lblBridgeTotalSpread.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="lblBridgeTotalSpread.Text" xml:space="preserve">
+    <value>Total Spread</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeTotalSpread.Name" xml:space="preserve">
+    <value>lblBridgeTotalSpread</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeTotalSpread.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeTotalSpread.Parent" xml:space="preserve">
+    <value>tlpBridgeSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeTotalSpread.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="lblBridgeStringSpacing.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="lblBridgeStringSpacing.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblBridgeStringSpacing.Location" type="System.Drawing.Point, System.Drawing">
+    <value>131, 3</value>
+  </data>
+  <data name="lblBridgeStringSpacing.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lblBridgeStringSpacing.Size" type="System.Drawing.Size, System.Drawing">
+    <value>46, 13</value>
+  </data>
+  <data name="lblBridgeStringSpacing.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="lblBridgeStringSpacing.Text" xml:space="preserve">
+    <value>Spacing</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeStringSpacing.Name" xml:space="preserve">
+    <value>lblBridgeStringSpacing</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeStringSpacing.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeStringSpacing.Parent" xml:space="preserve">
+    <value>tlpBridgeSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeStringSpacing.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="tlpBridgeSpacingAuto.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="tlpBridgeSpacingAuto.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="tlpBridgeSpacingAuto.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="cboBridgeSpacingAlignment.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="cboBridgeSpacingAlignment.Location" type="System.Drawing.Point, System.Drawing">
+    <value>93, 71</value>
+  </data>
+  <data name="cboBridgeSpacingAlignment.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 1</value>
+  </data>
+  <data name="cboBridgeSpacingAlignment.Size" type="System.Drawing.Size, System.Drawing">
+    <value>250, 21</value>
+  </data>
+  <data name="cboBridgeSpacingAlignment.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;cboBridgeSpacingAlignment.Name" xml:space="preserve">
+    <value>cboBridgeSpacingAlignment</value>
+  </data>
+  <data name="&gt;&gt;cboBridgeSpacingAlignment.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cboBridgeSpacingAlignment.Parent" xml:space="preserve">
+    <value>tlpBridgeSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;cboBridgeSpacingAlignment.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="cboBridgeSpacingMethod.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="cboBridgeSpacingMethod.Location" type="System.Drawing.Point, System.Drawing">
+    <value>93, 46</value>
+  </data>
+  <data name="cboBridgeSpacingMethod.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 1</value>
+  </data>
+  <data name="cboBridgeSpacingMethod.Size" type="System.Drawing.Size, System.Drawing">
+    <value>250, 21</value>
+  </data>
+  <data name="cboBridgeSpacingMethod.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;cboBridgeSpacingMethod.Name" xml:space="preserve">
+    <value>cboBridgeSpacingMethod</value>
+  </data>
+  <data name="&gt;&gt;cboBridgeSpacingMethod.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cboBridgeSpacingMethod.Parent" xml:space="preserve">
+    <value>tlpBridgeSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;cboBridgeSpacingMethod.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lblBridgeSpacingMethod.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="lblBridgeSpacingMethod.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblBridgeSpacingMethod.Location" type="System.Drawing.Point, System.Drawing">
+    <value>44, 49</value>
+  </data>
+  <data name="lblBridgeSpacingMethod.Size" type="System.Drawing.Size, System.Drawing">
+    <value>43, 13</value>
+  </data>
+  <data name="lblBridgeSpacingMethod.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="lblBridgeSpacingMethod.Text" xml:space="preserve">
+    <value>Method</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeSpacingMethod.Name" xml:space="preserve">
+    <value>lblBridgeSpacingMethod</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeSpacingMethod.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeSpacingMethod.Parent" xml:space="preserve">
+    <value>tlpBridgeSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeSpacingMethod.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lblBridgeSpacing.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="lblBridgeSpacing.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblBridgeSpacing.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 24</value>
+  </data>
+  <data name="lblBridgeSpacing.Size" type="System.Drawing.Size, System.Drawing">
+    <value>79, 13</value>
+  </data>
+  <data name="lblBridgeSpacing.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="lblBridgeSpacing.Text" xml:space="preserve">
+    <value>Bridge Spacing</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeSpacing.Name" xml:space="preserve">
+    <value>lblBridgeSpacing</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeSpacing.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeSpacing.Parent" xml:space="preserve">
+    <value>tlpBridgeSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeSpacing.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="lblBridgeSpacingAlignment.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="lblBridgeSpacingAlignment.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblBridgeSpacingAlignment.Location" type="System.Drawing.Point, System.Drawing">
+    <value>34, 74</value>
+  </data>
+  <data name="lblBridgeSpacingAlignment.Size" type="System.Drawing.Size, System.Drawing">
+    <value>53, 13</value>
+  </data>
+  <data name="lblBridgeSpacingAlignment.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="lblBridgeSpacingAlignment.Text" xml:space="preserve">
+    <value>Alignment</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeSpacingAlignment.Name" xml:space="preserve">
+    <value>lblBridgeSpacingAlignment</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeSpacingAlignment.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeSpacingAlignment.Parent" xml:space="preserve">
+    <value>tlpBridgeSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;lblBridgeSpacingAlignment.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="tlpBridgeSpacingAuto.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="tlpBridgeSpacingAuto.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 93</value>
+  </data>
+  <data name="tlpBridgeSpacingAuto.MaximumSize" type="System.Drawing.Size, System.Drawing">
+    <value>350, 500</value>
+  </data>
+  <data name="tlpBridgeSpacingAuto.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>250, 0</value>
+  </data>
+  <data name="tlpBridgeSpacingAuto.RowCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="tlpBridgeSpacingAuto.Size" type="System.Drawing.Size, System.Drawing">
+    <value>346, 93</value>
+  </data>
+  <data name="tlpBridgeSpacingAuto.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;tlpBridgeSpacingAuto.Name" xml:space="preserve">
+    <value>tlpBridgeSpacingAuto</value>
+  </data>
+  <data name="&gt;&gt;tlpBridgeSpacingAuto.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpBridgeSpacingAuto.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tlpBridgeSpacingAuto.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpBridgeSpacingAuto.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cboBridgeSpacingAlignment" Row="3" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="cboBridgeSpacingMethod" Row="2" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="lblBridgeSpacingMethod" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lblBridgeSpacing" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="mtbBridgeSpacing" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lblBridgeStringSpacing" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="mtbBridgeSpread" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lblBridgeTotalSpread" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lblBridgeSpacingAlignment" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,90,Percent,50,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <metadata name="LocStrings.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="Text_Spacing.Text" xml:space="preserve">
+    <value>Spacing</value>
+  </data>
+  <data name="Text_AvgSpacing.Text" xml:space="preserve">
+    <value>Avg. Spacing</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="$this.AutoScrollMinSize" type="System.Drawing.Size, System.Drawing">
+    <value>250, 0</value>
+  </data>
+  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
+    <value>346, 308</value>
+  </data>
+  <data name="$this.Title" xml:space="preserve">
+    <value>String Spacing</value>
+  </data>
+  <data name="&gt;&gt;LocStrings.Name" xml:space="preserve">
+    <value>LocStrings</value>
+  </data>
+  <data name="&gt;&gt;LocStrings.Type" xml:space="preserve">
+    <value>SiGen.Localization.LocalizableStringList, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;Text_Spacing.Name" xml:space="preserve">
+    <value>Text_Spacing</value>
+  </data>
+  <data name="&gt;&gt;Text_Spacing.Type" xml:space="preserve">
+    <value>SiGen.Localization.LocalizableString, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;Text_AvgSpacing.Name" xml:space="preserve">
+    <value>Text_AvgSpacing</value>
+  </data>
+  <data name="&gt;&gt;Text_AvgSpacing.Type" xml:space="preserve">
+    <value>SiGen.Localization.LocalizableString, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>StringSpacingEditor</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.LayoutPropertyEditor, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
+  </data>
 </root>

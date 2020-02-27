@@ -11,15 +11,16 @@ using SiGen.Measuring;
 using SiGen.Utilities;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Forms.Design;
+using System.Collections;
+using System.Windows.Forms.Design.Behavior;
 
-namespace SiGen.UI
+namespace SiGen.UI.Controls
 {
     [Designer(typeof(MeasureTextboxDesigner)), DefaultEvent("ValueChanged")]
     public partial class MeasureTextbox : UserControl
     {
         private Measure _Value;
         private bool internalChange;
-        private bool _IsEditing;
         private bool _AllowEmptyValue;
         private bool isMouseOver;
         private bool _HideBorders;
@@ -55,7 +56,7 @@ namespace SiGen.UI
                 {
                     _HideBorders = value;
                     SetBounds(0, 0, 0, 0, BoundsSpecified.Height);
-                    Invalidate();
+                    //Invalidate();
                 }
             }
         }
@@ -68,7 +69,7 @@ namespace SiGen.UI
             {
                 if (value != _Value || value.Unit != _Value.Unit)
                 {
-                    if (_IsEditing)
+                    if (IsEditing)
                         CancelEdit();
                     _Value = value;
                     SynchronizeValueToTextbox();
@@ -107,9 +108,16 @@ namespace SiGen.UI
         }
 
         [Browsable(false)]
-        public bool IsEditing
+        public bool IsEditing { get; private set; }
+
+        private bool _AutoSize;
+
+        [Browsable(true), DefaultValue(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public override bool AutoSize { get => _AutoSize; set => _AutoSize = value; }
+
+        protected bool ShouldSerializeAutoSize()
         {
-            get { return _IsEditing; }
+            return !_AutoSize;
         }
 
         #region Events
@@ -124,18 +132,24 @@ namespace SiGen.UI
         public MeasureTextbox()
         {
             InitializeComponent();
+
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer | ControlStyles.Selectable, true);
+            
             _Value = Measure.Mm(0);
-            measureBounds = Rectangle.Empty;
             _TextAlign = HorizontalAlignment.Center;
             innerTextbox.Visible = false;
             base.BackColor = Color.Empty;
+
+            int defaultHeight = GetPreferredSize(new Size(200,200)).Height;
+
+            _AutoSize = true;
+            SetBounds(0, 0, 0, defaultHeight, BoundsSpecified.Height);
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            UpdateMeasureBounds();
+            RepositionTextbox();
             SynchronizeValueToTextbox();
             //if (ReadOnly)
             //    ShowTextBox();
@@ -155,7 +169,6 @@ namespace SiGen.UI
 
             if (IsHandleCreated)
                 Invalidate();
-            UpdateMeasureBounds();
         }
 
 
@@ -190,7 +203,7 @@ namespace SiGen.UI
             if (VisualStyleRenderer.IsSupported)
             {
                 TextRenderer.DrawText(pe.Graphics, _Value.ToString(), Font, innerTextbox.Bounds, textColor,
-                    GetTextFormatFlagsAlignment() | TextFormatFlags.Bottom | TextFormatFlags.NoPadding);
+                    GetTextFormatFlagsAlignment() | TextFormatFlags.Top | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine | TextFormatFlags.TextBoxControl);
             }
             else
             {
@@ -288,9 +301,9 @@ namespace SiGen.UI
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            if (!innerTextbox.Visible && measureBounds != Rectangle.Empty)
+            if (!innerTextbox.Visible)
             {
-                if (measureBounds.Contains(e.Location))
+                if (innerTextbox.Bounds.Contains(e.Location))
                     Cursor = Cursors.IBeam;
                 else
                     Cursor = Cursors.Default;
@@ -300,11 +313,7 @@ namespace SiGen.UI
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-            if (!HideBorders)
-                Height = FontHeight + (SystemInformation.BorderSize.Height * 4) + 3;
-            else
-                Height = FontHeight + 3;
-            UpdateMeasureBounds();
+            SetBounds(0, 0, 0, 0, BoundsSpecified.Height);
         }
 
         protected override void OnForeColorChanged(EventArgs e)
@@ -313,11 +322,6 @@ namespace SiGen.UI
             innerTextbox.ForeColor = ForeColor;
         }
 
-        protected override void OnSizeChanged(EventArgs e)
-        {
-            base.OnSizeChanged(e);
-            UpdateMeasureBounds();
-        }
 
         private bool preventFocus;
 
@@ -383,13 +387,62 @@ namespace SiGen.UI
                 Invalidate();
         }
 
+        public override Size GetPreferredSize(Size proposedSize)
+        {
+
+            TextFormatFlags textFormatFlags = TextFormatFlags.NoPrefix | TextFormatFlags.TextBoxControl;
+
+            Size sz = TextRenderer.MeasureText(Text, Font, proposedSize, textFormatFlags);
+            sz.Height = Math.Max(sz.Height, base.FontHeight);
+            if (!HideBorders)
+            {
+                sz.Width += SystemInformation.BorderSize.Width * 4;
+                sz.Height += SystemInformation.BorderSize.Height * 4;
+                sz.Height += 3;
+            }
+
+            
+            return sz;
+            //if (innerTextbox != null)
+            //{
+            //    var baseSize = innerTextbox.GetPreferredSize(proposedSize);
+            //    if (!HideBorders)
+            //    {
+            //        baseSize.Width += SystemInformation.BorderSize.Width * 4;
+            //        baseSize.Height += SystemInformation.BorderSize.Height * 4;
+            //        return baseSize;
+            //    }
+            //}
+            //else
+            //{
+            //    var baseSize = base.GetPreferredSize(proposedSize);
+            //    baseSize.Height = Font.Height;
+            //    if (!HideBorders)
+            //    {
+            //        baseSize.Width += SystemInformation.BorderSize.Width * 4;
+            //        baseSize.Height += SystemInformation.BorderSize.Height * 4;
+            //    }
+            //}
+            //return base.GetPreferredSize(proposedSize);
+        }
+
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            if (!HideBorders)
-                height = FontHeight + (SystemInformation.BorderSize.Height * 4) + 3;
+            if (width <= 4 && specified.HasFlag(BoundsSpecified.Width))
+                return;
+
+            if (AutoSize)
+            {
+                var defaultSize = GetPreferredSize(new Size(200, 200));
+                height = defaultSize.Height;
+            }
             else
-                height = FontHeight + 3;
+            {
+                height = Math.Max(innerTextbox.Height, height);
+            }
+
             base.SetBoundsCore(x, y, width, height, specified);
+
             RepositionTextbox();
         }
 
@@ -397,12 +450,10 @@ namespace SiGen.UI
         {
             if (IsHandleCreated)
             {
-                using (var g = CreateGraphics())
-                {
-                    
-                    var textSize = g.MeasureString(_Value.ToString(), Font);
-                    measureBounds = new Rectangle((int)((Width - textSize.Width) / 2), (int)((Height - textSize.Height) / 2), (int)textSize.Width, (int)textSize.Height);
-                }
+                var textFormatFlags = TextFormatFlags.NoPrefix | TextFormatFlags.TextBoxControl | TextFormatFlags.SingleLine;
+                Size textSize = TextRenderer.MeasureText(_Value.ToString(), Font, Size, textFormatFlags);
+
+                measureBounds = new Rectangle((int)((Width - textSize.Width) / 2), (int)((Height - textSize.Height) / 2), (int)textSize.Width, (int)textSize.Height);
             }
         }
 
@@ -486,9 +537,9 @@ namespace SiGen.UI
         {
             if (!internalChange)
             {
-                if (!_IsEditing)
+                if (!IsEditing)
                 {
-                    _IsEditing = true;
+                    IsEditing = true;
                     OnBeginEdit(EventArgs.Empty);
                 }
             }
@@ -496,7 +547,7 @@ namespace SiGen.UI
 
         public void PerformEndEdit(bool keepTextBoxVisible = false)
         {
-            if (_IsEditing)
+            if (IsEditing)
             {
                 Measure newValue = Measure.Empty;
                 bool validValue = true;
@@ -516,7 +567,7 @@ namespace SiGen.UI
 
                 if (!vcArgs.Cancel)
                 {
-                    _IsEditing = false;
+                    IsEditing = false;
                     if (!keepTextBoxVisible)
                         innerTextbox.Visible = false;
 
@@ -535,9 +586,9 @@ namespace SiGen.UI
 
         public void CancelEdit()
         {
-            if (_IsEditing)
+            if (IsEditing)
             {
-                _IsEditing = false;
+                IsEditing = false;
                 innerTextbox.Visible = false;
                 SynchronizeValueToTextbox();
                 OnEndEdit(EventArgs.Empty);
@@ -569,7 +620,7 @@ namespace SiGen.UI
 
         private void innerTextbox_Validating(object sender, CancelEventArgs e)
         {
-            if (!internalChange && _IsEditing)
+            if (!internalChange && IsEditing)
             {
                 Measure value = Measure.Empty;
 
@@ -645,20 +696,16 @@ namespace SiGen.UI
 
         public class ValueChangingEventArgs : EventArgs
         {
-            private readonly Measure _PreviousValue;
-            private readonly Measure _NewValue;
-            private readonly bool _UserChange;
-
-            public Measure PreviousValue { get { return _PreviousValue; } }
-            public Measure NewValue { get { return _NewValue; } }
-            public bool UserChange { get { return _UserChange; } }
+            public Measure PreviousValue { get; }
+            public Measure NewValue { get; }
+            public bool UserChange { get; }
             public bool Cancel { get; set; }
 
             public ValueChangingEventArgs(Measure prevValue, Measure newValue, bool byUser)
             {
-                _PreviousValue = prevValue;
-                _NewValue = newValue;
-                _UserChange = byUser;
+                PreviousValue = prevValue;
+                NewValue = newValue;
+                UserChange = byUser;
             }
         }
 
@@ -679,7 +726,6 @@ namespace SiGen.UI
                     handleMessage = false;
                 }
             }
-
             if(handleMessage)
                 base.WndProc(ref m);
         }
@@ -692,16 +738,49 @@ namespace SiGen.UI
         
     }
 
-    internal class MeasureTextboxDesigner : ControlDesigner
+    internal class MeasureTextboxDesigner : TextBoxDesigner
     {
         public override SelectionRules SelectionRules
         {
             get
             {
                 SelectionRules selectionRules = base.SelectionRules;
-                selectionRules &= ~(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);
+                var txt = Control as MeasureTextbox;
+                if (txt.AutoSize)
+                    selectionRules &= ~(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);
+
                 return selectionRules;
             }
         }
+
+        public override IList SnapLines
+        {
+            get
+            {
+                var txt = Control as MeasureTextbox;
+                if (txt.AutoSize)
+                    return base.SnapLines;
+
+                var lines = new List<SnapLine>();
+                int offset = (Control as MeasureTextbox)?.innerTextbox.Top ?? 0;
+                foreach (SnapLine line in base.SnapLines)
+                {
+                    if (line.SnapLineType == SnapLineType.Baseline)
+                        lines.Add(new SnapLine(line.SnapLineType, line.Offset + offset - 3, line.Priority));
+                    else
+                        lines.Add(line);
+                }
+                return lines;
+            }
+        }
+
+        protected override void PreFilterProperties(IDictionary properties)
+        {
+            properties.Remove("AutoSizeMode");
+            properties.Remove("BorderStyle");
+            base.PreFilterProperties(properties);
+        }
+
+         
     }
 }

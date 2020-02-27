@@ -8,8 +8,85 @@ using System.Reflection;
 
 namespace System
 {
+    public class OldValueAttribute : Attribute
+    {
+        public string Value { get; set; }
+
+        public OldValueAttribute(string value)
+        {
+            Value = value;
+        }
+    }
+
     public static class EnumHelper
     {
+
+        public static T Parse<T>(string value) where T : Enum
+        {
+            var enumType = typeof(T);
+            var enumNames = Enum.GetNames(enumType);
+
+            for (int i = 0; i < enumNames.Length; i++)
+            {
+                if (enumNames[i].ToLower() == value.ToLower())
+                    return (T)Enum.Parse(enumType, enumNames[i]);
+
+                var enumValMember = enumType.GetMember(enumNames[i])[0];
+                var oldValAttr = enumValMember.GetCustomAttribute<OldValueAttribute>();
+
+                if (oldValAttr != null && oldValAttr.Value.ToLower() == value.ToLower())
+                    return (T)Enum.Parse(enumType, enumNames[i]);
+            }
+
+            return default(T);
+        }
+
+        public static object Parse(Type enumType, string value)
+        {
+            var enumNames = Enum.GetNames(enumType);
+
+            for (int i = 0; i < enumNames.Length; i++)
+            {
+                if (enumNames[i].ToLower() == value.ToLower())
+                    return Enum.Parse(enumType, enumNames[i], true);
+
+                var enumValMember = enumType.GetMember(enumNames[i])[0];
+                var oldValAttr = enumValMember.GetCustomAttribute<OldValueAttribute>();
+
+                if (oldValAttr != null && oldValAttr.Value.ToLower() == value.ToLower())
+                    return Enum.Parse(enumType, enumNames[i], true);
+            }
+
+            throw new ArgumentException();
+        }
+
+        public static bool TryParse<T>(string stringValue, out T value) where T : Enum
+        {
+            value = default(T);
+
+            var enumType = typeof(T);
+            var enumNames = Enum.GetNames(enumType);
+
+            for (int i = 0; i < enumNames.Length; i++)
+            {
+                if (enumNames[i] == stringValue)
+                {
+                    value = (T)Enum.Parse(enumType, enumNames[i]);
+                    return true;
+                }
+
+                var enumValMember = enumType.GetMember(enumNames[i])[0];
+                var oldValAttr = enumValMember.GetCustomAttribute<OldValueAttribute>();
+
+                if (oldValAttr != null && oldValAttr.Value == stringValue)
+                {
+                    value = (T)Enum.Parse(enumType, enumNames[i]);
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public static string[] GetEnumDescriptions(Type enumType)
         {
             var enumNames = Enum.GetNames(enumType);
@@ -17,7 +94,7 @@ namespace System
             for(int i = 0; i < enumNames.Length; i++)
             {
                 var enumValMember = enumType.GetMember(enumNames[i])[0];
-                var descAttr = enumValMember.GetAttribute<DescriptionAttribute>();
+                var descAttr = enumValMember.GetCustomAttribute<DescriptionAttribute>();
                 if (descAttr != null)
                     enumNames[i] = descAttr.Description;
             }
@@ -29,7 +106,7 @@ namespace System
             var enumName = Enum.GetName(enumType, value);
 
             var enumValMember = enumType.GetMember(enumName)[0];
-            var descAttr = enumValMember.GetAttribute<DescriptionAttribute>();
+            var descAttr = enumValMember.GetCustomAttribute<DescriptionAttribute>();
             if (descAttr != null)
                 return descAttr.Description;
 
@@ -41,37 +118,34 @@ namespace System
             public const string ValueMember = "Value";
             public const string DisplayMember = "Description";
 
-            private readonly object _Value;
-            private readonly string _Name;
-            private readonly string _Description;
-            private readonly Type _EnumType;
+            public object Value { get; }
+            public string Name { get; }
+            public string Description { get; set; }
 
-            public object Value { get { return _Value; } }
-            public string Name { get { return _Name; } }
-            public string Description { get { return _Description; } }
+            public Type EnumType { get; }
 
             public EnumItem(Type enumType, object value)
             {
-                _EnumType = enumType;
-                _Name = value.ToString();
-                _Value = value;
-                _Description = GetEnumDescription(enumType, value);
+                EnumType = enumType;
+                Name = value.ToString();
+                Value = value;
+                Description = GetEnumDescription(enumType, value);
             }
 
             public EnumItem(Type enumType, object value, string description)
             {
-                _EnumType = enumType;
-                _Name = value.ToString();
-                _Value = value;
-                _Description = description;
+                EnumType = enumType;
+                Name = value.ToString();
+                Value = value;
+                Description = description;
             }
 
             public EnumItem(object value, string description)
             {
-                _EnumType = value.GetType();
-                _Name = value.ToString();
-                _Value = value;
-                _Description = description;
+                EnumType = value.GetType();
+                Name = value.ToString();
+                Value = value;
+                Description = description;
             }
         }
 
