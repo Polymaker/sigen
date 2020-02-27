@@ -12,7 +12,6 @@ namespace SiGen.StringedInstruments.Layout.Visual
     {
         private List<FretSegment> _Segments;
         private bool _IsStraight;
-        private bool _IsNut;
 
         public List<FretSegment> Segments
         {
@@ -30,10 +29,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
             get { return _IsStraight; }
         }
 
-        public bool IsNut
-        {
-            get { return _IsNut; }
-        }
+        public bool IsNut { get; }
 
         public LayoutPolyLine LeftPath { get; set; }
         public LayoutPolyLine RightPath { get; set; }
@@ -43,7 +39,7 @@ namespace SiGen.StringedInstruments.Layout.Visual
         public FretLine(IEnumerable<FretSegment> segments)
         {
             _Segments = new List<FretSegment>(segments.OrderBy(s=>s.String.Index));
-            _IsNut = Segments.All(s => s.IsNut || s.IsVirtual);
+            IsNut = Segments.All(s => s.IsNut || s.IsVirtual);
         }
 
         public void VerifyIsStraight()
@@ -228,6 +224,37 @@ namespace SiGen.StringedInstruments.Layout.Visual
             }
 
             TrimBetween((LayoutLine)firstBound, (LayoutLine)lastBound, true);
+        }
+
+        public ILayoutLine GetExtendedFretLine(Measure amount)
+        {
+            if ((Length + (amount * 2)).NormalizedValue > 0)
+            {
+                if (IsStraight)
+                {
+                    var layoutLine = new LayoutLine(Points.First(), Points.Last());
+                    layoutLine.P2 += (layoutLine.Direction * amount);
+                    layoutLine.P1 += (layoutLine.Direction * (amount * -1));
+                    return layoutLine;
+                }
+                else
+                {
+                    RebuildSpline();
+
+                    var tmpLine = new LayoutPolyLine(Points);
+                    var bounds = GetFretBoundaries(false);
+                    var offset1 = LayoutLine.Offset(bounds.Item1, amount * -1);
+                    var offset2 = LayoutLine.Offset(bounds.Item2, amount);
+
+                    tmpLine.TrimBetween(offset1, offset2, true);
+                    if (Spline != null)
+                        tmpLine.InterpolateSpline(0.5);
+
+                    return tmpLine;
+                }
+            }
+            
+            return null;
         }
 
         public void RebuildSpline()

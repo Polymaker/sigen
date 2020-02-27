@@ -99,7 +99,7 @@ namespace SiGen.StringedInstruments.Layout
             {
                 ConstructString(Strings[0], nutStringPos[0], bridgeStringPos[0]);
             }
-            else if (ScaleLengthMode != ScaleLengthType.Individual)
+            else if (ScaleLengthMode != ScaleLengthType.Multiple)
             {
                 var trebleStr = ConstructString(Strings[0], nutStringPos[0], bridgeStringPos[0]);
                 var bassStr = ConstructString(Strings[NumberOfStrings - 1], nutStringPos[NumberOfStrings - 1], bridgeStringPos[NumberOfStrings - 1]);
@@ -128,8 +128,13 @@ namespace SiGen.StringedInstruments.Layout
                     var distFromNut = PointM.Distance(createdString.P1, middle);
                     var distFromBridge = PointM.Distance(createdString.P2, middle);
 
-                    if (!Measure.EqualOrClose(distFromNut, distFromBridge, Measure.Mm(0.05)))
+                    var stringCenterOffset = Measure.Abs(distFromNut - distFromBridge);
+                    
+                    if (!CompensateFretPositions && stringCenterOffset > Measure.Mm(0.05))
+                    {
+                        //adjust the end of the string so that it's center is above the 12th fret
                         createdString.P2 = createdString.P1 + (createdString.Direction * distFromNut * 2);
+                    }
 
                     Strings[i].RecalculateLengths();//store the physical length of the string
                 }
@@ -175,10 +180,10 @@ namespace SiGen.StringedInstruments.Layout
         {
             var ratio = 0.5;
 
-            if (ScaleLengthMode == ScaleLengthType.Individual)
+            if (ScaleLengthMode == ScaleLengthType.Multiple)
                 ratio = stringLine.String.MultiScaleRatio;
-            else if (ScaleLengthMode == ScaleLengthType.Multiple)
-                ratio = MultiScaleConfig.PerpendicularFretRatio;
+            else if (ScaleLengthMode == ScaleLengthType.Dual)
+                ratio = DualScaleConfig.PerpendicularFretRatio;
 
             var offsetY = (maxPerpHeight - stringLine.Bounds.Height) * (0.5 - ratio);
             stringLine.P1 += new PointM(Measure.Zero, offsetY);
@@ -337,13 +342,14 @@ namespace SiGen.StringedInstruments.Layout
             }
 
             //split physical from virtual fingerboard
-            var virtualTrebleEdge = AddVisualElement(new LayoutLine(trebleEndPoint, trebleSideEdge.P2, VisualElementType.GuideLine));
-            var virtualBassEdge = AddVisualElement(new LayoutLine(bassEndPoint, bassSideEdge.P2, VisualElementType.GuideLine));
+            var virtualTrebleEdge = AddVisualElement(new LayoutLine(trebleEndPoint, trebleSideEdge.P2, VisualElementType.FingerboardContinuation));
+            var virtualBassEdge = AddVisualElement(new LayoutLine(bassEndPoint, bassSideEdge.P2, VisualElementType.FingerboardContinuation));
             trebleSideEdge.P2 = virtualTrebleEdge.P1;
             bassSideEdge.P2 = virtualBassEdge.P1;
 
-            var bridgeLine = new LayoutPolyLine(Strings.Select(s => s.LayoutLine.P2));
-            
+            var bridgeLine = new LayoutPolyLine(Strings.Select(s => s.LayoutLine.P2), VisualElementType.BridgeLine);
+            VisualElements.Add(bridgeLine);
+
             var bridgeTrebleInter = PointM.Empty;
             if (bridgeLine.Intersects(virtualTrebleEdge, out bridgeTrebleInter))
                 virtualTrebleEdge.P2 = bridgeTrebleInter;
@@ -387,6 +393,33 @@ namespace SiGen.StringedInstruments.Layout
                 var fretboardEdge = AddVisualElement(new FingerboardEdge(edgePoints));
                 //fretboardEdge.InterpolateSpline();
             }
+
+            var fingerboardEnds = VisualElements.OfType<FingerboardEdge>();
+
+            var trebleLine = FirstString.LayoutLine;
+            foreach(var end in fingerboardEnds)
+            {
+                if (end.Intersects(trebleLine, out PointM inter, false))
+                {
+                    AddVisualElement(new LayoutLine(trebleLine.P1, inter, VisualElementType.FingerboardMargin));
+                    break;
+                }
+            }
+
+            if (LastString != FirstString)
+            {
+                var bassLine = LastString.LayoutLine;
+
+                foreach (var end in fingerboardEnds)
+                {
+                    if (end.Intersects(bassLine, out PointM inter, false))
+                    {
+                        AddVisualElement(new LayoutLine(bassLine.P1, inter, VisualElementType.FingerboardMargin));
+                        break;
+                    }
+                }
+            }
+            
         }
 
         #endregion
@@ -417,7 +450,8 @@ namespace SiGen.StringedInstruments.Layout
                 var positions = FretCompensationCalculator.CalculateFretsCompensatedPositions(
                     str.PhysicalProperties, str.StringLength,
                     str.Tuning.FinalPitch, FretsTemperament,
-                    Measure.Mm(0.5), str.ActionAtTwelfthFret, Measure.Mm(1.2), str.TotalNumberOfFrets);
+                    str.ActionAtFirstFret, str.ActionAtTwelfthFret, Measure.Mm(1.1938), str.TotalNumberOfFrets);
+                
                 for (int i = 0; i < positions.Length; i++)
                 {
                     PreciseDouble fretPosRatio = (str.StringLength - positions[i]).NormalizedValue / str.StringLength.NormalizedValue;
@@ -517,11 +551,11 @@ namespace SiGen.StringedInstruments.Layout
             if (FretsTemperament != Temperament.Equal || CompensateFretPositions)
                 return false;
 
-            if(ScaleLengthMode == ScaleLengthType.Multiple)
+            if(ScaleLengthMode == ScaleLengthType.Dual)
             {
                 return Strings.AllEqual(s => s.MultiScaleRatio);
             }
-            else if(ScaleLengthMode == ScaleLengthType.Individual)
+            else if(ScaleLengthMode == ScaleLengthType.Multiple)
             {
                 if(Strings.AllEqual(s => s.MultiScaleRatio))
                 {

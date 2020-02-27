@@ -161,21 +161,29 @@ namespace SiGen.Measuring
 
         public static bool operator >(Measure m1, Measure m2)
         {
+            if (m1.IsEmpty || m2.IsEmpty)
+                return false;
             return m1.NormalizedValue > m2.NormalizedValue;
         }
 
         public static bool operator <(Measure m1, Measure m2)
         {
+            if (m1.IsEmpty || m2.IsEmpty)
+                return false;
             return m1.NormalizedValue < m2.NormalizedValue;
         }
 
         public static bool operator >=(Measure m1, Measure m2)
         {
+            if (m1.IsEmpty || m2.IsEmpty)
+                return false;
             return m1.NormalizedValue >= m2.NormalizedValue;
         }
 
         public static bool operator <=(Measure m1, Measure m2)
         {
+            if (m1.IsEmpty || m2.IsEmpty)
+                return false;
             return m1.NormalizedValue <= m2.NormalizedValue;
         }
 
@@ -261,6 +269,11 @@ namespace SiGen.Measuring
         #endregion
 
         #region Functions
+
+        public Measure Convert(UnitOfMeasure unitOfMeasure)
+        {
+            return FromNormalizedValue(normalizedValue, unitOfMeasure);
+        }
 
         public static Measure Abs(Measure value)
         {
@@ -505,7 +518,7 @@ namespace SiGen.Measuring
         {
             if(IsEmpty)
                 return new System.Xml.Linq.XAttribute(name, "N/A");
-            return new System.Xml.Linq.XAttribute(name, string.Format(NumberFormatInfo.InvariantInfo, "{0}{1}", Value, Unit != null ? Unit.Abreviation : string.Empty));
+            return new System.Xml.Linq.XAttribute(name, string.Format(NumberFormatInfo.InvariantInfo, "{0}{1}", Value, Unit != null ? Unit.Abbreviation : string.Empty));
         }
 
         public static Measure Parse(string value)

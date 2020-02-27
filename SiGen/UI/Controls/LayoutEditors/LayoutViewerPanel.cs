@@ -1,4 +1,5 @@
 ﻿using SiGen.Common;
+using SiGen.Configuration;
 using SiGen.StringedInstruments.Layout;
 using System;
 using System.Collections.Generic;
@@ -24,11 +25,8 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         public LayoutDocument CurrentDocument
         {
-            get { return _CurrentFile; }
-            set
-            {
-                SetCurrentLayout(value);
-            }
+            get => _CurrentFile;
+            set => SetCurrentLayout(value);
         }
 
         public SILayout CurrentLayout => CurrentDocument?.Layout;
@@ -45,15 +43,17 @@ namespace SiGen.UI.Controls.LayoutEditors
         private void DropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
         {
             if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
-            {
                 e.Cancel = true;
-            }
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             ScreenDPI = 109;
+            Viewer.EnableMeasureTool = true;
+            Viewer.SetDisplayConfig(AppConfig.Current.DisplayConfig);
+            //Viewer.DisplayConfig.Strings.RenderMode = Configuration.Display.LineRenderMode.RealisticLook;
+            //Viewer.DisplayConfig.Frets.RenderMode = Configuration.Display.LineRenderMode.RealisticLook;
         }
 
         private void SetCurrentLayout(LayoutDocument value)
@@ -79,11 +79,11 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         private void Layout_NumberOfStringsChanged(object sender, EventArgs e)
         {
-            if (CurrentDocument.IsNew)
-            {
-                Text = $"New {CurrentLayout.NumberOfStrings} Strings Layout";
-                CurrentLayout.LayoutName = LayoutDocument.GenerateLayoutName(CurrentLayout);
-            }
+            //if (CurrentDocument.IsNew)
+            //{
+            //    Text = $"New {CurrentLayout.NumberOfStrings} Strings Layout";
+            //    CurrentLayout.LayoutName = LayoutDocument.GenerateLayoutName(CurrentLayout);
+            //}
         }
 
         private void toolStripStatusLabel1_Click(object sender, EventArgs e)
@@ -103,7 +103,7 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             tsmiCloseOthers.Enabled = DockPanel.DocumentsCount > 1;
             tsmiCloseRight.Enabled = GetTabIndex() < DockPanel.DocumentsCount - 1;
-            tsmiOpenFileDirectory.Enabled = !string.IsNullOrEmpty(CurrentDocument.FileName);
+            tsmiOpenFileDirectory.Enabled = !string.IsNullOrEmpty(CurrentDocument.FilePath);
         }
 
         private void tsmiCloseLayout_Click(object sender, EventArgs e)
@@ -145,17 +145,35 @@ namespace SiGen.UI.Controls.LayoutEditors
 
         private void tsmiOpenFileDirectory_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", $"/select, \"{CurrentDocument.FileName}\"");
+            Process.Start("explorer.exe", $"/select, \"{CurrentDocument.FilePath}\"");
         }
-       
 
         private void ResetCameraButton_Click(object sender, EventArgs e)
         {
             Viewer.ResetCamera();
         }
 
+        private bool UpdatingDisplayOptionsMenuItem;
+
+        private void DisplayOptionsDropDown_DropDownOpening(object sender, EventArgs e)
+        {
+            UpdatingDisplayOptionsMenuItem = true;
+
+            DisplayStringsMenuItem.Checked = Viewer.DisplayConfig.ShowStrings;
+            DisplayStringCentersMenuItem.Checked = Viewer.DisplayConfig.ShowMidlines;
+            DisplayFretsMenuItem.Checked = Viewer.DisplayConfig.ShowFrets;
+            DisplayMarginsMenuItem.Checked = Viewer.DisplayConfig.ShowMargins;
+            DisplayFingerboardMenuItem.Checked = Viewer.DisplayConfig.ShowFingerboard;
+            DisplayCenterLineMenuItem.Checked = Viewer.DisplayConfig.ShowCenterLine;
+
+            UpdatingDisplayOptionsMenuItem = false;
+        }
+
         private void DisplayOptionsMenuItem_CheckedChanged(object sender, EventArgs e)
         {
+            if (UpdatingDisplayOptionsMenuItem)
+                return;
+
             if (sender == DisplayStringsMenuItem)
             {
                 Viewer.DisplayConfig.ShowStrings = DisplayStringsMenuItem.Checked;
@@ -174,12 +192,22 @@ namespace SiGen.UI.Controls.LayoutEditors
             }
             else if (sender == DisplayFingerboardMenuItem)
             {
-                Viewer.DisplayConfig.ShowFingerboard = DisplayFingerboardMenuItem.Checked;
+                Viewer.DisplayConfig.ShowFingerboard= DisplayFingerboardMenuItem.Checked;
             }
             else if (sender == DisplayCenterLineMenuItem)
             {
                 Viewer.DisplayConfig.ShowCenterLine = DisplayCenterLineMenuItem.Checked;
             }
+        }
+
+        private void tsbMeasureTool_CheckedChanged(object sender, EventArgs e)
+        {
+            Viewer.EnableMeasureTool = tsbMeasureTool.Checked;
+        }
+
+        private void tsmiRename_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

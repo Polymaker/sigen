@@ -16,13 +16,16 @@ namespace SiGen.Common
         public string Brand { get; set; }
         [XmlAttribute("CD")]
         public Measure? CoreDiameter { get; set; }
+        /// <summary>
+        /// Gets or sets the string's outer diameter (A.K.A. the string gauge).
+        /// </summary>
         [XmlAttribute("OD")]
         public Measure OuterDiameter { get; set; }
         [XmlAttribute("UW")]
         public double? UnitWeight { get; set; }
         [XmlAttribute("MoE")]
         public double? ModulusOfElasticity { get; set; }
-        [XmlAttribute("Type")]
-        public StringType Type { get; set; }
+        [XmlAttribute("Material")]
+        public StringMaterial Material { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SiGen.Maths;
+﻿using SiGen.Configuration.Display;
+using SiGen.Maths;
 using SiGen.Measuring;
 using SiGen.StringedInstruments.Layout;
 using SiGen.StringedInstruments.Layout.Visual;
@@ -19,21 +20,24 @@ namespace SiGen.UI
         #region Fields
 
         private double _Zoom;
-        private LayoutViewerDisplayConfig _DisplayConfig;
+        private ViewerDisplayConfig _DisplayConfig;
         private bool manualZoom;
         private Vector cameraPosition;//independant of orientation
         private LayoutMeasure _CurrentMeasure;
         private bool _EnableMeasureTool;
-        private bool _IsMeasuring;
-
         private SILayout _CurrentLayout;
         private const int PADDING_BORDER = 6;
         private List<LayoutIntersection> LayoutIntersections;
-        //private List<IUIElement> _UIElements;
+        private const int MIN_ZOOM = 6;
+        private const int MAX_ZOOM = 250;
 
         #endregion
 
         #region Properties
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        public override string Text { get => base.Text; set => base.Text = value; }
 
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SILayout CurrentLayout
@@ -47,7 +51,7 @@ namespace SiGen.UI
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content), TypeConverter(typeof(ExpandableObjectConverter))]
-        public LayoutViewerDisplayConfig DisplayConfig
+        public ViewerDisplayConfig DisplayConfig
         {
             get { return _DisplayConfig; }
         }
@@ -77,10 +81,7 @@ namespace SiGen.UI
         }
 
         [Browsable(false)]
-        public bool IsMeasuring
-        {
-            get { return _IsMeasuring; }
-        }
+        public bool IsMeasuring { get; private set; }
 
         #endregion
 
@@ -106,15 +107,68 @@ namespace SiGen.UI
 
             InitializeCamera();
             InitializeMeasureTool();
+
             _CachedCenter = Vector.Empty;
+
             MouseDownPos = new Dictionary<MouseButtons, Vector>();
             MouseDownPos[MouseButtons.Left] = Vector.Empty;
             MouseDownPos[MouseButtons.Right] = Vector.Empty;
             MouseDownPos[MouseButtons.Middle] = Vector.Empty;
             
             LayoutIntersections = new List<LayoutIntersection>();
-            _DisplayConfig = new LayoutViewerDisplayConfig();
+
+            _DisplayConfig = ViewerDisplayConfig.CreateDefault();
+            _DisplayConfig.AttachPropertyChangedEvent();
             _DisplayConfig.PropertyChanged += DisplayConfigChanged;
+            
+        }
+
+        public void SetDisplayConfig(ViewerDisplayConfig config, bool keepVisibility = true)
+        {
+            var configVisible = new List<bool>();
+            if (_DisplayConfig != null)
+            {
+                _DisplayConfig.PropertyChanged -= DisplayConfigChanged;
+                foreach (var cfg in _DisplayConfig.LineConfigs)
+                    configVisible.Add(cfg.Visible);
+            }
+
+            _DisplayConfig = config ?? new ViewerDisplayConfig();
+
+            if (configVisible.Count > 0)
+            {
+                for (int i = 0; i < configVisible.Count; i++)
+                    _DisplayConfig.LineConfigs[i].Visible = configVisible[i];
+            }
+
+            _DisplayConfig.AttachPropertyChangedEvent();
+            _DisplayConfig.PropertyChanged += DisplayConfigChanged;
+
+            if (IsHandleCreated)
+                Invalidate();
+        }
+
+        public void SetDisplayColors(ViewerDisplayConfig config)
+        {
+            _DisplayConfig.PropertyChanged -= DisplayConfigChanged;
+
+            for (int i = 0; i < config.LineConfigs.Length; i++)
+            {
+                _DisplayConfig.LineConfigs[i].Color = config.LineConfigs[i].Color;
+
+                if (_DisplayConfig.LineConfigs[i] is StringsDisplayConfig stringsDisplay)
+                    stringsDisplay.RenderMode = (config.LineConfigs[i] as StringsDisplayConfig).RenderMode;
+
+                if (_DisplayConfig.LineConfigs[i] is FretsDisplayConfigs fretsDisplay)
+                {
+                    fretsDisplay.RenderMode = (config.LineConfigs[i] as FretsDisplayConfigs).RenderMode;
+                    fretsDisplay.RenderWidth = (config.LineConfigs[i] as FretsDisplayConfigs).RenderWidth;
+                }
+            }
+
+            _DisplayConfig.PropertyChanged += DisplayConfigChanged;
+            if (IsHandleCreated)
+                Invalidate();
         }
 
         private void SetLayout(SILayout layout)
@@ -129,73 +183,16 @@ namespace SiGen.UI
             CalculateIntersections();
         }
 
-        #region Drawing
-
-        protected override void OnPaint(PaintEventArgs pe)
-        {
-            base.OnPaint(pe);
-            pe.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-            var zoomf = (float)_Zoom;
-            var center = new PointF(Width / 2f, Height / 2f);
-            pe.Graphics.TranslateTransform(center.X, center.Y);
-            pe.Graphics.ScaleTransform(zoomf, zoomf);
-            pe.Graphics.TranslateTransform((float)cameraPosition.X * -1, (float)cameraPosition.Y);
-
-            if(CurrentLayout != null)
-            {
-                RenderFingerboard(pe.Graphics);
-                RenderGuideLines(pe.Graphics);
-
-                RenderFrets(pe.Graphics);
-                if(DisplayConfig.ShowStrings)
-                    RenderStrings(pe.Graphics);
-            }
-
-            pe.Graphics.ResetTransform();
-
-            if (EnableMeasureTool)
-                RenderMeasureTool(pe.Graphics);
-        }
-
-        private void InvalidateWorldRegion(int bleedSize, params Vector[] points)
-        {
-            Vector minPos = Vector.Empty;
-            Vector maxPos = Vector.Empty;
-
-            for (int i = 0; i < points.Length; i++)
-            {
-                if (!points[i].IsEmpty)
-                {
-                    if (minPos.IsEmpty)
-                    {
-                        minPos = points[i];
-                        maxPos = points[i];
-                    }
-                    else
-                    {
-                        minPos = Vector.Min(minPos, points[i]);
-                        maxPos = Vector.Max(maxPos, points[i]);
-                    }
-                }
-            }
-
-            if(!minPos.IsEmpty)
-            {
-                var minPt = WorldToDisplay(minPos, _Zoom, true);
-                var maxPt = WorldToDisplay(maxPos, _Zoom, true);
-                var updateBounds = Rectangle.FromLTRB((int)minPt.X - bleedSize, (int)minPt.Y - bleedSize, (int)maxPt.X + bleedSize, (int)maxPt.Y + bleedSize);
-                Invalidate(updateBounds);
-            }
-        }
-
-        #endregion
-
         #region Change events
 
         private void DisplayConfigChanged(object sender, PropertyChangedEventArgs e)
         {
+            switch (e.PropertyName)
+            {
+                case nameof(DisplayConfig.FretExtensionAmount):
+                    RecalculateFretExtensions();
+                    break;
+            }
             if (IsHandleCreated)
                 Invalidate();
         }
@@ -204,11 +201,13 @@ namespace SiGen.UI
         {
             if (IsHandleCreated)
             {
+                if (!DisplayConfig.FretExtensionAmount.IsEmpty)
+                    RecalculateFretExtensions();
+
                 if (!manualZoom)
                     ResetCamera();
                 else
                     Invalidate();
-
                 
                 CalculateIntersections();
 
@@ -225,6 +224,25 @@ namespace SiGen.UI
 
             if (!manualZoom)
                 ZoomToFit();
+        }
+
+        #endregion
+
+        #region Misc
+
+        private void RecalculateFretExtensions()
+        {
+            if (CurrentLayout != null)
+            {
+                foreach (var fretLine in CurrentLayout.VisualElements.OfType<FretLine>())
+                {
+                    if (DisplayConfig.FretExtensionAmount.IsEmpty)
+                        fretLine.Tag = null;
+                    else
+                        fretLine.Tag = fretLine.GetExtendedFretLine(DisplayConfig.FretExtensionAmount);
+                }
+            }
+            
         }
 
         #endregion
@@ -265,6 +283,9 @@ namespace SiGen.UI
                     {
                         _Zoom = (Height - (PADDING_BORDER * 2f)) / (float)layoutBounds.Height.NormalizedValue;
                     }
+
+                    _Zoom = Math.Max(MIN_ZOOM, Math.Min(_Zoom, MAX_ZOOM));
+
                     var centerY = layoutBounds.Center.Y.NormalizedValue;
                     cameraPosition = Vector.Zero;
                     if (DisplayConfig.FingerboardOrientation == Orientation.Vertical)
@@ -288,7 +309,7 @@ namespace SiGen.UI
             else
                 _Zoom *= 0.90909090909090909090909090909091;
 
-            _Zoom = Math.Max(8, Math.Min(200, _Zoom));
+            _Zoom = Math.Max(MIN_ZOOM, Math.Min(MAX_ZOOM, _Zoom));
 
             if (oldZoom != _Zoom)
             {
@@ -327,15 +348,23 @@ namespace SiGen.UI
             Measure2,
             Measure3
         }
+
+        private enum DragInputMode
+        {
+            None,
+            LeftButton,
+            MiddleButton,
+            Spacebar
+        }
         
         private HitTestInfo DragTarget;
         private Dictionary<MouseButtons, Vector> MouseDownPos;
 
         private bool CanDrag { get { return DragTarget != null; } }
         private bool IsDragging;
-
+        private DragInputMode DragInput;
         private Vector lastMousePos;
-        private Vector dragStart;
+        //private Vector dragStart;
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -343,20 +372,25 @@ namespace SiGen.UI
             Focus();
 
             MouseDownPos[e.Button] = DisplayToLocal(e.Location);
+
             if (!IsDragging)
             {
                 if (e.Button == MouseButtons.Middle)
                 {
-                    DragTarget = new HitTestInfo();
-                    lastMousePos = DisplayToLocal(e.Location);
+                    InitDragTarget(new HitTestInfo(), 
+                        DragInputMode.MiddleButton, 
+                        DisplayToLocal(e.Location), 
+                        true);
                 }
                 else if (e.Button == MouseButtons.Left)
                 {
                     var hitInfo = HitTest(e.Location);
                     if (hitInfo.Type == LayoutViewerHitTestType.MeasureBox)
                     {
-                        DragTarget = hitInfo;
-                        lastMousePos = DisplayToLocal(e.Location);
+                        InitDragTarget(hitInfo,
+                            DragInputMode.LeftButton,
+                            DisplayToLocal(e.Location),
+                            false);
                     }
                 }
             }
@@ -366,7 +400,14 @@ namespace SiGen.UI
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            ClearDrag();
+            if (CanDrag || IsDragging)
+            {
+                if ((e.Button == MouseButtons.Left && DragInput == DragInputMode.LeftButton) ||
+                    (e.Button == MouseButtons.Middle && DragInput == DragInputMode.MiddleButton))
+                {
+                    ClearDrag();
+                }
+            }
 
             MouseDownPos[e.Button] = Vector.Empty;
             base.OnMouseUp(e);
@@ -383,13 +424,11 @@ namespace SiGen.UI
             {
                 var curPos = DisplayToLocal(e.Location);
                 var moveVector = curPos - lastMousePos;
+
                 if (moveVector.Length > 1)//1 in local unit = 1 pixel
                 {
                     if (!IsDragging)
-                    {
-                        dragStart = lastMousePos;
-                        IsDragging = true;
-                    }
+                        OnDragStart();
 
                     PerformDragMove(moveVector);
 
@@ -411,6 +450,23 @@ namespace SiGen.UI
                     Invalidate(updateBounds);
                 }
             }
+        }
+
+        private void InitDragTarget(HitTestInfo target, DragInputMode inputMode, Vector mousePos, bool setCursor)
+        {
+            DragTarget = target;
+            DragInput = inputMode;
+            lastMousePos = mousePos;
+
+            if (setCursor)
+                Cursor = new Cursor(Properties.Resources.open_hand_icon.Handle);
+        }
+
+        private void OnDragStart()
+        {
+            Cursor = new Cursor(Properties.Resources.closed_hand_icon.Handle);
+            //dragStart = lastMousePos;
+            IsDragging = true;
         }
 
         private void PerformDragMove(Vector dragVector)
@@ -436,10 +492,12 @@ namespace SiGen.UI
         {
             if (CanDrag || IsDragging)
             {
+                DragInput = DragInputMode.None;
                 lastMousePos = Vector.Empty;
                 DragTarget = null;
                 IsDragging = false;
                 IsMovingCamera = false;
+                Cursor = Cursors.Default;
                 Invalidate();
             }
         }
@@ -579,6 +637,14 @@ namespace SiGen.UI
             base.OnKeyDown(e);
             if (EnableMeasureTool && MeasureLastSelection.IsEmpty && IsAltPressed(e.KeyCode))
                 UpdateMeasureSnapPosition();
+
+            if (!IsDragging && e.KeyCode == Keys.Space)
+            {
+                InitDragTarget(new HitTestInfo(),
+                            DragInputMode.Spacebar,
+                            DisplayToLocal(PointToClient(MousePosition)),
+                            true);
+            }
         }
 
         protected override void OnKeyUp(KeyEventArgs e)
@@ -586,6 +652,13 @@ namespace SiGen.UI
             base.OnKeyUp(e);
             if (EnableMeasureTool && MeasureLastSelection.IsEmpty && IsAltPressed(e.KeyCode))
                 UpdateMeasureSnapPosition();
+
+            if (e.KeyCode == Keys.Space &&
+                (CanDrag || IsDragging) &&
+                DragInput == DragInputMode.Spacebar)
+            {
+                ClearDrag();
+            }
         }
 
         protected override bool ProcessDialogKey(Keys keyData)

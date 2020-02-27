@@ -1,4 +1,8 @@
-﻿using SiGen.StringedInstruments.Layout;
+﻿using SiGen.Common;
+using SiGen.Configuration;
+using SiGen.Localization;
+using SiGen.Resources;
+using SiGen.StringedInstruments.Layout;
 using SiGen.UI.Controls;
 using SiGen.UI.Windows;
 using System;
@@ -9,6 +13,15 @@ namespace SiGen.UI
 {
 	public partial class LayoutEditorWindow
 	{
+
+        private void RefreshToolbarButtonStates()
+        {
+            tsbClose.Enabled = CurrentLayoutDocument != null;
+            tsbExport.Enabled = CurrentLayoutDocument != null;
+            tssbSave.Enabled = CurrentLayoutDocument != null;
+
+        }
+
 		#region Undo/Redo
 
 		private void RebuildUndoRedoMenus()
@@ -36,91 +49,7 @@ namespace SiGen.UI
 
 		private string GetActionName(ILayoutChange action)
 		{
-			if(action is BatchChange bc)
-			{
-                if(bc.ChangedProperties.Any(p => p.Property == nameof(SILayout.NumberOfStrings)))
-                {
-                    action = bc.ChangedProperties.First(p => p.Property == nameof(SILayout.NumberOfStrings));
-                }
-				if(bc.Component != null)
-                {
-                    switch (bc.Component)
-                    {
-                        case FingerboardMargin fm:
-                            switch (bc.Name)
-                            {
-                                case nameof(FingerboardMargin.Bass):
-                                    return $"Bass margin: {bc.ChangedProperties.First().NewValue}";
-                                case nameof(FingerboardMargin.Treble):
-                                    return $"Treble margin: {bc.ChangedProperties.First().NewValue}";
-                                case nameof(FingerboardMargin.MarginAtNut):
-                                    return $"Margin at nut: {bc.ChangedProperties.First().NewValue}";
-                                case nameof(FingerboardMargin.MarginAtBridge):
-                                    return $"Margin at bridge: {bc.ChangedProperties.First().NewValue}";
-                                case nameof(FingerboardMargin.Edges):
-                                    return $"Edges margin: {bc.ChangedProperties.First().NewValue}";
-
-                            }
-                            break;
-                    }
-                }
-
-			}
-
-			if(action is PropertyChange pc)
-			{
-				if(pc.Component != null)
-				{
-					switch (pc.Component)
-					{
-						case ScaleLengthManager slm:
-							{
-								var scaleEditor = GetLayoutEditor<ScaleLengthEditor>();
-								switch (pc.Property)
-								{
-									case nameof(ScaleLengthManager.SingleScale.Length):
-										return $"Scale length: {pc.NewValue}";
-									case nameof(ScaleLengthManager.MultiScale.Bass):
-									case nameof(ScaleLengthManager.MultiScale.Treble):
-										return $"{pc.Property} scale length: {pc.NewValue}";
-									case nameof(ScaleLengthManager.MultiScale.PerpendicularFretRatio):
-										return $"Perpendicular fret: {scaleEditor.GetPerpendicularFretName((double)pc.NewValue)}";
-									default:
-										return $"Scale length {pc.Property}: {pc.NewValue}";
-								}
-							}
-						case StringSpacingManager ssm:
-							{
-								switch (pc.Property)
-								{
-									default:
-										return $"String spacing {pc.Property}: {pc.NewValue}";
-								}
-							}
-						case SIString ss:
-							{
-								switch (pc.Property)
-								{
-									default:
-										return $"String {pc.Property}: {pc.NewValue}";
-								}
-							}
-					}
-				}
-				else
-				{
-					switch (pc.Property)
-					{
-						case nameof(SILayout.ScaleLengthMode):
-							return $"Scale length mode: {pc.NewValue}";
-						case nameof(SILayout.StringSpacingMode):
-							return $"String spacing mode: {pc.NewValue}";
-						case nameof(SILayout.NumberOfStrings):
-							return $"Number of strings: {pc.NewValue}";
-					}
-				}
-			}
-			return action.GetChanges()[0].Property;
+            return LayoutChangeTranslator.GetChangeDescription(CurrentLayoutDocument.Layout, action);
 		}
 
 		private void tssbUndo_ButtonClick(object sender, EventArgs e)
@@ -171,32 +100,76 @@ namespace SiGen.UI
 			}
 		}
 
-        #endregion
+		#endregion
 
+		private void AboutAppButton_Click(object sender, EventArgs e)
+		{
+			using (var dlg = new AboutDialog())
+				dlg.ShowDialog(this);
+		}
 
-        private void tsbNew_Click(object sender, EventArgs e)
+		private void tsbNew_Click(object sender, EventArgs e)
         {
-            OpenLayoutFile("DefaultLayout.sil", true);
+            OpenDefaultLayout();
         }
 
-        private void tsbExport_Click(object sender, EventArgs e)
+        private void tssbOpen_ButtonClick(object sender, EventArgs e)
         {
-            using (var exportDialog = new ExportLayoutDialog(CurrentLayoutDocument.Layout))
+            tssbOpen.HideDropDown();
+
+            using (var ofd = new OpenFileDialog())
+            {
+				ofd.Filter = $"{Localizations.Misc_LayoutFileDesc}|*.sil|{Localizations.Misc_AllFilesDesc}|*.*";
+
+				if (ofd.ShowDialog() == DialogResult.OK)
+                    OpenLayoutFile(ofd.FileName);
+            }
+        }
+
+        private void tsmiOpenFile_Click(object sender, EventArgs e)
+        {
+            tssbOpen_ButtonClick(sender, e);
+        }
+
+		private void tssbSave_ButtonClick(object sender, EventArgs e)
+		{
+			if (CurrentLayoutDocument != null)
+				SaveLayout(CurrentLayoutDocument, string.IsNullOrEmpty(CurrentLayoutDocument.FilePath));
+		}
+
+		private void tsmiSave_Click(object sender, EventArgs e)
+		{
+			if (CurrentLayoutDocument != null)
+				SaveLayout(CurrentLayoutDocument, string.IsNullOrEmpty(CurrentLayoutDocument.FilePath));
+		}
+
+		private void tsmiSaveAs_Click(object sender, EventArgs e)
+		{
+			if (CurrentLayoutDocument != null)
+				SaveLayout(CurrentLayoutDocument, true);
+		}
+
+		private void tsbExport_Click(object sender, EventArgs e)
+        {
+            using (var exportDialog = new ExportLayoutDialog(CurrentLayoutDocument))
                 exportDialog.ShowDialog();
         }
 
         private void tsbOptions_Click(object sender, EventArgs e)
         {
-            using (var dlg = new AppPreferencesWindow())
-                dlg.ShowDialog();
-        }
-
-        private void tsbMeasureTool_Click(object sender, EventArgs e)
-        {
-            if (ActiveDocument != null)
+            using (var dlg = new OptionsDialog())
             {
-                ActiveDocument.Viewer.EnableMeasureTool = tsbMeasureTool.Checked;
-            }
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+					//var curDisplayCfg = AppConfig.Current.DisplayConfig;
+					//foreach(var layoutPanel in OpenDocumentPanels)
+					//	layoutPanel.Viewer.SetDisplayColors(curDisplayCfg);
+				}
+
+				var curDisplayCfg = AppConfig.Current.DisplayConfig;
+				foreach (var layoutPanel in OpenDocumentPanels)
+					layoutPanel.Viewer.SetDisplayColors(curDisplayCfg);
+			}
         }
 
         private void tsbClose_Click(object sender, EventArgs e)

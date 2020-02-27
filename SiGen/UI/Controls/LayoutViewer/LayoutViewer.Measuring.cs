@@ -254,7 +254,7 @@ namespace SiGen.UI
             FirstIntersection = null;
             LastIntersection = null;
             _CurrentMeasure = null;
-            _IsMeasuring = false;
+            IsMeasuring = false;
             InitializeMeasureContextMenu();
         }
 
@@ -359,7 +359,7 @@ namespace SiGen.UI
             if (_CurrentMeasure != null || !MeasureFirstSelection.IsEmpty || MeasureBoxes.Count > 0)
             {
                 _CurrentMeasure = null;
-                _IsMeasuring = false;
+                IsMeasuring = false;
                 MeasureBoxes.Clear();
                 MeasureFirstSelection = Vector.Empty;
                 MeasureLastSelection = Vector.Empty;
@@ -376,7 +376,7 @@ namespace SiGen.UI
         private void AdjustMeasureAfterLayoutChanged()
         {
             _CurrentMeasure = null;
-            _IsMeasuring = false;
+            IsMeasuring = false;
             MeasureBoxes.Clear();
 
             if (FirstIntersection != null && LastIntersection != null)
@@ -432,7 +432,7 @@ namespace SiGen.UI
                     MeasureFirstSelection = pos;
                     FirstIntersection = GetVisibleIntersections().FirstOrDefault(x => x.WorldCoord.EqualOrClose(pos, 0.001));
 
-                    _IsMeasuring = true;
+                    IsMeasuring = true;
                     Invalidate();
                 }
             }
@@ -844,7 +844,7 @@ namespace SiGen.UI
             var boxBounds = box.DisplayBounds;
 
             var finalSize = new Size(boxBounds.Width - 2, measureEditor.ValueTextbox.PreferredHeight);
-            var screenPos = PointToScreen(boxBounds.Location);
+            //var screenPos = PointToScreen(boxBounds.Location);
 
             //screenPos.Y += (int)Math.Round((boxBounds.Height - (double)finalSize.Height) / 2d);
             //screenPos.X += (int)Math.Round((boxBounds.Width - (double)finalSize.Width) / 2d);

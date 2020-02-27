@@ -8,35 +8,33 @@ namespace SiGen.StringedInstruments.Layout
 {
 	public class BatchChange : ILayoutChange
 	{
-		private List<PropertyChange> _ChangedProperties;
+        private List<ILayoutChange> _LayoutChanges;
 
         public string Name { get; }
 
-		public IList<PropertyChange> ChangedProperties => _ChangedProperties.AsReadOnly();
+        public IList<ILayoutChange> LayoutChanges => _LayoutChanges.AsReadOnly();
 
-		public IEnumerable<LayoutComponent> ChangedComponents => _ChangedProperties.Select(p => p.Component).Distinct();
+        public IEnumerable<PropertyChange> ChangedProperties => LayoutChanges.OfType<PropertyChange>();
+
+		public IEnumerable<LayoutComponent> ChangedComponents => LayoutChanges.Select(p => p.Component).Distinct();
 
         public bool AffectsLayout => ChangedProperties.Any(x => x.AffectsLayout);
 
         public LayoutComponent Component { get; }
 
-        public BatchChange(List<PropertyChange> changedProperties)
-		{
+        public BatchChange(IEnumerable<ILayoutChange> layoutChanges)
+        {
             Name = string.Empty;
-            _ChangedProperties = changedProperties;
-            Component = ChangedComponents.Count() == 1 ? ChangedComponents.First() : null;
+            _LayoutChanges = layoutChanges.ToList();
+            Component = ChangedComponents.FirstOrDefault();
         }
 
-        public BatchChange(string name, List<PropertyChange> ChangedProperties)
+
+        public BatchChange(string name, IEnumerable<ILayoutChange> layoutChanges)
         {
             Name = name;
-            _ChangedProperties = ChangedProperties;
-            Component = ChangedComponents.Count() == 1 ? ChangedComponents.First() : null;
+            _LayoutChanges = layoutChanges.ToList();
+            Component = ChangedComponents.FirstOrDefault();
         }
-
-        public PropertyChange[] GetChanges()
-		{
-			return _ChangedProperties.ToArray();
-		}
 	}
 }

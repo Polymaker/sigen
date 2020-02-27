@@ -73,17 +73,17 @@ namespace SiGen.StringedInstruments.Layout
 
         public StringSpacingSimple(SILayout layout) : base(layout)
         {
-            _NutSpacingMode = StringSpacingMethod.StringsCenter;
-            _BridgeSpacingMode = StringSpacingMethod.StringsCenter;
+            _NutSpacingMode = StringSpacingMethod.EqualDistance;
+            _BridgeSpacingMode = StringSpacingMethod.EqualDistance;
             AdjustedNutSpacings = new Measure[0];
             AdjustedBridgeSpacings = new Measure[0];
         }
 
         public override Measure GetSpacing(int index, FingerboardEnd side)
         {
-            if (side == FingerboardEnd.Nut && NutSpacingMode == StringSpacingMethod.BetweenStrings && AdjustedNutSpacings.Length > 0)
+            if (side == FingerboardEnd.Nut && NutSpacingMode == StringSpacingMethod.EqualSpacing && AdjustedNutSpacings.Length > 0)
                 return AdjustedNutSpacings[index];
-            else if (side == FingerboardEnd.Bridge && BridgeSpacingMode == StringSpacingMethod.BetweenStrings && AdjustedBridgeSpacings.Length > 0)
+            else if (side == FingerboardEnd.Bridge && BridgeSpacingMode == StringSpacingMethod.EqualSpacing && AdjustedBridgeSpacings.Length > 0)
                 return AdjustedBridgeSpacings[index];
 
             return side == FingerboardEnd.Nut ? StringSpacingAtNut : StringSpacingAtBridge;
@@ -100,7 +100,7 @@ namespace SiGen.StringedInstruments.Layout
         public override XElement Serialize(string elemName)
         {
             var elem = base.Serialize(elemName);
-            if(NutSpacingMode == StringSpacingMethod.BetweenStrings && AdjustedNutSpacings != null && AdjustedNutSpacings.Length > 0)
+            if(NutSpacingMode == StringSpacingMethod.EqualSpacing && AdjustedNutSpacings != null && AdjustedNutSpacings.Length > 0)
                 elem.AddFirst(new XComment("Nut slot positions are adjusted in consideration of the strings gauge"));
             elem.Add(new XAttribute("NutSpacingMode", NutSpacingMode));
             elem.Add(new XAttribute("BridgeSpacingMode", BridgeSpacingMode));
@@ -114,9 +114,11 @@ namespace SiGen.StringedInstruments.Layout
             base.Deserialize(elem);
             if (elem.ContainsAttribute("NutSpacingMode"))
             {
-                NutSpacingMode = (StringSpacingMethod)Enum.Parse(typeof(StringSpacingMethod), elem.Attribute("NutSpacingMode").Value);
+                NutSpacingMode = EnumHelper.Parse<StringSpacingMethod>(elem.Attribute("NutSpacingMode").Value);
 
-                if (NutSpacingMode == StringSpacingMethod.BetweenStrings)
+                //NutSpacingMode = (StringSpacingMethod)Enum.Parse(typeof(StringSpacingMethod), elem.Attribute("NutSpacingMode").Value);
+
+                if (NutSpacingMode == StringSpacingMethod.EqualSpacing)
                 {
                     StringSpacingAtNut = Measure.ParseInvariant(elem.Attribute("StringSpacingAtNut").Value);
                     AdjustedNutSpacings = new Measure[elem.Elements("Spacing").Count()];
@@ -129,9 +131,10 @@ namespace SiGen.StringedInstruments.Layout
             }
             if (elem.ContainsAttribute("BridgeSpacingMode"))
             {
-                BridgeSpacingMode = (StringSpacingMethod)Enum.Parse(typeof(StringSpacingMethod), elem.Attribute("BridgeSpacingMode").Value);
+                BridgeSpacingMode = EnumHelper.Parse<StringSpacingMethod>(elem.Attribute("BridgeSpacingMode").Value);
+                //BridgeSpacingMode = (StringSpacingMethod)Enum.Parse(typeof(StringSpacingMethod), elem.Attribute("BridgeSpacingMode").Value);
 
-                if (BridgeSpacingMode == StringSpacingMethod.BetweenStrings)
+                if (BridgeSpacingMode == StringSpacingMethod.EqualSpacing)
                 {
                     StringSpacingAtBridge = Measure.ParseInvariant(elem.Attribute("StringSpacingAtBridge").Value);
                     AdjustedBridgeSpacings = new Measure[elem.Elements("Spacing").Count()];
@@ -151,7 +154,7 @@ namespace SiGen.StringedInstruments.Layout
 
             if (Layout.Strings.All(s => s.Gauge != Measure.Empty) && NumberOfStrings >= 2)
             {
-                if(NutSpacingMode == StringSpacingMethod.BetweenStrings)
+                if(NutSpacingMode == StringSpacingMethod.EqualSpacing)
                 {
                     AdjustedNutSpacings = new Measure[NumberOfStrings - 1];
                     var spacing = StringSpreadAtNut - Layout.Strings.Sum(s => s.Gauge);
@@ -164,7 +167,7 @@ namespace SiGen.StringedInstruments.Layout
                     }
                 }
 
-                if (BridgeSpacingMode == StringSpacingMethod.BetweenStrings)
+                if (BridgeSpacingMode == StringSpacingMethod.EqualSpacing)
                 {
                     AdjustedBridgeSpacings = new Measure[NumberOfStrings - 1];
                     var spacing = StringSpreadAtBridge - Layout.Strings.Sum(s => s.Gauge);

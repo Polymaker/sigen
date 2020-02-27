@@ -50,6 +50,7 @@ namespace SiGen.UI.Controls.LayoutEditors
             base.OnLoad(e);
             Controls.Add(_Editor);
             _Editor.Dock = System.Windows.Forms.DockStyle.Fill;
+            Text = _Editor.Title;
         }
 
         protected override void OnDockStateChanged(EventArgs e)
@@ -59,18 +60,6 @@ namespace SiGen.UI.Controls.LayoutEditors
                 Text = Text.Replace("&&", "&");
             else if(DockState != DockState.Float && Text.Contains(" & "))
                 Text = Text.Replace(" & ", " && ");
-        }
-
-        private void InitializeComponent()
-        {
-            this.SuspendLayout();
-            // 
-            // LayoutEditorPanel
-            // 
-            this.ClientSize = new System.Drawing.Size(284, 261);
-            this.Name = "LayoutEditorPanel";
-            this.ResumeLayout(false);
-
         }
     }
 }

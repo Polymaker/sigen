@@ -54,6 +54,13 @@ namespace SiGen.Utilities
                 mFlags[flagName] = value;
         }
 
+        public bool IsSet(string flagName)
+        {
+            if (mFlags.ContainsKey(flagName))
+                return mFlags[flagName];
+            return false;
+        }
+
         public IDisposable UseFlag(string name)
         {
             Set(name, true);

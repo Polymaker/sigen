@@ -55,7 +55,6 @@ namespace SiGen.UI.Controls
                         return true;
                     }
                 }
-
                 return kea.Handled || base.ProcessCmdKey(ref msg, keyData);
             }
             return kea.Handled;
@@ -67,5 +66,7 @@ namespace SiGen.UI.Controls
             if (handler != null)
                 handler(this, e);
         }
+
+
     }
 }

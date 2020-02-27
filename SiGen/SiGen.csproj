@@ -39,9 +39,66 @@
     <StartupObject>SiGen.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\SigenIcon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Icons\SiGenIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Wix Prep|x86' ">
+    <OutputPath>bin\Wix Prep\x86\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Wix Prep|x64'">
+    <OutputPath>bin\Wix Prep\x64\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Wix Prep|AnyCPU'">
+    <OutputPath>bin\Wix Prep\Any\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="netDxf">
+      <HintPath>..\Libraries\netDxf.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Svg, Version=2.2.1.39233, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
       <HintPath>packages\Svg.2.3.0\lib\net35\Svg.dll</HintPath>
       <Private>True</Private>
@@ -63,16 +120,32 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\AppPreferences.cs" />
+    <Compile Include="Configuration\AppConfig.cs" />
+    <Compile Include="Configuration\AppConfigManager.cs" />
     <Compile Include="Common\InstrumentType.cs" />
     <Compile Include="Common\LayoutDocument.cs" />
     <Compile Include="Common\StringData.cs" />
     <Compile Include="Common\StringSet.cs" />
-    <Compile Include="Common\StringType.cs" />
-    <Compile Include="Configuration\DisplayPreferences.cs" />
-    <Compile Include="Configuration\ScreenConfiguration.cs" />
-    <Compile Include="Export\LayoutExportOptions.cs" />
+    <Compile Include="Common\StringMaterial.cs" />
+    <Compile Include="Configuration\ConfigObjectBase.cs" />
+    <Compile Include="Configuration\Converters\ColorJsonConverter.cs" />
+    <Compile Include="Configuration\Converters\MeasureJsonConverter.cs" />
+    <Compile Include="Configuration\Display\FingerboardDisplayConfig.cs" />
+    <Compile Include="Configuration\Display\FretsDisplayConfigs.cs" />
+    <Compile Include="Configuration\Display\LineDisplayConfig.cs" />
+    <Compile Include="Configuration\Display\LineRenderMode.cs" />
+    <Compile Include="Configuration\Display\StringsDisplayConfig.cs" />
+    <Compile Include="Configuration\Export\FingerboardExportConfig.cs" />
+    <Compile Include="Configuration\Export\FretsExportConfig.cs" />
+    <Compile Include="Configuration\Export\StringsExportConfig.cs" />
+    <Compile Include="Configuration\Converters\ShouldSerializeContractResolver.cs" />
+    <Compile Include="Export\DxfLayoutExporter.cs" />
+    <Compile Include="Export\LineUnit.cs" />
+    <Compile Include="Export\LayoutExporterBase.cs" />
+    <Compile Include="Configuration\Export\LayoutExportConfig.cs" />
+    <Compile Include="Configuration\Export\LineExportConfig.cs" />
     <Compile Include="Export\SvgLayoutExporter.cs" />
+    <Compile Include="Localization\LayoutChangeTranslator.cs" />
     <Compile Include="Localization\LocalizableString.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -85,6 +158,7 @@
     <Compile Include="Localization\LocalizableStringList.Designer.cs">
       <DependentUpon>LocalizableStringList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Localization\LocDescriptionAttribute.cs" />
     <Compile Include="Maths\Angle.cs" />
     <Compile Include="Maths\AngleUnit.cs" />
     <Compile Include="Maths\BezierCurve.cs" />
@@ -105,13 +179,26 @@
     <Compile Include="Physics\Temperament.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Localizations.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Localizations.resx</DependentUpon>
+    </Compile>
     <Compile Include="StringedInstruments\Data\StringProperties.cs" />
     <Compile Include="StringedInstruments\Data\StringTuning.cs" />
     <Compile Include="StringedInstruments\Layout\Edit\BatchChange.cs" />
+    <Compile Include="StringedInstruments\Layout\Edit\CollectionChange.cs" />
+    <Compile Include="StringedInstruments\Layout\Edit\CollectionItemChangeInfo.cs" />
     <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardEnd.cs" />
     <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardMargin.cs" />
     <Compile Include="StringedInstruments\Layout\Fingerboard\FingerboardSide.cs" />
     <Compile Include="StringedInstruments\Layout\Fingerboard\FretInterpolationMethod.cs" />
+    <Compile Include="StringedInstruments\Layout\Frets\FretHelper.cs" />
     <Compile Include="StringedInstruments\Layout\Frets\FretPosition.cs" />
     <Compile Include="StringedInstruments\Layout\Frets\FretPositionCollection.cs" />
     <Compile Include="StringedInstruments\Layout\Edit\PropertyChange.cs" />
@@ -121,14 +208,19 @@
     <Compile Include="StringedInstruments\Layout\Edit\LayoutChangedEventArgs.cs" />
     <Compile Include="StringedInstruments\Layout\LayoutComponent.cs" />
     <Compile Include="StringedInstruments\Layout\LayoutIntersection.cs" />
+    <Compile Include="StringedInstruments\Layout\LayoutItemCollection.cs" />
+    <Compile Include="StringedInstruments\Layout\ScaleLength\MultipleScaleManager.cs" />
+    <Compile Include="StringedInstruments\Layout\ScaleLength\DualScaleManager.cs" />
     <Compile Include="StringedInstruments\Layout\ScaleLength\ScaleLengthManager.cs" />
     <Compile Include="StringedInstruments\Layout\ScaleLength\ScaleLengthType.cs" />
+    <Compile Include="StringedInstruments\Layout\ScaleLength\SingleScaleManager.cs" />
     <Compile Include="StringedInstruments\Layout\SILayout.Builder.cs" />
     <Compile Include="StringedInstruments\Layout\Strings\SIString.cs" />
     <Compile Include="StringedInstruments\Layout\ScaleLength\LengthFunction.cs" />
     <Compile Include="StringedInstruments\Layout\SILayout.cs" />
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingType.cs" />
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingMethod.cs" />
+    <Compile Include="StringedInstruments\Layout\Strings\StringHelper.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FingerboardEdge.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FretLine.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\FretSegment.cs" />
@@ -145,6 +237,9 @@
     <Compile Include="StringedInstruments\Layout\StringSpacing\StringSpacingManual.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElement.cs" />
     <Compile Include="StringedInstruments\Layout\Visual\VisualElementType.cs" />
+    <Compile Include="UI\Controls\CollapsiblePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\Controls\LayoutEditors\FingerboardMarginEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -193,23 +288,29 @@
     <Compile Include="UI\Controls\LayoutViewer\LayoutViewer.Measuring.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\Controls\PreferencesPanels\MonitorPreferences.cs">
+    <Compile Include="UI\Controls\Preferences\LineExportConfigEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\Controls\PreferencesPanels\MonitorPreferences.Designer.cs">
-      <DependentUpon>MonitorPreferences.cs</DependentUpon>
+    <Compile Include="UI\Controls\Preferences\LineExportConfigEdit.Designer.cs">
+      <DependentUpon>LineExportConfigEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\PreferencesPanels\PreferencesPanel.cs">
+    <Compile Include="UI\Controls\Preferences\LineExportEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\Controls\PreferencesPanels\PreferencesPanel.Designer.cs">
-      <DependentUpon>PreferencesPanel.cs</DependentUpon>
+    <Compile Include="UI\Controls\Preferences\LineExportEdit.Designer.cs">
+      <DependentUpon>LineExportEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\PreferencesPanels\StringsManagementPanel.cs">
+    <Compile Include="UI\Controls\ValueEditors\ColorSelectButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\Controls\PreferencesPanels\StringsManagementPanel.Designer.cs">
-      <DependentUpon>StringsManagementPanel.cs</DependentUpon>
+    <Compile Include="UI\Controls\ValueEditors\ColorSelectButton.Designer.cs">
+      <DependentUpon>ColorSelectButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\Preferences\LineThicknessEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\Preferences\LineThicknessEditor.Designer.cs">
+      <DependentUpon>LineThicknessEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\ValueEditors\NumericBox.cs">
       <SubType>Component</SubType>
@@ -223,6 +324,7 @@
     <Compile Include="UI\Controls\LayoutEditors\ScaleLengthEditor.Designer.cs">
       <DependentUpon>ScaleLengthEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Controls\ValueEditors\TextBoxDesigner.cs" />
     <Compile Include="UI\Controls\ValueEditors\TextBoxEx.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -231,17 +333,17 @@
     </Compile>
     <Compile Include="UI\Controls\ValueEditors\MeasureEditor.cs" />
     <Compile Include="UI\Controls\ValueEditors\UnitOfMeasureEditor.cs" />
-    <Compile Include="UI\Windows\AppPreferencesWindow.cs">
+    <Compile Include="UI\Windows\AboutDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Windows\AppPreferencesWindow.Designer.cs">
-      <DependentUpon>AppPreferencesWindow.cs</DependentUpon>
+    <Compile Include="UI\Windows\AboutDialog.Designer.cs">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Windows\DetectScreenDPI.cs">
+    <Compile Include="UI\Windows\OptionsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Windows\DetectScreenDPI.Designer.cs">
-      <DependentUpon>DetectScreenDPI.cs</DependentUpon>
+    <Compile Include="UI\Windows\OptionsDialog.Designer.cs">
+      <DependentUpon>OptionsDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Windows\LayoutEditorWindow.cs">
       <SubType>Form</SubType>
@@ -255,7 +357,7 @@
     <Compile Include="UI\Controls\LayoutViewer\LayoutViewer.Designer.cs">
       <DependentUpon>LayoutViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\LayoutViewer\LayoutViewerDisplayConfig.cs" />
+    <Compile Include="Configuration\Display\ViewerDisplayConfig.cs" />
     <Compile Include="UI\Controls\ValueEditors\MeasureTextbox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -272,13 +374,15 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Utilities\ArrayProperty.cs" />
+    <Compile Include="Utilities\ControlHelper.cs" />
     <Compile Include="Utilities\EnumHelper.cs" />
     <Compile Include="Utilities\ExtensionMethods\CollectionHelper.cs" />
     <Compile Include="Utilities\FlagList.cs" />
-    <Compile Include="Utilities\MeasureConverter.cs" />
+    <Compile Include="Measuring\MeasureConverter.cs" />
     <Compile Include="Utilities\ExtensionMethods\NumberHelper.cs" />
     <Compile Include="Utilities\ExtensionMethods\XmlLinqExtensions.cs" />
-    <Compile Include="Utilities\MeasureParser.cs" />
+    <Compile Include="Measuring\MeasureParser.cs" />
+    <Compile Include="Utilities\NativeUtils.cs" />
     <Compile Include="Utilities\ObservableCollectionEx.cs" />
     <Compile Include="Maths\PreciseDouble.cs" />
     <Compile Include="Utilities\SerializationHelper.cs" />
@@ -286,14 +390,19 @@
     <Compile Include="Utilities\TemporaryObject.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Localizations.fr.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
+    <EmbeddedResource Include="Resources\Localizations.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localizations.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\FingerboardMarginEditor.fr.resx">
+      <DependentUpon>FingerboardMarginEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\FingerboardMarginEditor.resx">
       <DependentUpon>FingerboardMarginEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -303,8 +412,14 @@
     <EmbeddedResource Include="UI\Controls\LayoutEditors\LayoutProperties.resx">
       <DependentUpon>LayoutProperties.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\LayoutViewerPanel.fr.resx">
+      <DependentUpon>LayoutViewerPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\LayoutViewerPanel.resx">
       <DependentUpon>LayoutViewerPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\ScaleLengthEditor.fr.resx">
+      <DependentUpon>ScaleLengthEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\ScaleLengthEditor.resx">
       <DependentUpon>ScaleLengthEditor.cs</DependentUpon>
@@ -312,26 +427,62 @@
     <EmbeddedResource Include="UI\Controls\LayoutEditors\StringPropertiesEditor.resx">
       <DependentUpon>StringPropertiesEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\StringsConfigurationEditor.fr.resx">
+      <DependentUpon>StringsConfigurationEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\StringsConfigurationEditor.resx">
       <DependentUpon>StringsConfigurationEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutEditors\StringSpacingEditor.fr.resx">
+      <DependentUpon>StringSpacingEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutEditors\StringSpacingEditor.resx">
       <DependentUpon>StringSpacingEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\LayoutViewer\LayoutViewer.fr.resx">
+      <DependentUpon>LayoutViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\LayoutViewer\LayoutViewer.resx">
       <DependentUpon>LayoutViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Controls\PreferencesPanels\MonitorPreferences.resx">
-      <DependentUpon>MonitorPreferences.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Controls\Preferences\LineExportConfigEdit.fr.resx">
+      <DependentUpon>LineExportConfigEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Controls\PreferencesPanels\StringsManagementPanel.resx">
-      <DependentUpon>StringsManagementPanel.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Controls\Preferences\LineExportConfigEdit.resx">
+      <DependentUpon>LineExportConfigEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Windows\AppPreferencesWindow.resx">
-      <DependentUpon>AppPreferencesWindow.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Controls\Preferences\LineExportEdit.fr.resx">
+      <DependentUpon>LineExportEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Windows\DetectScreenDPI.resx">
-      <DependentUpon>DetectScreenDPI.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Controls\Preferences\LineExportEdit.resx">
+      <DependentUpon>LineExportEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\Preferences\LineThicknessEditor.fr.resx">
+      <DependentUpon>LineThicknessEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\ValueEditors\ColorSelectButton.resx">
+      <DependentUpon>ColorSelectButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\Preferences\LineThicknessEditor.resx">
+      <DependentUpon>LineThicknessEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\ValueEditors\MeasureTextbox.fr.resx">
+      <DependentUpon>MeasureTextbox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Windows\AboutDialog.fr.resx">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Windows\AboutDialog.resx">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Windows\OptionsDialog.fr.resx">
+      <DependentUpon>OptionsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Windows\OptionsDialog.resx">
+      <DependentUpon>OptionsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Windows\ExportLayoutDialog.fr.resx">
+      <DependentUpon>ExportLayoutDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Windows\LayoutEditorWindow.fr.resx">
       <DependentUpon>LayoutEditorWindow.cs</DependentUpon>
@@ -345,9 +496,7 @@
     <EmbeddedResource Include="UI\Windows\ExportLayoutDialog.resx">
       <DependentUpon>ExportLayoutDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="DefaultLayout.sil">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="Resources\DefaultLayout.sil" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -367,15 +516,29 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Resources\MeasureIcon_32.png" />
-    <Content Include="Resources\MeasureIcon_64.png" />
-    <Content Include="Resources\NewLayoutIcon_32.png" />
-    <Content Include="Resources\OpenLayoutIcon_32.png" />
-    <Content Include="Resources\OptionsIcon_32.png" />
-    <Content Include="Resources\SigenIcon.ico" />
-    <None Include="Resources\SigenIcon_x64.png" />
+    <Content Include="Resources\Icons\closed hand icon.ico" />
+    <Content Include="Resources\Icons\LayoutFileIcon.ico" />
+    <Content Include="Resources\Icons\open hand icon.ico" />
+    <Content Include="Resources\Images\CloseLayout_x32.png" />
+    <Content Include="Resources\Images\ExportLayout_x32.png" />
+    <Content Include="Resources\Images\Measure_x32.png" />
+    <Content Include="Resources\Images\NewLayout_x32.png" />
+    <Content Include="Resources\Images\OpenLayout_x32.png" />
+    <Content Include="Resources\Images\Redo_x32.png" />
+    <Content Include="Resources\Images\SaveLayout_x32.png" />
+    <Content Include="Resources\Images\Settings_x32.png" />
+    <Content Include="Resources\Icons\SiGenIcon.ico" />
+    <Content Include="Resources\Images\SiGenIcon_x32.png" />
+    <Content Include="Resources\Images\Undo_x32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Wix Prep" (
+del *.pdb
+del *.xml
+
+)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

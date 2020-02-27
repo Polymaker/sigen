@@ -78,6 +78,12 @@ namespace SiGen.Measuring
             this.y = new Measure(y, unit);
         }
 
+        public PointM(Vector vector, UnitOfMeasure unit)
+        {
+            this.x = Measure.FromNormalizedValue(vector.X, unit);
+            this.y = Measure.FromNormalizedValue(vector.Y, unit);
+        }
+
         #endregion
 
         #region Static Ctors
@@ -160,6 +166,13 @@ namespace SiGen.Measuring
             if (IsEmpty)
                 return Vector.Empty;
             return new Vector(X.NormalizedValue, Y.NormalizedValue);
+        }
+
+        public Vector ToVector(UnitOfMeasure unit)
+        {
+            if (IsEmpty)
+                return Vector.Empty;
+            return new Vector(X[unit], Y[unit]);
         }
 
         #endregion

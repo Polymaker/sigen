@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using SiGen.StringedInstruments.Layout;
 using SiGen.Utilities;
 using SiGen.Measuring;
+using SiGen.Resources;
 
 namespace SiGen.UI.Controls.LayoutEditors
 {
@@ -24,7 +25,6 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
             base.OnLoad(e);
             UpdateComboboxes();
-            OptimizeLayout();
         }
 
         private void UpdateComboboxes(bool preserveValues = false)
@@ -32,12 +32,19 @@ namespace SiGen.UI.Controls.LayoutEditors
             using (FlagManager.UseFlag("UpdateComboboxes"))
             {
                 var alignmentList = new List<EnumHelper.EnumItem>();
-                alignmentList.Add(new EnumHelper.EnumItem(StringSpacingAlignment.SpacingMiddle, "Centered between outer strings"));
+
+                alignmentList.Add(new EnumHelper.EnumItem(StringSpacingAlignment.OuterStrings, 
+                    Localizations.StringSpacingAlignment_OuterStrings));
 
                 if (CurrentLayout == null || CurrentLayout.NumberOfStrings % 2 == 0)
-                    alignmentList.Add(new EnumHelper.EnumItem(StringSpacingAlignment.StringCenter, "Centered between middle strings"));
+                    alignmentList.Add(new EnumHelper.EnumItem(StringSpacingAlignment.MiddleString,
+                        Localizations.StringSpacingAlignment_MiddleStringEven));
                 else
-                    alignmentList.Add(new EnumHelper.EnumItem(StringSpacingAlignment.StringCenter, "Centered along middle string"));
+                    alignmentList.Add(new EnumHelper.EnumItem(StringSpacingAlignment.MiddleString,
+                        Localizations.StringSpacingAlignment_MiddleStringOdd));
+
+                alignmentList.Add(new EnumHelper.EnumItem(StringSpacingAlignment.FingerboardEdges,
+                    Localizations.StringSpacingAlignment_FingerboardEdges));
 
                 cboNutSpacingAlignment.ValueMember = EnumHelper.EnumItem.ValueMember;
                 cboNutSpacingAlignment.DisplayMember = EnumHelper.EnumItem.DisplayMember;
@@ -48,8 +55,10 @@ namespace SiGen.UI.Controls.LayoutEditors
                 cboBridgeSpacingAlignment.DataSource = alignmentList.ToList();//Clone
 
                 var spacingModeList = new List<EnumHelper.EnumItem>();
-                spacingModeList.Add(new EnumHelper.EnumItem(StringSpacingMethod.StringsCenter, "Equal spacing (center to center)"));
-                spacingModeList.Add(new EnumHelper.EnumItem(StringSpacingMethod.BetweenStrings, "Equal spacing (between strings)"));
+                spacingModeList.Add(new EnumHelper.EnumItem(StringSpacingMethod.EqualDistance,
+                    Localizations.StringSpacingMethod_EqualDistance));
+                spacingModeList.Add(new EnumHelper.EnumItem(StringSpacingMethod.EqualSpacing,
+                    Localizations.StringSpacingMethod_EqualSpacing));
 
                 cboNutSpacingMethod.ValueMember = EnumHelper.EnumItem.ValueMember;
                 cboNutSpacingMethod.DisplayMember = EnumHelper.EnumItem.DisplayMember;
@@ -69,11 +78,11 @@ namespace SiGen.UI.Controls.LayoutEditors
                 }
                 else
                 {
-                    cboNutSpacingAlignment.SelectedValue = StringSpacingAlignment.SpacingMiddle;
-                    cboBridgeSpacingAlignment.SelectedValue = StringSpacingAlignment.SpacingMiddle;
+                    cboNutSpacingAlignment.SelectedValue = StringSpacingAlignment.OuterStrings;
+                    cboBridgeSpacingAlignment.SelectedValue = StringSpacingAlignment.OuterStrings;
 
-                    cboNutSpacingMethod.SelectedValue = StringSpacingMethod.StringsCenter;
-                    cboBridgeSpacingMethod.SelectedValue = StringSpacingMethod.StringsCenter;
+                    cboNutSpacingMethod.SelectedValue = StringSpacingMethod.EqualDistance;
+                    cboBridgeSpacingMethod.SelectedValue = StringSpacingMethod.EqualDistance;
                 }
             }
         }
@@ -81,19 +90,6 @@ namespace SiGen.UI.Controls.LayoutEditors
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
-            //OptimizeLayout();
-        }
-
-        private void OptimizeLayout()
-        {
-            if(Width > 500 && tlpNutSpacingAuto.Dock == DockStyle.Top)
-            {
-
-            }
-            else if(tlpNutSpacingAuto.Dock != DockStyle.Top)
-            {
-
-            }
         }
 
         protected override void ReadLayoutProperties()
@@ -141,6 +137,7 @@ namespace SiGen.UI.Controls.LayoutEditors
         protected override void OnNumberOfStringsChanged()
         {
             base.OnNumberOfStringsChanged();
+
             using (FlagManager.UseFlag("UpdateSpacing"))
             {
                 UpdateComboboxes(true);
@@ -182,10 +179,10 @@ namespace SiGen.UI.Controls.LayoutEditors
             }
             if (cboNutSpacingMethod.SelectedItem != null && !FlagManager["UpdateComboboxes"])
             {
-                if ((StringSpacingMethod)cboNutSpacingMethod.SelectedValue == StringSpacingMethod.BetweenStrings)
-                    lblNutStringSpacing.Text = "Avg. Spacing";
+                if ((StringSpacingMethod)cboNutSpacingMethod.SelectedValue == StringSpacingMethod.EqualSpacing)
+                    lblNutStringSpacing.Text = Text_AvgSpacing;
                 else
-                    lblNutStringSpacing.Text = "Spacing";
+                    lblNutStringSpacing.Text = Text_Spacing;
             }
         }
 
@@ -233,10 +230,10 @@ namespace SiGen.UI.Controls.LayoutEditors
             }
             if (cboBridgeSpacingMethod.SelectedItem != null)
             {
-                if ((StringSpacingMethod)cboBridgeSpacingMethod.SelectedValue == StringSpacingMethod.BetweenStrings)
-                    lblBridgeStringSpacing.Text = "Avg. Spacing";
+                if ((StringSpacingMethod)cboBridgeSpacingMethod.SelectedValue == StringSpacingMethod.EqualSpacing)
+                    lblBridgeStringSpacing.Text = Text_AvgSpacing;
                 else
-                    lblBridgeStringSpacing.Text = "Spacing";
+                    lblBridgeStringSpacing.Text = Text_Spacing;
             }
         }
 

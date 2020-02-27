@@ -119,6 +119,13 @@ namespace SiGen.UI.Controls
             }
         }
 
+        [Browsable(true), DefaultValue(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public override bool AutoSize { get => base.AutoSize; set => base.AutoSize = value; }
+
+        protected bool ShouldSerializeAutoSize()
+        {
+            return !AutoSize;
+        }
 
         #endregion
 
@@ -135,6 +142,7 @@ namespace SiGen.UI.Controls
             InitializeComponent();
             _MaximumValue = 100;
             _AllowDecimals = true;
+            AutoSize = true;
             _MaxDisplayedDecimalPlaces = 5;
         }
 
@@ -225,23 +233,17 @@ namespace SiGen.UI.Controls
 
         protected void OnBeginEdit()
         {
-            var handler = BeginEdit;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
+            BeginEdit?.Invoke(this, EventArgs.Empty);
         }
 
         protected void OnEndEdit()
         {
-            var handler = EndEdit;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
+            EndEdit?.Invoke(this, EventArgs.Empty);
         }
 
         protected void OnValueChanged(EventArgs e)
         {
-            var handler = ValueChanged;
-            if (handler != null)
-                handler(this, e);
+            ValueChanged?.Invoke(this, e);
         }
 
         protected override void OnValidating(CancelEventArgs e)
@@ -277,6 +279,13 @@ namespace SiGen.UI.Controls
             PerformEndEdit();
         }
 
+
+        protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
+        {
+            if (width == 4)
+                return;
+            base.SetBoundsCore(x, y, width, height, specified);
+        }
         //private const int WM_PASTE = 0x0302;
 
         //protected override void WndProc(ref Message m)
@@ -291,7 +300,7 @@ namespace SiGen.UI.Controls
         //}
     }
 
-    internal class NumericBoxDesigner : ControlDesigner
+    internal class NumericBoxDesigner : TextBoxDesigner
     {
         public override SelectionRules SelectionRules
         {

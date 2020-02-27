@@ -64,12 +64,19 @@ namespace SiGen.StringedInstruments.Layout.Visual
             _Points.AddRange(points);
         }
 
+        public LayoutPolyLine(IEnumerable<PointM> points, VisualElementType elementType) : base(elementType)
+        {
+            _Points = new ObservableCollectionEx<PointM>();
+            _Points.CollectionChanged += Points_CollectionChanged;
+            _Points.AddRange(points);
+        }
+
         private void Points_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             isDirty = true;
         }
 
-        private void UpdateInfos()
+        public void UpdateInfos()
         {
             _Length = Measure.Zero;
             for (int i = 0; i < Points.Count - 1; i++)
@@ -419,6 +426,11 @@ namespace SiGen.StringedInstruments.Layout.Visual
             var points = Points.ToList();
             Points.Clear();
             _Points.AddRange(points.Select(p => new PointM(p.X * -1, p.Y)));
+        }
+
+        public PointM[] GetLinePoints()
+        {
+            return _Points.ToArray();
         }
     }
 }

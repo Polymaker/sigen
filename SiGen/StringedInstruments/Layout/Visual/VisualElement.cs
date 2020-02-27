@@ -11,9 +11,23 @@ namespace SiGen.StringedInstruments.Layout.Visual
     {
         internal SILayout Layout;
 
-        public virtual VisualElementType ElementType => VisualElementType.Unknown;
+        private VisualElementType _ElementType = VisualElementType.Unknown;
+
+        public virtual VisualElementType ElementType => _ElementType;
 
         public abstract RectangleM Bounds { get; }
+
+        public object Tag { get; set; }
+
+        public VisualElement()
+        {
+
+        }
+
+        protected VisualElement(VisualElementType elementType)
+        {
+            _ElementType = elementType;
+        }
 
         internal virtual void FlipHandedness()
         {

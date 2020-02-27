@@ -1,4 +1,6 @@
-﻿using SiGen.Maths;
+﻿using SiGen.Common;
+using SiGen.Configuration.Display;
+using SiGen.Maths;
 using SiGen.Measuring;
 using SiGen.StringedInstruments.Layout;
 using SiGen.StringedInstruments.Layout.Visual;
@@ -15,6 +17,22 @@ namespace SiGen.UI
 {
     public partial class LayoutViewer
     {
+        #region Hardcoded Colors
+
+        private static Color NylonFill = Color.FromArgb(180, 235, 235, 235);
+        private static Color NylonOutline = Color.FromArgb(180, 200, 200, 200);
+
+        private static Color PlainSteelFill = Color.Gainsboro;
+        private static Color PlainSteelOutline = Color.DarkGray;
+
+        private static Color SteelWoundFill = Color.Silver;
+        private static Color SteelWoundOutline = Color.Gray;
+
+        private static Color BronzeWoundFill = Color.FromArgb(194, 137, 33);
+        private static Color BronzeWoundOutline = Color.FromArgb(169, 91, 14);
+
+        #endregion
+
         #region Graphics Extentions
 
         private static readonly Vector FlipY = new Vector(1, -1);
@@ -60,21 +78,140 @@ namespace SiGen.UI
             g.DrawLine(pen, PointToDisplay(p1), PointToDisplay(p2));
         }
 
+        private void DrawLine(Graphics g, LayoutLine line, Pen pen)
+        {
+            DrawLine(g, pen, line.P1, line.P2);
+        }
+
+        private void DrawLine(Graphics g, LayoutPolyLine line, Pen pen)
+        {
+            var linePoints = line.GetLinePoints()
+                .Select(x => PointToDisplay(x)).ToArray();
+            g.DrawCurve(pen, linePoints, 0.5f);
+        }
+
+        //private GraphicsPath GetLinePath(PointM p1, PointM p2, Measure thickness)
+        //{
+        //    var line = Line.FromPoints(p1.ToVector(), p2.ToVector());
+        //    var perpVec = line.GetPerpendicular(p1.ToVector());
+        //    var p1a = p1 + (perpVec.Vector * (thickness * -0.5d));
+        //    var p1b = p1 + (perpVec.Vector * (thickness * 0.5d));
+        //    var p2a = p2 + (perpVec.Vector * (thickness * -0.5d));
+        //    var p2b = p2 + (perpVec.Vector * (thickness * 0.5d));
+        //    var gp = new GraphicsPath();
+        //    gp.StartFigure();
+        //    gp.AddLine(PointToDisplay(p1a), PointToDisplay(p2a));
+        //    gp.AddLine(PointToDisplay(p2b), PointToDisplay(p1b));
+        //    gp.CloseFigure();
+
+        //    return gp;
+        //}
+
+        //private GraphicsPath GetLinePath(PointM p1, PointM p2, Measure thickness, out PointF gradPt1, out PointF gradPt2)
+        //{
+        //    var line = Line.FromPoints(p1.ToVector(), p2.ToVector());
+        //    var perpVec = line.GetPerpendicular(p1.ToVector());
+        //    var p1a = p1 + (perpVec.Vector * (thickness * -0.5d));
+        //    var p1b = p1 + (perpVec.Vector * (thickness * 0.5d));
+        //    var p2a = p2 + (perpVec.Vector * (thickness * -0.5d));
+        //    var p2b = p2 + (perpVec.Vector * (thickness * 0.5d));
+        //    var gp = new GraphicsPath();
+        //    gp.StartFigure();
+        //    gp.AddLine(PointToDisplay(p1a), PointToDisplay(p2a));
+        //    gp.AddLine(PointToDisplay(p2b), PointToDisplay(p1b));
+        //    gp.CloseFigure();
+
+        //    p1a = p1 + (perpVec.Vector * (thickness * -2d));
+        //    p1b = p1 + (perpVec.Vector * (thickness * 2d));
+        //    gradPt1 = PointToDisplay(p1a);
+        //    gradPt2 = PointToDisplay(p1b);
+
+        //    return gp;
+        //}
+
         private void DrawLines(Graphics g, Pen pen, IEnumerable<PointM> points)
         {
             g.DrawLines(pen, points.Select(p => PointToDisplay(p)).ToArray());
         }
 
-        private void DrawRotatedString(Graphics g, string text, Font font, Brush brush, PointF center, Angle angle)
+        #endregion
+
+        protected override void OnPaint(PaintEventArgs pe)
         {
-            SizeF textSize = g.MeasureString(text, font);
-            g.TranslateTransform(center.X, center.Y);
-            g.RotateTransform((float)angle.Degrees);
-            g.DrawString(text, font, brush, -(textSize.Width / 2), -(textSize.Height / 2));
-            g.ResetTransform();
+            base.OnPaint(pe);
+
+            pe.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+
+            var center = new PointF(Width / 2f, Height / 2f);
+            pe.Graphics.TranslateTransform(center.X, center.Y);
+            pe.Graphics.ScaleTransform((float)_Zoom, (float)_Zoom);
+            pe.Graphics.TranslateTransform((float)cameraPosition.X * -1, (float)cameraPosition.Y);
+
+
+            //var topLeftPt = new Point(0, 0);
+            //var botRightPt = new Point(Width, Height);
+
+            //if (!pe.ClipRectangle.IsEmpty)
+            //{
+            //    topLeftPt = pe.ClipRectangle.Location;
+            //    botRightPt = new Point(pe.ClipRectangle.Right, pe.ClipRectangle.Bottom);
+            //}
+
+            //var topLeftM = new PointM(DisplayToWorld(topLeftPt), UnitOfMeasure.Mm);
+            //var botRightM = new PointM(DisplayToWorld(botRightPt), UnitOfMeasure.Mm);
+            //var clipBounds = RectangleM.FromLTRB(topLeftM.X, botRightM.Y, botRightM.X, topLeftM.Y);
+
+            if (CurrentLayout != null)
+            {
+                RenderFingerboard(pe.Graphics);
+                RenderGuideLines(pe.Graphics);
+
+                if (DisplayConfig.ShowFrets)
+                    RenderFrets(pe.Graphics, RectangleM.Empty);
+
+                if (DisplayConfig.ShowStrings)
+                    RenderStrings(pe.Graphics);
+            }
+
+            pe.Graphics.ResetTransform();
+
+            if (EnableMeasureTool)
+                RenderMeasureTool(pe.Graphics);
         }
 
-        #endregion
+        private void InvalidateWorldRegion(int bleedSize, params Vector[] points)
+        {
+            Vector minPos = Vector.Empty;
+            Vector maxPos = Vector.Empty;
+
+            for (int i = 0; i < points.Length; i++)
+            {
+                if (!points[i].IsEmpty)
+                {
+                    if (minPos.IsEmpty)
+                    {
+                        minPos = points[i];
+                        maxPos = points[i];
+                    }
+                    else
+                    {
+                        minPos = Vector.Min(minPos, points[i]);
+                        maxPos = Vector.Max(maxPos, points[i]);
+                    }
+                }
+            }
+
+            if (!minPos.IsEmpty)
+            {
+                var minPt = WorldToDisplay(minPos, _Zoom, true);
+                var maxPt = WorldToDisplay(maxPos, _Zoom, true);
+                var updateBounds = Rectangle.FromLTRB((int)minPt.X - bleedSize, (int)minPt.Y - bleedSize, (int)maxPt.X + bleedSize, (int)maxPt.Y + bleedSize);
+                Invalidate(updateBounds);
+            }
+        }
+
 
         public bool IsElementVisible(VisualElement element)
         {
@@ -82,48 +219,50 @@ namespace SiGen.UI
             {
                 case VisualElementType.CenterLine:
                     return DisplayConfig.ShowCenterLine;
+
                 case VisualElementType.Fret:
                     return DisplayConfig.ShowFrets;
+
                 case VisualElementType.String:
-                    {
-                        if (DisplayConfig.ShowStrings)
-                            return true;
-                        return DisplayConfig.ShowMargins && ((element as StringLine).String == CurrentLayout.FirstString || (element as StringLine).String == CurrentLayout.LastString);
-                    }
-                case VisualElementType.StringCenter:
+                    return DisplayConfig.ShowStrings;
+
+                case VisualElementType.FingerboardMargin:
+                    return DisplayConfig.ShowMargins && !DisplayConfig.ShowStrings;
+
+                case VisualElementType.StringMidline:
                     return DisplayConfig.ShowMidlines;
+
+                case VisualElementType.FingerboardContinuation:
                 case VisualElementType.FingerboardEdge:
                     return DisplayConfig.ShowFingerboard;
 
                 default:
-                    {
-
-                        break;
-                    }
+                    return false;
             }
-            return false;
+            
         }
 
         private void RenderFingerboard(Graphics g)
         {
             if (DisplayConfig.ShowCenterLine)
             {
-                //var layoutBounds = CurrentLayout.GetLayoutBounds();
-                var centerLine = CurrentLayout.VisualElements.OfType<LayoutLine>().FirstOrDefault(x => x.ElementType == VisualElementType.CenterLine);
-                using (var guidePen = GetPen(Color.Black, 1))
-                {
+                var centerLine = CurrentLayout.VisualElements.OfType<LayoutLine>()
+                    .FirstOrDefault(x => x.ElementType == VisualElementType.CenterLine);
+
+                using (var guidePen = GetPen(DisplayConfig.CenterLine.Color, 1))
                     DrawLine(g, guidePen, centerLine.P1, centerLine.P2);
-                }
             }
 
             if (DisplayConfig.ShowMidlines)
             {
-                using (var guidePen = GetPen(Color.Gainsboro, 1))
+                using (var guidePen = GetPen(DisplayConfig.Midlines.Color, 1))
                 {
                     guidePen.DashPattern = new float[] { 6, 4, 2, 4 };
-                    foreach (var stringCenter in CurrentLayout.VisualElements.OfType<StringCenter>())
+
+                    foreach (var stringCenter in CurrentLayout.GetElements<StringCenter>())
                     {
-                        if(!DisplayConfig.ShowCenterLine || !(stringCenter.Equation.IsVertical && stringCenter.Equation.X == 0))
+                        bool isExactCenter = stringCenter.Equation.IsVertical && stringCenter.Equation.X == 0;
+                        if (!DisplayConfig.ShowCenterLine || !isExactCenter)
                             DrawLine(g, guidePen, stringCenter.P1, stringCenter.P2);
                     }
                 }
@@ -131,28 +270,35 @@ namespace SiGen.UI
 
             if (!DisplayConfig.ShowStrings && DisplayConfig.ShowMargins)
             {
-                var firstString = CurrentLayout.FirstString.LayoutLine;
-                var lastString = CurrentLayout.LastString.LayoutLine;
-                var trebleEdge = CurrentLayout.GetStringBoundaryLine(CurrentLayout.FirstString, FingerboardSide.Treble);
-                var bassEdge = CurrentLayout.GetStringBoundaryLine(CurrentLayout.LastString, FingerboardSide.Bass);
+                var margins = CurrentLayout.VisualElements.OfType<LayoutLine>()
+                    .Where(x => x.ElementType == VisualElementType.FingerboardMargin);
 
-                using (var guidePen = GetPen(Color.Gray, 1))
+                if (margins.Any())
                 {
-                    DrawLine(g, guidePen, firstString.P1, firstString.SnapToLine(trebleEdge.P2, LineSnapDirection.Horizontal));
-                    if(firstString != lastString)
-                        DrawLine(g, guidePen, lastString.P1, lastString.SnapToLine(bassEdge.P2, LineSnapDirection.Horizontal));
+                    using (var guidePen = GetPen(DisplayConfig.Margins.Color, 1))
+                    {
+                        foreach (var marginLine in margins)
+                            DrawLine(g, guidePen, marginLine.P1, marginLine.P2);
+                    }
                 }
             }
 
             if (DisplayConfig.ShowFingerboard)
             {
-                using (var edgePen = GetPen(Color.Blue, 1))
+                using (var edgePen = GetPen(DisplayConfig.Fingerboard.Color, 1))
                 {
                     foreach (var edge in CurrentLayout.VisualElements.OfType<FingerboardEdge>())
                         DrawLines(g, edgePen, edge.Points);
 
                     foreach (var edge in CurrentLayout.VisualElements.OfType<FingerboardSideEdge>())
                         DrawLine(g, edgePen, edge.P1, edge.P2);
+
+                    if (!DisplayConfig.ShowFrets)
+                    {
+                        var nutLines = CurrentLayout.GetElements<FretLine>(x => x.IsNut);
+                        foreach (var line in nutLines)
+                            DrawLine(g, line, edgePen);
+                    }
                 }
             }
         }
@@ -162,157 +308,171 @@ namespace SiGen.UI
             using (var guidePen = GetPen(Color.Gainsboro, 1))
             {
                 guidePen.DashPattern = new float[] { 6, 4, 2, 4 };
-                foreach (var line in CurrentLayout.VisualElements.OfType<LayoutLine>().Where(l => l.ElementType == VisualElementType.GuideLine))
-                    DrawLine(g, guidePen, line.P1, line.P2);
+
+                if (DisplayConfig.ShowFingerboard && DisplayConfig.Fingerboard.ContinueLines)
+                {
+                    var endPoints = new List<PointM>();
+
+                    foreach (var line in CurrentLayout.GetElements<LayoutLine>(l => 
+                        l.ElementType == VisualElementType.FingerboardContinuation))
+                    {
+                        DrawLine(g, line, guidePen);
+                        endPoints.Add(line.P2);
+                    }
+
+                    var pt1 = endPoints.OrderBy(pt => pt.X).First();
+                    var pt2 = endPoints.OrderByDescending(pt => pt.X).First();
+                    DrawLine(g, guidePen, pt1, pt2);
+                }
+
+                foreach (var line in CurrentLayout.GetElements<LayoutLine>(l => 
+                    l.ElementType == VisualElementType.GuideLine))
+                {
+                    DrawLine(g, line, guidePen);
+                }
             }
         }
 
-        private void RenderFrets(Graphics g)
+        private void RenderFrets(Graphics g, RectangleM clipRect)
         {
             Pen fretPen = null;
-            Pen highlightPen = null;
-            Pen nutPen = GetPen(Color.Red, 1);
-            Pen contourPen = GetPen(Color.DarkSlateGray, 1);
-            if (!DisplayConfig.RenderRealFrets)
-                fretPen = GetPen(Color.Red, 1);
-            else
+            Pen nutPen = GetPen(DisplayConfig.Frets.Color, 1);
+
+            switch (DisplayConfig.Frets.RenderMode)
             {
-                fretPen = GetPen(Color.DarkGray, DisplayConfig.FretWidth);
-                highlightPen = GetPen(Color.LightGray, DisplayConfig.FretWidth * 0.7);
+                default:
+                case LineRenderMode.PlainLine:
+                    fretPen = GetPen(DisplayConfig.Frets.Color, 1);
+                    break;
+                case LineRenderMode.RealWidth:
+                    fretPen = GetPen(DisplayConfig.Frets.Color, DisplayConfig.Frets.RenderWidth);
+                    break;
+                case LineRenderMode.RealisticLook:
+                    fretPen = GetPen(Color.DarkGray, DisplayConfig.Frets.RenderWidth);
+                    break;
             }
-
-            var zoomf = (float)_Zoom;
-            var scaleMatrix = new Matrix();
-            scaleMatrix.Scale(zoomf, zoomf);
-            
-            var originalTransform = g.Transform;
-            var unscaledTransform = originalTransform.Clone();
-            unscaledTransform.Scale(1f / zoomf, 1f / zoomf);
-
-            var trebleEdge = CurrentLayout.GetStringBoundaryLine(CurrentLayout.FirstString, FingerboardSide.Treble);
-            var bassEdge = CurrentLayout.GetStringBoundaryLine(CurrentLayout.LastString, FingerboardSide.Bass);
 
             foreach (var fretLine in CurrentLayout.VisualElements.OfType<FretLine>())
             {
-                //if (fretLine.LeftPath == null && !DisplayConfig.FretWidth.IsEmpty)
-                //{
-                //    fretLine.LeftPath = fretLine.OffsetLine(DisplayConfig.FretWidth * 0.5d);
-                //    fretLine.LeftPath.Extend(Measure.Mm(3));
-                //    fretLine.LeftPath.TrimBetween(bassEdge, trebleEdge, true);
-                //    fretLine.RightPath = fretLine.OffsetLine(DisplayConfig.FretWidth * -0.5d);
-                //    fretLine.RightPath.TrimBetween(bassEdge, trebleEdge, true);
-                //}
-
-                if (DisplayConfig.ShowFrets)
+                if (!clipRect.IsEmpty && !clipRect.IntersectsWith(fretLine.Bounds))
                 {
-                    var fretPoints = fretLine.Points.Select(p => PointToDisplay(p)).ToArray();
-
-                    if (fretLine.IsNut)
-                    {
-                        if (fretLine.IsStraight || CurrentLayout.FretInterpolation == FretInterpolationMethod.Linear)
-                            g.DrawLines(nutPen, fretPoints);
-                        else
-                            g.DrawCurve(nutPen, fretPoints, 0.5f);
-                    }
-                    else
-                    {
-                        //g.Transform = unscaledTransform;
-                        DrawRealFret(g, fretPen, contourPen, fretLine, fretPoints, scaleMatrix, unscaledTransform, originalTransform);
-                        //g.Transform = originalTransform;
-                    }
-                    
+                    Console.WriteLine($"{fretLine.FretIndex} out of bounds");
+                    continue;
                 }
 
-                if (DisplayConfig.ShowTheoreticalFrets && fretLine.Strings.Count() > 1)
+                var penToUse = fretLine.IsNut ? nutPen : fretPen;
+                var fretPoints = fretLine.Points.Select(p => PointToDisplay(p)).ToArray();
+
+                if (DisplayConfig.ExtendFrets && fretLine.Tag is ILayoutLine layoutLine)
                 {
-                    g.DrawLines(nutPen, fretLine.Segments.Where(s => !s.IsVirtual).Select(s => PointToDisplay(s.PointOnString)).ToArray());
+                    fretPoints = layoutLine.GetLinePoints()
+                        .Select(x => PointToDisplay(x)).ToArray();
+                }
+
+                if (fretLine.IsStraight || CurrentLayout.FretInterpolation == FretInterpolationMethod.Linear)
+                    g.DrawLines(penToUse, fretPoints);
+                else
+                    g.DrawCurve(penToUse, fretPoints, 0.5f);
+
+                if (DisplayConfig.Frets.DisplayAccuratePositions && fretLine.Strings.Count() > 1)
+                {
+                    g.DrawLines(nutPen, fretLine.Segments.Where(s => !s.IsVirtual)
+                        .Select(s => PointToDisplay(s.PointOnString)).ToArray());
                 }
             }
-            
+
+            var bridgeLine = CurrentLayout.GetElement<LayoutPolyLine>(x => x.ElementType == VisualElementType.BridgeLine);
+            if (bridgeLine != null )
+            {
+                if (clipRect.IsEmpty || clipRect.IntersectsWith(bridgeLine.Bounds))
+                    DrawLine(g, bridgeLine, nutPen);
+            }
+
             nutPen.Dispose();
             fretPen.Dispose();
         }
 
-        private void DrawRealFret(Graphics g, Pen fretPen, Pen contourPen, FretLine fretLine, PointF[] fretPoints, Matrix scaledMatrix, Matrix unscaledTransform, Matrix originalTransform)
-        {
-
-            using (var gp = new GraphicsPath())
-            {
-                if (fretLine.LeftPath != null && fretLine.RightPath != null)
-                {
-                    gp.StartFigure();
-                    if (fretLine.IsStraight || CurrentLayout.FretInterpolation == FretInterpolationMethod.Linear)
-                    {
-                        gp.AddLines(fretLine.LeftPath.Points.Select(x => PointToDisplay(x)).ToArray());
-                        gp.AddLines(fretLine.RightPath.Points.Select(x => PointToDisplay(x)).Reverse().ToArray());
-                    }
-                    else
-                    {
-                        gp.AddCurve(fretLine.LeftPath.Points.Select(x => PointToDisplay(x)).ToArray(), 0.5f);
-                        gp.AddCurve(fretLine.RightPath.Points.Select(x => PointToDisplay(x)).Reverse().ToArray(), 0.5f);
-                    }
-                    gp.CloseFigure();
-                }
-                else
-                {
-
-                    if (fretLine.IsStraight || CurrentLayout.FretInterpolation == FretInterpolationMethod.Linear)
-                        gp.AddLines(fretPoints);
-                    else
-                        gp.AddCurve(fretPoints, 0.5f);
-
-                    g.Transform = unscaledTransform;
-                    gp.Widen(fretPen, scaledMatrix);
-                }
-
-                
-
-                using (var pgb = new PathGradientBrush(gp))
-                {
-                    pgb.CenterColor = Color.Gainsboro;
-                    pgb.SurroundColors = new Color[] { Color.DarkGray };
-                    g.FillPath(pgb, gp);
-                }
-               
-
-                g.DrawPath(contourPen, gp);
-                g.Transform = originalTransform;
-            }
-
-            
-        }
-
         private void RenderStrings(Graphics g)
         {
-            using(var defaultPen = GetPen(Color.Black, 1))
+            using (var defaultPen = GetPen(DisplayConfig.Strings.Color, 1))
             {
                 foreach (var stringLine in CurrentLayout.VisualElements.OfType<StringLine>())
                 {
-                    if (DisplayConfig.RenderRealStrings && stringLine.String.Gauge != Measure.Empty && stringLine.String.Gauge > Measure.Zero)
+                    var renderMode = DisplayConfig.Strings.RenderMode;
+                    if (!(stringLine.String.Gauge > Measure.Zero))
+                        renderMode = LineRenderMode.PlainLine;
+
+                    switch (renderMode)
                     {
-                        var outlineColor = stringLine.String.Gauge.NormalizedValue >= 0.06090 ? Color.Gray : Color.DarkGray;
-                        var stringColor = stringLine.String.Gauge.NormalizedValue >= 0.06090 ? Color.Silver : Color.Gainsboro;
+                        default:
+                        case LineRenderMode.PlainLine:
+                            DrawLine(g, defaultPen, stringLine.P1, stringLine.P2);
+                            break;
+                        case LineRenderMode.RealWidth:
+                            using (var gaugePen = GetPen(defaultPen.Color, stringLine.String.Gauge))
+                                DrawLine(g, gaugePen, stringLine.P1, stringLine.P2);
+                            break;
+                        case LineRenderMode.RealisticLook:
+                            {
+                                var stringMaterial = StringMaterial.PlainSteel;
+
+                                if (stringLine.String.Gauge.NormalizedValue >= 0.06090)
+                                    stringMaterial = StringMaterial.SteelWound;
+
+                                GetStringMaterialColors(stringMaterial, out Color stringColor, out Color outlineColor);
+
+                                using (var gaugePen = GetPen(outlineColor, stringLine.String.Gauge, 1.8))
+                                    DrawLine(g, gaugePen, stringLine.P1, stringLine.P2);
+
+                                using (var gaugePen = GetPen(stringColor, stringLine.String.Gauge))
+                                    DrawLine(g, gaugePen, stringLine.P1, stringLine.P2);
 
 
-                        using (var gaugePen = GetPen(outlineColor, stringLine.String.Gauge, 1.5))
-                            DrawLine(g, gaugePen, stringLine.P1, stringLine.P2);
+                                var highlightSize = (stringLine.String.Gauge * 0.5d).NormalizedValue * _Zoom;
 
-                        using (var gaugePen = GetPen(stringColor, stringLine.String.Gauge))
-                            DrawLine(g, gaugePen, stringLine.P1, stringLine.P2);
+                                if (highlightSize >= 0.5d)
+                                {
+                                    var testP1 = stringLine.P1;
+                                    testP1.X -= (stringLine.String.Gauge * 0.1);
+                                    var testP2 = stringLine.P2;
+                                    testP2.X -= (stringLine.String.Gauge * 0.1);
 
-                        //if(stringLine.String.Gauge.NormalizedValue >= 0.06090)
-                        //{
-                        //    using (var gaugePen = GetPen(Color.FromArgb(100, outlineColor), stringLine.String.Gauge))
-                        //    {
-                        //        float offset = (1f / gaugePen.Width) / 10f;
-                        //        gaugePen.DashPattern = new float[] { .5f * offset, 1.0f * offset, .5f * offset, 1.0f * offset };
-                        //        DrawLine(g, gaugePen, stringLine.P1, stringLine.P2);
-                        //    }
-                        //}
+                                    using (var gaugePen = GetPen(Color.FromArgb(80, 255, 255, 255), stringLine.String.Gauge * 0.50d))
+                                        DrawLine(g, gaugePen, testP1, testP2);
+
+                                    //using (var gaugePen = GetPen(Color.FromArgb(80, 255, 255, 255), stringLine.String.Gauge * 0.2d))
+                                    //    DrawLine(g, gaugePen, testP1, testP2);
+                                }
+                                
+
+                                break;
+                            }
                     }
-                    else
-                        DrawLine(g, defaultPen, stringLine.P1, stringLine.P2);
                 }
+            }
+        }
+
+        private void GetStringMaterialColors(StringMaterial material, out Color fillColor, out Color outlineColor)
+        {
+            switch (material)
+            {
+                default:
+                case StringMaterial.PlainSteel:
+                    outlineColor = PlainSteelOutline;
+                    fillColor = PlainSteelFill;
+                    break;
+                case StringMaterial.SteelWound:
+                    outlineColor = SteelWoundOutline;
+                    fillColor = SteelWoundFill;
+                    break;
+                case StringMaterial.BronzeWound:
+                    outlineColor = BronzeWoundOutline;
+                    fillColor = BronzeWoundFill;
+                    break;
+                case StringMaterial.Nylon:
+                    outlineColor = NylonOutline;
+                    fillColor = NylonFill;
+                    break;
             }
         }
 
@@ -351,6 +511,7 @@ namespace SiGen.UI
                         using (var pen = new Pen(GetMeasureTypeColor(lengthBox.Type), 2))
                             g.DrawLine(pen, p1UI, p2UI);
                     }
+
                     if (!IsMovingCamera)
                     {
                         //Draw Pointer Lines

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SiGen.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -34,10 +35,15 @@ namespace SiGen.StringedInstruments.Layout
 
 		internal void SetLayout(SILayout layout)
 		{
+            var oldLayout = Layout;
 			Layout = layout;
-			if (!layout._Components.Contains(this))
-				Layout._Components.Add(this);
-		}
+
+            if (oldLayout != null && oldLayout._Components.Contains(this))
+                oldLayout._Components.Add(this);
+
+            if (layout != null && !layout._Components.Contains(this))
+                layout._Components.Add(this);
+        }
 
 		~LayoutComponent()
         {
@@ -55,12 +61,22 @@ namespace SiGen.StringedInstruments.Layout
 			}
         }
 
-        void ILayoutComponent.OnStringConfigurationChanged()
+		void ILayoutComponent.BeforeChangingStrings()
+		{
+			BeforeChangingStrings();
+		}
+
+		void ILayoutComponent.OnStringsChanged()
         {
-            OnStringConfigurationChanged();
+            OnStringsChanged();
         }
 
-        protected virtual void OnStringConfigurationChanged()
+		protected virtual void BeforeChangingStrings()
+		{
+
+		}
+
+        protected virtual void OnStringsChanged()
         {
 
         }
@@ -121,11 +137,27 @@ namespace SiGen.StringedInstruments.Layout
 			return false;
 		}
 
-		protected bool SetSubPropertyValue<V,P>(P prop, Expression<Func<P,V>> subProp, V value)
+		internal virtual void OnSetFieldValue(string fieldName, object field, int? index, object value)
 		{
-			
-			return false;
+
 		}
+
+		protected void StartBatchChanges(string name = null)
+		{
+			Layout?.StartBatchChanges(name);
+		}
+
+		protected void FinishBatchChanges()
+		{
+			Layout?.FinishBatchChanges();
+		}
+
+		//protected IDisposable OpenBatchTrans(string name = null)
+		//{
+		//	return new TemporaryObject(
+		//		() => StartBatchChanges(name), 
+		//		() => FinishBatchChanges());
+		//}
 	}
 
 	public abstract class ActivableLayoutComponent : LayoutComponent
@@ -134,6 +166,7 @@ namespace SiGen.StringedInstruments.Layout
 
 		public ActivableLayoutComponent(SILayout layout) : base(layout)
 		{
+
 		}
 
 		protected override void NotifyLayoutChanged(PropertyChange change)

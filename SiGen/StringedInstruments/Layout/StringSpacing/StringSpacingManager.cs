@@ -71,14 +71,46 @@ namespace SiGen.StringedInstruments.Layout
                 else
                     stringPos[i] = stringPos[i - 1] + GetSpacingBetweenStrings(i - 1, i, side);
             }
-            if ((side == FingerboardEnd.Nut ? NutAlignment : BridgeAlignment) == StringSpacingAlignment.SpacingMiddle)
-                center = (side == FingerboardEnd.Nut ? StringSpreadAtNut : StringSpreadAtBridge) / 2d;
-            else if (NumberOfStrings % 2 == 1)//odd number of strings
-                center = stringPos[(NumberOfStrings - 1) / 2];
-            else//even number of strings
+
+            var centerAlign = (side == FingerboardEnd.Nut) ? NutAlignment : BridgeAlignment;
+            var stringSpread = (side == FingerboardEnd.Nut) ? StringSpreadAtNut : StringSpreadAtBridge;
+
+            switch (centerAlign)
             {
-                int mid = NumberOfStrings / 2;
-                center = ((stringPos[mid] - stringPos[mid - 1]) / 2) + stringPos[mid - 1];
+                default:
+                case StringSpacingAlignment.FingerboardEdges:
+                    {
+                        if (Layout.Margins.CompensateStringGauge && 
+                            !(Layout.FirstString.Gauge.IsEmpty || Layout.LastString.Gauge.IsEmpty))
+                        {
+                            var bassMargin = Layout.Margins.BassMargins[side] + Layout.LastString.Gauge / 2d;
+                            var trebleMargin = Layout.Margins.TrebleMargins[side] + Layout.FirstString.Gauge / 2d;
+                            
+                            var totalWidth = bassMargin + stringSpread + trebleMargin;
+                            center = totalWidth / 2d;
+                            center -= trebleMargin;
+                        }
+                        else
+                            center = stringSpread / 2d;
+                        break;
+                    }
+                case StringSpacingAlignment.OuterStrings:
+                    center = stringSpread / 2d;
+                    break;
+                case StringSpacingAlignment.MiddleString:
+                    {
+                        if (NumberOfStrings % 2 == 1)//odd number of strings
+                        {
+                            center = stringPos[(NumberOfStrings - 1) / 2];
+                        }
+                        else
+                        {
+                            //even number of strings
+                            int mid = NumberOfStrings / 2;
+                            center = ((stringPos[mid] - stringPos[mid - 1]) / 2) + stringPos[mid - 1];
+                        }
+                        break;
+                    }
             }
 
             for (int i = 0; i < NumberOfStrings; i++)
@@ -124,22 +156,31 @@ namespace SiGen.StringedInstruments.Layout
                 StringSpreadAtNut.SerializeAsAttribute("StringSpreadAtNut"),
                 new XAttribute("BridgeAlignment", BridgeAlignment),
                 StringSpreadAtBridge.SerializeAsAttribute("StringSpreadAtBridge"));
+
             for (int i = 0; i < NumberOfStrings - 1; i++)
-                elem.Add(new XElement("Spacing", 
-                    new XAttribute("Index", i), 
+            {
+                elem.Add(new XElement("Spacing",
+                    new XAttribute("Index", i),
                     GetSpacing(i, FingerboardEnd.Nut).SerializeAsAttribute("Nut"),
                     GetSpacing(i, FingerboardEnd.Bridge).SerializeAsAttribute("Bridge")));
+            }
+
             return elem;
         }
 
         public virtual void Deserialize(XElement elem)
         {
-            NutAlignment = (StringSpacingAlignment)Enum.Parse(typeof(StringSpacingAlignment), elem.Attribute("NutAlignment").Value);
-            BridgeAlignment = (StringSpacingAlignment)Enum.Parse(typeof(StringSpacingAlignment), elem.Attribute("BridgeAlignment").Value);
-            foreach(var spacingElem in elem.Elements("Spacing"))
+            NutAlignment = elem.ReadAttribute("NutAlignment", StringSpacingAlignment.OuterStrings);
+            BridgeAlignment = elem.ReadAttribute("BridgeAlignment", StringSpacingAlignment.OuterStrings);
+
+            foreach (var spacingElem in elem.Elements("Spacing"))
             {
-                SetSpacing(FingerboardEnd.Nut, spacingElem.GetIntAttribute("Index"), Measure.TryParse(spacingElem.Attribute("Nut").Value, NumberFormatInfo.InvariantInfo, Measure.Zero));
-                SetSpacing(FingerboardEnd.Bridge, spacingElem.GetIntAttribute("Index"), Measure.TryParse(spacingElem.Attribute("Bridge").Value, NumberFormatInfo.InvariantInfo, Measure.Zero));
+                int spacingIndex = spacingElem.ReadAttribute<int>("Index");
+                SetSpacing(FingerboardEnd.Nut, spacingIndex,
+                    spacingElem.ReadAttribute("Nut", Measure.Zero));
+
+                SetSpacing(FingerboardEnd.Bridge, spacingIndex,
+                    spacingElem.ReadAttribute("Bridge", Measure.Zero));
             }
         }
     }

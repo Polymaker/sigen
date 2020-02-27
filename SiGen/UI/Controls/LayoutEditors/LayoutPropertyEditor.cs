@@ -32,6 +32,9 @@ namespace SiGen.UI.Controls
             set { BindLayout(value); }
         }
 
+        [Localizable(true)]
+        public string Title { get; set; }
+
         protected bool IsLoading { get { return _IsLoading; /* FlagManager["ReloadPropertyValues"] */} }
 
         protected bool IsLayoutFirstLoad => CurrentLayout != null && !CachedLayoutData.ContainsKey(CurrentLayout);

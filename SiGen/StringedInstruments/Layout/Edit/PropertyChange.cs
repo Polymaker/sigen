@@ -63,9 +63,5 @@ namespace SiGen.StringedInstruments.Layout
 			Index = index;
 		}
 
-		public PropertyChange[] GetChanges()
-		{
-			return new PropertyChange[] { this };
-		}
 	}
 }

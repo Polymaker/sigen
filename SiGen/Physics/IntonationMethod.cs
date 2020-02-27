@@ -4,7 +4,7 @@
     {
         Just,
         EqualTempered,
-        Pythagorean,
+        //Pythagorean,
         Computed//Used for notes calculated from pitch alone (eg. notes created from an offsetted/calculated pitch)
     }
 }

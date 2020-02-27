@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StringsConfigurationEditor));
             this.nbxNumberOfStrings = new SiGen.UI.Controls.NumericBox();
             this.label1 = new System.Windows.Forms.Label();
             this.chkLeftHanded = new System.Windows.Forms.CheckBox();
@@ -44,78 +45,59 @@
             this.tsmiConvertToCM = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiConvertToIN = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiConvertToFT = new System.Windows.Forms.ToolStripMenuItem();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStrings)).BeginInit();
             this.cmsMesureCellMenu.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // nbxNumberOfStrings
             // 
             this.nbxNumberOfStrings.AllowDecimals = false;
-            this.nbxNumberOfStrings.Location = new System.Drawing.Point(102, 3);
+            resources.ApplyResources(this.nbxNumberOfStrings, "nbxNumberOfStrings");
             this.nbxNumberOfStrings.MaximumValue = 40D;
             this.nbxNumberOfStrings.MinimumValue = 1D;
             this.nbxNumberOfStrings.Name = "nbxNumberOfStrings";
-            this.nbxNumberOfStrings.Size = new System.Drawing.Size(66, 20);
-            this.nbxNumberOfStrings.TabIndex = 0;
             this.nbxNumberOfStrings.Value = 1D;
             this.nbxNumberOfStrings.ValueChanged += new System.EventHandler(this.nbxNumberOfStrings_ValueChanged);
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 7);
+            resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(93, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Number Of Strings";
             // 
             // chkLeftHanded
             // 
-            this.chkLeftHanded.AutoSize = true;
-            this.chkLeftHanded.Location = new System.Drawing.Point(174, 6);
+            resources.ApplyResources(this.chkLeftHanded, "chkLeftHanded");
             this.chkLeftHanded.Name = "chkLeftHanded";
-            this.chkLeftHanded.Size = new System.Drawing.Size(85, 17);
-            this.chkLeftHanded.TabIndex = 2;
-            this.chkLeftHanded.Text = "Left Handed";
             this.chkLeftHanded.UseVisualStyleBackColor = true;
             this.chkLeftHanded.CheckedChanged += new System.EventHandler(this.chkLeftHanded_CheckedChanged);
             // 
             // nbxNumberOfFrets
             // 
             this.nbxNumberOfFrets.AllowDecimals = false;
-            this.nbxNumberOfFrets.Location = new System.Drawing.Point(102, 29);
+            resources.ApplyResources(this.nbxNumberOfFrets, "nbxNumberOfFrets");
             this.nbxNumberOfFrets.MaximumValue = 50D;
             this.nbxNumberOfFrets.MinimumValue = 1D;
             this.nbxNumberOfFrets.Name = "nbxNumberOfFrets";
-            this.nbxNumberOfFrets.Size = new System.Drawing.Size(66, 20);
-            this.nbxNumberOfFrets.TabIndex = 3;
             this.nbxNumberOfFrets.Value = 24D;
             this.nbxNumberOfFrets.ValueChanged += new System.EventHandler(this.nbxNumberOfFrets_ValueChanged);
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 33);
+            resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(84, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Number Of Frets";
             // 
             // dgvStrings
             // 
             this.dgvStrings.AllowUserToAddRows = false;
             this.dgvStrings.AllowUserToDeleteRows = false;
             this.dgvStrings.AllowUserToResizeRows = false;
-            this.dgvStrings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvStrings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvStrings.Location = new System.Drawing.Point(3, 55);
+            this.tableLayoutPanel1.SetColumnSpan(this.dgvStrings, 3);
+            resources.ApplyResources(this.dgvStrings, "dgvStrings");
             this.dgvStrings.MultiSelect = false;
             this.dgvStrings.Name = "dgvStrings";
-            this.dgvStrings.RowHeadersWidth = 120;
-            this.dgvStrings.Size = new System.Drawing.Size(359, 181);
-            this.dgvStrings.TabIndex = 5;
             this.dgvStrings.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvStrings_CellClick);
             this.dgvStrings.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvStrings_CellFormatting);
             this.dgvStrings.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvStrings_CellMouseClick);
@@ -127,12 +109,8 @@
             // 
             // chkShowAdvanced
             // 
-            this.chkShowAdvanced.AutoSize = true;
-            this.chkShowAdvanced.Location = new System.Drawing.Point(174, 29);
+            resources.ApplyResources(this.chkShowAdvanced, "chkShowAdvanced");
             this.chkShowAdvanced.Name = "chkShowAdvanced";
-            this.chkShowAdvanced.Size = new System.Drawing.Size(141, 17);
-            this.chkShowAdvanced.TabIndex = 6;
-            this.chkShowAdvanced.Text = "Show Advanced Config.";
             this.chkShowAdvanced.UseVisualStyleBackColor = true;
             this.chkShowAdvanced.CheckedChanged += new System.EventHandler(this.chkShowAdvanced_CheckedChanged);
             // 
@@ -147,72 +125,71 @@
             this.tsmiConvertToIN,
             this.tsmiConvertToFT});
             this.cmsMesureCellMenu.Name = "cmsConvert";
-            this.cmsMesureCellMenu.Size = new System.Drawing.Size(139, 142);
+            resources.ApplyResources(this.cmsMesureCellMenu, "cmsMesureCellMenu");
             this.cmsMesureCellMenu.Opening += new System.ComponentModel.CancelEventHandler(this.cmsMesureCellMenu_Opening);
             // 
             // tsmiClearValue
             // 
             this.tsmiClearValue.Name = "tsmiClearValue";
-            this.tsmiClearValue.Size = new System.Drawing.Size(138, 22);
-            this.tsmiClearValue.Text = "Clear Value";
+            resources.ApplyResources(this.tsmiClearValue, "tsmiClearValue");
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(135, 6);
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             // 
             // convertToToolStripMenuItem
             // 
             this.convertToToolStripMenuItem.Name = "convertToToolStripMenuItem";
-            this.convertToToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
-            this.convertToToolStripMenuItem.Text = "Convert to:";
+            resources.ApplyResources(this.convertToToolStripMenuItem, "convertToToolStripMenuItem");
             // 
             // tsmiConvertToMM
             // 
             this.tsmiConvertToMM.Name = "tsmiConvertToMM";
-            this.tsmiConvertToMM.Size = new System.Drawing.Size(138, 22);
-            this.tsmiConvertToMM.Text = "Millimeters";
+            resources.ApplyResources(this.tsmiConvertToMM, "tsmiConvertToMM");
             this.tsmiConvertToMM.Click += new System.EventHandler(this.tsmiConvertToMM_Click);
             // 
             // tsmiConvertToCM
             // 
             this.tsmiConvertToCM.Name = "tsmiConvertToCM";
-            this.tsmiConvertToCM.Size = new System.Drawing.Size(138, 22);
-            this.tsmiConvertToCM.Text = "Centimeters";
+            resources.ApplyResources(this.tsmiConvertToCM, "tsmiConvertToCM");
             this.tsmiConvertToCM.Click += new System.EventHandler(this.tsmiConvertToCM_Click);
             // 
             // tsmiConvertToIN
             // 
             this.tsmiConvertToIN.Name = "tsmiConvertToIN";
-            this.tsmiConvertToIN.Size = new System.Drawing.Size(138, 22);
-            this.tsmiConvertToIN.Text = "Inches";
+            resources.ApplyResources(this.tsmiConvertToIN, "tsmiConvertToIN");
             this.tsmiConvertToIN.Click += new System.EventHandler(this.tsmiConvertToIN_Click);
             // 
             // tsmiConvertToFT
             // 
             this.tsmiConvertToFT.Name = "tsmiConvertToFT";
-            this.tsmiConvertToFT.Size = new System.Drawing.Size(138, 22);
-            this.tsmiConvertToFT.Text = "Feets";
+            resources.ApplyResources(this.tsmiConvertToFT, "tsmiConvertToFT");
             this.tsmiConvertToFT.Click += new System.EventHandler(this.tsmiConvertToFT_Click);
+            // 
+            // tableLayoutPanel1
+            // 
+            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.dgvStrings, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.chkShowAdvanced, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.nbxNumberOfStrings, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.nbxNumberOfFrets, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.chkLeftHanded, 2, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             // 
             // StringsConfigurationEditor
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoScroll = true;
-            this.Controls.Add(this.chkShowAdvanced);
-            this.Controls.Add(this.dgvStrings);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.nbxNumberOfFrets);
-            this.Controls.Add(this.chkLeftHanded);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.nbxNumberOfStrings);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "StringsConfigurationEditor";
-            this.Size = new System.Drawing.Size(365, 239);
             ((System.ComponentModel.ISupportInitialize)(this.dgvStrings)).EndInit();
             this.cmsMesureCellMenu.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -233,5 +210,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiConvertToCM;
         private System.Windows.Forms.ToolStripMenuItem tsmiConvertToIN;
         private System.Windows.Forms.ToolStripMenuItem tsmiConvertToFT;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }
