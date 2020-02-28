@@ -41,6 +41,7 @@ namespace SiGen.UI.Windows
         {
             InitializeComponent();
             Icon = Properties.Resources.SiGenIcon;
+            
             //ExportOptions = LayoutExportConfig.CreateDefault();
             LayoutToExport = layoutDocument;
         }
@@ -141,6 +142,19 @@ namespace SiGen.UI.Windows
                 LineRenderMode.PlainLine;
 
             layoutPreview.DisplayConfig.FretExtensionAmount = ExportOptions.Frets.ExtensionAmount;
+
+            if (ExportOptions.Frets.LineUnit == LineUnit.Millimeters)
+            {
+                layoutPreview.DisplayConfig.Frets.RenderMode = LineRenderMode.RealWidth;
+                layoutPreview.DisplayConfig.Frets.RenderWidth = Measure.Mm(ExportOptions.Frets.LineThickness);
+            }
+            else if (ExportOptions.Frets.LineUnit == LineUnit.Millimeters)
+            {
+                layoutPreview.DisplayConfig.Frets.RenderMode = LineRenderMode.RealWidth;
+                layoutPreview.DisplayConfig.Frets.RenderWidth = Measure.Inches(ExportOptions.Frets.LineThickness);
+            }
+            else
+                layoutPreview.DisplayConfig.Frets.RenderMode = LineRenderMode.PlainLine;
         }
 
         private void btnExport_Click(object sender, EventArgs e)
