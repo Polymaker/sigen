@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <?define SiGen_TargetDir=$(var.SiGen.TargetDir)?>
+  <?define ProductVersion=1.0.4.0?>
+  
   <?include $(sys.CURRENTDIR)\Variables.wxi?>
   
 	<Product Id="*" Name="$(var.ProductName)" Language="1033" 
-           Version="1.0.0.0" Manufacturer="Polymaker" 
+           Version="$(var.ProductVersion)" Manufacturer="Polymaker" 
            UpgradeCode="fb896ebb-bff3-480a-b28a-313237f1b5e9">
     
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Manufacturer="Polymaker" />
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-
+    
     <Icon Id="icon.ico" SourceFile="$(var.SiGen.ProjectDir)Resources\Icons\SiGenIcon.ico"/>
     <Property Id="ARPPRODUCTICON" Value="icon.ico" />
     
