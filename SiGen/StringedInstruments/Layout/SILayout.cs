@@ -303,6 +303,11 @@ namespace SiGen.StringedInstruments.Layout
             for (int i = 0; i < _Strings.Count; i++)
                 _Strings[i].Index = i;
 
+            if (_NumberOfStrings > 10)
+            {
+                StringHelper.EstimateStringsGauges(this);
+            }
+
             RebuildComponentStringData();
 
             CheckCanCompensateFretPositions();
@@ -322,12 +327,19 @@ namespace SiGen.StringedInstruments.Layout
             };
 
             if (side == FingerboardSide.Treble)
+            {
+                newString.NumberOfFrets = FirstString.NumberOfFrets;
                 _Strings.Insert(0, newString);
+            }
             else
+            {
+                newString.NumberOfFrets = LastString.NumberOfFrets;
                 _Strings.Add(newString);
+            }
 
             IsAssigningProperties = true;
-            StringHelper.EstimateStringGauge(newString);
+            if (NumberOfStrings <= 10)
+                StringHelper.EstimateStringGauge(newString);
             StringHelper.EstimateStringAction(newString);
             IsAssigningProperties = false;
         }

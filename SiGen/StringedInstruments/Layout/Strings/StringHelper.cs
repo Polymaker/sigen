@@ -58,15 +58,36 @@ namespace SiGen.StringedInstruments.Layout
                 }
             }
 
-            if (estimatedGauge != null)
+            if (!estimatedGauge.IsEmpty)
             {
-                var gaugeIn = estimatedGauge[UnitOfMeasure.In].DoubleValue;
+                estimatedGauge = GetNearestGuitarGauge(estimatedGauge);
+                @string.Gauge = estimatedGauge;
+            }
+        }
 
-                var roundedGauge = Math.Truncate(gaugeIn * 1000d) / 1000d;
-                var remainder = gaugeIn - roundedGauge;
-                remainder = NumberHelper.Round(remainder * 10000d, 5d) / 10000d;
-                roundedGauge += remainder;
-                @string.Gauge = Measure.Inches(roundedGauge);
+        public static Measure GetNearestGuitarGauge(Measure gauge)
+        {
+            var gaugeIn = gauge[UnitOfMeasure.In].DoubleValue;
+
+            var roundedGauge = Math.Truncate(gaugeIn * 1000d) / 1000d;
+            var remainder = gaugeIn - roundedGauge;
+            remainder = NumberHelper.Round(remainder * 10000d, 5d) / 10000d;
+            roundedGauge += remainder;
+            return Measure.Inches(roundedGauge);
+        }
+
+        public static void EstimateStringsGauges(SILayout layout)
+        {
+            var minGauge = Measure.Inches(0.01);
+            var maxGauge = Measure.Inches(0.1);
+            if (layout.NumberOfStrings >= 20)
+                maxGauge = Measure.Inches(0.06);
+
+            var gaugeStep = (maxGauge - minGauge) / (layout.NumberOfStrings - 1);
+
+            for (int i = 0; i < layout.NumberOfStrings; i++)
+            {
+                layout.Strings[i].Gauge = GetNearestGuitarGauge(minGauge + gaugeStep * i);
             }
         }
     }

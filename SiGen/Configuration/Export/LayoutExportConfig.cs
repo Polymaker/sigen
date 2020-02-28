@@ -124,7 +124,11 @@ namespace SiGen.Export
 
         public LayoutExportConfig Clone()
         {
-            string json = JsonConvert.SerializeObject(this);
+            var jsonConfig = new JsonSerializerSettings
+            {
+                ContractResolver = new ShouldSerializeContractResolver(true)
+            };
+            string json = JsonConvert.SerializeObject(this, jsonConfig);
             JsonSerializer serializer = new JsonSerializer();
             using (var sr = new StringReader(json))
                 return (LayoutExportConfig)serializer.Deserialize(sr, typeof(LayoutExportConfig));

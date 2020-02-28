@@ -10,12 +10,27 @@ namespace SiGen.Configuration
 {
     public class ShouldSerializeContractResolver : DefaultContractResolver
     {
+        public bool ForceSerialize { get; set; }
+
+        public ShouldSerializeContractResolver()
+        {
+        }
+
+        public ShouldSerializeContractResolver(bool forceSerialize)
+        {
+            ForceSerialize = forceSerialize;
+        }
+
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             var property = base.CreateProperty(member, memberSerialization);
             var jsonPropInfo = member.GetCustomAttribute<JsonPropertyAttribute>();
 
-            if (property != null && jsonPropInfo != null && 
+            if (ForceSerialize)
+            {
+                property.ShouldSerialize = instance => true;
+            }
+            else if (property != null && jsonPropInfo != null && 
                 jsonPropInfo.DefaultValueHandling == DefaultValueHandling.Include)
             {
                 property.ShouldSerialize = instance => true;

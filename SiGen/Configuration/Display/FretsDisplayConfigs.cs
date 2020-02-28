@@ -104,6 +104,17 @@ namespace SiGen.Configuration.Display
             };
         }
 
+        public override void CopyValues(LineDisplayConfig displayConfig)
+        {
+            base.CopyValues(displayConfig);
+            if (displayConfig is FretsDisplayConfigs fretsDisplay)
+            {
+                RenderMode = fretsDisplay.RenderMode;
+                RenderWidth = fretsDisplay.RenderWidth;
+                DisplayAccuratePositions = fretsDisplay.DisplayAccuratePositions;
+            }
+        }
+
         #endregion
     }
 }
