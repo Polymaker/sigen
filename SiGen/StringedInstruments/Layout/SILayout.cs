@@ -19,6 +19,8 @@ namespace SiGen.StringedInstruments.Layout
 {
     public partial class SILayout// : XSerializable
     {
+        public const int CURRENT_LAYOUT_VERSION = 2;
+
         #region Fields
 
         internal List<LayoutComponent> _Components;
@@ -204,6 +206,8 @@ namespace SiGen.StringedInstruments.Layout
             }
         }
 
+        public int LayoutVersion { get; set; }
+
         public List<VisualElement> VisualElements { get; }
 
         public bool IsLoading { get; private set; }
@@ -246,8 +250,10 @@ namespace SiGen.StringedInstruments.Layout
             LayoutName = string.Empty;
 
 			LayoutChanges = new List<ILayoutChange>();
+
+            LayoutVersion = CURRENT_LAYOUT_VERSION;
             //_InstrumentType = InstrumentType.Guitar;
-		}
+        }
 
         #region Strings Management
 
@@ -698,6 +704,9 @@ namespace SiGen.StringedInstruments.Layout
             if (!string.IsNullOrEmpty(LayoutName))
                 root.Add(new XAttribute("Name", LayoutName));
 
+            LayoutVersion = CURRENT_LAYOUT_VERSION;
+            root.Add(new XAttribute("Version", LayoutVersion));
+
             root.Add(new XComment("Temperaments: " + Enum.GetNames(typeof(Temperament)).Aggregate((i, j) => i + ", " + j)));
             root.Add(SerializeProperty("Temperament", FretsTemperament));
             
@@ -753,6 +762,9 @@ namespace SiGen.StringedInstruments.Layout
 
             var layout = new SILayout() { IsLoading = true };
 
+            layout.LayoutVersion = root.ReadAttribute("Version", 1);
+            EnumHelper.CurrentLayoutVersion = layout.LayoutVersion;
+
             layout._NumberOfStrings = root.Element("Strings").GetIntAttribute("Count");
             for (int i = 0; i < layout.NumberOfStrings; i++)
                 layout._Strings.Add(new SIString(layout, i));
@@ -769,7 +781,6 @@ namespace SiGen.StringedInstruments.Layout
                 layout.ScaleLengthMode = slElem.ReadAttribute("Type", ScaleLengthType.Single);
                 layout.CurrentScaleLength.Deserialize(slElem);
             }
-            
 
             layout.Margins.Deserialize(root.Element("FingerboardMargins"));
 

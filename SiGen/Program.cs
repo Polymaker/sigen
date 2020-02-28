@@ -26,7 +26,7 @@ namespace SiGen
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                //Thread.CurrentThread.CurrentUICulture = new CultureInfo("fr-CA");
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-CA");
                 Application.Run(new LayoutEditorWindow(args));
             }
             else

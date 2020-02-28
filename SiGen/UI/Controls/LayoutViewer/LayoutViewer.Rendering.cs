@@ -169,7 +169,7 @@ namespace SiGen.UI
                 RenderGuideLines(pe.Graphics);
 
                 if (DisplayConfig.ShowFrets)
-                    RenderFrets(pe.Graphics, RectangleM.Empty);
+                    RenderFrets(pe.Graphics);
 
                 if (DisplayConfig.ShowStrings)
                     RenderStrings(pe.Graphics);
@@ -344,7 +344,7 @@ namespace SiGen.UI
             }
         }
 
-        private void RenderFrets(Graphics g, RectangleM clipRect)
+        private void RenderFrets(Graphics g)
         {
             Pen fretPen = null;
             Pen nutPen = GetPen(DisplayConfig.Frets.Color, 1);
@@ -365,12 +365,6 @@ namespace SiGen.UI
 
             foreach (var fretLine in CurrentLayout.VisualElements.OfType<FretLine>())
             {
-                if (!clipRect.IsEmpty && !clipRect.IntersectsWith(fretLine.Bounds))
-                {
-                    Console.WriteLine($"{fretLine.FretIndex} out of bounds");
-                    continue;
-                }
-
                 var penToUse = fretLine.IsNut ? nutPen : fretPen;
                 var fretPoints = fretLine.Points.Select(p => PointToDisplay(p)).ToArray();
 
@@ -383,7 +377,7 @@ namespace SiGen.UI
                 if (fretLine.IsStraight || CurrentLayout.FretInterpolation == FretInterpolationMethod.Linear)
                     g.DrawLines(penToUse, fretPoints);
                 else
-                    g.DrawCurve(penToUse, fretPoints, 0.5f);
+                    g.DrawCurve(penToUse, fretPoints, 0.6f);
 
                 if (DisplayConfig.Frets.DisplayAccuratePositions && fretLine.Strings.Count() > 1)
                 {
@@ -395,7 +389,7 @@ namespace SiGen.UI
             var bridgeLine = CurrentLayout.GetElement<LayoutPolyLine>(x => x.ElementType == VisualElementType.BridgeLine);
             if (bridgeLine != null )
             {
-                if (clipRect.IsEmpty || clipRect.IntersectsWith(bridgeLine.Bounds))
+                //if (clipRect.IsEmpty || clipRect.IntersectsWith(bridgeLine.Bounds))
                     DrawLine(g, bridgeLine, nutPen);
             }
 
