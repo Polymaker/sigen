@@ -126,7 +126,7 @@ namespace SiGen.UI
         public void SetDisplayConfig(ViewerDisplayConfig config, bool keepVisibility = true)
         {
             var configVisible = new List<bool>();
-            if (_DisplayConfig != null)
+            if (_DisplayConfig != null && keepVisibility)
             {
                 _DisplayConfig.PropertyChanged -= DisplayConfigChanged;
                 foreach (var cfg in _DisplayConfig.LineConfigs)
@@ -135,7 +135,7 @@ namespace SiGen.UI
 
             _DisplayConfig = config ?? new ViewerDisplayConfig();
 
-            if (configVisible.Count > 0)
+            if (keepVisibility && configVisible.Count > 0)
             {
                 for (int i = 0; i < configVisible.Count; i++)
                     _DisplayConfig.LineConfigs[i].Visible = configVisible[i];
@@ -236,7 +236,7 @@ namespace SiGen.UI
             {
                 foreach (var fretLine in CurrentLayout.VisualElements.OfType<FretLine>())
                 {
-                    if (DisplayConfig.FretExtensionAmount.IsEmpty)
+                    if (DisplayConfig.FretExtensionAmount.IsEmpty || fretLine.IsNut)
                         fretLine.Tag = null;
                     else
                         fretLine.Tag = fretLine.GetExtendedFretLine(DisplayConfig.FretExtensionAmount);

@@ -34,15 +34,13 @@ namespace SiGen.UI.Windows
         {
             InitializeComponent();
             Icon = Properties.Resources.SiGenIcon;
-            //ExportOptions = LayoutExportConfig.CreateDefault();
         }
 
         public ExportLayoutDialog(LayoutDocument layoutDocument)
         {
             InitializeComponent();
             Icon = Properties.Resources.SiGenIcon;
-            
-            //ExportOptions = LayoutExportConfig.CreateDefault();
+
             LayoutToExport = layoutDocument;
         }
 

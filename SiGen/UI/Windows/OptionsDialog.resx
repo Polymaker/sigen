@@ -193,7 +193,7 @@
     <value>FretWidthBox</value>
   </data>
   <data name="&gt;&gt;FretWidthBox.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.24846, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;FretWidthBox.Parent" xml:space="preserve">
     <value>tabPage1</value>
@@ -244,7 +244,7 @@
     <value>FretsColorSelect</value>
   </data>
   <data name="&gt;&gt;FretsColorSelect.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.ValueEditors.ColorSelectButton, SiGen, Version=1.0.0.24846, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.ValueEditors.ColorSelectButton, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;FretsColorSelect.Parent" xml:space="preserve">
     <value>tabPage1</value>
@@ -331,7 +331,7 @@
     <value>StringsColorSelect</value>
   </data>
   <data name="&gt;&gt;StringsColorSelect.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.ValueEditors.ColorSelectButton, SiGen, Version=1.0.0.24846, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.ValueEditors.ColorSelectButton, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;StringsColorSelect.Parent" xml:space="preserve">
     <value>tabPage1</value>
@@ -511,7 +511,7 @@
     <value>3, 423</value>
   </data>
   <data name="StringCentersExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>351, 78</value>
+    <value>296, 81</value>
   </data>
   <data name="StringCentersExportCfg.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -520,7 +520,7 @@
     <value>StringCentersExportCfg</value>
   </data>
   <data name="&gt;&gt;StringCentersExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.24846, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;StringCentersExportCfg.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -541,7 +541,7 @@
     <value>3, 507</value>
   </data>
   <data name="GuideExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>351, 78</value>
+    <value>296, 81</value>
   </data>
   <data name="GuideExportCfg.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -550,7 +550,7 @@
     <value>GuideExportCfg</value>
   </data>
   <data name="&gt;&gt;GuideExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.24846, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;GuideExportCfg.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -571,7 +571,7 @@
     <value>3, 339</value>
   </data>
   <data name="StringsExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>351, 78</value>
+    <value>296, 81</value>
   </data>
   <data name="StringsExportCfg.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -580,7 +580,7 @@
     <value>StringsExportCfg</value>
   </data>
   <data name="&gt;&gt;StringsExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.24846, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;StringsExportCfg.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -601,7 +601,7 @@
     <value>3, 255</value>
   </data>
   <data name="CenterLineExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>351, 78</value>
+    <value>296, 81</value>
   </data>
   <data name="CenterLineExportCfg.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -610,7 +610,7 @@
     <value>CenterLineExportCfg</value>
   </data>
   <data name="&gt;&gt;CenterLineExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.24846, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;CenterLineExportCfg.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -631,7 +631,7 @@
     <value>3, 171</value>
   </data>
   <data name="MarginsExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>351, 78</value>
+    <value>296, 81</value>
   </data>
   <data name="MarginsExportCfg.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -640,7 +640,7 @@
     <value>MarginsExportCfg</value>
   </data>
   <data name="&gt;&gt;MarginsExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.24846, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;MarginsExportCfg.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -661,7 +661,7 @@
     <value>3, 87</value>
   </data>
   <data name="FingerboardExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>351, 78</value>
+    <value>296, 81</value>
   </data>
   <data name="FingerboardExportCfg.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -670,7 +670,7 @@
     <value>FingerboardExportCfg</value>
   </data>
   <data name="&gt;&gt;FingerboardExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.24846, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;FingerboardExportCfg.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -691,7 +691,7 @@
     <value>3, 3</value>
   </data>
   <data name="FretsExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>351, 78</value>
+    <value>296, 81</value>
   </data>
   <data name="FretsExportCfg.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -700,7 +700,7 @@
     <value>FretsExportCfg</value>
   </data>
   <data name="&gt;&gt;FretsExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.24846, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;FretsExportCfg.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -821,9 +821,6 @@
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 8.25pt</value>
-  </data>
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterParent</value>

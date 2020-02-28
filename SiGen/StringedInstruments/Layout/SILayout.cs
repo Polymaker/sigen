@@ -883,21 +883,6 @@ namespace SiGen.StringedInstruments.Layout
         {
             var stream = typeof(SILayout).Assembly.GetManifestResourceStream("SiGen.Resources.DefaultLayout.sil");
             return Load(stream);
-            //var layout = new SILayout
-            //{
-            //    LayoutName = "6 Strings Fingerboard Layout",
-            //    IsLoading = true
-            //};
-
-            //layout.InitializeStrings(0, 6);
-            //layout.FretsTemperament = Temperament.Equal;
-            //layout.StringSpacingMode = StringSpacingType.Simple;
-            //layout.ScaleLengthMode = ScaleLengthType.Single;
-            //layout.SingleScaleConfig.Length = Measure.Inches(25.5);
-            //layout.SimpleStringSpacing.StringSpacingAtNut = Measure.Mm(7.3);
-            //layout.SimpleStringSpacing.StringSpreadAtBridge = Measure.Mm(10.5);
-            //layout.IsLoading = false;
-            //return layout;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SiGen.Physics
@@ -105,27 +106,37 @@ namespace SiGen.Physics
 
         public static NoteName ParseNoteName(string value)
         {
-            NoteName note = NoteName.A;
+            // A regex to validate the input: ^([ABDEG]b?|[ACDFG]#?)$
 
-            if (Enum.TryParse<NoteName>(value, out note))
+
+            value = (value ?? string.Empty).Trim();
+
+            if (string.IsNullOrEmpty(value))
+                throw new ArgumentNullException(nameof(value));
+
+            value = value.Replace("♯", "#");
+            value = value.Replace("♭", "b");
+
+            if (Enum.TryParse(value, true, out NoteName note))
                 return note;
 
             const string NOTES = "ABCDEFG";
 
-            if (value.Length == 1 && NOTES.Contains(value.ToUpper()))
-                return (NoteName)Enum.Parse(typeof(NoteName), value.ToUpper());
-            else if (NOTES.Contains(char.ToUpper(value[0])))
+            if (value.Length == 2 && NOTES.Contains(char.ToUpper(value[0])))
             {
                 if (value.Contains("#"))
                 {
                     int noteIdx = NOTES.IndexOf(char.ToUpper(value[0]));
-                    return (NoteName)Enum.Parse(typeof(NoteName), NOTES[(noteIdx + 1) % NOTES.Length] + "b");
-                }
-                else if (value.ToUpper().IndexOf("B", 1) > 0)
-                {
-                    return (NoteName)Enum.Parse(typeof(NoteName), char.ToUpper(value[0]) + "b");
+                    string flatNoteName = NOTES[(noteIdx + 1) % NOTES.Length] + "b";
+
+                    if (Enum.TryParse(flatNoteName, true, out note))
+                        return note;
+                    
                 }
             }
+            ////should have the same result as directly parsing the value
+            //else if (value.Length == 1 && NOTES.Contains(value.ToUpper()))
+            //    return (NoteName)Enum.Parse(typeof(NoteName), value.ToUpper());
 
             throw new InvalidCastException("Invalid note name");
         }
