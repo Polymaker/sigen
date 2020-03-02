@@ -386,11 +386,13 @@ namespace SiGen.UI
                 }
             }
 
-            var bridgeLine = CurrentLayout.GetElement<LayoutPolyLine>(x => x.ElementType == VisualElementType.BridgeLine);
-            if (bridgeLine != null )
+            if (DisplayConfig.Frets.DisplayBridgeLine)
             {
-                //if (clipRect.IsEmpty || clipRect.IntersectsWith(bridgeLine.Bounds))
+                var bridgeLine = CurrentLayout.GetElement<LayoutPolyLine>(x => x.ElementType == VisualElementType.BridgeLine);
+                if (bridgeLine != null)
+                {
                     DrawLine(g, bridgeLine, nutPen);
+                }
             }
 
             nutPen.Dispose();

@@ -193,7 +193,7 @@
     <value>FretWidthBox</value>
   </data>
   <data name="&gt;&gt;FretWidthBox.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.4.18887, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;FretWidthBox.Parent" xml:space="preserve">
     <value>tabPage1</value>
@@ -244,7 +244,7 @@
     <value>FretsColorSelect</value>
   </data>
   <data name="&gt;&gt;FretsColorSelect.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.ValueEditors.ColorSelectButton, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.ValueEditors.ColorSelectButton, SiGen, Version=1.0.4.18887, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;FretsColorSelect.Parent" xml:space="preserve">
     <value>tabPage1</value>
@@ -331,7 +331,7 @@
     <value>StringsColorSelect</value>
   </data>
   <data name="&gt;&gt;StringsColorSelect.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.ValueEditors.ColorSelectButton, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.ValueEditors.ColorSelectButton, SiGen, Version=1.0.4.18887, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;StringsColorSelect.Parent" xml:space="preserve">
     <value>tabPage1</value>
@@ -462,6 +462,243 @@
   <data name="&gt;&gt;tabPage1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="flowLayoutPanel1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="flowLayoutPanel1.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="FretsExportCfg.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="FretsExportCfg.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="FretsExportCfg.ConfigName" xml:space="preserve">
+    <value>Export frets</value>
+  </data>
+  <data name="FretsExportCfg.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="FretsExportCfg.Size" type="System.Drawing.Size, System.Drawing">
+    <value>301, 81</value>
+  </data>
+  <data name="FretsExportCfg.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;FretsExportCfg.Name" xml:space="preserve">
+    <value>FretsExportCfg</value>
+  </data>
+  <data name="&gt;&gt;FretsExportCfg.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.4.18887, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;FretsExportCfg.Parent" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;FretsExportCfg.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="FingerboardExportCfg.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="FingerboardExportCfg.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="FingerboardExportCfg.ConfigName" xml:space="preserve">
+    <value>Export fingerboard</value>
+  </data>
+  <data name="FingerboardExportCfg.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 90</value>
+  </data>
+  <data name="FingerboardExportCfg.Size" type="System.Drawing.Size, System.Drawing">
+    <value>301, 81</value>
+  </data>
+  <data name="FingerboardExportCfg.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;FingerboardExportCfg.Name" xml:space="preserve">
+    <value>FingerboardExportCfg</value>
+  </data>
+  <data name="&gt;&gt;FingerboardExportCfg.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.4.18887, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;FingerboardExportCfg.Parent" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;FingerboardExportCfg.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="MarginsExportCfg.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="MarginsExportCfg.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="MarginsExportCfg.ConfigName" xml:space="preserve">
+    <value>Export margins</value>
+  </data>
+  <data name="MarginsExportCfg.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 177</value>
+  </data>
+  <data name="MarginsExportCfg.Size" type="System.Drawing.Size, System.Drawing">
+    <value>301, 81</value>
+  </data>
+  <data name="MarginsExportCfg.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;MarginsExportCfg.Name" xml:space="preserve">
+    <value>MarginsExportCfg</value>
+  </data>
+  <data name="&gt;&gt;MarginsExportCfg.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.4.18887, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;MarginsExportCfg.Parent" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;MarginsExportCfg.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="CenterLineExportCfg.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="CenterLineExportCfg.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="CenterLineExportCfg.ConfigName" xml:space="preserve">
+    <value>Export center line</value>
+  </data>
+  <data name="CenterLineExportCfg.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 264</value>
+  </data>
+  <data name="CenterLineExportCfg.Size" type="System.Drawing.Size, System.Drawing">
+    <value>301, 81</value>
+  </data>
+  <data name="CenterLineExportCfg.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;CenterLineExportCfg.Name" xml:space="preserve">
+    <value>CenterLineExportCfg</value>
+  </data>
+  <data name="&gt;&gt;CenterLineExportCfg.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.4.18887, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;CenterLineExportCfg.Parent" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;CenterLineExportCfg.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="StringsExportCfg.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="StringsExportCfg.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="StringsExportCfg.ConfigName" xml:space="preserve">
+    <value>Export strings</value>
+  </data>
+  <data name="StringsExportCfg.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 351</value>
+  </data>
+  <data name="StringsExportCfg.Size" type="System.Drawing.Size, System.Drawing">
+    <value>301, 81</value>
+  </data>
+  <data name="StringsExportCfg.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;StringsExportCfg.Name" xml:space="preserve">
+    <value>StringsExportCfg</value>
+  </data>
+  <data name="&gt;&gt;StringsExportCfg.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.4.18887, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;StringsExportCfg.Parent" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;StringsExportCfg.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="StringCentersExportCfg.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="StringCentersExportCfg.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="StringCentersExportCfg.ConfigName" xml:space="preserve">
+    <value>Export string centers</value>
+  </data>
+  <data name="StringCentersExportCfg.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 438</value>
+  </data>
+  <data name="StringCentersExportCfg.Size" type="System.Drawing.Size, System.Drawing">
+    <value>301, 81</value>
+  </data>
+  <data name="StringCentersExportCfg.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;StringCentersExportCfg.Name" xml:space="preserve">
+    <value>StringCentersExportCfg</value>
+  </data>
+  <data name="&gt;&gt;StringCentersExportCfg.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.4.18887, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;StringCentersExportCfg.Parent" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;StringCentersExportCfg.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="GuideExportCfg.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="GuideExportCfg.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="GuideExportCfg.ConfigName" xml:space="preserve">
+    <value>Guide lines</value>
+  </data>
+  <data name="GuideExportCfg.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 525</value>
+  </data>
+  <data name="GuideExportCfg.Size" type="System.Drawing.Size, System.Drawing">
+    <value>301, 81</value>
+  </data>
+  <data name="GuideExportCfg.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;GuideExportCfg.Name" xml:space="preserve">
+    <value>GuideExportCfg</value>
+  </data>
+  <data name="&gt;&gt;GuideExportCfg.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.4.18887, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;GuideExportCfg.Parent" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;GuideExportCfg.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="flowLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 3</value>
+  </data>
+  <data name="flowLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>487, 346</value>
+  </data>
+  <data name="flowLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanel1.Name" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.FlowLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanel1.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanel1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="Export_CancelButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
   </data>
@@ -490,243 +727,6 @@
     <value>tabPage2</value>
   </data>
   <data name="&gt;&gt;Export_CancelButton.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="panel1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
-  </data>
-  <data name="panel1.AutoScroll" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="StringCentersExportCfg.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="StringCentersExportCfg.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
-    <value>GrowAndShrink</value>
-  </data>
-  <data name="StringCentersExportCfg.ConfigName" xml:space="preserve">
-    <value>Export string centers</value>
-  </data>
-  <data name="StringCentersExportCfg.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 423</value>
-  </data>
-  <data name="StringCentersExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>296, 81</value>
-  </data>
-  <data name="StringCentersExportCfg.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;StringCentersExportCfg.Name" xml:space="preserve">
-    <value>StringCentersExportCfg</value>
-  </data>
-  <data name="&gt;&gt;StringCentersExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;StringCentersExportCfg.Parent" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;StringCentersExportCfg.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="GuideExportCfg.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="GuideExportCfg.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
-    <value>GrowAndShrink</value>
-  </data>
-  <data name="GuideExportCfg.ConfigName" xml:space="preserve">
-    <value>Guide lines</value>
-  </data>
-  <data name="GuideExportCfg.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 507</value>
-  </data>
-  <data name="GuideExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>296, 81</value>
-  </data>
-  <data name="GuideExportCfg.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;GuideExportCfg.Name" xml:space="preserve">
-    <value>GuideExportCfg</value>
-  </data>
-  <data name="&gt;&gt;GuideExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;GuideExportCfg.Parent" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;GuideExportCfg.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="StringsExportCfg.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="StringsExportCfg.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
-    <value>GrowAndShrink</value>
-  </data>
-  <data name="StringsExportCfg.ConfigName" xml:space="preserve">
-    <value>Export strings</value>
-  </data>
-  <data name="StringsExportCfg.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 339</value>
-  </data>
-  <data name="StringsExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>296, 81</value>
-  </data>
-  <data name="StringsExportCfg.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;StringsExportCfg.Name" xml:space="preserve">
-    <value>StringsExportCfg</value>
-  </data>
-  <data name="&gt;&gt;StringsExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;StringsExportCfg.Parent" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;StringsExportCfg.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="CenterLineExportCfg.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="CenterLineExportCfg.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
-    <value>GrowAndShrink</value>
-  </data>
-  <data name="CenterLineExportCfg.ConfigName" xml:space="preserve">
-    <value>Export center line</value>
-  </data>
-  <data name="CenterLineExportCfg.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 255</value>
-  </data>
-  <data name="CenterLineExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>296, 81</value>
-  </data>
-  <data name="CenterLineExportCfg.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;CenterLineExportCfg.Name" xml:space="preserve">
-    <value>CenterLineExportCfg</value>
-  </data>
-  <data name="&gt;&gt;CenterLineExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;CenterLineExportCfg.Parent" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;CenterLineExportCfg.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="MarginsExportCfg.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="MarginsExportCfg.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
-    <value>GrowAndShrink</value>
-  </data>
-  <data name="MarginsExportCfg.ConfigName" xml:space="preserve">
-    <value>Export margins</value>
-  </data>
-  <data name="MarginsExportCfg.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 171</value>
-  </data>
-  <data name="MarginsExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>296, 81</value>
-  </data>
-  <data name="MarginsExportCfg.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;MarginsExportCfg.Name" xml:space="preserve">
-    <value>MarginsExportCfg</value>
-  </data>
-  <data name="&gt;&gt;MarginsExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;MarginsExportCfg.Parent" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;MarginsExportCfg.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="FingerboardExportCfg.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="FingerboardExportCfg.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
-    <value>GrowAndShrink</value>
-  </data>
-  <data name="FingerboardExportCfg.ConfigName" xml:space="preserve">
-    <value>Export fingerboard</value>
-  </data>
-  <data name="FingerboardExportCfg.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 87</value>
-  </data>
-  <data name="FingerboardExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>296, 81</value>
-  </data>
-  <data name="FingerboardExportCfg.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;FingerboardExportCfg.Name" xml:space="preserve">
-    <value>FingerboardExportCfg</value>
-  </data>
-  <data name="&gt;&gt;FingerboardExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;FingerboardExportCfg.Parent" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;FingerboardExportCfg.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="FretsExportCfg.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="FretsExportCfg.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
-    <value>GrowAndShrink</value>
-  </data>
-  <data name="FretsExportCfg.ConfigName" xml:space="preserve">
-    <value>Export frets</value>
-  </data>
-  <data name="FretsExportCfg.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="FretsExportCfg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>296, 81</value>
-  </data>
-  <data name="FretsExportCfg.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;FretsExportCfg.Name" xml:space="preserve">
-    <value>FretsExportCfg</value>
-  </data>
-  <data name="&gt;&gt;FretsExportCfg.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportConfigEdit, SiGen, Version=1.0.0.14440, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;FretsExportCfg.Parent" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;FretsExportCfg.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 3</value>
-  </data>
-  <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>487, 342</value>
-  </data>
-  <data name="panel1.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;panel1.Name" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;panel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;panel1.Parent" xml:space="preserve">
-    <value>tabPage2</value>
-  </data>
-  <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="Export_SaveButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
@@ -821,6 +821,9 @@
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 8.25pt</value>
+  </data>
+  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterParent</value>

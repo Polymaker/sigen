@@ -25,6 +25,10 @@ namespace SiGen.StringedInstruments.Layout
 
         public bool IsSinglePoint => Item2 == null;
 
+        public bool IsStartPoint { get; }
+
+        public bool IsEndPoint => IsSinglePoint && !IsStartPoint;
+
         public LayoutIntersection(ILayoutLine item1, ILayoutLine item2, PointM intersection)
         {
             Item1 = item1;
@@ -33,11 +37,12 @@ namespace SiGen.StringedInstruments.Layout
             WorldCoord = Intersection.ToVector();
         }
 
-        public LayoutIntersection(ILayoutLine item1, PointM intersection)
+        public LayoutIntersection(ILayoutLine item1, PointM intersection, bool isStart)
         {
             Item1 = item1;
             Intersection = intersection;
             WorldCoord = Intersection.ToVector();
+            IsStartPoint = isStart;
         }
 
         public PreciseDouble GetDistance(Vector worldPos)
@@ -66,6 +71,9 @@ namespace SiGen.StringedInstruments.Layout
                 return false;
 
             if (!AreSimilar(Item1, line1, ElementType1))
+                return false;
+
+            if (IsSinglePoint && IsStartPoint != other.IsStartPoint)
                 return false;
 
             if (!IsSinglePoint && !AreSimilar(Item2, line2, ElementType2))

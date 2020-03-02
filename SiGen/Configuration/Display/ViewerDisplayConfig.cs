@@ -254,7 +254,8 @@ namespace SiGen.UI
                     Visible = true,
                     Color = Color.Red,
                     RenderMode = LineRenderMode.RealisticLook,
-                    RenderWidth = Measure.Mm(2.6)
+                    RenderWidth = Measure.Mm(2.6),
+                    DisplayBridgeLine = true
                 },
                 Fingerboard = new FingerboardDisplayConfig()
                 {

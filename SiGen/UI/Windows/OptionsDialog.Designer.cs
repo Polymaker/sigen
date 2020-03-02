@@ -34,18 +34,18 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.ResetDisplayButton = new System.Windows.Forms.Button();
             this.FretWidthLabel = new System.Windows.Forms.Label();
-            this.FretWidthBox = new SiGen.UI.Controls.MeasureTextbox();
             this.FretsColorLabel = new System.Windows.Forms.Label();
-            this.FretsColorSelect = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
             this.ChkRealisticFrets = new System.Windows.Forms.CheckBox();
             this.StringsColorLabel = new System.Windows.Forms.Label();
-            this.StringsColorSelect = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
             this.ChkRealisticStrings = new System.Windows.Forms.CheckBox();
             this.Display_CancelButton = new System.Windows.Forms.Button();
             this.Display_SaveButton = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.Export_CancelButton = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.Export_SaveButton = new System.Windows.Forms.Button();
+            this.FretWidthBox = new SiGen.UI.Controls.MeasureTextbox();
+            this.FretsColorSelect = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
+            this.StringsColorSelect = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
             this.StringCentersExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
             this.GuideExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
             this.StringsExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
@@ -53,11 +53,11 @@
             this.MarginsExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
             this.FingerboardExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
             this.FretsExportCfg = new SiGen.UI.Controls.Preferences.LineExportConfigEdit();
-            this.Export_SaveButton = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -97,21 +97,10 @@
             resources.ApplyResources(this.FretWidthLabel, "FretWidthLabel");
             this.FretWidthLabel.Name = "FretWidthLabel";
             // 
-            // FretWidthBox
-            // 
-            resources.ApplyResources(this.FretWidthBox, "FretWidthBox");
-            this.FretWidthBox.Name = "FretWidthBox";
-            // 
             // FretsColorLabel
             // 
             resources.ApplyResources(this.FretsColorLabel, "FretsColorLabel");
             this.FretsColorLabel.Name = "FretsColorLabel";
-            // 
-            // FretsColorSelect
-            // 
-            resources.ApplyResources(this.FretsColorSelect, "FretsColorSelect");
-            this.FretsColorSelect.Name = "FretsColorSelect";
-            this.FretsColorSelect.Value = System.Drawing.Color.Red;
             // 
             // ChkRealisticFrets
             // 
@@ -124,12 +113,6 @@
             // 
             resources.ApplyResources(this.StringsColorLabel, "StringsColorLabel");
             this.StringsColorLabel.Name = "StringsColorLabel";
-            // 
-            // StringsColorSelect
-            // 
-            resources.ApplyResources(this.StringsColorSelect, "StringsColorSelect");
-            this.StringsColorSelect.Name = "StringsColorSelect";
-            this.StringsColorSelect.Value = System.Drawing.Color.Red;
             // 
             // ChkRealisticStrings
             // 
@@ -153,8 +136,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.flowLayoutPanel1);
             this.tabPage2.Controls.Add(this.Export_CancelButton);
-            this.tabPage2.Controls.Add(this.panel1);
             this.tabPage2.Controls.Add(this.Export_SaveButton);
             resources.ApplyResources(this.tabPage2, "tabPage2");
             this.tabPage2.Name = "tabPage2";
@@ -167,17 +150,29 @@
             this.Export_CancelButton.UseVisualStyleBackColor = true;
             this.Export_CancelButton.Click += new System.EventHandler(this.Export_CancelButton_Click);
             // 
-            // panel1
+            // Export_SaveButton
             // 
-            resources.ApplyResources(this.panel1, "panel1");
-            this.panel1.Controls.Add(this.StringCentersExportCfg);
-            this.panel1.Controls.Add(this.GuideExportCfg);
-            this.panel1.Controls.Add(this.StringsExportCfg);
-            this.panel1.Controls.Add(this.CenterLineExportCfg);
-            this.panel1.Controls.Add(this.MarginsExportCfg);
-            this.panel1.Controls.Add(this.FingerboardExportCfg);
-            this.panel1.Controls.Add(this.FretsExportCfg);
-            this.panel1.Name = "panel1";
+            resources.ApplyResources(this.Export_SaveButton, "Export_SaveButton");
+            this.Export_SaveButton.Name = "Export_SaveButton";
+            this.Export_SaveButton.UseVisualStyleBackColor = true;
+            this.Export_SaveButton.Click += new System.EventHandler(this.Export_SaveButton_Click);
+            // 
+            // FretWidthBox
+            // 
+            resources.ApplyResources(this.FretWidthBox, "FretWidthBox");
+            this.FretWidthBox.Name = "FretWidthBox";
+            // 
+            // FretsColorSelect
+            // 
+            resources.ApplyResources(this.FretsColorSelect, "FretsColorSelect");
+            this.FretsColorSelect.Name = "FretsColorSelect";
+            this.FretsColorSelect.Value = System.Drawing.Color.Red;
+            // 
+            // StringsColorSelect
+            // 
+            resources.ApplyResources(this.StringsColorSelect, "StringsColorSelect");
+            this.StringsColorSelect.Name = "StringsColorSelect";
+            this.StringsColorSelect.Value = System.Drawing.Color.Red;
             // 
             // StringCentersExportCfg
             // 
@@ -221,12 +216,17 @@
             this.FretsExportCfg.LineConfig = null;
             this.FretsExportCfg.Name = "FretsExportCfg";
             // 
-            // Export_SaveButton
+            // flowLayoutPanel1
             // 
-            resources.ApplyResources(this.Export_SaveButton, "Export_SaveButton");
-            this.Export_SaveButton.Name = "Export_SaveButton";
-            this.Export_SaveButton.UseVisualStyleBackColor = true;
-            this.Export_SaveButton.Click += new System.EventHandler(this.Export_SaveButton_Click);
+            resources.ApplyResources(this.flowLayoutPanel1, "flowLayoutPanel1");
+            this.flowLayoutPanel1.Controls.Add(this.FretsExportCfg);
+            this.flowLayoutPanel1.Controls.Add(this.FingerboardExportCfg);
+            this.flowLayoutPanel1.Controls.Add(this.MarginsExportCfg);
+            this.flowLayoutPanel1.Controls.Add(this.CenterLineExportCfg);
+            this.flowLayoutPanel1.Controls.Add(this.StringsExportCfg);
+            this.flowLayoutPanel1.Controls.Add(this.StringCentersExportCfg);
+            this.flowLayoutPanel1.Controls.Add(this.GuideExportCfg);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             // 
             // OptionsDialog
             // 
@@ -240,8 +240,8 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -251,7 +251,6 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button Export_SaveButton;
-        private System.Windows.Forms.Panel panel1;
         private Controls.Preferences.LineExportConfigEdit CenterLineExportCfg;
         private Controls.Preferences.LineExportConfigEdit MarginsExportCfg;
         private Controls.Preferences.LineExportConfigEdit FingerboardExportCfg;
@@ -271,5 +270,6 @@
         private System.Windows.Forms.Label FretWidthLabel;
         private Controls.MeasureTextbox FretWidthBox;
         private System.Windows.Forms.Button ResetDisplayButton;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }

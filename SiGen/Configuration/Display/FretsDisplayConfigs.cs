@@ -15,6 +15,7 @@ namespace SiGen.Configuration.Display
         private Measure _RenderWidth;
         private LineRenderMode _RenderMode;
         private bool _DisplayAccuratePositions;
+        private bool _DisplayBridgeLine;
 
         [JsonProperty, JsonConverter(typeof(StringEnumConverter))]
         public LineRenderMode RenderMode
@@ -36,6 +37,13 @@ namespace SiGen.Configuration.Display
         {
             get => _DisplayAccuratePositions;
             set => SetPropertyValue(ref _DisplayAccuratePositions, value);
+        }
+
+        [JsonProperty]
+        public bool DisplayBridgeLine
+        {
+            get => _DisplayBridgeLine;
+            set => SetPropertyValue(ref _DisplayBridgeLine, value);
         }
 
         #region Winform Designer Specifics
@@ -76,12 +84,25 @@ namespace SiGen.Configuration.Display
             return DisplayAccuratePositions != ((DefaultValues as FretsDisplayConfigs)?.DisplayAccuratePositions ?? false);
         }
 
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public void ResetDisplayBridgeLine()
+        {
+            DisplayBridgeLine = (DefaultValues as FretsDisplayConfigs)?.DisplayBridgeLine ?? false;
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public bool ShouldSerializeDisplayBridgeLine()
+        {
+            return DisplayBridgeLine != ((DefaultValues as FretsDisplayConfigs)?.DisplayBridgeLine ?? false);
+        }
+
         public override bool ShouldSerializeConfig()
         {
             return base.ShouldSerializeConfig() || 
                 ShouldSerializeRenderMode() ||
                 ShouldSerializeRenderWidth() ||
-                ShouldSerializeDisplayAccuratePositions();
+                ShouldSerializeDisplayAccuratePositions() ||
+                ShouldSerializeDisplayBridgeLine();
         }
 
         public override void ResetConfig()
@@ -90,6 +111,7 @@ namespace SiGen.Configuration.Display
             ResetRenderMode();
             ResetRenderWidth();
             ResetDisplayAccuratePositions();
+            ResetDisplayBridgeLine();
         }
 
         public override void InitDefaultValues()
@@ -100,7 +122,8 @@ namespace SiGen.Configuration.Display
                 Visible = Visible,
                 RenderMode = RenderMode,
                 RenderWidth = RenderWidth,
-                DisplayAccuratePositions = DisplayAccuratePositions
+                DisplayAccuratePositions = DisplayAccuratePositions,
+                DisplayBridgeLine = DisplayBridgeLine
             };
         }
 
@@ -112,6 +135,7 @@ namespace SiGen.Configuration.Display
                 RenderMode = fretsDisplay.RenderMode;
                 RenderWidth = fretsDisplay.RenderWidth;
                 DisplayAccuratePositions = fretsDisplay.DisplayAccuratePositions;
+                DisplayBridgeLine = fretsDisplay.DisplayBridgeLine;
             }
         }
 

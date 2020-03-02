@@ -545,40 +545,40 @@ namespace SiGen.UI
             return measureBox;
         }
 
-        private AngleValueBox CreateAngleMeasureBox(LayoutMeasure selection)
-        {
-            var corner = new PointM(selection.FromPoint.X, selection.ToPoint.Y).ToVector();
-            var p1v = selection.FromPoint.ToVector();
-            var p2v = selection.ToPoint.ToVector();
-            var center = (p2v + corner) / 2;
-            var angleBox = new AngleValueBox(selection, Angle.FromPoints(p1v, p2v, corner)) { Viewer = this };
-            angleBox.TargetPosition = p1v;
-            SizeF textSize = SizeF.Empty;
-            using (var g = CreateGraphics())
-                textSize = g.MeasureString(angleBox.GetDisplayValue(), Font);
-            angleBox.Size = new SizeF(textSize.Width + 2, textSize.Height + 2);
-            return angleBox;
-        }
+        //private AngleValueBox CreateAngleMeasureBox(LayoutMeasure selection)
+        //{
+        //    var corner = new PointM(selection.FromPoint.X, selection.ToPoint.Y).ToVector();
+        //    var p1v = selection.FromPoint.ToVector();
+        //    var p2v = selection.ToPoint.ToVector();
+        //    var center = (p2v + corner) / 2;
+        //    var angleBox = new AngleValueBox(selection, Angle.FromPoints(p1v, p2v, corner)) { Viewer = this };
+        //    angleBox.TargetPosition = p1v;
+        //    SizeF textSize = SizeF.Empty;
+        //    using (var g = CreateGraphics())
+        //        textSize = g.MeasureString(angleBox.GetDisplayValue(), Font);
+        //    angleBox.Size = new SizeF(textSize.Width + 2, textSize.Height + 2);
+        //    return angleBox;
+        //}
 
-        private void CreateAngleMeasureBox2(LayoutMeasure selection)
-        {
-            var corner = new PointM(selection.FromPoint.X, selection.ToPoint.Y).ToVector();
-            var p1v = selection.FromPoint.ToVector();
-            var p2v = selection.ToPoint.ToVector();
-            var center = (p2v + corner) / 2;
+        //private void CreateAngleMeasureBox2(LayoutMeasure selection)
+        //{
+        //    var corner = new PointM(selection.FromPoint.X, selection.ToPoint.Y).ToVector();
+        //    var p1v = selection.FromPoint.ToVector();
+        //    var p2v = selection.ToPoint.ToVector();
+        //    var center = (p2v + corner) / 2;
 
-            var angle1Box = new AngleValueBox(selection, Angle.FromPoints(p1v, p2v, corner)) { Viewer = this };
-            var angle2Box = new AngleValueBox(selection, Angle.FromPoints(p2v, p1v, corner)) { Viewer = this };
-            if (angle1Box.Value.IsEmpty || angle2Box.Value.IsEmpty || angle1Box.Value == Angle.Zero || angle2Box.Value == Angle.Zero)
-                return;
-            angle1Box.TargetPosition = p1v;
-            angle2Box.TargetPosition = p2v;
+        //    var angle1Box = new AngleValueBox(selection, Angle.FromPoints(p1v, p2v, corner)) { Viewer = this };
+        //    var angle2Box = new AngleValueBox(selection, Angle.FromPoints(p2v, p1v, corner)) { Viewer = this };
+        //    if (angle1Box.Value.IsEmpty || angle2Box.Value.IsEmpty || angle1Box.Value == Angle.Zero || angle2Box.Value == Angle.Zero)
+        //        return;
+        //    angle1Box.TargetPosition = p1v;
+        //    angle2Box.TargetPosition = p2v;
 
-            angle1Box.UpdateSize();
-            angle2Box.UpdateSize();
-            MeasureBoxes.Add(angle1Box);
-            MeasureBoxes.Add(angle2Box);
-        }
+        //    angle1Box.UpdateSize();
+        //    angle2Box.UpdateSize();
+        //    MeasureBoxes.Add(angle1Box);
+        //    MeasureBoxes.Add(angle2Box);
+        //}
 
         private void UpdateMeasureBoxBounds(MeasureValueBox box)
         {
@@ -739,8 +739,6 @@ namespace SiGen.UI
 
         public Vector SnapToNearest(Vector worldPos, double intersectionRange, double lineRange)
         {
-            //var pointsNear = LayoutIntersections2.Where(i => i.GetDistance(worldPos) <= intersectionRange);
-            
             SnapToClosestIntersection(worldPos, intersectionRange, out Vector closestInter, out double interDist);
 
             SnapToClosestLine(worldPos, lineRange, out Vector closestLine, out double lineDist);
@@ -749,8 +747,6 @@ namespace SiGen.UI
             {
                 var interRatio = interDist / intersectionRange;
                 return interRatio < 0.75 ? closestInter : closestLine;
-                //var lineRatio = lineDist / lineRange;
-                //return interRatio < lineRatio ? closestInter : closestLine;
             }
             else if (!closestInter.IsEmpty)
                 return closestInter;
@@ -821,10 +817,10 @@ namespace SiGen.UI
                     var v2 = line.P2.ToVector();
 
                     //if (!LayoutIntersections.Any(x => x.WorldCoord.EqualOrClose(v1, 0.001)))
-                        LayoutIntersections.Add(new LayoutIntersection(line, line.P1));
+                        LayoutIntersections.Add(new LayoutIntersection(line, line.P1, true));
 
                     //if (!LayoutIntersections.Any(x => x.WorldCoord.EqualOrClose(v2, 0.001)))
-                        LayoutIntersections.Add(new LayoutIntersection(line, line.P2));
+                        LayoutIntersections.Add(new LayoutIntersection(line, line.P2, false));
                 }
             }
         }

@@ -73,7 +73,11 @@ namespace SiGen.Export
         }
 
         [JsonIgnore]
-        public bool ExportBridgeLine { get; set; }
+        public bool ExportBridgeLine
+        {
+            get => Frets.ExportBridgeLine;
+            set => Frets.ExportBridgeLine = value;
+        }
 
         [JsonIgnore]
         public bool ExtendFretSlots => Frets.ExtendFretSlots;
@@ -206,13 +210,14 @@ namespace SiGen.Export
         {
             var exportConfig = new LayoutExportConfig()
             {
-                //ConfigurationName = "Default",
                 ExportFrets = true,
                 ExportFingerboardEdges = true,
+                ExportBridgeLine = true,
                 ExportCenterLine = true,
                 ExportUnit = UnitOfMeasure.Mm,
                 InkscapeCompatible = true
             };
+
             exportConfig.Frets.Color = Color.Red;
             exportConfig.Strings.Color = Color.Black;
             exportConfig.Midlines.Color = Color.LightGray;

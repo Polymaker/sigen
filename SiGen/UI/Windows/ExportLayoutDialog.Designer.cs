@@ -48,8 +48,8 @@
             this.ExportMarginsPanel = new SiGen.UI.Controls.CollapsiblePanel();
             this.MarginsCfgEdit = new SiGen.UI.Controls.Preferences.LineExportEdit();
             this.ExportFingerboardPanel = new SiGen.UI.Controls.CollapsiblePanel();
-            this.ContinueEdgesCheckbox = new System.Windows.Forms.CheckBox();
             this.FretboardCfgEdit = new SiGen.UI.Controls.Preferences.LineExportEdit();
+            this.DisplayInfoLabel = new System.Windows.Forms.Label();
             this.lblExportFormat = new System.Windows.Forms.Label();
             this.flpExportFormat = new System.Windows.Forms.FlowLayoutPanel();
             this.rbSvgExport = new System.Windows.Forms.RadioButton();
@@ -57,7 +57,6 @@
             this.layoutPreview = new SiGen.UI.LayoutViewer();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
-            this.DisplayInfoLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -264,28 +263,26 @@
             // 
             // ExportFingerboardPanel.ContentPanel
             // 
-            this.ExportFingerboardPanel.ContentPanel.Controls.Add(this.ContinueEdgesCheckbox);
             this.ExportFingerboardPanel.ContentPanel.Controls.Add(this.FretboardCfgEdit);
             resources.ApplyResources(this.ExportFingerboardPanel.ContentPanel, "ExportFingerboardPanel.ContentPanel");
             this.ExportFingerboardPanel.ContentPanel.Name = "ContentPanel";
             resources.ApplyResources(this.ExportFingerboardPanel, "ExportFingerboardPanel");
             this.ExportFingerboardPanel.Name = "ExportFingerboardPanel";
-            this.ExportFingerboardPanel.PanelHeight = 76;
+            this.ExportFingerboardPanel.PanelHeight = 59;
             this.ExportFingerboardPanel.ShowCheckBox = true;
             this.ExportFingerboardPanel.CheckedChanged += new System.EventHandler(this.ExportFingerboardPanel_CheckedChanged);
-            // 
-            // ContinueEdgesCheckbox
-            // 
-            resources.ApplyResources(this.ContinueEdgesCheckbox, "ContinueEdgesCheckbox");
-            this.ContinueEdgesCheckbox.Name = "ContinueEdgesCheckbox";
-            this.ContinueEdgesCheckbox.UseVisualStyleBackColor = true;
-            this.ContinueEdgesCheckbox.CheckedChanged += new System.EventHandler(this.ContinueEdgesCheckbox_CheckedChanged);
             // 
             // FretboardCfgEdit
             // 
             resources.ApplyResources(this.FretboardCfgEdit, "FretboardCfgEdit");
             this.FretboardCfgEdit.LineConfig = null;
             this.FretboardCfgEdit.Name = "FretboardCfgEdit";
+            // 
+            // DisplayInfoLabel
+            // 
+            this.DisplayInfoLabel.BackColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.DisplayInfoLabel, "DisplayInfoLabel");
+            this.DisplayInfoLabel.Name = "DisplayInfoLabel";
             // 
             // lblExportFormat
             // 
@@ -339,12 +336,6 @@
             this.btnExport.Name = "btnExport";
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
-            // 
-            // DisplayInfoLabel
-            // 
-            this.DisplayInfoLabel.BackColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.DisplayInfoLabel, "DisplayInfoLabel");
-            this.DisplayInfoLabel.Name = "DisplayInfoLabel";
             // 
             // ExportLayoutDialog
             // 
@@ -417,7 +408,6 @@
         private Controls.Preferences.LineExportEdit CenterLineCfgEdit;
         private Controls.CollapsiblePanel ExportMidlinesPanel;
         private Controls.Preferences.LineExportEdit MidlinesCfgEdit;
-        private System.Windows.Forms.CheckBox ContinueEdgesCheckbox;
         private Controls.CollapsiblePanel ExtendFretsPanel;
         private Controls.CollapsiblePanel ExportMarginsPanel;
         private Controls.Preferences.LineExportEdit MarginsCfgEdit;

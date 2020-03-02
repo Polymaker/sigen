@@ -139,7 +139,7 @@
     <value>0, 0</value>
   </data>
   <data name="MidlinesCfgEdit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>262, 53</value>
+    <value>267, 53</value>
   </data>
   <data name="MidlinesCfgEdit.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -148,7 +148,7 @@
     <value>MidlinesCfgEdit</value>
   </data>
   <data name="&gt;&gt;MidlinesCfgEdit.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportEdit, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportEdit, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;MidlinesCfgEdit.Parent" xml:space="preserve">
     <value>ExportMidlinesPanel.ContentPanel</value>
@@ -166,7 +166,7 @@
     <value>ExportMidlinesPanel.ContentPanel</value>
   </data>
   <data name="&gt;&gt;ExportMidlinesPanel.ContentPanel.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.CollapsiblePanel+CollapsiblePanelContainer, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.CollapsiblePanel+CollapsiblePanelContainer, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ExportMidlinesPanel.ContentPanel.Parent" xml:space="preserve">
     <value>ExportMidlinesPanel</value>
@@ -178,7 +178,7 @@
     <value>Top</value>
   </data>
   <data name="ExportMidlinesPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 360</value>
+    <value>0, 343</value>
   </data>
   <data name="ExportMidlinesPanel.Size" type="System.Drawing.Size, System.Drawing">
     <value>323, 79</value>
@@ -193,7 +193,7 @@
     <value>ExportMidlinesPanel</value>
   </data>
   <data name="&gt;&gt;ExportMidlinesPanel.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.CollapsiblePanel, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.CollapsiblePanel, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ExportMidlinesPanel.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -211,7 +211,7 @@
     <value>0, 0</value>
   </data>
   <data name="StringLinesCfgEdit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>262, 53</value>
+    <value>267, 53</value>
   </data>
   <data name="StringLinesCfgEdit.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -220,7 +220,7 @@
     <value>StringLinesCfgEdit</value>
   </data>
   <data name="&gt;&gt;StringLinesCfgEdit.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportEdit, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportEdit, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;StringLinesCfgEdit.Parent" xml:space="preserve">
     <value>ExportStringsPanel.ContentPanel</value>
@@ -238,7 +238,7 @@
     <value>ExportStringsPanel.ContentPanel</value>
   </data>
   <data name="&gt;&gt;ExportStringsPanel.ContentPanel.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.CollapsiblePanel+CollapsiblePanelContainer, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.CollapsiblePanel+CollapsiblePanelContainer, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ExportStringsPanel.ContentPanel.Parent" xml:space="preserve">
     <value>ExportStringsPanel</value>
@@ -250,7 +250,7 @@
     <value>Top</value>
   </data>
   <data name="ExportStringsPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 281</value>
+    <value>0, 264</value>
   </data>
   <data name="ExportStringsPanel.Size" type="System.Drawing.Size, System.Drawing">
     <value>323, 79</value>
@@ -265,7 +265,7 @@
     <value>ExportStringsPanel</value>
   </data>
   <data name="&gt;&gt;ExportStringsPanel.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.CollapsiblePanel, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.CollapsiblePanel, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ExportStringsPanel.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -283,7 +283,7 @@
     <value>0, 0</value>
   </data>
   <data name="CenterLineCfgEdit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>262, 53</value>
+    <value>267, 53</value>
   </data>
   <data name="CenterLineCfgEdit.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -292,7 +292,7 @@
     <value>CenterLineCfgEdit</value>
   </data>
   <data name="&gt;&gt;CenterLineCfgEdit.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportEdit, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportEdit, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;CenterLineCfgEdit.Parent" xml:space="preserve">
     <value>ExportCenterLinePanel.ContentPanel</value>
@@ -310,7 +310,7 @@
     <value>ExportCenterLinePanel.ContentPanel</value>
   </data>
   <data name="&gt;&gt;ExportCenterLinePanel.ContentPanel.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.CollapsiblePanel+CollapsiblePanelContainer, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.CollapsiblePanel+CollapsiblePanelContainer, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ExportCenterLinePanel.ContentPanel.Parent" xml:space="preserve">
     <value>ExportCenterLinePanel</value>
@@ -322,7 +322,7 @@
     <value>Top</value>
   </data>
   <data name="ExportCenterLinePanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 258</value>
+    <value>0, 241</value>
   </data>
   <data name="ExportCenterLinePanel.Size" type="System.Drawing.Size, System.Drawing">
     <value>323, 23</value>
@@ -337,7 +337,7 @@
     <value>ExportCenterLinePanel</value>
   </data>
   <data name="&gt;&gt;ExportCenterLinePanel.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.CollapsiblePanel, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.CollapsiblePanel, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ExportCenterLinePanel.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -381,6 +381,24 @@
   <data name="flpExtendDirection.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
     <value>GrowAndShrink</value>
   </data>
+  <data name="rbExtendInward.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbExtendInward.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="rbExtendInward.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="rbExtendInward.Size" type="System.Drawing.Size, System.Drawing">
+    <value>57, 17</value>
+  </data>
+  <data name="rbExtendInward.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="rbExtendInward.Text" xml:space="preserve">
+    <value>Inward</value>
+  </data>
   <data name="&gt;&gt;rbExtendInward.Name" xml:space="preserve">
     <value>rbExtendInward</value>
   </data>
@@ -392,6 +410,24 @@
   </data>
   <data name="&gt;&gt;rbExtendInward.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="rbExtendOutward.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbExtendOutward.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="rbExtendOutward.Location" type="System.Drawing.Point, System.Drawing">
+    <value>66, 3</value>
+  </data>
+  <data name="rbExtendOutward.Size" type="System.Drawing.Size, System.Drawing">
+    <value>65, 17</value>
+  </data>
+  <data name="rbExtendOutward.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="rbExtendOutward.Text" xml:space="preserve">
+    <value>Outward</value>
   </data>
   <data name="&gt;&gt;rbExtendOutward.Name" xml:space="preserve">
     <value>rbExtendOutward</value>
@@ -439,7 +475,7 @@
     <value>mtbFretExtendAmount</value>
   </data>
   <data name="&gt;&gt;mtbFretExtendAmount.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;mtbFretExtendAmount.Parent" xml:space="preserve">
     <value>ExtendFretsPanel.ContentPanel</value>
@@ -457,7 +493,7 @@
     <value>ExtendFretsPanel.ContentPanel</value>
   </data>
   <data name="&gt;&gt;ExtendFretsPanel.ContentPanel.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.CollapsiblePanel+CollapsiblePanelContainer, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.CollapsiblePanel+CollapsiblePanelContainer, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ExtendFretsPanel.ContentPanel.Parent" xml:space="preserve">
     <value>ExtendFretsPanel</value>
@@ -469,7 +505,7 @@
     <value>Top</value>
   </data>
   <data name="ExtendFretsPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 201</value>
+    <value>0, 184</value>
   </data>
   <data name="ExtendFretsPanel.Size" type="System.Drawing.Size, System.Drawing">
     <value>323, 57</value>
@@ -484,7 +520,7 @@
     <value>ExtendFretsPanel</value>
   </data>
   <data name="&gt;&gt;ExtendFretsPanel.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.CollapsiblePanel, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.CollapsiblePanel, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ExtendFretsPanel.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -502,7 +538,7 @@
     <value>0, 0</value>
   </data>
   <data name="FretLinesCfgEdit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>262, 53</value>
+    <value>267, 53</value>
   </data>
   <data name="FretLinesCfgEdit.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -511,7 +547,7 @@
     <value>FretLinesCfgEdit</value>
   </data>
   <data name="&gt;&gt;FretLinesCfgEdit.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportEdit, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportEdit, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;FretLinesCfgEdit.Parent" xml:space="preserve">
     <value>ExportFretsPanel.ContentPanel</value>
@@ -529,7 +565,7 @@
     <value>ExportFretsPanel.ContentPanel</value>
   </data>
   <data name="&gt;&gt;ExportFretsPanel.ContentPanel.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.CollapsiblePanel+CollapsiblePanelContainer, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.CollapsiblePanel+CollapsiblePanelContainer, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ExportFretsPanel.ContentPanel.Parent" xml:space="preserve">
     <value>ExportFretsPanel</value>
@@ -541,7 +577,7 @@
     <value>Top</value>
   </data>
   <data name="ExportFretsPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 122</value>
+    <value>0, 105</value>
   </data>
   <data name="ExportFretsPanel.Size" type="System.Drawing.Size, System.Drawing">
     <value>323, 79</value>
@@ -556,7 +592,7 @@
     <value>ExportFretsPanel</value>
   </data>
   <data name="&gt;&gt;ExportFretsPanel.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.CollapsiblePanel, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.CollapsiblePanel, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ExportFretsPanel.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -574,7 +610,7 @@
     <value>0, 0</value>
   </data>
   <data name="MarginsCfgEdit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>262, 53</value>
+    <value>267, 53</value>
   </data>
   <data name="MarginsCfgEdit.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -583,7 +619,7 @@
     <value>MarginsCfgEdit</value>
   </data>
   <data name="&gt;&gt;MarginsCfgEdit.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportEdit, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportEdit, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;MarginsCfgEdit.Parent" xml:space="preserve">
     <value>ExportMarginsPanel.ContentPanel</value>
@@ -601,7 +637,7 @@
     <value>ExportMarginsPanel.ContentPanel</value>
   </data>
   <data name="&gt;&gt;ExportMarginsPanel.ContentPanel.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.CollapsiblePanel+CollapsiblePanelContainer, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.CollapsiblePanel+CollapsiblePanelContainer, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ExportMarginsPanel.ContentPanel.Parent" xml:space="preserve">
     <value>ExportMarginsPanel</value>
@@ -613,7 +649,7 @@
     <value>Top</value>
   </data>
   <data name="ExportMarginsPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 99</value>
+    <value>0, 82</value>
   </data>
   <data name="ExportMarginsPanel.Size" type="System.Drawing.Size, System.Drawing">
     <value>323, 23</value>
@@ -628,46 +664,13 @@
     <value>ExportMarginsPanel</value>
   </data>
   <data name="&gt;&gt;ExportMarginsPanel.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.CollapsiblePanel, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.CollapsiblePanel, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ExportMarginsPanel.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;ExportMarginsPanel.ZOrder" xml:space="preserve">
     <value>5</value>
-  </data>
-  <data name="ContinueEdgesCheckbox.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="ContinueEdgesCheckbox.CheckAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleRight</value>
-  </data>
-  <data name="ContinueEdgesCheckbox.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="ContinueEdgesCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 56</value>
-  </data>
-  <data name="ContinueEdgesCheckbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 17</value>
-  </data>
-  <data name="ContinueEdgesCheckbox.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="ContinueEdgesCheckbox.Text" xml:space="preserve">
-    <value>Continue edges up to bridge</value>
-  </data>
-  <data name="&gt;&gt;ContinueEdgesCheckbox.Name" xml:space="preserve">
-    <value>ContinueEdgesCheckbox</value>
-  </data>
-  <data name="&gt;&gt;ContinueEdgesCheckbox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ContinueEdgesCheckbox.Parent" xml:space="preserve">
-    <value>ExportFingerboardPanel.ContentPanel</value>
-  </data>
-  <data name="&gt;&gt;ContinueEdgesCheckbox.ZOrder" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="FretboardCfgEdit.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -679,7 +682,7 @@
     <value>0, 0</value>
   </data>
   <data name="FretboardCfgEdit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>262, 53</value>
+    <value>267, 53</value>
   </data>
   <data name="FretboardCfgEdit.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -688,13 +691,13 @@
     <value>FretboardCfgEdit</value>
   </data>
   <data name="&gt;&gt;FretboardCfgEdit.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.Preferences.LineExportEdit, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.Preferences.LineExportEdit, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;FretboardCfgEdit.Parent" xml:space="preserve">
     <value>ExportFingerboardPanel.ContentPanel</value>
   </data>
   <data name="&gt;&gt;FretboardCfgEdit.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="ExportFingerboardPanel.ContentPanel.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 23</value>
@@ -706,7 +709,7 @@
     <value>ExportFingerboardPanel.ContentPanel</value>
   </data>
   <data name="&gt;&gt;ExportFingerboardPanel.ContentPanel.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.CollapsiblePanel+CollapsiblePanelContainer, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.CollapsiblePanel+CollapsiblePanelContainer, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ExportFingerboardPanel.ContentPanel.Parent" xml:space="preserve">
     <value>ExportFingerboardPanel</value>
@@ -721,7 +724,7 @@
     <value>0, 0</value>
   </data>
   <data name="ExportFingerboardPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>323, 99</value>
+    <value>323, 82</value>
   </data>
   <data name="ExportFingerboardPanel.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
@@ -733,7 +736,7 @@
     <value>ExportFingerboardPanel</value>
   </data>
   <data name="&gt;&gt;ExportFingerboardPanel.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.CollapsiblePanel, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.CollapsiblePanel, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ExportFingerboardPanel.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -825,6 +828,24 @@
   <data name="flpExportFormat.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
     <value>GrowAndShrink</value>
   </data>
+  <data name="rbSvgExport.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbSvgExport.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="rbSvgExport.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="rbSvgExport.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 17</value>
+  </data>
+  <data name="rbSvgExport.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="rbSvgExport.Text" xml:space="preserve">
+    <value>SVG</value>
+  </data>
   <data name="&gt;&gt;rbSvgExport.Name" xml:space="preserve">
     <value>rbSvgExport</value>
   </data>
@@ -836,6 +857,24 @@
   </data>
   <data name="&gt;&gt;rbSvgExport.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="rbDxfExport.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbDxfExport.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="rbDxfExport.Location" type="System.Drawing.Point, System.Drawing">
+    <value>56, 3</value>
+  </data>
+  <data name="rbDxfExport.Size" type="System.Drawing.Size, System.Drawing">
+    <value>46, 17</value>
+  </data>
+  <data name="rbDxfExport.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="rbDxfExport.Text" xml:space="preserve">
+    <value>DXF</value>
   </data>
   <data name="&gt;&gt;rbDxfExport.Name" xml:space="preserve">
     <value>rbDxfExport</value>
@@ -886,7 +925,7 @@
     <value>layoutPreview</value>
   </data>
   <data name="&gt;&gt;layoutPreview.Type" xml:space="preserve">
-    <value>SiGen.UI.LayoutViewer, SiGen, Version=1.0.0.13816, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.LayoutViewer, SiGen, Version=1.0.4.18941, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;layoutPreview.Parent" xml:space="preserve">
     <value>splitContainer1.Panel2</value>
@@ -986,126 +1025,6 @@
   </data>
   <data name="&gt;&gt;splitContainer1.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <data name="rbExtendInward.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="rbExtendInward.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="rbExtendInward.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="rbExtendInward.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 17</value>
-  </data>
-  <data name="rbExtendInward.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="rbExtendInward.Text" xml:space="preserve">
-    <value>Inward</value>
-  </data>
-  <data name="&gt;&gt;rbExtendInward.Name" xml:space="preserve">
-    <value>rbExtendInward</value>
-  </data>
-  <data name="&gt;&gt;rbExtendInward.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbExtendInward.Parent" xml:space="preserve">
-    <value>flpExtendDirection</value>
-  </data>
-  <data name="&gt;&gt;rbExtendInward.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="rbExtendOutward.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="rbExtendOutward.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="rbExtendOutward.Location" type="System.Drawing.Point, System.Drawing">
-    <value>66, 3</value>
-  </data>
-  <data name="rbExtendOutward.Size" type="System.Drawing.Size, System.Drawing">
-    <value>65, 17</value>
-  </data>
-  <data name="rbExtendOutward.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="rbExtendOutward.Text" xml:space="preserve">
-    <value>Outward</value>
-  </data>
-  <data name="&gt;&gt;rbExtendOutward.Name" xml:space="preserve">
-    <value>rbExtendOutward</value>
-  </data>
-  <data name="&gt;&gt;rbExtendOutward.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbExtendOutward.Parent" xml:space="preserve">
-    <value>flpExtendDirection</value>
-  </data>
-  <data name="&gt;&gt;rbExtendOutward.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="rbSvgExport.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="rbSvgExport.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="rbSvgExport.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="rbSvgExport.Size" type="System.Drawing.Size, System.Drawing">
-    <value>47, 17</value>
-  </data>
-  <data name="rbSvgExport.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="rbSvgExport.Text" xml:space="preserve">
-    <value>SVG</value>
-  </data>
-  <data name="&gt;&gt;rbSvgExport.Name" xml:space="preserve">
-    <value>rbSvgExport</value>
-  </data>
-  <data name="&gt;&gt;rbSvgExport.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbSvgExport.Parent" xml:space="preserve">
-    <value>flpExportFormat</value>
-  </data>
-  <data name="&gt;&gt;rbSvgExport.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="rbDxfExport.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="rbDxfExport.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="rbDxfExport.Location" type="System.Drawing.Point, System.Drawing">
-    <value>56, 3</value>
-  </data>
-  <data name="rbDxfExport.Size" type="System.Drawing.Size, System.Drawing">
-    <value>46, 17</value>
-  </data>
-  <data name="rbDxfExport.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="rbDxfExport.Text" xml:space="preserve">
-    <value>DXF</value>
-  </data>
-  <data name="&gt;&gt;rbDxfExport.Name" xml:space="preserve">
-    <value>rbDxfExport</value>
-  </data>
-  <data name="&gt;&gt;rbDxfExport.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbDxfExport.Parent" xml:space="preserve">
-    <value>flpExportFormat</value>
-  </data>
-  <data name="&gt;&gt;rbDxfExport.ZOrder" xml:space="preserve">
-    <value>1</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>

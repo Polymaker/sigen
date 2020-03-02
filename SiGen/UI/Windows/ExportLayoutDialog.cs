@@ -61,6 +61,7 @@ namespace SiGen.UI.Windows
             ExportOptions.AttachPropertyChangedEvent();
             ExportOptions.PropertyChanged += ExportOptions_PropertyChanged;
 
+            AdjustOptionPanels();
         }
 
 
@@ -88,8 +89,6 @@ namespace SiGen.UI.Windows
             MidlinesCfgEdit.LineConfig = ExportOptions.Midlines;
             MarginsCfgEdit.LineConfig = ExportOptions.FingerboardMargins;
 
-            ContinueEdgesCheckbox.Checked = ExportOptions.FingerboardEdges.ContinueLines;
-
             if (ExportOptions.ExtendFretSlots)
             {
                 if (ExportOptions.Frets.ExtensionAmount > Measure.Zero)
@@ -106,6 +105,18 @@ namespace SiGen.UI.Windows
             }
 
             isLoading = false;
+        }
+
+        private void AdjustOptionPanels()
+        {
+            foreach (var collapsePanel in splitContainer1.Panel1.Controls.OfType<CollapsiblePanel>())
+            {
+                if (collapsePanel.ContentPanel.Controls.Count == 1)
+                {
+                    var ctrl = collapsePanel.ContentPanel.Controls[0];
+                    collapsePanel.PanelHeight = ctrl.Top + ctrl.Height;
+                }
+            }
         }
 
         private void UpdatePreview()
@@ -131,6 +142,7 @@ namespace SiGen.UI.Windows
 
             layoutCfg.Frets.Visible = exportCfg.Frets.Enabled;
             layoutCfg.Frets.Color = exportCfg.Frets.Color;
+            layoutCfg.Frets.DisplayBridgeLine = exportCfg.Frets.ExportBridgeLine;
 
             layoutCfg.Strings.Visible = exportCfg.Strings.Enabled;
             layoutCfg.Strings.Color = exportCfg.Strings.Color;
@@ -267,12 +279,6 @@ namespace SiGen.UI.Windows
         {
             if (!isLoading && HasInitialized)
                 ExportOptions.ExportFingerboardEdges = ExportFingerboardPanel.Checked;
-        }
-
-        private void ContinueEdgesCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!isLoading && HasInitialized)
-                ExportOptions.FingerboardEdges.ContinueLines = ContinueEdgesCheckbox.Checked;
         }
     }
 }
