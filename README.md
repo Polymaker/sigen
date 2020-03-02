@@ -11,8 +11,10 @@ Here are some examples of what it can do:
 
 **5 Strings Banjo** *parametrable starting fret*
 ![image](Graphics/Github/BanjoLayout.png)
+
 **Dual scale** *along with by-string number of frets*
 ![image](Graphics/Github/ComplexLayout1.png)
+
 **Multi scale** *by-string scale length*
 ![image](Graphics/Github/ComplexLayout2.png)
 
