@@ -72,7 +72,7 @@
       </Component>
       
       <Component Id="Resources" Guid="3e5ae673-406d-4ad8-abb6-cb5e567bfb3b">
-        <File Id="Resources_License.ico" Name="LICENSE.txt" Source="$(var.SolutionDir)LICENSE.txt" />
+        <File Id="Resources_License.txt" Name="LICENSE.txt" Source="$(var.SolutionDir)LICENSE.txt" />
         <File Id="Resources_SigenIcon.ico" Name="SigenIcon.ico" Source="$(var.SiGen.ProjectDir)Resources\Icons\SiGenIcon.ico" />
         <File Id="Resources_LayoutFileIcon.ico" Name="LayoutFileIcon.ico" Source="$(var.SiGen.ProjectDir)Resources\Icons\LayoutFileIcon.ico" />
       </Component>
