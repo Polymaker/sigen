@@ -33,6 +33,25 @@ namespace SiGen.Configuration.Display
             return ContinueLines != ((DefaultValues as FingerboardDisplayConfig)?.ContinueLines ?? false);
         }
 
+        public override void InitDefaultValues()
+        {
+            DefaultValues = new FingerboardDisplayConfig()
+            {
+                Color = Color,
+                Visible = Visible,
+                ContinueLines = ContinueLines
+            };
+        }
+
+        public override void CopyValues(LineDisplayConfig displayConfig)
+        {
+            base.CopyValues(displayConfig);
+            if (displayConfig is FingerboardDisplayConfig fingerboard)
+            {
+                ContinueLines = fingerboard.ContinueLines;
+            }
+        }
+
         #endregion
     }
 }

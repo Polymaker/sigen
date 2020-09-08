@@ -83,6 +83,15 @@ namespace SiGen.Configuration.Display
             };
         }
 
+        public override void CopyValues(LineDisplayConfig displayConfig)
+        {
+            base.CopyValues(displayConfig);
+            if (displayConfig is StringsDisplayConfig stringConfig)
+            {
+                RenderMode = stringConfig.RenderMode;
+            }
+        }
+
         #endregion
     }
 }

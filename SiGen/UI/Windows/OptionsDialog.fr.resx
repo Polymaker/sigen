@@ -172,9 +172,9 @@
     <value>Guides</value>
   </data>
   <data name="ChkRealisticFrets.Text" xml:space="preserve">
-    <value>Affichage réaliste des cordes</value>
+    <value>Affichage réaliste des frettes</value>
   </data>
   <data name="ChkRealisticStrings.Text" xml:space="preserve">
-    <value>Affichage réaliste des frettes</value>
+    <value>Affichage réaliste des cordes</value>
   </data>
 </root>

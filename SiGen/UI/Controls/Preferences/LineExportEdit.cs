@@ -28,6 +28,7 @@ namespace SiGen.UI.Controls.Preferences
             InitializeComponent();
             FlagManager = new FlagList();
             StringGaugeCheckbox.Visible = false;
+            ExtraOption1Checkbox.Visible = false;
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
 
@@ -59,14 +60,37 @@ namespace SiGen.UI.Controls.Preferences
 
                 ThicknessEditor.Enabled = true;
 
-                if (LineConfig is StringsExportConfig stringsCfg)
+                StringGaugeCheckbox.Visible = false;
+                ExtraOption1Checkbox.Visible = false;
+
+                switch (LineConfig)
                 {
-                    StringGaugeCheckbox.Visible = true;
-                    ThicknessEditor.Enabled = !stringsCfg.UseStringGauge;
-                    StringGaugeCheckbox.Checked = stringsCfg.UseStringGauge;
+                    case StringsExportConfig stringsCfg:
+                        {
+                            StringGaugeCheckbox.Visible = true;
+                            ThicknessEditor.Enabled = !stringsCfg.UseStringGauge;
+                            StringGaugeCheckbox.Checked = stringsCfg.UseStringGauge;
+                            break;
+                        }
+
+                    case FingerboardExportConfig fingerboardCfg:
+                        {
+                            ExtraOption1Checkbox.Text = ContinueEdgeLines;
+                            ExtraOption1Checkbox.Visible = true;
+                            ExtraOption1Checkbox.Checked = fingerboardCfg.ContinueLines;
+                            break;
+                        }
+
+                    case FretsExportConfig fretCfg:
+                        {
+                            ExtraOption1Checkbox.Text = IncludeBridgeLine;
+                            ExtraOption1Checkbox.Visible = true;
+                            ExtraOption1Checkbox.Checked = fretCfg.ExportBridgeLine;
+                            break;
+                        }
                 }
-                else
-                    StringGaugeCheckbox.Visible = false;
+
+                AdjustControlHeight();
             }
         }
 
@@ -74,6 +98,12 @@ namespace SiGen.UI.Controls.Preferences
         //{
             
         //}
+
+        public void AdjustControlHeight()
+        {
+            var prefSize = GetPreferredSize(new Size(9999, 20));
+            Height = prefSize.Height;
+        }
 
         private void ColorSelector_ValueChanged(object sender, EventArgs e)
         {
@@ -97,6 +127,21 @@ namespace SiGen.UI.Controls.Preferences
             {
                 stringsCfg.UseStringGauge = StringGaugeCheckbox.Checked;
                 ThicknessEditor.Enabled = !StringGaugeCheckbox.Checked;
+            }
+        }
+
+        private void ExtraOption1Checkbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!FlagManager.IsSet("LoadConfig"))
+            {
+                if (LineConfig is FingerboardExportConfig fingerboardCfg)
+                {
+                    fingerboardCfg.ContinueLines = ExtraOption1Checkbox.Checked;
+                }
+                else if (LineConfig is FretsExportConfig fretCfg)
+                {
+                    fretCfg.ExportBridgeLine = ExtraOption1Checkbox.Checked;
+                }
             }
         }
     }

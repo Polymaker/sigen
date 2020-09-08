@@ -28,24 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LineExportEdit));
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.ColorLabel = new System.Windows.Forms.Label();
+            this.ThicknessLabel = new System.Windows.Forms.Label();
             this.DashedCheckbox = new System.Windows.Forms.CheckBox();
             this.StringGaugeCheckbox = new System.Windows.Forms.CheckBox();
             this.ThicknessEditor = new SiGen.UI.Controls.ValueEditors.LineThicknessEditor();
             this.ColorSelector = new SiGen.UI.Controls.ValueEditors.ColorSelectButton();
+            this.ExtraOption1Checkbox = new System.Windows.Forms.CheckBox();
+            this.localizableStringList1 = new SiGen.Localization.LocalizableStringList(this.components);
+            this.ContinueEdgeLines = new SiGen.Localization.LocalizableString(this.components);
+            this.IncludeBridgeLine = new SiGen.Localization.LocalizableString(this.components);
             this.SuspendLayout();
             // 
-            // label1
+            // ColorLabel
             // 
-            resources.ApplyResources(this.label1, "label1");
-            this.label1.Name = "label1";
+            resources.ApplyResources(this.ColorLabel, "ColorLabel");
+            this.ColorLabel.Name = "ColorLabel";
             // 
-            // label2
+            // ThicknessLabel
             // 
-            resources.ApplyResources(this.label2, "label2");
-            this.label2.Name = "label2";
+            resources.ApplyResources(this.ThicknessLabel, "ThicknessLabel");
+            this.ThicknessLabel.Name = "ThicknessLabel";
             // 
             // DashedCheckbox
             // 
@@ -74,14 +79,35 @@
             this.ColorSelector.Value = System.Drawing.Color.Red;
             this.ColorSelector.ValueChanged += new System.EventHandler(this.ColorSelector_ValueChanged);
             // 
+            // ExtraOption1Checkbox
+            // 
+            resources.ApplyResources(this.ExtraOption1Checkbox, "ExtraOption1Checkbox");
+            this.ExtraOption1Checkbox.Name = "ExtraOption1Checkbox";
+            this.ExtraOption1Checkbox.UseVisualStyleBackColor = true;
+            this.ExtraOption1Checkbox.CheckedChanged += new System.EventHandler(this.ExtraOption1Checkbox_CheckedChanged);
+            // 
+            // localizableStringList1
+            // 
+            this.localizableStringList1.Items.Add(this.ContinueEdgeLines);
+            this.localizableStringList1.Items.Add(this.IncludeBridgeLine);
+            // 
+            // ContinueEdgeLines
+            // 
+            resources.ApplyResources(this.ContinueEdgeLines, "ContinueEdgeLines");
+            // 
+            // IncludeBridgeLine
+            // 
+            resources.ApplyResources(this.IncludeBridgeLine, "IncludeBridgeLine");
+            // 
             // LineExportEdit
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.ExtraOption1Checkbox);
             this.Controls.Add(this.StringGaugeCheckbox);
             this.Controls.Add(this.DashedCheckbox);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.ThicknessLabel);
+            this.Controls.Add(this.ColorLabel);
             this.Controls.Add(this.ThicknessEditor);
             this.Controls.Add(this.ColorSelector);
             this.Name = "LineExportEdit";
@@ -94,9 +120,13 @@
 
         private ValueEditors.ColorSelectButton ColorSelector;
         private ValueEditors.LineThicknessEditor ThicknessEditor;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label ColorLabel;
+        private System.Windows.Forms.Label ThicknessLabel;
         private System.Windows.Forms.CheckBox DashedCheckbox;
         private System.Windows.Forms.CheckBox StringGaugeCheckbox;
+        private System.Windows.Forms.CheckBox ExtraOption1Checkbox;
+        private Localization.LocalizableStringList localizableStringList1;
+        private Localization.LocalizableString ContinueEdgeLines;
+        private Localization.LocalizableString IncludeBridgeLine;
     }
 }

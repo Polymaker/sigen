@@ -357,7 +357,6 @@ namespace SiGen.UI
             var defaultLayout = SILayout.GenerateDefaultLayout();
             var layoutDoc = new LayoutDocument(defaultLayout);
             OpenLayoutAndActivate(layoutDoc);
-            //OpenLayoutFile("DefaultLayout.sil", true);
         }
 
         private void OpenLayoutFile(string filename, bool asTemplate = false)
@@ -469,11 +468,6 @@ namespace SiGen.UI
                 var dataStruct = Marshal.PtrToStructure<NativeUtils.COPYDATASTRUCT>(m.LParam);
                 var messageStr = Marshal.PtrToStringUni(dataStruct.lpData, dataStruct.cbData / 2);
 
-                if (WindowState == FormWindowState.Minimized)
-                    WindowState = FormWindowState.Normal;
-
-                
-
                 if (messageStr.StartsWith("MUTEX#"))
                     messageStr = messageStr.Substring(6);
 
@@ -499,10 +493,14 @@ namespace SiGen.UI
 
         private void ProcessStartArgs(string[] args)
         {
+            if (WindowState == FormWindowState.Minimized)
+                WindowState = FormWindowState.Normal;
+
             Activate();
             TopMost = true;
             BringToFront();
             TopMost = false;
+
             foreach (var fileArg in args)
             {
                 if (File.Exists(fileArg))

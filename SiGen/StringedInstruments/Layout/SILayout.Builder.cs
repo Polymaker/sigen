@@ -347,16 +347,19 @@ namespace SiGen.StringedInstruments.Layout
             trebleSideEdge.P2 = virtualTrebleEdge.P1;
             bassSideEdge.P2 = virtualBassEdge.P1;
 
-            var bridgeLine = new LayoutPolyLine(Strings.Select(s => s.LayoutLine.P2), VisualElementType.BridgeLine);
-            VisualElements.Add(bridgeLine);
+            if (NumberOfStrings > 1)
+            {
+                var bridgeLine = new LayoutPolyLine(Strings.Select(s => s.LayoutLine.P2), VisualElementType.BridgeLine);
+                VisualElements.Add(bridgeLine);
 
-            var bridgeTrebleInter = PointM.Empty;
-            if (bridgeLine.Intersects(virtualTrebleEdge, out bridgeTrebleInter))
-                virtualTrebleEdge.P2 = bridgeTrebleInter;
+                var bridgeTrebleInter = PointM.Empty;
+                if (bridgeLine.Intersects(virtualTrebleEdge, out bridgeTrebleInter))
+                    virtualTrebleEdge.P2 = bridgeTrebleInter;
 
-            var bridgeBassInter = PointM.Empty;
-            if (bridgeLine.Intersects(virtualBassEdge, out bridgeBassInter))
-                virtualBassEdge.P2 = bridgeBassInter;
+                var bridgeBassInter = PointM.Empty;
+                if (bridgeLine.Intersects(virtualBassEdge, out bridgeBassInter))
+                    virtualBassEdge.P2 = bridgeBassInter;
+            }
 
             if (trebleLastFret.Strings.Count() == NumberOfStrings && trebleLastFret.IsStraight && trebleLastFret.FretIndex == MaximumFret)
             {

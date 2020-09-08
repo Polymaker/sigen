@@ -162,4 +162,7 @@
   <data name="DisplayFingerboardMenuItem.Text" xml:space="preserve">
     <value>Touche</value>
   </data>
+  <data name="ResetCameraButton.Text" xml:space="preserve">
+    <value>Recadrer</value>
+  </data>
 </root>

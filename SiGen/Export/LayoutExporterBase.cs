@@ -53,7 +53,7 @@ namespace SiGen.Export
         {
             foreach (var fretLine in Layout.VisualElements.OfType<FretLine>())
             {
-                if (Options.ExtendFretSlots)
+                if (Options.ExtendFretSlots && !fretLine.IsNut)
                 {
                     var extendedFretLine = fretLine.GetExtendedFretLine(Options.Frets.ExtensionAmount);
                     if (extendedFretLine is LayoutLine line)

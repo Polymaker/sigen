@@ -34,14 +34,13 @@ namespace SiGen.UI.Windows
         {
             InitializeComponent();
             Icon = Properties.Resources.SiGenIcon;
-            //ExportOptions = LayoutExportConfig.CreateDefault();
         }
 
         public ExportLayoutDialog(LayoutDocument layoutDocument)
         {
             InitializeComponent();
             Icon = Properties.Resources.SiGenIcon;
-            //ExportOptions = LayoutExportConfig.CreateDefault();
+
             LayoutToExport = layoutDocument;
         }
 
@@ -62,6 +61,7 @@ namespace SiGen.UI.Windows
             ExportOptions.AttachPropertyChangedEvent();
             ExportOptions.PropertyChanged += ExportOptions_PropertyChanged;
 
+            AdjustOptionPanels();
         }
 
 
@@ -89,8 +89,6 @@ namespace SiGen.UI.Windows
             MidlinesCfgEdit.LineConfig = ExportOptions.Midlines;
             MarginsCfgEdit.LineConfig = ExportOptions.FingerboardMargins;
 
-            ContinueEdgesCheckbox.Checked = ExportOptions.FingerboardEdges.ContinueLines;
-
             if (ExportOptions.ExtendFretSlots)
             {
                 if (ExportOptions.Frets.ExtensionAmount > Measure.Zero)
@@ -107,6 +105,18 @@ namespace SiGen.UI.Windows
             }
 
             isLoading = false;
+        }
+
+        private void AdjustOptionPanels()
+        {
+            foreach (var collapsePanel in splitContainer1.Panel1.Controls.OfType<CollapsiblePanel>())
+            {
+                if (collapsePanel.ContentPanel.Controls.Count == 1)
+                {
+                    var ctrl = collapsePanel.ContentPanel.Controls[0];
+                    collapsePanel.PanelHeight = ctrl.Top + ctrl.Height;
+                }
+            }
         }
 
         private void UpdatePreview()
@@ -132,6 +142,7 @@ namespace SiGen.UI.Windows
 
             layoutCfg.Frets.Visible = exportCfg.Frets.Enabled;
             layoutCfg.Frets.Color = exportCfg.Frets.Color;
+            layoutCfg.Frets.DisplayBridgeLine = exportCfg.Frets.ExportBridgeLine;
 
             layoutCfg.Strings.Visible = exportCfg.Strings.Enabled;
             layoutCfg.Strings.Color = exportCfg.Strings.Color;
@@ -141,6 +152,19 @@ namespace SiGen.UI.Windows
                 LineRenderMode.PlainLine;
 
             layoutPreview.DisplayConfig.FretExtensionAmount = ExportOptions.Frets.ExtensionAmount;
+
+            if (ExportOptions.Frets.LineUnit == LineUnit.Millimeters)
+            {
+                layoutPreview.DisplayConfig.Frets.RenderMode = LineRenderMode.RealWidth;
+                layoutPreview.DisplayConfig.Frets.RenderWidth = Measure.Mm(ExportOptions.Frets.LineThickness);
+            }
+            else if (ExportOptions.Frets.LineUnit == LineUnit.Millimeters)
+            {
+                layoutPreview.DisplayConfig.Frets.RenderMode = LineRenderMode.RealWidth;
+                layoutPreview.DisplayConfig.Frets.RenderWidth = Measure.Inches(ExportOptions.Frets.LineThickness);
+            }
+            else
+                layoutPreview.DisplayConfig.Frets.RenderMode = LineRenderMode.PlainLine;
         }
 
         private void btnExport_Click(object sender, EventArgs e)
@@ -255,12 +279,6 @@ namespace SiGen.UI.Windows
         {
             if (!isLoading && HasInitialized)
                 ExportOptions.ExportFingerboardEdges = ExportFingerboardPanel.Checked;
-        }
-
-        private void ContinueEdgesCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!isLoading && HasInitialized)
-                ExportOptions.FingerboardEdges.ContinueLines = ContinueEdgesCheckbox.Checked;
         }
     }
 }

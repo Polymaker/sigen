@@ -117,68 +117,74 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ColorLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="label1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="ColorLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 6</value>
+  <data name="ColorLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 6</value>
   </data>
-  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>69, 13</value>
+  <data name="ColorLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>54, 13</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="label1.TabIndex" type="System.Int32, mscorlib">
+  <data name="ColorLabel.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="label1.Text" xml:space="preserve">
+  <data name="ColorLabel.Text" xml:space="preserve">
     <value>Line Color</value>
   </data>
-  <data name="label1.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+  <data name="ColorLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>TopRight</value>
   </data>
-  <data name="&gt;&gt;label1.Name" xml:space="preserve">
-    <value>label1</value>
+  <data name="&gt;&gt;ColorLabel.Name" xml:space="preserve">
+    <value>ColorLabel</value>
   </data>
-  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+  <data name="&gt;&gt;ColorLabel.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
+  <data name="&gt;&gt;ColorLabel.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>3</value>
+  <data name="&gt;&gt;ColorLabel.ZOrder" xml:space="preserve">
+    <value>4</value>
   </data>
-  <data name="label2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="ThicknessLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="ThicknessLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 32</value>
+  <data name="ThicknessLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 32</value>
   </data>
-  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>69, 13</value>
+  <data name="ThicknessLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 13</value>
   </data>
-  <data name="label2.TabIndex" type="System.Int32, mscorlib">
+  <data name="ThicknessLabel.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="label2.Text" xml:space="preserve">
+  <data name="ThicknessLabel.Text" xml:space="preserve">
     <value>Thickness</value>
   </data>
-  <data name="label2.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+  <data name="ThicknessLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>TopRight</value>
   </data>
-  <data name="&gt;&gt;label2.Name" xml:space="preserve">
-    <value>label2</value>
+  <data name="&gt;&gt;ThicknessLabel.Name" xml:space="preserve">
+    <value>ThicknessLabel</value>
   </data>
-  <data name="&gt;&gt;label2.Type" xml:space="preserve">
+  <data name="&gt;&gt;ThicknessLabel.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
+  <data name="&gt;&gt;ThicknessLabel.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>2</value>
+  <data name="&gt;&gt;ThicknessLabel.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
   <data name="DashedCheckbox.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -190,7 +196,7 @@
     <value>NoControl</value>
   </data>
   <data name="DashedCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>196, 5</value>
+    <value>201, 5</value>
   </data>
   <data name="DashedCheckbox.Size" type="System.Drawing.Size, System.Drawing">
     <value>63, 17</value>
@@ -211,7 +217,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;DashedCheckbox.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="StringGaugeCheckbox.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -223,7 +229,7 @@
     <value>NoControl</value>
   </data>
   <data name="StringGaugeCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>196, 31</value>
+    <value>201, 31</value>
   </data>
   <data name="StringGaugeCheckbox.Size" type="System.Drawing.Size, System.Drawing">
     <value>106, 17</value>
@@ -244,10 +250,10 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;StringGaugeCheckbox.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="ThicknessEditor.Location" type="System.Drawing.Point, System.Drawing">
-    <value>75, 29</value>
+    <value>80, 29</value>
   </data>
   <data name="ThicknessEditor.Size" type="System.Drawing.Size, System.Drawing">
     <value>115, 21</value>
@@ -259,16 +265,16 @@
     <value>ThicknessEditor</value>
   </data>
   <data name="&gt;&gt;ThicknessEditor.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.ValueEditors.LineThicknessEditor, SiGen, Version=1.0.0.25154, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.ValueEditors.LineThicknessEditor, SiGen, Version=1.0.4.24307, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ThicknessEditor.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;ThicknessEditor.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="ColorSelector.Location" type="System.Drawing.Point, System.Drawing">
-    <value>75, 3</value>
+    <value>80, 3</value>
   </data>
   <data name="ColorSelector.Size" type="System.Drawing.Size, System.Drawing">
     <value>115, 20</value>
@@ -280,13 +286,52 @@
     <value>ColorSelector</value>
   </data>
   <data name="&gt;&gt;ColorSelector.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.ValueEditors.ColorSelectButton, SiGen, Version=1.0.0.25154, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.ValueEditors.ColorSelectButton, SiGen, Version=1.0.4.24307, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ColorSelector.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;ColorSelector.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
+  </data>
+  <data name="ExtraOption1Checkbox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="ExtraOption1Checkbox.CheckAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="ExtraOption1Checkbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 56</value>
+  </data>
+  <data name="ExtraOption1Checkbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>84, 17</value>
+  </data>
+  <data name="ExtraOption1Checkbox.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="ExtraOption1Checkbox.Text" xml:space="preserve">
+    <value>Extra Option</value>
+  </data>
+  <data name="&gt;&gt;ExtraOption1Checkbox.Name" xml:space="preserve">
+    <value>ExtraOption1Checkbox</value>
+  </data>
+  <data name="&gt;&gt;ExtraOption1Checkbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ExtraOption1Checkbox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;ExtraOption1Checkbox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="localizableStringList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="ContinueEdgeLines.Text" xml:space="preserve">
+    <value>Continue edges up to bridge</value>
+  </data>
+  <data name="IncludeBridgeLine.Text" xml:space="preserve">
+    <value>Include bridge line</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -301,7 +346,25 @@
     <value>GrowAndShrink</value>
   </data>
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
-    <value>305, 53</value>
+    <value>310, 76</value>
+  </data>
+  <data name="&gt;&gt;localizableStringList1.Name" xml:space="preserve">
+    <value>localizableStringList1</value>
+  </data>
+  <data name="&gt;&gt;localizableStringList1.Type" xml:space="preserve">
+    <value>SiGen.Localization.LocalizableStringList, SiGen, Version=1.0.4.24307, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ContinueEdgeLines.Name" xml:space="preserve">
+    <value>ContinueEdgeLines</value>
+  </data>
+  <data name="&gt;&gt;ContinueEdgeLines.Type" xml:space="preserve">
+    <value>SiGen.Localization.LocalizableString, SiGen, Version=1.0.4.24307, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;IncludeBridgeLine.Name" xml:space="preserve">
+    <value>IncludeBridgeLine</value>
+  </data>
+  <data name="&gt;&gt;IncludeBridgeLine.Type" xml:space="preserve">
+    <value>SiGen.Localization.LocalizableString, SiGen, Version=1.0.4.24307, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>LineExportEdit</value>

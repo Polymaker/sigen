@@ -239,6 +239,18 @@ namespace SiGen.Measuring
             return new Measure(m1.Value / value, m1.Unit);
         }
 
+        public static Measure operator /(Measure m1, double value)
+        {
+            m1.EnsureIsNotNaN();
+            return new Measure(m1.Value / value, m1.Unit);
+        }
+
+        public static Measure operator /(Measure m1, int value)
+        {
+            m1.EnsureIsNotNaN();
+            return new Measure(m1.Value / value, m1.Unit);
+        }
+
         public static PreciseDouble operator /(Measure m1, Measure m2)
         {
             m1.EnsureIsNotNaN();

@@ -169,7 +169,7 @@ namespace SiGen.UI
                 RenderGuideLines(pe.Graphics);
 
                 if (DisplayConfig.ShowFrets)
-                    RenderFrets(pe.Graphics, RectangleM.Empty);
+                    RenderFrets(pe.Graphics);
 
                 if (DisplayConfig.ShowStrings)
                     RenderStrings(pe.Graphics);
@@ -207,7 +207,18 @@ namespace SiGen.UI
             {
                 var minPt = WorldToDisplay(minPos, _Zoom, true);
                 var maxPt = WorldToDisplay(maxPos, _Zoom, true);
+
+                if (IsFlipHorizontal)
+                {
+                    var tmp1 = minPt;
+                    var tmp2 = maxPt;
+                    minPt = new PointF(Math.Min(tmp1.X, tmp2.X), Math.Min(tmp1.Y, tmp2.Y));
+                    maxPt = new PointF(Math.Max(tmp1.X, tmp2.X), Math.Max(tmp1.Y, tmp2.Y));
+                }
+
                 var updateBounds = Rectangle.FromLTRB((int)minPt.X - bleedSize, (int)minPt.Y - bleedSize, (int)maxPt.X + bleedSize, (int)maxPt.Y + bleedSize);
+
+                
                 Invalidate(updateBounds);
             }
         }
@@ -333,7 +344,7 @@ namespace SiGen.UI
             }
         }
 
-        private void RenderFrets(Graphics g, RectangleM clipRect)
+        private void RenderFrets(Graphics g)
         {
             Pen fretPen = null;
             Pen nutPen = GetPen(DisplayConfig.Frets.Color, 1);
@@ -354,12 +365,6 @@ namespace SiGen.UI
 
             foreach (var fretLine in CurrentLayout.VisualElements.OfType<FretLine>())
             {
-                if (!clipRect.IsEmpty && !clipRect.IntersectsWith(fretLine.Bounds))
-                {
-                    Console.WriteLine($"{fretLine.FretIndex} out of bounds");
-                    continue;
-                }
-
                 var penToUse = fretLine.IsNut ? nutPen : fretPen;
                 var fretPoints = fretLine.Points.Select(p => PointToDisplay(p)).ToArray();
 
@@ -372,7 +377,7 @@ namespace SiGen.UI
                 if (fretLine.IsStraight || CurrentLayout.FretInterpolation == FretInterpolationMethod.Linear)
                     g.DrawLines(penToUse, fretPoints);
                 else
-                    g.DrawCurve(penToUse, fretPoints, 0.5f);
+                    g.DrawCurve(penToUse, fretPoints, 0.6f);
 
                 if (DisplayConfig.Frets.DisplayAccuratePositions && fretLine.Strings.Count() > 1)
                 {
@@ -381,11 +386,13 @@ namespace SiGen.UI
                 }
             }
 
-            var bridgeLine = CurrentLayout.GetElement<LayoutPolyLine>(x => x.ElementType == VisualElementType.BridgeLine);
-            if (bridgeLine != null )
+            if (DisplayConfig.Frets.DisplayBridgeLine)
             {
-                if (clipRect.IsEmpty || clipRect.IntersectsWith(bridgeLine.Bounds))
+                var bridgeLine = CurrentLayout.GetElement<LayoutPolyLine>(x => x.ElementType == VisualElementType.BridgeLine);
+                if (bridgeLine != null)
+                {
                     DrawLine(g, bridgeLine, nutPen);
+                }
             }
 
             nutPen.Dispose();

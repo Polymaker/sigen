@@ -163,6 +163,19 @@ namespace SiGen.UI
 
         public ViewerDisplayConfig()
         {
+            _Strings = new StringsDisplayConfig();
+
+            _Frets = new FretsDisplayConfigs();
+
+            _Fingerboard = new FingerboardDisplayConfig();
+
+            _Margins = new LineDisplayConfig();
+
+            _CenterLine = new LineDisplayConfig();
+
+            _Midlines = new LineDisplayConfig();
+
+            /*
             _Strings = new StringsDisplayConfig()
             {
                 Visible = true,
@@ -202,7 +215,7 @@ namespace SiGen.UI
                 Visible = true,
                 Color = Color.Gainsboro
             };
-
+            */
             _FingerboardOrientation = Orientation.Horizontal;
             _DefaultDisplayUnit = UnitOfMeasure.Mm;
             _FretExtensionAmount = Measure.Empty;
@@ -210,19 +223,20 @@ namespace SiGen.UI
 
         internal void InitDefaultDesignerValues()
         {
-            var configObjs = new LineDisplayConfig[]
-            {
-                Strings,
-                Midlines,
-                CenterLine,
-                Frets,
-                Fingerboard,
-                Margins,
-                //GuideLines
-            };
+            for (int i = 0; i < LineConfigs.Length; i++)
+                LineConfigs[i].InitDefaultValues();
+        }
 
-            for (int i = 0; i < configObjs.Length; i++)
-                configObjs[i].InitDefaultValues();
+        internal void SetDefaultValues(ViewerDisplayConfig displayConfig)
+        {
+            for (int i = 0; i < LineConfigs.Length; i++)
+                LineConfigs[i].SetDefaultValues(displayConfig.LineConfigs[i]);
+        }
+
+        internal void CopyValues(ViewerDisplayConfig displayConfig)
+        {
+            for (int i = 0; i < LineConfigs.Length; i++)
+                LineConfigs[i].CopyValues(displayConfig.LineConfigs[i]);
         }
 
         public static ViewerDisplayConfig CreateDefault()
@@ -240,7 +254,8 @@ namespace SiGen.UI
                     Visible = true,
                     Color = Color.Red,
                     RenderMode = LineRenderMode.RealisticLook,
-                    RenderWidth = Measure.Mm(2.6)
+                    RenderWidth = Measure.Mm(2.6),
+                    DisplayBridgeLine = true
                 },
                 Fingerboard = new FingerboardDisplayConfig()
                 {
@@ -267,13 +282,17 @@ namespace SiGen.UI
                 DefaultDisplayUnit = UnitOfMeasure.Mm,
                 FretExtensionAmount = Measure.Empty
             };
-            defaultCfg.InitDefaultDesignerValues();
+            //defaultCfg.InitDefaultDesignerValues();
             return defaultCfg;
         }
 
         public ViewerDisplayConfig Clone()
         {
-            string json = JsonConvert.SerializeObject(this);
+            var jsonConfig = new JsonSerializerSettings
+            {
+                ContractResolver = new ShouldSerializeContractResolver(true)
+            };
+            string json = JsonConvert.SerializeObject(this, jsonConfig);
             JsonSerializer serializer = new JsonSerializer();
             using (var sr = new StringReader(json))
                 return (ViewerDisplayConfig)serializer.Deserialize(sr, typeof(ViewerDisplayConfig));
@@ -297,38 +316,16 @@ namespace SiGen.UI
 
         public void DettachPropertyChangedEvent()
         {
-            var configObjs = new LineDisplayConfig[]
-            {
-                Strings,
-                Midlines,
-                CenterLine,
-                Frets,
-                Fingerboard,
-                Margins,
-                //GuideLines
-            };
-
-            for (int i = 0; i < configObjs.Length; i++)
-                configObjs[i].PropertyChanged -= ConfigObj_PropertyChanged;
+            for (int i = 0; i < LineConfigs.Length; i++)
+                LineConfigs[i].PropertyChanged -= ConfigObj_PropertyChanged;
         }
 
         public void AttachPropertyChangedEvent()
         {
-            var configObjs = new LineDisplayConfig[]
+            for (int i = 0; i < LineConfigs.Length; i++)
             {
-                Strings,
-                Midlines,
-                CenterLine,
-                Frets,
-                Fingerboard,
-                Margins,
-                //GuideLines
-            };
-
-            for (int i = 0; i < configObjs.Length; i++)
-            {
-                configObjs[i].PropertyChanged -= ConfigObj_PropertyChanged;
-                configObjs[i].PropertyChanged += ConfigObj_PropertyChanged;
+                LineConfigs[i].PropertyChanged -= ConfigObj_PropertyChanged;
+                LineConfigs[i].PropertyChanged += ConfigObj_PropertyChanged;
             }
         }
 

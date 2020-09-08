@@ -104,16 +104,16 @@ namespace SiGen.StringedInstruments.Layout.Visual
             }
         }
 
-        public void InterpolateSplineV2(double resolution = 0.1)
+        public void InterpolateSplineV2(double resolution = 0.1, double weight = 1)
         {
             if (Points.Count < 3)
                 return;
 
             if (_Spline == null)
-                _Spline = new BezierSpline(Points.Select(p => p.ToVector()).ToArray());
+                _Spline = new BezierSpline(Points.Select(p => p.ToVector()), weight);
 
             var finalPoints = new List<PointM>();
-            var splinePoints = _Spline.InterpolateV2(0.1);
+            var splinePoints = _Spline.InterpolateV2(resolution);
             finalPoints.AddRange(splinePoints.Select(v => PointM.FromVector(v, Points[0].Unit)));
 
             if (finalPoints.Count > 1)

@@ -105,6 +105,17 @@ namespace SiGen.Configuration.Display
             };
         }
 
+        public void SetDefaultValues(LineDisplayConfig displayConfig)
+        {
+            DefaultValues = displayConfig;
+        }
+
+        public virtual void CopyValues(LineDisplayConfig displayConfig)
+        {
+            Color = displayConfig.Color;
+            Visible = displayConfig.Visible;
+        }
+
         #endregion
 
 

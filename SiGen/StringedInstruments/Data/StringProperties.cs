@@ -13,12 +13,14 @@ namespace SiGen.StringedInstruments.Data
         /// </summary>
         [XmlAttribute("CoreWireDiameter")]
         public Measure CoreWireDiameter { get; set; }
+
         /// <summary>
         /// The outer diameter of a wound string.
         /// Used mainly for display.
         /// </summary>
         [XmlAttribute("StringDiameter")]
         public Measure StringDiameter { get; set; }
+
         /// <summary>
         /// The weight per unit volume of the string's material (core wire for wound strings) in lbs./ inch.
         /// Used for fret compensation calculations.

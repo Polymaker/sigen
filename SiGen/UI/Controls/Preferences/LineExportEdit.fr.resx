@@ -120,13 +120,19 @@
   <data name="DashedCheckbox.Text" xml:space="preserve">
     <value>Pointillé</value>
   </data>
-  <data name="label1.Text" xml:space="preserve">
-    <value>Couleur</value>
-  </data>
-  <data name="label2.Text" xml:space="preserve">
-    <value>Épaisseur</value>
-  </data>
   <data name="StringGaugeCheckbox.Text" xml:space="preserve">
     <value>Taille réelle</value>
+  </data>
+  <data name="ContinueEdgeLines.Text" xml:space="preserve">
+    <value>Continuer les bords jusqu'au pont</value>
+  </data>
+  <data name="ColorLabel.Text" xml:space="preserve">
+    <value>Couleur</value>
+  </data>
+  <data name="ThicknessLabel.Text" xml:space="preserve">
+    <value>Épaisseur</value>
+  </data>
+  <data name="IncludeBridgeLine.Text" xml:space="preserve">
+    <value>Exporter le pont</value>
   </data>
 </root>

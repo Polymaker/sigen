@@ -162,4 +162,7 @@
   <data name="rbExtendOutward.Text" xml:space="preserve">
     <value>Extérieure</value>
   </data>
+  <data name="DisplayInfoLabel.Text" xml:space="preserve">
+    <value>* La prévisualisation n'est pas exacte.</value>
+  </data>
 </root>

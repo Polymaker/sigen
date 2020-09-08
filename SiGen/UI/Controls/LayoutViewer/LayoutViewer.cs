@@ -118,6 +118,8 @@ namespace SiGen.UI
             LayoutIntersections = new List<LayoutIntersection>();
 
             _DisplayConfig = ViewerDisplayConfig.CreateDefault();
+
+            _DisplayConfig.InitDefaultDesignerValues();
             _DisplayConfig.AttachPropertyChangedEvent();
             _DisplayConfig.PropertyChanged += DisplayConfigChanged;
             
@@ -125,17 +127,21 @@ namespace SiGen.UI
 
         public void SetDisplayConfig(ViewerDisplayConfig config, bool keepVisibility = true)
         {
+            if (config == null)
+                config = ViewerDisplayConfig.CreateDefault();
+
             var configVisible = new List<bool>();
-            if (_DisplayConfig != null)
+
+            if (keepVisibility)
             {
-                _DisplayConfig.PropertyChanged -= DisplayConfigChanged;
                 foreach (var cfg in _DisplayConfig.LineConfigs)
                     configVisible.Add(cfg.Visible);
             }
 
-            _DisplayConfig = config ?? new ViewerDisplayConfig();
+            _DisplayConfig.PropertyChanged -= DisplayConfigChanged;
+            _DisplayConfig.CopyValues(config);
 
-            if (configVisible.Count > 0)
+            if (keepVisibility && configVisible.Count > 0)
             {
                 for (int i = 0; i < configVisible.Count; i++)
                     _DisplayConfig.LineConfigs[i].Visible = configVisible[i];
@@ -236,7 +242,7 @@ namespace SiGen.UI
             {
                 foreach (var fretLine in CurrentLayout.VisualElements.OfType<FretLine>())
                 {
-                    if (DisplayConfig.FretExtensionAmount.IsEmpty)
+                    if (DisplayConfig.FretExtensionAmount.IsEmpty || fretLine.IsNut)
                         fretLine.Tag = null;
                     else
                         fretLine.Tag = fretLine.GetExtendedFretLine(DisplayConfig.FretExtensionAmount);
@@ -444,9 +450,9 @@ namespace SiGen.UI
                     var maxX = (int)Math.Max(pt1.X, e.X);
                     var minY = (int)Math.Min(pt1.Y, e.Y);
                     var maxY = (int)Math.Max(pt1.Y, e.Y);
-
+                    
                     var updateBounds = Rectangle.FromLTRB(minX, minY, maxX, maxY);
-                    updateBounds.Inflate(20, 20);
+                    updateBounds.Inflate(30, 30);
                     Invalidate(updateBounds);
                 }
             }
