@@ -6,6 +6,7 @@ using SiGen.StringedInstruments.Layout;
 using SiGen.StringedInstruments.Layout.Visual;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -68,9 +69,27 @@ namespace SiGen.UI
             return new Pen(color, (float)size.NormalizedValue + (float)(offset / _Zoom));
         }
 
-        private Pen GetPen(Color color, double size)
+        private Pen GetPen(Color color, double size, bool dashed = false)
         {
-            return new Pen(color, (float)(size / _Zoom));
+            var pen = new Pen(color, (float)(size / _Zoom));
+            if (dashed)
+                pen.DashPattern = new float[] { 6, 4, 2, 4 };
+            return pen;
+        }
+
+        private Pen GetPen(double size, LineDisplayConfig config)
+        {
+            var pen = new Pen(config.Color, (float)(size / _Zoom));
+            if (config.Dashed)
+                pen.DashPattern = new float[] { 6, 4, 2, 4 };
+            return pen;
+        }
+        //LineDisplayConfig
+
+
+        private Font GetFont(float size)
+        {
+            return new Font(Font.FontFamily, (float)(size / _Zoom));
         }
 
         private void DrawLine(Graphics g, Pen pen, PointM p1, PointM p2)
@@ -135,6 +154,9 @@ namespace SiGen.UI
         }
 
         #endregion
+
+        [DefaultValue(false)]
+        public bool RenderForExport { get; set; }
 
         protected override void OnPaint(PaintEventArgs pe)
         {
@@ -260,15 +282,16 @@ namespace SiGen.UI
                 var centerLine = CurrentLayout.VisualElements.OfType<LayoutLine>()
                     .FirstOrDefault(x => x.ElementType == VisualElementType.CenterLine);
 
-                using (var guidePen = GetPen(DisplayConfig.CenterLine.Color, 1))
+                using (var guidePen = GetPen(1, DisplayConfig.CenterLine))
                     DrawLine(g, guidePen, centerLine.P1, centerLine.P2);
             }
 
             if (DisplayConfig.ShowMidlines)
             {
-                using (var guidePen = GetPen(DisplayConfig.Midlines.Color, 1))
+                using (var guidePen = GetPen(1, DisplayConfig.Midlines))
                 {
-                    guidePen.DashPattern = new float[] { 6, 4, 2, 4 };
+                    if (!RenderForExport)
+                        guidePen.DashPattern = new float[] { 6, 4, 2, 4 };
 
                     foreach (var stringCenter in CurrentLayout.GetElements<StringCenter>())
                     {
@@ -286,7 +309,7 @@ namespace SiGen.UI
 
                 if (margins.Any())
                 {
-                    using (var guidePen = GetPen(DisplayConfig.Margins.Color, 1))
+                    using (var guidePen = GetPen(1, DisplayConfig.Margins))
                     {
                         foreach (var marginLine in margins)
                             DrawLine(g, guidePen, marginLine.P1, marginLine.P2);
@@ -296,7 +319,7 @@ namespace SiGen.UI
 
             if (DisplayConfig.ShowFingerboard)
             {
-                using (var edgePen = GetPen(DisplayConfig.Fingerboard.Color, 1))
+                using (var edgePen = GetPen(1, DisplayConfig.Fingerboard))
                 {
                     foreach (var edge in CurrentLayout.VisualElements.OfType<FingerboardEdge>())
                         DrawLines(g, edgePen, edge.Points);
@@ -347,13 +370,20 @@ namespace SiGen.UI
         private void RenderFrets(Graphics g)
         {
             Pen fretPen = null;
-            Pen nutPen = GetPen(DisplayConfig.Frets.Color, 1);
+            Pen nutPen = GetPen(1, DisplayConfig.Frets);
+            Font fretNumFont = GetFont(8f);
+            var textSize = g.MeasureString("30", fretNumFont);
+            
+            var sf = new StringFormat() { 
+                LineAlignment = StringAlignment.Center,
+                Alignment = IsHorizontal ? StringAlignment.Center : StringAlignment.Far,
+            };
 
             switch (DisplayConfig.Frets.RenderMode)
             {
                 default:
                 case LineRenderMode.PlainLine:
-                    fretPen = GetPen(DisplayConfig.Frets.Color, 1);
+                    fretPen = GetPen(1, DisplayConfig.Frets);
                     break;
                 case LineRenderMode.RealWidth:
                     fretPen = GetPen(DisplayConfig.Frets.Color, DisplayConfig.Frets.RenderWidth);
@@ -362,7 +392,7 @@ namespace SiGen.UI
                     fretPen = GetPen(Color.DarkGray, DisplayConfig.Frets.RenderWidth);
                     break;
             }
-
+            
             foreach (var fretLine in CurrentLayout.VisualElements.OfType<FretLine>())
             {
                 var penToUse = fretLine.IsNut ? nutPen : fretPen;
@@ -378,6 +408,25 @@ namespace SiGen.UI
                     g.DrawLines(penToUse, fretPoints);
                 else
                     g.DrawCurve(penToUse, fretPoints, 0.6f);
+
+                if (fretLine.FretIndex > 0 && DisplayConfig.Frets.ShowNumbers)
+                {
+                    
+                    var firstPt = fretPoints[0];
+                    var textRect = new RectangleF(firstPt, textSize);
+                    
+                    textRect.Offset(-textRect.Width * 0.5f, -textRect.Height * 0.5f);
+                    textRect.Inflate(3f / (float)_Zoom, 3f / (float)_Zoom);
+
+                    if (IsHorizontal)
+                        textRect.Offset(0, -textRect.Height * 0.5f);
+                    else
+                        textRect.Offset(-textRect.Width * 0.5f, 0);
+
+                    g.DrawString(fretLine.FretIndex.ToString(), fretNumFont, Brushes.Black, textRect, sf);
+                    //g.DrawRectangle(nutPen, textRect.X, textRect.Y, textRect.Width, textRect.Height);
+                }
+                
 
                 if (DisplayConfig.Frets.DisplayAccuratePositions && fretLine.Strings.Count() > 1)
                 {
@@ -401,7 +450,7 @@ namespace SiGen.UI
 
         private void RenderStrings(Graphics g)
         {
-            using (var defaultPen = GetPen(DisplayConfig.Strings.Color, 1))
+            using (var defaultPen = GetPen(1, DisplayConfig.Strings))
             {
                 foreach (var stringLine in CurrentLayout.VisualElements.OfType<StringLine>())
                 {

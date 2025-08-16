@@ -135,13 +135,19 @@
     <value>184, 22</value>
   </data>
   <data name="DisplayStringCentersMenuItem.Text" xml:space="preserve">
-    <value>String centers</value>
+    <value>String medians</value>
   </data>
   <data name="DisplayFretsMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>184, 22</value>
   </data>
   <data name="DisplayFretsMenuItem.Text" xml:space="preserve">
     <value>Frets</value>
+  </data>
+  <data name="DisplayFretNumbersMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>184, 22</value>
+  </data>
+  <data name="DisplayFretNumbersMenuItem.Text" xml:space="preserve">
+    <value>Fret numbers</value>
   </data>
   <data name="DisplayMarginsMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>184, 22</value>
@@ -277,7 +283,7 @@
     <value>layoutViewer1</value>
   </data>
   <data name="&gt;&gt;layoutViewer1.Type" xml:space="preserve">
-    <value>SiGen.UI.LayoutViewer, SiGen, Version=1.0.0.14596, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.LayoutViewer, SiGen, Version=1.0.6.15760, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;layoutViewer1.Parent" xml:space="preserve">
     <value>toolStripContainer1.ContentPanel</value>
@@ -556,6 +562,12 @@
     <value>tsmiOpenFileDirectory</value>
   </data>
   <data name="&gt;&gt;tsmiOpenFileDirectory.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;DisplayFretNumbersMenuItem.Name" xml:space="preserve">
+    <value>DisplayFretNumbersMenuItem</value>
+  </data>
+  <data name="&gt;&gt;DisplayFretNumbersMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">

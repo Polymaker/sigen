@@ -194,6 +194,7 @@ namespace SiGen.UI.Controls
                         break;
                 }
 
+                mtbBassTrebleSkew.Value = CurrentLayout.CurrentScaleLength.BassTrebleSkew;
                 int totalHeight = tlpLayout.Height;
                 if (dgvScaleLengths.Visible)
                     totalHeight += dgvScaleLengths.MinimumSize.Height;
@@ -312,6 +313,15 @@ namespace SiGen.UI.Controls
                     var selectedPosition = (FretPosition)cboParallelFret.SelectedItem;
                     nubMultiScaleRatio.Value = selectedPosition.PositionRatio;// Math.Round(selectedPosition.PositionRatio, 4);
                 }
+            }
+        }
+
+        private void mtbBassTrebleSkew_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoading && CurrentLayout != null)
+            {
+                CurrentLayout.CurrentScaleLength.BassTrebleSkew = mtbBassTrebleSkew.Value;
+                CurrentLayout.RebuildLayout();
             }
         }
 
@@ -546,5 +556,7 @@ namespace SiGen.UI.Controls
                 }
             }
         }
+
+        
     }
 }

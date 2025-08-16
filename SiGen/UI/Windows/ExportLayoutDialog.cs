@@ -127,25 +127,16 @@ namespace SiGen.UI.Windows
             var layoutCfg = layoutPreview.DisplayConfig;
             var exportCfg = ExportOptions;
 
-            layoutCfg.Midlines.Visible = exportCfg.ExportMidlines;
-            layoutCfg.Midlines.Color = exportCfg.Midlines.Color;
-
-            layoutCfg.Margins.Visible = exportCfg.FingerboardMargins.Enabled;
-            layoutCfg.Margins.Color = exportCfg.FingerboardMargins.Color;
-
-            layoutCfg.CenterLine.Visible = exportCfg.ExportCenterLine;
-            layoutCfg.CenterLine.Color = exportCfg.CenterLine.Color;
-
-            layoutCfg.Fingerboard.Color = exportCfg.FingerboardEdges.Color;
-            layoutCfg.Fingerboard.Visible = exportCfg.ExportFingerboardEdges;
+            layoutCfg.Midlines.ApplyExportConfig(exportCfg.Midlines);
+            layoutCfg.Margins.ApplyExportConfig(exportCfg.FingerboardMargins);
+            layoutCfg.CenterLine.ApplyExportConfig(exportCfg.CenterLine);
+            layoutCfg.Fingerboard.ApplyExportConfig(exportCfg.FingerboardEdges);
             layoutCfg.Fingerboard.ContinueLines = exportCfg.FingerboardEdges.ContinueLines;
 
-            layoutCfg.Frets.Visible = exportCfg.Frets.Enabled;
-            layoutCfg.Frets.Color = exportCfg.Frets.Color;
+            layoutCfg.Frets.ApplyExportConfig(exportCfg.Frets);
             layoutCfg.Frets.DisplayBridgeLine = exportCfg.Frets.ExportBridgeLine;
 
-            layoutCfg.Strings.Visible = exportCfg.Strings.Enabled;
-            layoutCfg.Strings.Color = exportCfg.Strings.Color;
+            layoutCfg.Strings.ApplyExportConfig(exportCfg.Strings);
             layoutCfg.Strings.RenderMode =
                 exportCfg.Strings.UseStringGauge ? 
                 LineRenderMode.RealWidth : 

@@ -317,11 +317,13 @@
             this.layoutPreview.DisplayConfig.FingerboardOrientation = System.Windows.Forms.Orientation.Vertical;
             this.layoutPreview.DisplayConfig.ShowCenterLine = false;
             this.layoutPreview.DisplayConfig.ShowFingerboard = true;
+            this.layoutPreview.DisplayConfig.ShowFretNumbers = false;
             this.layoutPreview.DisplayConfig.ShowFrets = true;
             this.layoutPreview.DisplayConfig.ShowMargins = true;
             this.layoutPreview.DisplayConfig.ShowMidlines = true;
             this.layoutPreview.DisplayConfig.ShowStrings = true;
             this.layoutPreview.Name = "layoutPreview";
+            this.layoutPreview.RenderForExport = true;
             // 
             // btnCancel
             // 

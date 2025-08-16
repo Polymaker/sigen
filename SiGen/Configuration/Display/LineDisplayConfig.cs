@@ -14,6 +14,8 @@ namespace SiGen.Configuration.Display
         internal LineDisplayConfig DefaultValues;
 
         private bool _Visible;
+        private bool _Dashed;
+        //private float _Thickness;
         private Color _Color;
 
         [JsonProperty]
@@ -22,6 +24,20 @@ namespace SiGen.Configuration.Display
             get => _Visible;
             set => SetPropertyValue(ref _Visible, value);
         }
+
+        [JsonIgnore]
+        public bool Dashed
+        {
+            get => _Dashed;
+            set => SetPropertyValue(ref _Dashed, value);
+        }
+
+        //[JsonIgnore]
+        //public float Thickness
+        //{
+        //    get => _Thickness;
+        //    set => SetPropertyValue(ref _Thickness, value);
+        //}
 
         [JsonProperty, JsonConverter(typeof(ColorJsonConverter))]
         public Color Color
@@ -55,6 +71,14 @@ namespace SiGen.Configuration.Display
         public static bool operator !=(LineDisplayConfig left, LineDisplayConfig right)
         {
             return !(left == right);
+        }
+
+        public void ApplyExportConfig(SiGen.Export.LineExportConfig config)
+        {
+            Color = config.Color;
+            Dashed = config.IsDashed;
+            Visible = config.Enabled;
+            //if (config.LineUnit == Export.LineUnit.Pixels)
         }
 
 

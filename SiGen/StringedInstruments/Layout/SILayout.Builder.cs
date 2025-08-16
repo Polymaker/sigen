@@ -110,7 +110,7 @@ namespace SiGen.StringedInstruments.Layout
 
                 var nutLine = Line.FromPoints(trebleStr.P1.ToVector(), bassStr.P1.ToVector());
                 var bridgeLine = Line.FromPoints(trebleStr.P2.ToVector(), bassStr.P2.ToVector());
-                var twelfthFret = new LayoutLine(PointM.Average(trebleStr.P1, trebleStr.P2), PointM.Average(bassStr.P1, bassStr.P2));
+                
 
                 //create the remaining strings by distributing them equally between the outer strings
                 for (int i = 1; i < NumberOfStrings - 1; i++)
@@ -120,6 +120,15 @@ namespace SiGen.StringedInstruments.Layout
                     var createdString = AddVisualElement(new StringLine(Strings[i],
                         PointM.FromVector(nutPos, nutStringPos[i].Unit),
                         PointM.FromVector(bridgePos, bridgeStringPos[i].Unit)));
+                }
+
+                ApplyBassTrebleSkew();
+
+                var twelfthFret = new LayoutLine(PointM.Average(trebleStr.P1, trebleStr.P2), PointM.Average(bassStr.P1, bassStr.P2));
+                for (int i = 1; i < NumberOfStrings - 1; i++)
+                {
+                    
+                    var createdString = Strings[i].LayoutLine as StringLine;
 
                     //strings distributed equally between the outer strings (which are tapered/angled) do not have their centers aligned
                     //so we correct the string length (at bridge) so that its center is aligned with the twelfth fret
@@ -129,7 +138,7 @@ namespace SiGen.StringedInstruments.Layout
                     var distFromBridge = PointM.Distance(createdString.P2, middle);
 
                     var stringCenterOffset = Measure.Abs(distFromNut - distFromBridge);
-                    
+
                     if (!CompensateFretPositions && stringCenterOffset > Measure.Mm(0.05))
                     {
                         //adjust the end of the string so that it's center is above the 12th fret
@@ -150,8 +159,10 @@ namespace SiGen.StringedInstruments.Layout
                     AdjustStringVerticalPosition(strLine, maxPerpHeight);
             }
 
+            
+
             //calculate starting fret position if different from 0 (nut)
-            foreach(var str in Strings)
+            foreach (var str in Strings)
             {
                 if (str.StartingFret != 0)
                 {
@@ -169,6 +180,31 @@ namespace SiGen.StringedInstruments.Layout
 
             for(int i = 0; i < NumberOfStrings - 1; i++)
                 AddVisualElement(new StringCenter(Strings[i + 1].LayoutLine, Strings[i].LayoutLine));
+        }
+
+        private void ApplyBassTrebleSkew()
+        {
+            if (CurrentScaleLength.BassTrebleSkew.IsEmpty || CurrentScaleLength.BassTrebleSkew == Measure.Zero)
+                return;
+
+            
+            var firstString = Strings.First();
+            var lastString = Strings.Last();
+            var maxX = MathP.Abs(MathP.Max(firstString.LayoutLine.P1.X.NormalizedValue, firstString.LayoutLine.P2.X.NormalizedValue));
+            var minX = MathP.Abs(MathP.Min(lastString.LayoutLine.P1.X.NormalizedValue, lastString.LayoutLine.P2.X.NormalizedValue));
+            maxX = MathP.Max(minX, maxX);
+            var skewAmount = CurrentScaleLength.BassTrebleSkew.NormalizedValue;
+            PointM skewPoint(PointM vec)
+            {
+                var yAmount = MathP.Map(-maxX, maxX, skewAmount * 0.5, skewAmount * -0.5, vec.X.NormalizedValue);
+                return new PointM(vec.X, vec.Y + Measure.FromNormalizedValue(yAmount, vec.Unit));
+            }
+            for (int i = 0; i < NumberOfStrings; i++)
+            {
+                Strings[i].LayoutLine.P1 = skewPoint(Strings[i].LayoutLine.P1);
+                Strings[i].LayoutLine.P2 = skewPoint(Strings[i].LayoutLine.P2);
+            }
+            
         }
 
         /// <summary>
@@ -442,11 +478,11 @@ namespace SiGen.StringedInstruments.Layout
 
         private List<FretPosition> CalculateFretsForString(SIString str)
         {
-            var frets = new List<FretPosition>();
+            var fretPoints = new List<FretPosition>();
             if (!CompensateFretPositions)
             {
                 for (int i = MinimumFret; i <= MaximumFret; i++)
-                    frets.Add(CalculateFretPosition(str, i));
+                    fretPoints.Add(CalculateFretPosition(str, i));
             }
             else
             {
@@ -459,10 +495,10 @@ namespace SiGen.StringedInstruments.Layout
                 {
                     PreciseDouble fretPosRatio = (str.StringLength - positions[i]).NormalizedValue / str.StringLength.NormalizedValue;
                     var fretPos = str.LayoutLine.P2 + (str.LayoutLine.Direction * -1) * (str.StringLength * fretPosRatio);
-                    frets.Add(new FretPosition() { FretIndex = i - str.StartingFret, Position = fretPos, StringIndex = str.Index, PositionRatio = fretPosRatio });
+                    fretPoints.Add(new FretPosition() { FretIndex = i - str.StartingFret, Position = fretPos, StringIndex = str.Index, PositionRatio = fretPosRatio });
                 }
             }
-            return frets;
+            return fretPoints;
         }
 
         private FretPosition CalculateFretPosition(SIString str, int fret)

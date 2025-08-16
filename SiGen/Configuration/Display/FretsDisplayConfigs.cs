@@ -16,6 +16,7 @@ namespace SiGen.Configuration.Display
         private LineRenderMode _RenderMode;
         private bool _DisplayAccuratePositions;
         private bool _DisplayBridgeLine;
+        private bool _ShowNumbers;
 
         [JsonProperty, JsonConverter(typeof(StringEnumConverter))]
         public LineRenderMode RenderMode
@@ -44,6 +45,13 @@ namespace SiGen.Configuration.Display
         {
             get => _DisplayBridgeLine;
             set => SetPropertyValue(ref _DisplayBridgeLine, value);
+        }
+
+        [JsonProperty, DefaultValue(false)]
+        public bool ShowNumbers
+        {
+            get => _ShowNumbers;
+            set => SetPropertyValue(ref _ShowNumbers, value);
         }
 
         #region Winform Designer Specifics
@@ -96,13 +104,20 @@ namespace SiGen.Configuration.Display
             return DisplayBridgeLine != ((DefaultValues as FretsDisplayConfigs)?.DisplayBridgeLine ?? false);
         }
 
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public bool ShouldShowNumbers()
+        {
+            return ShowNumbers;
+        }
+
         public override bool ShouldSerializeConfig()
         {
             return base.ShouldSerializeConfig() || 
                 ShouldSerializeRenderMode() ||
                 ShouldSerializeRenderWidth() ||
                 ShouldSerializeDisplayAccuratePositions() ||
-                ShouldSerializeDisplayBridgeLine();
+                ShouldSerializeDisplayBridgeLine() ||
+                ShouldShowNumbers();
         }
 
         public override void ResetConfig()
@@ -112,6 +127,7 @@ namespace SiGen.Configuration.Display
             ResetRenderWidth();
             ResetDisplayAccuratePositions();
             ResetDisplayBridgeLine();
+            ShowNumbers = false;
         }
 
         public override void InitDefaultValues()
@@ -123,7 +139,8 @@ namespace SiGen.Configuration.Display
                 RenderMode = RenderMode,
                 RenderWidth = RenderWidth,
                 DisplayAccuratePositions = DisplayAccuratePositions,
-                DisplayBridgeLine = DisplayBridgeLine
+                DisplayBridgeLine = DisplayBridgeLine,
+                ShowNumbers = false
             };
         }
 
@@ -136,6 +153,7 @@ namespace SiGen.Configuration.Display
                 RenderWidth = fretsDisplay.RenderWidth;
                 DisplayAccuratePositions = fretsDisplay.DisplayAccuratePositions;
                 DisplayBridgeLine = fretsDisplay.DisplayBridgeLine;
+                ShowNumbers = fretsDisplay.ShowNumbers;
             }
         }
 

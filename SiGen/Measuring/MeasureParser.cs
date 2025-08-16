@@ -136,8 +136,18 @@ namespace SiGen.Utilities
 				}
 				value = new Measure(whole + (n1 / n2), unit);
 			}
+            else if (FeetFractionPattern.IsMatch(s))
+            {
+                var match = FeetFractionPattern.Match(s);
+                var wholeFeet = int.Parse(match.Groups[1].Value);
+                var wholeInch = match.Groups[3].Success ? int.Parse(match.Groups[3].Value) : 0;
+                var n1 = double.Parse(match.Groups[4].Value);
+                var n2 = double.Parse(match.Groups[5].Value);
 
-			if (!value.IsEmpty && value.Unit == null && defaultUnit != null)
+                value = new Measure(wholeFeet, UnitOfMeasure.Ft) + Measure.Inches(wholeInch + (n1 / n2));
+            }
+
+            if (!value.IsEmpty && value.Unit == null && defaultUnit != null)
 				value = new Measure(value.Value, defaultUnit);
 
 			return !value.IsEmpty;

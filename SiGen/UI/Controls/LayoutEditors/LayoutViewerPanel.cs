@@ -165,7 +165,7 @@ namespace SiGen.UI.Controls.LayoutEditors
             DisplayMarginsMenuItem.Checked = Viewer.DisplayConfig.ShowMargins;
             DisplayFingerboardMenuItem.Checked = Viewer.DisplayConfig.ShowFingerboard;
             DisplayCenterLineMenuItem.Checked = Viewer.DisplayConfig.ShowCenterLine;
-
+            DisplayFretNumbersMenuItem.Checked = Viewer.DisplayConfig.ShowFretNumbers;
             UpdatingDisplayOptionsMenuItem = false;
         }
 
@@ -192,11 +192,15 @@ namespace SiGen.UI.Controls.LayoutEditors
             }
             else if (sender == DisplayFingerboardMenuItem)
             {
-                Viewer.DisplayConfig.ShowFingerboard= DisplayFingerboardMenuItem.Checked;
+                Viewer.DisplayConfig.ShowFingerboard = DisplayFingerboardMenuItem.Checked;
             }
             else if (sender == DisplayCenterLineMenuItem)
             {
                 Viewer.DisplayConfig.ShowCenterLine = DisplayCenterLineMenuItem.Checked;
+            }
+            else if (sender == DisplayFretNumbersMenuItem)
+            {
+                Viewer.DisplayConfig.ShowFretNumbers = DisplayFretNumbersMenuItem.Checked;
             }
         }
 
@@ -209,5 +213,7 @@ namespace SiGen.UI.Controls.LayoutEditors
         {
 
         }
+
+        
     }
 }

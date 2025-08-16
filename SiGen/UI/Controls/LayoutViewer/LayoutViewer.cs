@@ -28,7 +28,7 @@ namespace SiGen.UI
         private SILayout _CurrentLayout;
         private const int PADDING_BORDER = 6;
         private List<LayoutIntersection> LayoutIntersections;
-        private const int MIN_ZOOM = 6;
+        private const int MIN_ZOOM = 5;
         private const int MAX_ZOOM = 250;
 
         #endregion
@@ -169,6 +169,7 @@ namespace SiGen.UI
                 {
                     fretsDisplay.RenderMode = (config.LineConfigs[i] as FretsDisplayConfigs).RenderMode;
                     fretsDisplay.RenderWidth = (config.LineConfigs[i] as FretsDisplayConfigs).RenderWidth;
+                    fretsDisplay.DisplayAccuratePositions = (config.LineConfigs[i] as FretsDisplayConfigs).DisplayAccuratePositions;
                 }
             }
 
@@ -397,6 +398,13 @@ namespace SiGen.UI
                             DragInputMode.LeftButton,
                             DisplayToLocal(e.Location),
                             false);
+                    }
+                    else if (!EnableMeasureTool)
+                    {
+                        InitDragTarget(new HitTestInfo(),
+                            DragInputMode.LeftButton,
+                            DisplayToLocal(e.Location),
+                            true);
                     }
                 }
             }

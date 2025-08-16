@@ -58,6 +58,13 @@ namespace SiGen.UI
             set => Frets.Visible = value;
         }
 
+        [JsonIgnore, Browsable(false)]
+        public bool ShowFretNumbers
+        {
+            get => Frets.ShowNumbers;
+            set => Frets.ShowNumbers = value;
+        }
+
         [JsonProperty]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content), TypeConverter(typeof(ExpandableObjectConverter))]
         public FingerboardDisplayConfig Fingerboard

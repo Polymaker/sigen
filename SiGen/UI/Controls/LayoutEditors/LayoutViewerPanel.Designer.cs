@@ -54,6 +54,7 @@
             this.tsmiRename = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiOpenFileDirectory = new System.Windows.Forms.ToolStripMenuItem();
+            this.DisplayFretNumbersMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
@@ -95,6 +96,7 @@
             this.DisplayStringsMenuItem,
             this.DisplayStringCentersMenuItem,
             this.DisplayFretsMenuItem,
+            this.DisplayFretNumbersMenuItem,
             this.DisplayMarginsMenuItem,
             this.DisplayFingerboardMenuItem,
             this.DisplayCenterLineMenuItem});
@@ -188,6 +190,7 @@
             // layoutViewer1
             // 
             this.layoutViewer1.BackColor = System.Drawing.SystemColors.Window;
+            this.layoutViewer1.DisplayConfig.Frets.ShowNumbers = true;
             this.layoutViewer1.DisplayConfig.ShowCenterLine = false;
             this.layoutViewer1.DisplayConfig.ShowFingerboard = true;
             this.layoutViewer1.DisplayConfig.ShowFrets = true;
@@ -266,6 +269,15 @@
             resources.ApplyResources(this.tsmiOpenFileDirectory, "tsmiOpenFileDirectory");
             this.tsmiOpenFileDirectory.Click += new System.EventHandler(this.tsmiOpenFileDirectory_Click);
             // 
+            // DisplayFretNumbersMenuItem
+            // 
+            this.DisplayFretNumbersMenuItem.Checked = true;
+            this.DisplayFretNumbersMenuItem.CheckOnClick = true;
+            this.DisplayFretNumbersMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.DisplayFretNumbersMenuItem.Name = "DisplayFretNumbersMenuItem";
+            resources.ApplyResources(this.DisplayFretNumbersMenuItem, "DisplayFretNumbersMenuItem");
+            this.DisplayFretNumbersMenuItem.CheckedChanged += new System.EventHandler(this.DisplayOptionsMenuItem_CheckedChanged);
+            // 
             // LayoutViewerPanel
             // 
             resources.ApplyResources(this, "$this");
@@ -310,5 +322,6 @@
         private System.Windows.Forms.ToolStripMenuItem DisplayFingerboardMenuItem;
         private System.Windows.Forms.ToolStripMenuItem DisplayCenterLineMenuItem;
         private System.Windows.Forms.ToolStripButton tsbMeasureTool;
+        private System.Windows.Forms.ToolStripMenuItem DisplayFretNumbersMenuItem;
     }
 }
