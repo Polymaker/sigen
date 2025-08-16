@@ -265,7 +265,7 @@
     <value>ThicknessEditor</value>
   </data>
   <data name="&gt;&gt;ThicknessEditor.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.ValueEditors.LineThicknessEditor, SiGen, Version=1.0.4.24307, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.ValueEditors.LineThicknessEditor, SiGen, Version=1.0.6.18501, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ThicknessEditor.Parent" xml:space="preserve">
     <value>$this</value>
@@ -286,7 +286,7 @@
     <value>ColorSelector</value>
   </data>
   <data name="&gt;&gt;ColorSelector.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.ValueEditors.ColorSelectButton, SiGen, Version=1.0.4.24307, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.ValueEditors.ColorSelectButton, SiGen, Version=1.0.6.18501, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ColorSelector.Parent" xml:space="preserve">
     <value>$this</value>
@@ -352,19 +352,19 @@
     <value>localizableStringList1</value>
   </data>
   <data name="&gt;&gt;localizableStringList1.Type" xml:space="preserve">
-    <value>SiGen.Localization.LocalizableStringList, SiGen, Version=1.0.4.24307, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.Localization.LocalizableStringList, SiGen, Version=1.0.6.18501, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;ContinueEdgeLines.Name" xml:space="preserve">
     <value>ContinueEdgeLines</value>
   </data>
   <data name="&gt;&gt;ContinueEdgeLines.Type" xml:space="preserve">
-    <value>SiGen.Localization.LocalizableString, SiGen, Version=1.0.4.24307, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.Localization.LocalizableString, SiGen, Version=1.0.6.18501, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;IncludeBridgeLine.Name" xml:space="preserve">
     <value>IncludeBridgeLine</value>
   </data>
   <data name="&gt;&gt;IncludeBridgeLine.Type" xml:space="preserve">
-    <value>SiGen.Localization.LocalizableString, SiGen, Version=1.0.4.24307, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.Localization.LocalizableString, SiGen, Version=1.0.6.18501, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>LineExportEdit</value>

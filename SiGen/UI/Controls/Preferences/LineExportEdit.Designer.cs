@@ -57,6 +57,7 @@
             resources.ApplyResources(this.DashedCheckbox, "DashedCheckbox");
             this.DashedCheckbox.Name = "DashedCheckbox";
             this.DashedCheckbox.UseVisualStyleBackColor = true;
+            this.DashedCheckbox.CheckedChanged += new System.EventHandler(this.DashedCheckbox_CheckedChanged);
             // 
             // StringGaugeCheckbox
             // 

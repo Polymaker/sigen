@@ -51,6 +51,8 @@
             this.colStringNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colScaleLength = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colMultiScaleRatio = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mtbBassTrebleSkew = new SiGen.UI.Controls.MeasureTextbox();
+            this.lblBassTrebleSkew = new System.Windows.Forms.Label();
             this.tlpLayout.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvScaleLengths)).BeginInit();
@@ -69,6 +71,8 @@
             this.tlpLayout.Controls.Add(this.lblParallelFret, 0, 3);
             this.tlpLayout.Controls.Add(this.nubMultiScaleRatio, 1, 4);
             this.tlpLayout.Controls.Add(this.cboParallelFret, 1, 3);
+            this.tlpLayout.Controls.Add(this.mtbBassTrebleSkew, 1, 5);
+            this.tlpLayout.Controls.Add(this.lblBassTrebleSkew, 0, 5);
             this.tlpLayout.Name = "tlpLayout";
             // 
             // lblBass
@@ -201,6 +205,17 @@
             this.colMultiScaleRatio.Name = "colMultiScaleRatio";
             this.colMultiScaleRatio.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // mtbBassTrebleSkew
+            // 
+            resources.ApplyResources(this.mtbBassTrebleSkew, "mtbBassTrebleSkew");
+            this.mtbBassTrebleSkew.Name = "mtbBassTrebleSkew";
+            this.mtbBassTrebleSkew.ValueChanged += new System.EventHandler(this.mtbBassTrebleSkew_ValueChanged);
+            // 
+            // lblBassTrebleSkew
+            // 
+            resources.ApplyResources(this.lblBassTrebleSkew, "lblBassTrebleSkew");
+            this.lblBassTrebleSkew.Name = "lblBassTrebleSkew";
+            // 
             // ScaleLengthEditor
             // 
             resources.ApplyResources(this, "$this");
@@ -238,5 +253,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colMultiScaleRatio;
         private System.Windows.Forms.Label lblParallelFret;
         private System.Windows.Forms.ComboBox cboParallelFret;
+        private MeasureTextbox mtbBassTrebleSkew;
+        private System.Windows.Forms.Label lblBassTrebleSkew;
     }
 }

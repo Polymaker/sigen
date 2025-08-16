@@ -144,5 +144,13 @@ namespace SiGen.UI.Controls.Preferences
                 }
             }
         }
+
+        private void DashedCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!FlagManager.IsSet("LoadConfig") && LineConfig != null)
+            {
+                LineConfig.IsDashed = DashedCheckbox.Checked;
+            }
+        }
     }
 }

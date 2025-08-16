@@ -49,12 +49,16 @@ namespace SiGen.UI.Windows
         {
             ChkRealisticStrings.Checked = DisplayConfig.Strings.RenderMode == Configuration.Display.LineRenderMode.RealisticLook;
             StringsColorSelect.Value = DisplayConfig.Strings.Color;
+            StringsColorSelect.Enabled = !ChkRealisticStrings.Checked;
 
             ChkRealisticFrets.Checked = DisplayConfig.Frets.RenderMode != Configuration.Display.LineRenderMode.PlainLine;
             FretsColorSelect.Value = DisplayConfig.Frets.Color;
+            FretsColorSelect.Enabled = !ChkRealisticFrets.Checked;
 
             FretWidthBox.Enabled = ChkRealisticFrets.Checked;
             FretWidthBox.Value = DisplayConfig.Frets.RenderWidth;
+
+            ChkRealFretPos.Checked = DisplayConfig.Frets.DisplayAccuratePositions;
         }
 
         private void LoadExportConfigs()
@@ -91,7 +95,7 @@ namespace SiGen.UI.Windows
 
             DisplayConfig.Frets.Color = FretsColorSelect.Value;
             DisplayConfig.Frets.RenderWidth = FretWidthBox.Value;
-
+            DisplayConfig.Frets.DisplayAccuratePositions = ChkRealFretPos.Checked;
             AppConfig.Current.DisplayConfig = DisplayConfig;
             AppConfigManager.Save();
             DialogResult = DialogResult.OK;
@@ -110,12 +114,23 @@ namespace SiGen.UI.Windows
         private void ChkRealisticFrets_CheckedChanged(object sender, EventArgs e)
         {
             FretWidthBox.Enabled = ChkRealisticFrets.Checked;
+            FretsColorSelect.Enabled = !ChkRealisticFrets.Checked;
         }
 
         private void ResetDisplayButton_Click(object sender, EventArgs e)
         {
             DisplayConfig = ViewerDisplayConfig.CreateDefault();
             LoadDisplayConfigs();
+        }
+
+        private void ChkRealisticStrings_CheckedChanged(object sender, EventArgs e)
+        {
+            StringsColorSelect.Enabled = !ChkRealisticStrings.Checked;
+        }
+
+        private void ChkRealFretPos_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

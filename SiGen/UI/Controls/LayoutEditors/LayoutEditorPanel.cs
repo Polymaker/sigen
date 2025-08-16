@@ -43,6 +43,7 @@ namespace SiGen.UI.Controls.LayoutEditors
             CloseButtonVisible = false;
             DockAreas ^= DockAreas.Document;
             MaximizeBox = true;
+            
         }
 
         protected override void OnLoad(EventArgs e)

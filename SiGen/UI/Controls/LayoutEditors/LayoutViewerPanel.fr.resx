@@ -165,4 +165,7 @@
   <data name="ResetCameraButton.Text" xml:space="preserve">
     <value>Recadrer</value>
   </data>
+  <data name="DisplayFretNumbersMenuItem.Text" xml:space="preserve">
+    <value>Numéros de fret</value>
+  </data>
 </root>

@@ -10,6 +10,8 @@ namespace SiGen.StringedInstruments.Layout
     public abstract class ScaleLengthManager : ActivableLayoutComponent
 	{
         protected LengthFunction _LengthCalculationMethod;
+        private Measure _BassTrebleSkew;
+
         /// <summary>
         /// Determine if the scale length is applied along each strings (taking into account the neck taper) or straight along the fingerboard.
         /// </summary>
@@ -25,7 +27,14 @@ namespace SiGen.StringedInstruments.Layout
 
         public abstract ScaleLengthType Type { get; }
 
-		public override bool IsActive => Layout.CurrentScaleLength == this;
+        public Measure BassTrebleSkew
+        {
+            get => _BassTrebleSkew;
+            set => SetPropertyValue(ref _BassTrebleSkew, value);
+        }
+
+
+        public override bool IsActive => Layout.CurrentScaleLength == this;
 
 		public ScaleLengthManager(SILayout layout) : base(layout)
         {
@@ -38,12 +47,25 @@ namespace SiGen.StringedInstruments.Layout
 
         public virtual XElement Serialize(string elemName)
         {
-            return new XElement(elemName, new XAttribute("Type", Type), new XAttribute("LengthFunction", LengthCalculationMethod));
+            var rootElem = new XElement(elemName,
+                new XAttribute("Type", Type),
+                new XAttribute("LengthFunction", LengthCalculationMethod));
+
+            if (!BassTrebleSkew.IsEmpty)
+            {
+                rootElem.Add(BassTrebleSkew.SerializeAsAttribute(nameof(BassTrebleSkew)));
+            }
+
+            return rootElem;
         }
 
         internal virtual void Deserialize(XElement elem)
         {
             LengthCalculationMethod = (LengthFunction)Enum.Parse(typeof(LengthFunction), elem.Attribute("LengthFunction").Value);
+            if (elem.HasAttribute(nameof(BassTrebleSkew), out var btsAttr))
+                BassTrebleSkew = Measure.ParseInvariant(btsAttr.Value);
+            else
+                BassTrebleSkew = Measure.Empty;
         }
     }
 }

@@ -109,7 +109,12 @@ namespace SiGen
 			return result;
 		}
 
-		public static PreciseDouble operator *(PreciseDouble v1, PreciseDouble v2)
+        public static PreciseDouble operator -(PreciseDouble left)
+        {
+            return left * -1d;
+        }
+
+        public static PreciseDouble operator *(PreciseDouble v1, PreciseDouble v2)
 		{
 			var result = v1.doubleValue * v2.doubleValue;
 

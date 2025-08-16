@@ -135,4 +135,7 @@
   <data name="IncludeBridgeLine.Text" xml:space="preserve">
     <value>Exporter le pont</value>
   </data>
+  <data name="ExtraOption1Checkbox.Text" xml:space="preserve">
+    <value>Option extra</value>
+  </data>
 </root>

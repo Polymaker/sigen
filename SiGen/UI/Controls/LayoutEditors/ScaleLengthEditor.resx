@@ -319,7 +319,7 @@
     <value>mtbTrebleLength</value>
   </data>
   <data name="&gt;&gt;mtbTrebleLength.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.17808, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.6.15584, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;mtbTrebleLength.Parent" xml:space="preserve">
     <value>tlpLayout</value>
@@ -343,7 +343,7 @@
     <value>mtbBassLength</value>
   </data>
   <data name="&gt;&gt;mtbBassLength.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.0.17808, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.6.15584, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;mtbBassLength.Parent" xml:space="preserve">
     <value>tlpLayout</value>
@@ -457,7 +457,7 @@
     <value>nubMultiScaleRatio</value>
   </data>
   <data name="&gt;&gt;nubMultiScaleRatio.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.NumericBox, SiGen, Version=1.0.0.17808, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.NumericBox, SiGen, Version=1.0.6.15584, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;nubMultiScaleRatio.Parent" xml:space="preserve">
     <value>tlpLayout</value>
@@ -489,6 +489,60 @@
   <data name="&gt;&gt;cboParallelFret.ZOrder" xml:space="preserve">
     <value>9</value>
   </data>
+  <data name="mtbBassTrebleSkew.Location" type="System.Drawing.Point, System.Drawing">
+    <value>103, 125</value>
+  </data>
+  <data name="mtbBassTrebleSkew.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 20</value>
+  </data>
+  <data name="mtbBassTrebleSkew.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="&gt;&gt;mtbBassTrebleSkew.Name" xml:space="preserve">
+    <value>mtbBassTrebleSkew</value>
+  </data>
+  <data name="&gt;&gt;mtbBassTrebleSkew.Type" xml:space="preserve">
+    <value>SiGen.UI.Controls.MeasureTextbox, SiGen, Version=1.0.6.15584, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;mtbBassTrebleSkew.Parent" xml:space="preserve">
+    <value>tlpLayout</value>
+  </data>
+  <data name="&gt;&gt;mtbBassTrebleSkew.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="lblBassTrebleSkew.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="lblBassTrebleSkew.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblBassTrebleSkew.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblBassTrebleSkew.Location" type="System.Drawing.Point, System.Drawing">
+    <value>24, 128</value>
+  </data>
+  <data name="lblBassTrebleSkew.Size" type="System.Drawing.Size, System.Drawing">
+    <value>73, 13</value>
+  </data>
+  <data name="lblBassTrebleSkew.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="lblBassTrebleSkew.Text" xml:space="preserve">
+    <value>Skew Amount</value>
+  </data>
+  <data name="&gt;&gt;lblBassTrebleSkew.Name" xml:space="preserve">
+    <value>lblBassTrebleSkew</value>
+  </data>
+  <data name="&gt;&gt;lblBassTrebleSkew.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblBassTrebleSkew.Parent" xml:space="preserve">
+    <value>tlpLayout</value>
+  </data>
+  <data name="&gt;&gt;lblBassTrebleSkew.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
   <data name="tlpLayout.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
   </data>
@@ -496,10 +550,10 @@
     <value>0, 0</value>
   </data>
   <data name="tlpLayout.RowCount" type="System.Int32, mscorlib">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="tlpLayout.Size" type="System.Drawing.Size, System.Drawing">
-    <value>481, 122</value>
+    <value>481, 148</value>
   </data>
   <data name="tlpLayout.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -517,7 +571,7 @@
     <value>1</value>
   </data>
   <data name="tlpLayout.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lblBass" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lblScaleLength" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="flowLayoutPanel1" Row="0" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="mtbTrebleLength" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="mtbBassLength" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lblTreble" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lblMultiScaleRatio" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lblParallelFret" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="nubMultiScaleRatio" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cboParallelFret" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,100,AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lblBass" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lblScaleLength" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="flowLayoutPanel1" Row="0" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="mtbTrebleLength" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="mtbBassLength" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lblTreble" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lblMultiScaleRatio" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lblParallelFret" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="nubMultiScaleRatio" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cboParallelFret" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="mtbBassTrebleSkew" Row="5" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lblBassTrebleSkew" Row="5" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,100,AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,30" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="colStringNumber.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -541,13 +595,13 @@
     <value>Fill</value>
   </data>
   <data name="dgvScaleLengths.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 122</value>
+    <value>0, 148</value>
   </data>
   <data name="dgvScaleLengths.MinimumSize" type="System.Drawing.Size, System.Drawing">
     <value>0, 100</value>
   </data>
   <data name="dgvScaleLengths.Size" type="System.Drawing.Size, System.Drawing">
-    <value>481, 270</value>
+    <value>481, 244</value>
   </data>
   <data name="dgvScaleLengths.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -604,6 +658,6 @@
     <value>ScaleLengthEditor</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>SiGen.UI.Controls.LayoutPropertyEditor, SiGen, Version=1.0.0.17808, Culture=neutral, PublicKeyToken=null</value>
+    <value>SiGen.UI.Controls.LayoutPropertyEditor, SiGen, Version=1.0.6.15584, Culture=neutral, PublicKeyToken=null</value>
   </data>
 </root>

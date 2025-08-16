@@ -31,7 +31,7 @@ namespace SiGen.UI
         private LayoutEditorPanel<StringsConfigurationEditor> stringConfigPanel;
         private LayoutEditorPanel<FingerboardMarginEditor> layoutMarginPanel;
         private LayoutEditorPanel<ScaleLengthEditor> scaleLengthPanel;
-        //private LayoutEditorPanel<LayoutProperties> layoutInfoPanel;
+        private LayoutEditorPanel<LayoutProperties> layoutInfoPanel;
         private LayoutViewerPanel PreviousDocument;
         private string[] FilesToOpen;
         
@@ -125,9 +125,11 @@ namespace SiGen.UI
             stringSpacingPanel.Show(layoutMarginPanel.Pane, DockAlignment.Right, 0.5);
             //stringSpacingPanel.Text = "String Spacing";
 
-            //layoutInfoPanel = new LayoutEditorPanel<LayoutProperties>();
+            layoutInfoPanel = new LayoutEditorPanel<LayoutProperties>();
+            layoutInfoPanel.Show(stringSpacingPanel.Pane, null);
             //layoutInfoPanel.Show(layoutMarginPanel.Pane, DockAlignment.Bottom, .4);
-            //layoutInfoPanel.Text = "Layout Properties";
+            layoutInfoPanel.Text = "Layout Properties";
+            stringSpacingPanel.Activate();
 
             scaleLengthPanel = new LayoutEditorPanel<ScaleLengthEditor>();
             scaleLengthPanel.Show(layoutMarginPanel.Pane, DockAlignment.Bottom, .5);

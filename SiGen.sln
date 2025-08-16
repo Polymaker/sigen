@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29306.81
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiGen", "SiGen\SiGen.csproj", "{BF3F27DD-C257-418C-AEA7-F1F992B7A0B0}"
 EndProject
@@ -43,7 +43,8 @@ Global
 		{C58AA230-0F37-425E-9B72-39583A35028E}.Debug|x86.ActiveCfg = Debug|x86
 		{C58AA230-0F37-425E-9B72-39583A35028E}.Debug|x86.Build.0 = Debug|x86
 		{C58AA230-0F37-425E-9B72-39583A35028E}.Release|Any CPU.ActiveCfg = Release|x86
-		{C58AA230-0F37-425E-9B72-39583A35028E}.Release|x64.ActiveCfg = Release|x86
+		{C58AA230-0F37-425E-9B72-39583A35028E}.Release|x64.ActiveCfg = Release|x64
+		{C58AA230-0F37-425E-9B72-39583A35028E}.Release|x64.Build.0 = Release|x64
 		{C58AA230-0F37-425E-9B72-39583A35028E}.Release|x86.ActiveCfg = Release|x86
 		{C58AA230-0F37-425E-9B72-39583A35028E}.Release|x86.Build.0 = Release|x86
 		{C58AA230-0F37-425E-9B72-39583A35028E}.Wix Prep|Any CPU.ActiveCfg = Release|x86
@@ -57,7 +58,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_SaveFilesImmediatelyUponChange = False
 		SolutionGuid = {10366DA2-F209-453C-9ED8-563304F56BDF}
+		RESX_SaveFilesImmediatelyUponChange = False
 	EndGlobalSection
 EndGlobal
