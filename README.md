@@ -1,3 +1,13 @@
+## Notice: New Version in Development
+
+A new version of **SiGen** (Stringed Instrument layout Generator) is currently in development!
+
+SiGen-Next is a complete rewrite with improved features, a modern user interface, and enhanced flexibility for luthiers and builders.
+
+You can follow the progress and future releases of SiGen V2 here: [SiGen-Next Repository](https://github.com/Polymaker/sigen-next)
+
+This repository contains the stable version. For new features and updates, please check out SiGen-Next.
+
 # SiGen
 **S**tringed **I**nstrument Layout **Gen**erator
 ![image](Graphics/Github/AppPreview1.png)
